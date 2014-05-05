@@ -5,16 +5,17 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Mon May  5 17:01:29 2014 lafitt_g
-** Last update Mon May  5 18:26:53 2014 lafitt_g
+** Last update Mon May  5 19:49:32 2014 lafitt_g
 */
 
 #include <openssl/md5.h>
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "Exception.hh"
 
 void
-Md5it(std::string filename, std::string &save)
+Map::Md5it(std::string filename, std::string &save)
 {
   std::ifstream filemap(filename.c_str(), std::ios::in);
 
@@ -31,7 +32,7 @@ Md5it(std::string filename, std::string &save)
     }
   else
     {
-  /* Mettre exception */
-  std::cerr << "Impossible d'ouvrir le fichier !" << std::endl;
+      throw Md5Exception();
     }
 }
+
