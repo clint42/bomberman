@@ -1,0 +1,26 @@
+/*************************************************************************/
+/**************************_____BOMBERMAN_____****************************/
+/*************************************************************************/
+
+
+	serveur
+	{
+  	  coeur logique
+	  joueurs (IA / client)
+	  communication
+	}
+
+	client
+	{
+	  GUI (affichage, events)
+	  communication
+	}
+
+
+
+interface communication -> le client envoie les events au coeur logique qui lui répond
+	  		-> le serveur transmet toutes les infos à tous les joueurs
+
+map gérée par fichiers -> le serveur lit le .map pour créer un objet Map ou génère un fichier .map aléatoirement
+    	       	       -> serveur transmet l'objet Map au client et indique les 'blocks' détruits à chaque client
+		       -> nombre max de joueurs sur une map défini par la taille de la map
