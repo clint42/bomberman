@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Tue May  6 14:04:31 2014 buret_j
+** Last update Tue May  6 15:44:41 2014 lafitt_g
 //
 
 #ifndef SERVER_HPP_
@@ -28,8 +28,11 @@ namespace Server {
     Map				*_map;
     std::list<std::string>	_mapNames;
 
-    void   retrieveConfig();
-    size_t retrieveMapNames();
+    void	retrieveConfig();
+    size_t	retrieveMapNames();
+    void	isDead(size_t);
+    void	allDead();
+    void	putInPlayersAlive();
 
   public:
     Server();
