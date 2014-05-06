@@ -1,12 +1,12 @@
-//
+/*
 // server.hh for  in /home/buret_j/rendu/bomberman
 //
 // Made by buret_j
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Tue May  6 15:44:41 2014 lafitt_g
-//
+** Last update Tue May  6 15:56:22 2014 lafitt_g
+*/
 
 #ifndef SERVER_HPP_
 # define SERVER_HPP_
