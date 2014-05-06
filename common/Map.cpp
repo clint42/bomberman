@@ -1,13 +1,14 @@
-//
+/*
 // map.cpp for  in /home/franel_j/tek2/cpp/bomberman/common
 //
 // Made by julie franel
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Tue May  6 17:25:21 2014 julie franel
-//
+** Last update Tue May  6 17:48:34 2014 lafitt_g
+*/
 
+#include <openssl/md5.h>
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -71,10 +72,30 @@ ground\n1 -> wall\n2 -> destructible wall");
 	  else if (_h >= height)
 	    throw MapException("Map height is higher than expected.");
 	  std::pair<size_t, size_t> _pos(_w, _h);
-	  _map[_pos] = _c;
+	  _map[_pos] = _c - '0';
 	  _w++;
 	}
     }
+}
+
+void
+Map::md5It(std::string &save)
+{
+  std::ifstream filemap(this->_filename.c_str(), std::ios::in);
+
+  if(filemap)
+    {
+      char key[MD5_DIGEST_LENGTH] = {0};
+      std::string content, line;
+
+      while (filemap >> line)
+        content += line;
+      filemap.close();
+      MD5((unsigned char *)content.c_str(), content.size(), (unsigned char *)key);
+      save = key;
+    }
+  else
+    throw Md5Exception();
 }
 
 Map			*Map::parseMap(const std::string &filename)
