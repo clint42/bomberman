@@ -5,11 +5,13 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 14:41:04 2014 buret_j
-// Last update Tue May  6 15:49:58 2014 buret_j
+// Last update Tue May  6 17:26:13 2014 buret_j
 //
 
 #ifndef COLORGENERATOR_HPP_
 # define COLORGENERATOR_HPP_
+
+# include <cstdlib>
 
 namespace Server {
 

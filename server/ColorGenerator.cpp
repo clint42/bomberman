@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 15:00:59 2014 buret_j
-// Last update Tue May  6 16:11:27 2014 buret_j
+// Last update Tue May  6 17:27:05 2014 buret_j
 //
 
 #include "ColorGenerator.hpp"
@@ -33,6 +33,7 @@ static unsigned char
     : hueRounded == 3 || hueRounded == 4 ?	value
     : hueRounded == 2 ?				t
     :	q;
+  return rgb;
 }
 
 static size_t
