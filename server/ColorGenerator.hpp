@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 14:41:04 2014 buret_j
-// Last update Tue May  6 17:26:13 2014 buret_j
+// Last update Tue May  6 17:51:52 2014 buret_j
 //
 
 #ifndef COLORGENERATOR_HPP_
@@ -21,14 +21,11 @@ namespace Server {
   // http://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
 
   class	ColorGenerator {
-    // static size_t _count;
-
     ColorGenerator() {}
     ~ColorGenerator() {}
 
   public:
     static size_t make();
-    // static void   reset();
   };
 
 }
