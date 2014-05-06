@@ -5,28 +5,24 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Mon May  5 19:40:54 2014 julie franel
+// Last update Tue May  6 11:14:24 2014 julie franel
 //
 
 #include <fstream>
+#include <sstream>
+#include "Exception.hpp"
 #include "Map.hpp"
 
 /*
 ** CONSTRUCTOR / DESTRUCTOR
 */
 
-Map::Map(const std::string &filename)
+Map::Map(size_t width, size_t height, size_t nbPlayers, const std::string &key)
 {
-  this->parseMap(filename);
-  this->_width = 0;
-  this->_height = 0;
-  this->_nbPlayers = 0;
-  this->_key = "";
-}
-
-Map::Map()
-{
-  this->generateMap();
+  this->_width = width;
+  this->_height = height;
+  this->_nbPlayers = nbPlayers;
+  this->_key = key;
 }
 
 Map::~Map()
@@ -39,13 +35,30 @@ Map::~Map()
 ** MEMBER FUNCTIONS
 */
 
-void		Map::parseMap(const std::string &filename)
+size_t			Map::getSizeT(const std::string &size) const
+{
+  std::stringstream	ss(size);
+  size_t		tmp;
+
+  ss >> tmp;
+  return (tmp);
+}
+
+Map		*Map::parseMap(const std::string &filename)
 {
   std::ifstream	file(filename.c_str(), std::ios::in);
-  std::string	name;
+  std::string	width;
+  std::string	height;
+  size_t	_w;
+  size_t	_h;
 
-  std::getline(file, name);
-  std::cout << "1ST LINE = " << name << std::endl;
+  std::getline(file, width);
+  std::getline(file, height);
+  _w = Map::getSizeT(width);
+  _h = Map::getSizeT(height);
+  if (_w < 4 || _h < 4)
+    throw SizeException();
+  return (new Map(_w, _h, 0, ""));
 }
 
 void		Map::generateMap()

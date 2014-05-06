@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:11:21 2014 julie franel
-// Last update Mon May  5 19:40:59 2014 julie franel
+// Last update Tue May  6 11:14:04 2014 julie franel
 //
 
 #ifndef		MAP_HPP_
@@ -26,12 +26,13 @@ class		Map
   // std::map<std::pair<size_t, size_t>, int>	_map;
 
 public:
-  Map(const std::string &filename);
-  Map();
+  Map(size_t width, size_t height, size_t nbPlayers, const std::string &filename);
   ~Map();
 
-  void		parseMap(const std::string &filename);
-  void		generateMap();
+  size_t	getSizeT(const std::string &size) const;
+
+  static Map	*parseMap(const std::string &filename);
+  static void	generateMap();
 
 };
 

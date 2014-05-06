@@ -10,3 +10,6 @@ ABombermanException::message(void) const throw()
 
 Md5Exception::Md5Exception(void) throw() : ABombermanException("Couldn't open the map") {}
 Md5Exception::~Md5Exception(void) throw() {}
+
+SizeException::SizeException(void) throw(): ABombermanException("Map size must be equal to 4*4 or higher") {}
+SizeException::~SizeException(void) throw() {}
