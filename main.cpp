@@ -4,16 +4,23 @@
 // Made by julie franel
 // Login   <franel_j@epitech.net>
 //
-// Started on  Mon May  5 17:06:54 2014 julie franel
-// Last update Tue May  6 11:21:08 2014 buret_j
+// Started on  Tue May  6 11:22:17 2014 julie franel
+// Last update Tue May  6 12:08:44 2014 julie franel
 //
 
-#include "server/Server.hpp"
-#include "client/Client.hpp"
+#include "Exception.hpp"
+#include "Map.hpp"
 
 int	main()
 {
-  Map	_map("test");
-
+  try
+    {
+      Map	*_map = Map::parseMap("test");
+      (void)_map;
+    }
+  catch (MapException e)
+    {
+      std::cerr << e.message() << std::endl;
+    }
   return (0);
 }

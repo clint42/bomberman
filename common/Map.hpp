@@ -5,35 +5,44 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:11:21 2014 julie franel
-// Last update Tue May  6 11:14:04 2014 julie franel
+// Last update Tue May  6 17:05:41 2014 julie franel
 //
 
-#ifndef		MAP_HPP_
-# define	MAP_HPP_
+#ifndef			MAP_HPP_
+# define		MAP_HPP_
 
-# include	<iostream>
-# include	<string>
-# include	<map>
-# include	<utility>
-# include	<cstdlib>
+# include		<iostream>
+# include		<string>
+# include		<map>
+# include		<utility>
+# include		<cstdlib>
 
-class		Map
+class			Map
 {
-  size_t	_width;
-  size_t	_height;
-  size_t	_nbPlayers;
-  std::string	_key;
-  // std::map<std::pair<size_t, size_t>, int>	_map;
+  size_t		_width;
+  size_t		_height;
+  size_t		_nbPlayers;
+  std::string		_key;
+  std::map<std::pair<size_t, size_t>, int>	_map;
+
+  static size_t		getSizeT(const std::string &size);
+  static void		getMap(size_t &width, size_t &height, std::ifstream &file,
+			       std::map<std::pair<size_t, size_t>, int> &_map);
 
 public:
-  Map(size_t width, size_t height, size_t nbPlayers, const std::string &filename);
+  Map(size_t width, size_t height, size_t nbPlayers, const std::string &filename,
+      const std::map<std::pair<size_t, size_t>, int> &_map);
   ~Map();
 
-  size_t	getSizeT(const std::string &size) const;
+  size_t		getWidth() const;
+  size_t		getHeight() const;
+  size_t		getNbrSlot() const;
+  const std::string	&getKey() const;
+  const std::map<std::pair<size_t, size_t>, int>	&getMap() const;
 
-  static Map	*parseMap(const std::string &filename);
-  static void	generateMap();
+  static Map		*parseMap(const std::string &filename);
+  static void		generateMap();
 
 };
 
-#endif		/* !MAP_HPP */
+#endif			/* !MAP_HPP */

@@ -1,4 +1,14 @@
-#include "Exception.hh"
+//
+// Exception.cpp for  in /home/franel_j/tek2/cpp/bomberman
+//
+// Made by julie franel
+// Login   <franel_j@epitech.net>
+//
+// Started on  Tue May  6 11:18:51 2014 julie franel
+// Last update Tue May  6 11:28:06 2014 julie franel
+//
+
+#include "Exception.hpp"
 
 ABombermanException::ABombermanException(std::string const &msg) throw() : _message(msg) {}
 ABombermanException::~ABombermanException(void) throw() {}
@@ -11,5 +21,5 @@ ABombermanException::message(void) const throw()
 Md5Exception::Md5Exception(void) throw() : ABombermanException("Couldn't open the map") {}
 Md5Exception::~Md5Exception(void) throw() {}
 
-SizeException::SizeException(void) throw(): ABombermanException("Map size must be equal to 4*4 or higher") {}
-SizeException::~SizeException(void) throw() {}
+MapException::MapException(const std::string &msg) throw(): ABombermanException(msg) {}
+MapException::~MapException(void) throw() {}
