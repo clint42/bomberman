@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:11:21 2014 julie franel
-// Last update Tue May  6 18:05:18 2014 julie franel
+// Last update Tue May  6 18:20:06 2014 julie franel
 */
 
 #ifndef			MAP_HPP_
@@ -19,6 +19,18 @@
 
 class			Map
 {
+public:
+  enum	eTypes
+    {
+      GROUND,
+      WALL,
+      DWALL, // Destructible WALL
+      BOMB, // bonus
+      FLAME, // bonus
+      SPEED // bonus
+    };
+
+private:
   size_t		_width;
   size_t		_height;
   size_t		_nbPlayers;

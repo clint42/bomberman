@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Tue May  6 18:14:08 2014 julie franel
+// Last update Tue May  6 18:24:59 2014 julie franel
 */
 
 #include <openssl/md5.h>
@@ -48,13 +48,16 @@ size_t			Map::getSizeT(const std::string &size)
   return (tmp);
 }
 
-void		Map::getMap(size_t &width, size_t &height, std::ifstream &file,
-		    std::map<std::pair<size_t, size_t>, int> &_map)
+void				Map::getMap(size_t &width, size_t &height, std::ifstream &file,
+					    std::map<std::pair<size_t, size_t>, int> &_map)
 {
-  char		_c;
-  size_t	_w = 0;
-  size_t	_h = 0;
+  char				_c;
+  size_t			_w = 0;
+  size_t			_h = 0;
+  std::map<char, eTypes>	_types;
 
+  _types['1'] = WALL;
+  _types['2'] = DWALL;
   while (file.get(_c))
     {
       if (!((_c >= '0' && _c <= '2') || _c == '\n'))
@@ -65,14 +68,17 @@ ground\n1 -> wall\n2 -> destructible wall");
 	  _w = 0;
 	  _h += 1;
 	}
-      else if (_c == '1' || _c == '2')
+      else
 	{
-	  if (_w >= width)
-	    throw MapException("Map width is higher than expected.");
-	  else if (_h >= height)
-	    throw MapException("Map height is higher than expected.");
-	  std::pair<size_t, size_t> _pos(_w, _h);
-	  _map[_pos] = _c - '0';
+	  for (char x = '1'; x <= '2'; ++x)
+	    {
+	      if (_w >= width)
+		throw MapException("Map width is higher than expected.");
+	      else if (_h >= height)
+		throw MapException("Map height is higher than expected.");
+	      std::pair<size_t, size_t> _pos(_w, _h);
+	      _map[_pos] = _types[x];
+	    }
 	  _w++;
 	}
     }
