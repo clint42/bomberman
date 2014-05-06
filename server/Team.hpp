@@ -5,11 +5,15 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 14:06:52 2014 buret_j
-// Last update Tue May  6 14:18:18 2014 buret_j
+// Last update Tue May  6 17:02:44 2014 buret_j
 //
 
 #ifndef TEAM_HPP_
 # define TEAM_HPP_
+
+# include <cstdlib>
+
+# include "ColorGenerator.hpp"
 
 namespace Server {
 
@@ -21,7 +25,7 @@ namespace Server {
     size_t _players;
 
   public:
-    Team();
+    Team(size_t);
     ~Team();
 
     inline size_t getID() const { return this->_id; }
@@ -34,7 +38,7 @@ namespace Server {
 
     inline void   addPlayer() { this->_players += 1; }
     inline void   rmPlayer() { this->_players -= 1; }
-    inline size_t getplayers() const { return this->_players; }
+    inline size_t getPlayers() const { return this->_players; }
 
   }; // !class Team
 

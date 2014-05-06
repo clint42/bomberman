@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Tue May  6 15:56:22 2014 lafitt_g
+// Last update Tue May  6 17:04:14 2014 buret_j
 */
 
 #ifndef SERVER_HPP_
@@ -13,17 +13,19 @@
 
 # include <list>
 # include <map>
+# include <cstdlib>
 
 # include "Player.hpp"
 # include "Map.hpp"
+# include "Team.hpp"
 # include "Exception.hpp"
 
 namespace Server {
 
   class	Server {
-    std::list<Server::Team *> _teams;
-    std::map<size_t, Server::Player *>	_playersAlive;// size_t is Player's _id attribute
-    std::map<size_t, Server::Player *>	_playersDead;
+    std::list<Team *> _teams;
+    std::map<size_t, Player *>	_playersAlive;// size_t is Player's _id attribute
+    std::map<size_t, Player *>	_playersDead;
 
     Map				*_map;
     std::list<std::string>	_mapNames;
