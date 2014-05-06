@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Tue May  6 14:03:54 2014 buret_j
+// Last update Tue May  6 14:15:04 2014 buret_j
 //
 
 #ifndef PLAYER_HPP_
@@ -38,7 +38,7 @@ namespace Server {
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
     inline void   updateDateOfLastCommand() { TIME(_lastCommand); }
-    inline size_t getTimeSinceLastCommand() {
+    inline size_t getTimeSinceLastCommand() const {
       timeval t; TIME(t);
       return (t.tv_sec % 1000 * 1000 + t.tv_usec / 1000) -
 	(_lastCommand.tv_sec % 1000 * 1000 + _lastCommand.tv_usec / 1000);
