@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:11:21 2014 julie franel
-** Last update Tue May  6 17:47:57 2014 lafitt_g
+// Last update Tue May  6 18:05:18 2014 julie franel
 */
 
 #ifndef			MAP_HPP_
@@ -29,6 +29,7 @@ class			Map
   static size_t		getSizeT(const std::string &size);
   static void		getMap(size_t &width, size_t &height, std::ifstream &file,
 			       std::map<std::pair<size_t, size_t>, int> &_map);
+
   void			md5It(std::string &);
 
 public:
@@ -41,6 +42,8 @@ public:
   size_t		getNbrSlot() const;
   const std::string	&getKey() const;
   const std::map<std::pair<size_t, size_t>, int>	&getMap() const;
+
+  void			deleteElem(size_t posX, size_t posY);
 
   static Map		*parseMap(const std::string &filename);
   static void		generateMap();

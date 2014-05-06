@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-** Last update Tue May  6 17:48:34 2014 lafitt_g
+// Last update Tue May  6 18:14:08 2014 julie franel
 */
 
 #include <openssl/md5.h>
@@ -156,4 +156,24 @@ const std::string     &Map::getKey() const
 const std::map<std::pair<size_t, size_t>, int>        &Map::getMap() const
 {
   return (this->_map);
+}
+
+
+/*
+** MODIFIERS
+*/
+
+void	Map::deleteElem(size_t posX, size_t posY)
+{
+  std::pair<size_t, size_t>	_pos(posX, posY);
+  std::map<std::pair<size_t, size_t>, int>::iterator	it;
+
+  for (it = this->_map.begin(); it != this->_map.end(); ++it)
+    {
+      if (it->first == _pos)
+	{
+	  this->_map.erase(it);
+	  return ;
+	}
+    }
 }

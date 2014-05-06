@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Tue May  6 11:22:17 2014 julie franel
-// Last update Tue May  6 12:08:44 2014 julie franel
+// Last update Tue May  6 18:13:02 2014 julie franel
 //
 
 #include "Exception.hpp"
@@ -16,7 +16,9 @@ int	main()
   try
     {
       Map	*_map = Map::parseMap("test");
-      (void)_map;
+      std::cout << "BEFORE = " << _map->getMap().size() << std::endl;
+      _map->deleteElem(2, 3);
+      std::cout << "AFTER = " << _map->getMap().size() << std::endl;
     }
   catch (MapException e)
     {
