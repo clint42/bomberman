@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Tue May  6 17:25:45 2014 buret_j
+## Last update Tue May  6 18:09:37 2014 lafitt_g
 ##
 
 CXX		=	clang++
@@ -25,13 +25,12 @@ SRC		=	main.cpp		\
 OBJ		=	$(SRC:.cpp=.o)
 
 CXXFLAGS	=	-Wall -Wextra -Werror 	\
-			-Icommon/ #		\
-			-lssl -lcrypto
+			-Icommon/		\
 
 all:			$(NAME)
 
 $(NAME):		$(OBJ)
-			$(CXX) -o $(NAME) $(OBJ)
+			$(CXX) -o $(NAME) $(OBJ) -lssl -lcrypto
 
 clean:
 			$(RM) -f $(OBJ)
