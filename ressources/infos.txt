@@ -24,3 +24,9 @@ interface communication -> le client envoie les events au coeur logique qui lui 
 map gérée par fichiers -> le serveur lit le .map pour créer un objet Map ou génère un fichier .map aléatoirement
     	       	       -> serveur transmet l'objet Map au client et indique les 'blocks' détruits à chaque client
 		       -> nombre max de joueurs sur une map défini par la taille de la map
+
+
+@greg, @jg   [server][bombs & events]
+http://stackoverflow.com/questions/14398345/is-there-any-way-to-lock-a-mutex-and-have-it-automatically-unlock-after-a-given
+http://man7.org/linux/man-pages/dir_all_alphabetic.html
+http://man7.org/linux/man-pages/man3/sem_timedwait.3.html
