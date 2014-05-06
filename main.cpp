@@ -5,10 +5,11 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:06:54 2014 julie franel
-// Last update Mon May  5 19:45:03 2014 julie franel
+// Last update Tue May  6 11:21:08 2014 buret_j
 //
 
-#include "Map.hpp"
+#include "server/Server.hpp"
+#include "client/Client.hpp"
 
 int	main()
 {

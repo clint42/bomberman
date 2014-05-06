@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Tue May  6 11:13:24 2014 julie franel
+## Last update Tue May  6 11:22:08 2014 buret_j
 ##
 
 CXX		=	clang++
@@ -14,13 +14,15 @@ RM		=	rm
 
 NAME		=	bomberman
 
-SRC		=	common/Map.cpp		\
-			common/Exception.cpp	\
-			main.cpp
+SRC		=	main.cpp		\
+			common/Map.cpp		\
+			common/Exception.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
-CXXFLAGS	+=	-Wall -Wextra -Werror -Iserver/ -Icommon/ -Iclient/ # -lssl -lcrypto
+CXXFLAGS	=	-Wall -Wextra -Werror 	\
+			-Icommon/ #		\
+			-lssl -lcrypto
 
 all:			$(NAME)
 
