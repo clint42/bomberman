@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Tue May  6 18:24:59 2014 julie franel
+// Last update Wed May  7 14:18:31 2014 julie franel
 */
 
 #include <openssl/md5.h>
@@ -19,7 +19,7 @@
 ** CONSTRUCTOR / DESTRUCTOR
 */
 
-Map::Map(size_t width, size_t height, size_t nbPlayers, const std::string &key,
+Map::Map(const size_t &width, const size_t &height, const size_t &nbPlayers, const std::string &key,
 	 const std::map<std::pair<size_t, size_t>, int> &map)
 {
   this->_width = width;
@@ -48,7 +48,7 @@ size_t			Map::getSizeT(const std::string &size)
   return (tmp);
 }
 
-void				Map::getMap(size_t &width, size_t &height, std::ifstream &file,
+void				Map::getMap(const size_t &width, const size_t &height, std::ifstream &file,
 					    std::map<std::pair<size_t, size_t>, int> &_map)
 {
   char				_c;
@@ -139,17 +139,17 @@ void		Map::generateMap()
 ** GETTERS
 */
 
-size_t                Map::getWidth() const
+const size_t                &Map::getWidth() const
 {
   return (this->_width);
 }
 
-size_t                Map::getHeight() const
+const size_t                &Map::getHeight() const
 {
   return (this->_height);
 }
 
-size_t                Map::getNbrSlot() const
+const size_t                &Map::getNbrSlot() const
 {
   return (this->_nbPlayers);
 }
@@ -169,7 +169,7 @@ const std::map<std::pair<size_t, size_t>, int>        &Map::getMap() const
 ** MODIFIERS
 */
 
-void	Map::deleteElem(size_t posX, size_t posY)
+void	Map::deleteElem(const size_t &posX, const size_t &posY)
 {
   std::pair<size_t, size_t>	_pos(posX, posY);
   std::map<std::pair<size_t, size_t>, int>::iterator	it;

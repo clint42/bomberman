@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Wed May  7 11:40:32 2014 julie franel
-// Last update Wed May  7 13:18:54 2014 julie franel
+// Last update Wed May  7 14:14:19 2014 julie franel
 //
 
 #ifndef		PLAYER_HPP_
@@ -24,7 +24,8 @@ namespace Client {
     std::string		_name;
 
   public:
-    Player(size_t id, size_t posX, size_t posY, size_t color, const std::string &name);
+    Player(const size_t &id, const size_t &posX, const size_t &posY, const size_t &color,
+	   const std::string &name);
     ~Player();
 
     size_t		getId() const;

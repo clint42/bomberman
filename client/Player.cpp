@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Wed May  7 12:13:28 2014 julie franel
-// Last update Wed May  7 13:20:09 2014 julie franel
+// Last update Wed May  7 14:14:35 2014 julie franel
 //
 
 #include "Player.hpp"
@@ -14,7 +14,8 @@
 ** CONSTRUCTOR / DESTRUCTOR
 */
 
-Client::Player::Player(size_t id, size_t posX, size_t posY, size_t color, const std::string &name)
+Client::Player::Player(const size_t &id, const size_t &posX, const size_t &posY,
+		       const size_t &color, const std::string &name)
 {
   this->_id = id;
   this->_posX = posX;
