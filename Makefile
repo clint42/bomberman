@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Tue May  6 18:09:37 2014 lafitt_g
+## Last update Wed May  7 13:18:17 2014 julie franel
 ##
 
 CXX		=	clang++
@@ -14,13 +14,14 @@ RM		=	rm
 
 NAME		=	bomberman
 
-SRC		=	main.cpp		\
-			common/Map.cpp		\
-			common/Exception.cpp	\
-			server/Server.cpp	\
-			server/Player.cpp	\
-			server/Team.cpp		\
-			server/ColorGenerator.cpp
+SRC		=	main.cpp			\
+			common/Map.cpp			\
+			common/Exception.cpp		\
+			server/Server.cpp		\
+			server/Player.cpp		\
+			server/Team.cpp			\
+			server/ColorGenerator.cpp	\
+			client/Player.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
