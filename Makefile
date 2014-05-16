@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Wed May  7 13:18:17 2014 julie franel
+## Last update Fri May 16 15:51:46 2014 aurelien prieur
 ##
 
 CXX		=	clang++
@@ -20,8 +20,7 @@ SRC		=	main.cpp			\
 			server/Server.cpp		\
 			server/Player.cpp		\
 			server/Team.cpp			\
-			server/ColorGenerator.cpp	\
-			client/Player.cpp
+			server/ColorGenerator.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
