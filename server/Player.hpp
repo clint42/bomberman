@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Mon May 19 16:05:27 2014 buret_j
+// Last update Mon May 19 17:08:19 2014 buret_j
 //
 
 #ifndef PLAYER_HPP_
@@ -48,8 +48,8 @@ namespace Server {
     inline void	setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
     inline void setTeam(Team *t) { this->_team = t; }
 
-    inline void	poseBomb() { if (_bombLimit < _bombsOnFloor) _bombsOnFloor += 1; }
-    inline void destroyBomb() { if (_bombsOnFloor > 0) _bombOnFloor -= 1; }
+    inline void	poseBomb() { if (_bombsLimit < _bombsOnFloor) _bombsOnFloor += 1; }
+    inline void destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }
 
     inline void   updateDateOfLastCommand() { TIME(_lastCommand); }
     inline double getLastCommandMultiplier() const { return _lastCommandTimeMultiplier; }
