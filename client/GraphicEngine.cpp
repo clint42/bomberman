@@ -5,12 +5,11 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Mon May 19 14:27:14 2014 virol_g
+// Last update Mon May 19 15:10:34 2014 aurelien prieur
 //
 
 #include <iostream>
-#include "Gui.hpp"
-#include "Cube.hpp"
+#include "GraphicEngine.hpp"
 #include "Model.hpp"
 
 GraphicEngine::GraphicEngine(GameEntities &objects): objects(objects)
@@ -26,10 +25,8 @@ bool	GraphicEngine::initialize()
   glm::mat4	projection;
   glm::mat4	transformation;
   AObject	*model;
-  AObject	*cube;
 
-  if (this->sdlContext.start(800, 600, "Test LibGDL") == false)
-    throw GraphicEngineException("Unable to initialize gui");
+  this->sdlContext.start(800, 600, "Test LibGDL");
   glEnable(GL_DEPTH_TEST);
   if (!shader.load("/home/prieur_b/LibBomberman_linux_x64/shaders/basic.fp", GL_FRAGMENT_SHADER)
       || !shader.load("/home/prieur_b/LibBomberman_linux_x64/shaders/basic.vp", GL_VERTEX_SHADER)
@@ -48,25 +45,26 @@ bool	GraphicEngine::initialize()
 
 bool	GraphicEngine::update()
 {
-  Cube	Cube;
- 
   this->sdlContext.updateClock(this->clock);
   this->sdlContext.updateInputs(this->input);
   if (this->input.getKey(SDLK_ESCAPE) || this->input.getInput(SDL_QUIT, false))
     return (false);
-  for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.entities.begin();
-       it < this->objects.entities.end(); ++it)
-    it->update(this->clock, this->input);
+  for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
+       it != this->objects.getEntities().end(); ++it)
+    it->second->update(this->clock, this->input);
   return (true);
 }
 
 void	GraphicEngine::draw()
 {
+  std::cout << "DRAW" << std::endl;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  std::cout << "Before shader bind" << std::endl;
   shader.bind();
-  for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.entities.begin();
-       it < this->objects.entities.end(); ++it)
-    it->draw(this->shader, this->clock);
+  std::cout << "After shader bind" << std::endl;
+  for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
+       it != this->objects.getEntities().end(); ++it)
+    it->second->draw(this->shader, this->clock);
   this->sdlContext.flush();
 }
 

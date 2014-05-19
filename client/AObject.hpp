@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:05:44 2014 aurelien prieur
-// Last update Mon May 12 11:46:43 2014 aurelien prieur
+// Last update Mon May 19 14:34:49 2014 aurelien prieur
 //
 
 #ifndef AOBJECT_HPP_
@@ -23,6 +23,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+enum	ObjectType
+  {
+    PLAYER
+  };
 
 class	AObject
 {
@@ -41,6 +45,9 @@ public:
   void		rotate(glm::vec3 const &axis, float angle);
   void		scale(glm::vec3 const &scale);
   glm::mat4	getTransformation();
+  void		setPos(glm::vec3 const &pos);
+  void		setScale(glm::vec3 const &scale);
+  static AObject	*create(ObjectType type);
 };
 
 #endif // !AOBJECT_HPP_

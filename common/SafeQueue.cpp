@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon Apr 21 23:49:03 2014 buret_j
-// Last update Fri Apr 25 15:46:23 2014 buret_j
+// Last update Mon May 19 17:15:08 2014 aurelien prieur
 //
 
 #include "SafeQueue.hpp"
@@ -52,5 +52,4 @@ SafeQueue<T>::getSize(void) {
   return this->_queue.size();
 }
 
-#include "ThreadPool.hpp"
-template class SafeQueue<ThreadPool::task_t*>;
+template class SafeQueue<int>;

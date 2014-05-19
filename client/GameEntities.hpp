@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Fri May 16 18:04:03 2014 aurelien prieur
+// Last update Mon May 19 17:11:23 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -14,11 +14,14 @@
 # include <pthread.h>
 # include <map>
 # include <utility>
+# include "AObject.hpp"
+# include "ThreadException.hpp"
+# include "../common/Mutex.hpp"
 
 class	GameEntities
 {
-  std::map<std::pair<size_t, size_t>, AObject *>	entities;
-  pthread_mutex_t					locker;
+  std::map<std::pair<size_t, size_t>, AObject *>	_entities;
+  Mutex							_locker;
 
 public:
   GameEntities();
@@ -28,7 +31,7 @@ public:
   bool		addEntity(std::pair<size_t, size_t> const &coord, ObjectType type);
   bool		deleteEntity(std::pair<size_t, size_t> const &coord);
   AObject	*getEntity(std::pair<size_t, size_t> const &coord);
-  std::map<std::pair<size_t, size_t>, AObject *>  const &getEntities() const;
+  std::map<std::pair<size_t, size_t>, AObject *>  &getEntities();
 };
 
 #endif // !GAMEENTITIES_HPP_

@@ -5,10 +5,12 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Fri May 16 18:05:09 2014 aurelien prieur
+// Last update Mon May 19 15:02:46 2014 aurelien prieur
 //
 
 #include <unistd.h>
+#include "GameEntities.hpp"
+#include "ThreadUI.hpp"
 
 int	main()
 {
@@ -16,8 +18,7 @@ int	main()
   GameEntities	gameEntities;
   ThreadUI	threadUI(gameEntities);
 
-  
   //TODO: add failure condition to return correct value
   threadUI.join();
-  return (EXIT_SUCCESS)
+  return (EXIT_SUCCESS);
 }
