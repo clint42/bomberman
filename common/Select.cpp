@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Mon May 19 15:13:01 2014 lafitt_g
-** Last update Mon May 19 17:38:36 2014 lafitt_g
+// Last update Mon May 19 17:44:17 2014 aurelien prieur
 */
 
 #include "Select.hpp"
@@ -21,24 +21,28 @@ Select::~Select()
 void
 Select::fdZeroRead()
 {
+  _maxfd = 0;
   FD_ZERO(&this->_readfd);
 }
 
 void
 Select::fdZeroWrite()
 {
+  _maxfd = 0;
   FD_ZERO(&this->_writefd);
 }
 
 void
 Select::fdSetRead(int fd)
 {
+  _maxfd = (fd > _maxfd) ? fd : _maxfd;
   FD_SET(fd, &this->_readfd);
 }
 
 void
 Select::fdSetWrite(int fd)
 {
+  _maxfd = (fd > _maxfd) ? fd : _maxfd;
   FD_SET(fd, &this->_writefd);
 }
 
@@ -55,7 +59,7 @@ Select::fdIssetWrite(int fd)
 }
 
 int
-Select::fdSelect(int nfds)
+Select::fdSelect(struct timeval *timeout)
 {
-  return (select(nfds, &this->_readfd, &this->_writefd, NULL, NULL));
+  return (select(_maxfd + 1, &this->_readfd, &this->_writefd, NULL, timeout));
 }
