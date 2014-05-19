@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Tue May  6 11:18:51 2014 julie franel
-// Last update Tue May  6 11:28:06 2014 julie franel
+// Last update Mon May 19 14:13:16 2014 julie franel
 //
 
 #include "Exception.hpp"
@@ -23,3 +23,6 @@ Md5Exception::~Md5Exception(void) throw() {}
 
 MapException::MapException(const std::string &msg) throw(): ABombermanException(msg) {}
 MapException::~MapException(void) throw() {}
+
+SocketException::SocketException(const std::string &msg) throw(): ABombermanException(msg) {}
+SocketException::~SocketException(void) throw() {}
