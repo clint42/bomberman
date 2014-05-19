@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Mon May 19 14:59:44 2014 lafitt_g
-** Last update Mon May 19 15:57:36 2014 lafitt_g
+** Last update Mon May 19 17:35:56 2014 lafitt_g
 */
 
 #ifndef SELECT_HPP_
@@ -28,7 +28,7 @@ public:
   void		fdZeroWrite();
   void		fdSetWrite(int);
   int		fdIssetWrite(int);
-  int		fdSelect(int, fd_set *, struct timeval *);
+  int		fdSelect(int);
 
 private:
   fd_set	_readfd;

@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Mon May 19 15:13:01 2014 lafitt_g
-** Last update Mon May 19 16:03:55 2014 lafitt_g
+** Last update Mon May 19 17:38:36 2014 lafitt_g
 */
 
 #include "Select.hpp"
@@ -55,7 +55,7 @@ Select::fdIssetWrite(int fd)
 }
 
 int
-Select::fdSelect(int nfds, fd_set *exceptfds, struct timeval *timeout)
+Select::fdSelect(int nfds)
 {
-  return (select(nfds, &this->_readfd, &this->_writefd, exceptfds, timeout));
+  return (select(nfds, &this->_readfd, &this->_writefd, NULL, NULL));
 }
