@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Tue May  6 17:25:21 2014 buret_j
+// Last update Mon May 19 16:05:27 2014 buret_j
 //
 
 #ifndef PLAYER_HPP_
@@ -23,16 +23,20 @@ namespace Server {
 
   class Player {
     size_t	 _id;
-    Team	*_team;
+    // std::string  _name;
     bool	 _bot;
+    Team	*_team;
     size_t	 _posX, _posY;
+
+    size_t	_bombsLimit;
+    size_t	_bombsOnFloor;
 
     timeval	_lastCommand;
     double	_lastCommandTimeMultiplier;// differentiating displacement & orientation commands
     double	_commandTimeMultiplier;// used by bonus, '1' by default
 
   public:
-    Player(size_t, bool);
+    Player(size_t, Team *, bool);
     ~Player();
 
     inline size_t getID() const { return this->_id; }
@@ -40,6 +44,12 @@ namespace Server {
     inline bool   isBot() const { return this->_bot; }
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
+
+    inline void	setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
+    inline void setTeam(Team *t) { this->_team = t; }
+
+    inline void	poseBomb() { if (_bombLimit < _bombsOnFloor) _bombsOnFloor += 1; }
+    inline void destroyBomb() { if (_bombsOnFloor > 0) _bombOnFloor -= 1; }
 
     inline void   updateDateOfLastCommand() { TIME(_lastCommand); }
     inline double getLastCommandMultiplier() const { return _lastCommandTimeMultiplier; }

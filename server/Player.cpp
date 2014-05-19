@@ -5,15 +5,15 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 12:24:05 2014 buret_j
-// Last update Tue May  6 17:16:25 2014 buret_j
+// Last update Mon May 19 16:05:19 2014 buret_j
 //
 
 #include "Player.hpp"
 
-Server::Player::Player(size_t id, bool bot)
-  : _id(id), _team(0), _bot(bot) {
+Server::Player::Player(size_t id, Server::Team *t, bool bot)
+  : _id(id), _bot(bot), _team(t), _posX(0), _posY(0)
+    _bombsLimit(1), _bombsOnFloor(0) {
 }
 
 Server::Player::~Player() {
 }
-
