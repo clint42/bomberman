@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 14:06:52 2014 buret_j
-// Last update Tue May  6 17:02:44 2014 buret_j
+// Last update Mon May 19 14:41:18 2014 buret_j
 //
 
 #ifndef TEAM_HPP_
@@ -36,6 +36,7 @@ namespace Server {
     inline void   incrScore() { this->_score += 1; }
     inline void   decrScore() { this->_score -= 1; }
 
+    inline void	  cleanPlayer() { this->_players = 0; }
     inline void   addPlayer() { this->_players += 1; }
     inline void   rmPlayer() { this->_players -= 1; }
     inline size_t getPlayers() const { return this->_players; }

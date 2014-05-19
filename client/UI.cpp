@@ -5,12 +5,12 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:52:00 2014 aurelien prieur
-// Last update Fri May 16 18:00:08 2014 aurelien prieur
+// Last update Mon May 19 15:10:15 2014 aurelien prieur
 //
 
 #include "UI.hpp"
 
-UI::UI(GameEntities *gameEntities): _graphicEngine(gameEntities)
+UI::UI(GameEntities &gameEntities): _graphicEngine(gameEntities)
 {
 }
 
@@ -20,7 +20,11 @@ UI::~UI()
 
 bool	UI::run()
 {
-  //GRAPHIC LOOP
-  //WHILE (_graphicEngine.update)
-  //_graphicEngine.draw
+  _graphicEngine.initialize();
+
+  while (_graphicEngine.update())
+    {
+      _graphicEngine.draw();
+    }
+  return (true);
 }

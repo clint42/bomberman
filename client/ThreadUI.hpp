@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:16:05 2014 aurelien prieur
-// Last update Fri May 16 17:59:16 2014 aurelien prieur
+// Last update Mon May 19 15:00:03 2014 aurelien prieur
 //
 
 #ifndef THREADUI_HPP_
@@ -16,26 +16,18 @@
 # include <exception>
 # include "GameEntities.hpp"
 # include "UI.hpp"
+# include "ThreadException.hpp"
 
 class	ThreadUI
 {
   pthread_t	_thread;
-  GameEntities	*_gameEntities;
+  GameEntities	&_gameEntities;
   static void	*threadLaunch(void *);
   void		*run();
 public:
-  Thread(GameEntities *gameEntities);
-  virtual ~Thread();
+  ThreadUI(GameEntities &gameEntities);
+  virtual ~ThreadUI();
   bool		join();
-};
-
-class	ThreadException: public std::exception
-{
-  std::string	_what;
-public:
-  ThreadException(std::string const &what);
-  ~ThreadException() throw();
-  const char	*what() const throw();
 };
 
 #endif // !THREADUI_HPP_
