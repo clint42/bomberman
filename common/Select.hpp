@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Mon May 19 14:59:44 2014 lafitt_g
-// Last update Mon May 19 17:44:10 2014 aurelien prieur
+// Last update Mon May 19 18:27:41 2014 aurelien prieur
 */
 
 #ifndef SELECT_HPP_
@@ -33,7 +33,8 @@ public:
 private:
   fd_set	_readfd;
   fd_set	_writefd;
-  int		_maxfd;
+  int		_maxfdRead;
+  int		_maxfdWrite;
 };
 
 #endif /* !SELECT_HPP_ */
