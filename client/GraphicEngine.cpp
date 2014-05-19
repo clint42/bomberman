@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Fri May 16 16:49:55 2014 aurelien prieur
+// Last update Sun May 18 16:24:25 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -13,7 +13,7 @@
 #include "Cube.hpp"
 #include "Model.hpp"
 
-GraphicEngine::GraphicEngine()
+GraphicEngine::GraphicEngine(GameEntities &objects): objects(objects)
 {
 }
 
@@ -54,6 +54,7 @@ bool	GraphicEngine::update()
   this->sdlContext.updateInputs(this->input);
   if (this->input.getKey(SDLK_ESCAPE) || this->input.getInput(SDL_QUIT, false))
     return (false);
+  //TODO: iterator (map used instead of vector)
   for (size_t i = 0; i < this->objects.size(); ++i)
     this->objects[i]->update(this->clock, this->input);
   return (true);
@@ -63,6 +64,7 @@ void	GraphicEngine::draw()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   shader.bind();
+  //TODO: iterator (map used instead of vector)
   for (size_t i = 0; i < this->objects.size(); ++i)
     this->objects[i]->draw(this->shader, this->clock);
   this->sdlContext.flush();

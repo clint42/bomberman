@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:00:09 2014 aurelien prieur
-// Last update Fri May 16 17:50:42 2014 aurelien prieur
+// Last update Sun May 18 16:22:37 2014 aurelien prieur
 //
 
 #ifndef GRAPHICENGINE_HPP_
@@ -30,10 +30,10 @@ class			GraphicEngine: public gdl::Game
   gdl::Clock		clock;
   gdl::Input		input;
   gdl::BasicShader	shader;
-  GameEntities		*objects;
+  GameEntities		&objects;
 
 public:
-  GraphicEngine(GameEntities *objects);
+  GraphicEngine(GameEntities &objects);
   ~GraphicEngine();
   virtual bool	initialize();
   virtual bool	update();
