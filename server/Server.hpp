@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Mon May 19 17:16:26 2014 buret_j
+** Last update Mon May 19 18:14:51 2014 lafitt_g
 */
 
 #ifndef SERVER_HPP_
@@ -24,8 +24,8 @@
 namespace Server {
 
   class	Server {
-    // std::map<std::pair<size_t, size_t>, Player *> _playersAlive;
-    // std::map<std::pair<size_t, size_t>, Player *> _playersDead;
+    std::map<std::pair<size_t, size_t>, Player *> _playersAlive;
+    std::map<std::pair<size_t, size_t>, Player *> _playersDead;
     std::list<Team *>	_teams;
 
     std::list<std::string>	_mapNames;
@@ -38,7 +38,7 @@ namespace Server {
     void	setTime();
 
     //
-    void	isDead(size_t);
+    void	isDead(size_t, std::pair<size_t, size_t>);
     void	allDead();
     void	putInPlayersAlive();
 
