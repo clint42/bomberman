@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sun May 18 16:24:25 2014 aurelien prieur
+// Last update Mon May 19 14:27:14 2014 virol_g
 //
 
 #include <iostream>
@@ -54,9 +54,9 @@ bool	GraphicEngine::update()
   this->sdlContext.updateInputs(this->input);
   if (this->input.getKey(SDLK_ESCAPE) || this->input.getInput(SDL_QUIT, false))
     return (false);
-  //TODO: iterator (map used instead of vector)
-  for (size_t i = 0; i < this->objects.size(); ++i)
-    this->objects[i]->update(this->clock, this->input);
+  for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.entities.begin();
+       it < this->objects.entities.end(); ++it)
+    it->update(this->clock, this->input);
   return (true);
 }
 
@@ -64,9 +64,9 @@ void	GraphicEngine::draw()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   shader.bind();
-  //TODO: iterator (map used instead of vector)
-  for (size_t i = 0; i < this->objects.size(); ++i)
-    this->objects[i]->draw(this->shader, this->clock);
+  for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.entities.begin();
+       it < this->objects.entities.end(); ++it)
+    it->draw(this->shader, this->clock);
   this->sdlContext.flush();
 }
 
