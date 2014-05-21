@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May 19 16:01:46 2014 julie franel
-// Last update Mon May 19 17:11:29 2014 julie franel
+// Last update Wed May 21 14:23:40 2014 julie franel
 //
 
 #ifndef		SOCKETCLT_HPP_
@@ -21,6 +21,8 @@ class		SocketClt : public ASocket
 public:
   SocketClt(const std::string &ip, int port);
   ~SocketClt();
+
+  int	getFd() const;
 };
 
 #endif		/* !SOCKETCLT_HPP_ */

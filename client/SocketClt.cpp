@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May 19 16:06:46 2014 julie franel
-// Last update Mon May 19 17:11:05 2014 julie franel
+// Last update Wed May 21 14:24:02 2014 julie franel
 //
 
 #include "SocketClt.hpp"
@@ -43,4 +43,9 @@ void	SocketClt::connectSocket()
 void	SocketClt::getInetAddr(const std::string &ip)
 {
   this->_sin.sin_addr.s_addr = inet_addr(ip.c_str());
+}
+
+int	SocketClt::getFd() const
+{
+  return (this->_fd);
 }
