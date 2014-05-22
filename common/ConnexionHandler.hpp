@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Thu May 22 17:48:56 2014 buret_j
+// Last update Thu May 22 18:08:32 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -93,11 +93,10 @@ public: // nested classes definition
       int		fd = socket(PF_INET, SOCK_STREAM, pe);
       sockaddr_in	sin;
 
-      if (!pe || fd == -1) throw ConnexionException;
       sin.sin_family = AF_INET;
       sin.sin_port = htons(port);
       sin.sin_addr.s_addr = inet_addr(ip.c_str());
-      connect(fd);
+      if (!pe || fd == -1 || connect(fd) == -1) throw ConnexionException;
       _socket = new Socket(fd);
     }
     ~Client() {}
