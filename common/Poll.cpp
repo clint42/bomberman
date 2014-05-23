@@ -5,9 +5,10 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Tue May 20 09:42:06 2014 aurelien prieur
-// Last update Tue May 20 10:46:02 2014 aurelien prieur
+// Last update Fri May 23 14:53:23 2014 aurelien prieur
 //
 
+#include <iostream>
 #include "Poll.hpp"
 
 Poll::Poll()
@@ -18,7 +19,7 @@ Poll::~Poll()
 {
 }
 
-void		Poll::watchEvent(int fd, int event, bool revents)
+void		Poll::watchEvent(int fd, int event)
 {
   size_t	i;
 
@@ -27,33 +28,26 @@ void		Poll::watchEvent(int fd, int event, bool revents)
     {
       if (_fds[i].fd == fd)
 	{
-	  if (!revents)
-	    _fds[i].events |= event;
-	  else
-	    _fds[i].revents |= event;
+	  _fds[i].events |= event;
+	  _fds[i].revents = 0;
 	  return ;
 	}
       ++i;
     }
   _fds.resize(1);
   _fds[i].fd = fd;
-  if (!revents)
-    _fds[i].events = event;
-  else
-    _fds[i].revents = event;
+  _fds[i].events = event | POLLRDHUP;
+  _fds[i].revents = 0;
 } 
 
-void		Poll::stopWatchingEvent(int fd, int event, bool revents)
+void		Poll::stopWatchingEvent(int fd, int event)
 {
   for (std::vector<struct pollfd>::iterator it = _fds.begin();
        it != _fds.end(); ++it)
     {
       if (it->fd == fd)
 	{
-	  if (!revents)
-	    it->events &= ~event;
-	  else
-	    it->revents &= ~event;
+	  it->events &= ~event;
 	  if (it->events == 0 && it->revents == 0)
 	    _fds.erase(it);
 	  return ;
@@ -62,16 +56,25 @@ void		Poll::stopWatchingEvent(int fd, int event, bool revents)
   throw PollException("fd not set");
 }
 
-bool		Poll::isEventOccurred(int fd, int event, bool revents)
+bool		Poll::isEventOccurred(int fd, int event)
 {
   for (size_t i = 0; i < _fds.size(); ++i)
     {
       if (_fds[i].fd == fd)
 	{
-	  if (!revents)
-	    return ((_fds[i].events & event) == event);
-	  else
-	    return ((_fds[i].revents & event) == event);
+	  return ((_fds[i].revents & event) == event);
+	}
+    }
+  throw PollException("fd not set");
+}
+
+bool		Poll::isDisconnected(int fd)
+{
+  for (size_t i = 0; i < _fds.size(); ++i)
+    {
+      if (_fds[i].fd == fd)
+	{
+	  return ((_fds[i].revents & POLLRDHUP) == POLLRDHUP);
 	}
     }
   throw PollException("fd not set");
@@ -94,3 +97,4 @@ const char	*PollException::what() const throw()
 {
   return (_what.c_str());
 }
+
