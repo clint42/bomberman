@@ -5,7 +5,7 @@
 ** Login   <prieur_b@epitech.net>
 ** 
 ** Started on  Mon May 19 18:00:15 2014 aurelien prieur
-** Last update Fri May 23 15:09:59 2014 aurelien prieur
+** Last update Fri May 23 15:30:53 2014 aurelien prieur
 */
 
 #include <stdlib.h>
@@ -95,7 +95,7 @@ int		main(int ac, char **av)
   cs = -1;
   size_sin = sizeof(sin);
   poll.watchEvent(sock, POLLIN);
-  while ((ret = poll.pollFn(-1)) >= 0)
+  while ((ret = poll.pollFn(300)) >= 0)
     {
       try {
       if (poll.isEventOccurred(sock, POLLIN))
