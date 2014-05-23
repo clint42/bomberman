@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Tue May 20 09:42:06 2014 aurelien prieur
-// Last update Fri May 23 14:53:23 2014 aurelien prieur
+// Last update Fri May 23 15:15:49 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -34,7 +34,7 @@ void		Poll::watchEvent(int fd, int event)
 	}
       ++i;
     }
-  _fds.resize(1);
+  _fds.resize(_fds.size() + 1);
   _fds[i].fd = fd;
   _fds[i].events = event | POLLRDHUP;
   _fds[i].revents = 0;
