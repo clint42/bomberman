@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:30 2014 aurelien prieur
-// Last update Tue May 13 15:22:20 2014 aurelien prieur
+// Last update Fri May 23 14:17:07 2014 virol_g
 //
 
 #include <iostream>
@@ -22,17 +22,24 @@ Model::~Model()
 bool	Model::initialize()
 {
   _speed = 10.0f;
-  if (_texture.load("/home/prieur_b/LibBomberman_linux_x64/assets/marvin.fbm/Main_texture_diffuse2.tga") == false)
-    return (false);
-  if (_model.load("/home/prieur_b/LibBomberman_linux_x64/assets/marvin.fbx") == false)
-    return (false);
+  if (_texture.load("./assets/marvin.fbm/Main_texture_diffuse2.tga") == false)
+    {
+      std::cerr << "Couldn't load texture." << std::endl;
+      return (false);
+    }
+  if (_model.load("./assets/marvin.fbx") == false)
+    {
+      std::cerr << "Couldn't load model." << std::endl;
+      return (false);
+    }
   if (_model.createSubAnim(0, "run", 0, 60) == false)
     return (false);
   return (true);
 }
 
 bool	Model::update(gdl::Clock const &clock, gdl::Input &input)
-{  
+{
+  std::cout << "UPDATE MODEL" << std::endl;
   if (input.getKey(SDLK_UP))
     {
       _rotation.y = 180;
