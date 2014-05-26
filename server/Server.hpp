@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Mon May 19 18:14:51 2014 lafitt_g
+// Last update Mon May 26 17:35:41 2014 julie franel
 */
 
 #ifndef SERVER_HPP_
@@ -19,6 +19,8 @@
 # include "Player.hpp"
 # include "Map.hpp"
 # include "Team.hpp"
+# include "SafeQueue.hpp"
+# include "Filter.hpp"
 # include "Exception.hpp"
 
 namespace Server {
@@ -33,6 +35,16 @@ namespace Server {
     Game::type			_gameType;
     Game::time			_gameTimeMult;
     timeval			_dateEnd;
+
+    SafeQueue<t_cmd *>		_events;
+    SafeQueue<t_cmd *>		_bomb;
+
+    struct			t_msg
+    {
+      timeval			_date;
+      std::string		_msg;
+    };
+    std::list<t_msg *>		_messages;
 
     size_t	retrieveMapNames();
     void	setTime();
