@@ -5,18 +5,10 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon Apr 21 23:49:03 2014 buret_j
-// Last update Mon May 19 17:15:08 2014 aurelien prieur
+// Last update Mon May 26 18:55:20 2014 buret_j
 //
 
 #include "SafeQueue.hpp"
-
-template <class T>
-SafeQueue<T>::SafeQueue(void) {
-}
-
-template <class T>
-SafeQueue<T>::~SafeQueue(void) {
-}
 
 template <class T>
 void
@@ -51,5 +43,3 @@ SafeQueue<T>::getSize(void) {
   ScopedLock l_mutex(&this->_mutex);
   return this->_queue.size();
 }
-
-template class SafeQueue<int>;

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon Apr 21 20:37:45 2014 buret_j
-// Last update Fri Apr 25 15:46:32 2014 buret_j
+// Last update Mon May 26 18:53:20 2014 buret_j
 //
 
 #ifndef SAFEQUEUE_HPP_
@@ -23,8 +23,9 @@ private:
   std::list<T>	_queue;
 
 public:
-  SafeQueue(void);
-  ~SafeQueue(void);
+  SafeQueue(void) { }
+  ~SafeQueue(void) { }
+
   void		push(T);
   bool		tryPop(T*);
   bool		empty(void); // not const of of Mutex locked

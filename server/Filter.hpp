@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Fri May 23 14:16:00 2014 lafitt_g
-** Last update Mon May 26 15:57:18 2014 lafitt_g
+// Last update Mon May 26 18:55:40 2014 buret_j
 */
 
 #ifndef FILTER_HPP_
@@ -36,5 +36,8 @@ public:
 private:
   std::string	_cmd;
 };
+
+template class SafeQueue<t_cmd *>;
+
 
 #endif /* !FILTER_HPP_ */
