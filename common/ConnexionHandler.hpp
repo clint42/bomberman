@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Mon May 26 15:38:28 2014 buret_j
+// Last update Mon May 26 18:31:00 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
