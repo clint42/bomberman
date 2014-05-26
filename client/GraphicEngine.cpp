@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Fri May 23 15:50:36 2014 virol_g
+// Last update Fri May 23 16:17:16 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -38,13 +38,6 @@ bool	GraphicEngine::initialize()
   projection = glm::perspective(60.0f, 800.0f / 600.0f, 0.1f, 100.f);
   transformation = glm::lookAt(glm::vec3(0, 15, 20), glm::vec3(0, 5, 0), glm::vec3(0, 6, 0));
   shader.bind();
-  this->objects.lock();
-
-  this->objects.addEntity(std::pair<size_t, size_t>(0, 0), PLAYER);
-  this->objects.getEntity(std::pair<size_t, size_t>(0, 0))->initialize();
-  this->objects.getEntity(std::pair<size_t, size_t>(0, 0))->scale(glm::vec3(0.02, 0.02, 0.02));
-
-  this->objects.unlock();
   shader.setUniform("view", transformation);
   shader.setUniform("projection", projection);
   return (true);
