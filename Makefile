@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Mon May 19 17:30:39 2014 julie franel
+## Last update Mon May 26 15:28:47 2014 julie franel
 ##
 
 CXX		=	clang++
@@ -18,9 +18,6 @@ SRC		=	main.cpp			\
 			common/Map.cpp			\
 			common/Exception.cpp		\
 			common/Select.cpp		\
-			common/ASocket.cpp		\
-			client/SocketClt.cpp		\
-			server/SocketSrv.cpp		\
 			server/Server.cpp		\
 			server/Player.cpp		\
 			server/Team.cpp			\
