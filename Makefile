@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Mon May 26 15:28:47 2014 julie franel
+## Last update Mon May 26 17:39:52 2014 julie franel
 ##
 
 CXX		=	clang++
@@ -18,10 +18,13 @@ SRC		=	main.cpp			\
 			common/Map.cpp			\
 			common/Exception.cpp		\
 			common/Select.cpp		\
+			common/Mutex.cpp		\
+			common/SafeQueue.cpp		\
+			common/ScopedLock.cpp		\
 			server/Server.cpp		\
 			server/Player.cpp		\
 			server/Team.cpp			\
-			server/ColorGenerator.cpp
+			server/ColorGenerator.cpp	\
 
 OBJ		=	$(SRC:.cpp=.o)
 
