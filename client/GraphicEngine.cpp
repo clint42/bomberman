@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Mon May 19 15:10:34 2014 aurelien prieur
+// Last update Fri May 23 16:17:16 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -28,8 +28,8 @@ bool	GraphicEngine::initialize()
 
   this->sdlContext.start(800, 600, "Test LibGDL");
   glEnable(GL_DEPTH_TEST);
-  if (!shader.load("/home/prieur_b/LibBomberman_linux_x64/shaders/basic.fp", GL_FRAGMENT_SHADER)
-      || !shader.load("/home/prieur_b/LibBomberman_linux_x64/shaders/basic.vp", GL_VERTEX_SHADER)
+  if (!shader.load("./shaders/basic.fp", GL_FRAGMENT_SHADER)
+      || !shader.load("./shaders/basic.vp", GL_VERTEX_SHADER)
       || !shader.build())
     {
       std::cerr << "Shader loading error" << std::endl;
@@ -59,9 +59,9 @@ void	GraphicEngine::draw()
 {
   std::cout << "DRAW" << std::endl;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  std::cout << "Before shader bind" << std::endl;
+  //  std::cout << "Before shader bind" << std::endl;
   shader.bind();
-  std::cout << "After shader bind" << std::endl;
+  //std::cout << "After shader bind" << std::endl;
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
        it != this->objects.getEntities().end(); ++it)
     it->second->draw(this->shader, this->clock);
