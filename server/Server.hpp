@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Mon May 26 17:35:41 2014 julie franel
+// Last update Wed May 28 18:06:39 2014 julie franel
 */
 
 #ifndef SERVER_HPP_
@@ -46,6 +46,9 @@ namespace Server {
     };
     std::list<t_msg *>		_messages;
 
+    ScopedLock			_eventMutex;
+    ScopedLock			_bombMutex;
+
     size_t	retrieveMapNames();
     void	setTime();
 
@@ -54,10 +57,14 @@ namespace Server {
     void	allDead();
     void	putInPlayersAlive();
 
+    Player	*getPlayer(size_t, size_t);
+    Player	*getPlayer(size_t id);
+
   public:
     Server();
     ~Server();
 
+    void	run();
   };
 
 }
