@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Wed May 28 18:06:39 2014 julie franel
+// Last update Wed May 28 18:18:54 2014 julie franel
 */
 
 #ifndef SERVER_HPP_
@@ -46,8 +46,8 @@ namespace Server {
     };
     std::list<t_msg *>		_messages;
 
-    ScopedLock			_eventMutex;
-    ScopedLock			_bombMutex;
+    // ScopedLock			_eventMutex;
+    // ScopedLock			_bombMutex;
 
     size_t	retrieveMapNames();
     void	setTime();

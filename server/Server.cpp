@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Wed May 28 18:12:39 2014 julie franel
+// Last update Wed May 28 18:20:51 2014 julie franel
 */
 
 #include "Server.hpp"
@@ -101,17 +101,16 @@ Server::Player	*Server::Server::getPlayer(size_t id)
 
 void		Server::Server::run()
 {
-  t_cmd		_cmd;
+  t_cmd		*_cmd;
   Player	*_player;
 
   while (1)
     {
-      // do scopedlock
       this->_events.tryPop(&_cmd); // verifier retour
-      if ((_player = this->getPlayer(_cmd.pos.first, _cmd.pos.second)) == NULL)
+      if ((_player = this->getPlayer(_cmd->pos.first, _cmd->pos.second)) == NULL)
 	{
-	  _player = this->getPlayer(_cmd.id);
-	  _player->setPos(_cmd.pos.first, _cmd.pos.second);
+	  _player = this->getPlayer(_cmd->id);
+	  _player->setPos(_cmd->pos.first, _cmd->pos.second);
 	}
       if (_player->getTimeSinceLastCommand() <= (DELAY * _player->getLastCommandMultiplier()
 						 * _player->getCommandTimeMultiplier()))
