@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Mon May 26 18:31:00 2014 buret_j
+// Last update Wed May 28 14:37:55 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -40,7 +40,7 @@ public:
   inline Server *	Server() { return _server; }
   inline Server *	Server(int port) {
     if (!_server && !_client) { _server = new Server(port); }
-    _poll.watchEvent(Server()->getMasterSocket(), );
+    _poll.watchEvent(Server()->getMasterSocket(), POLLIN);
     return _server;
   }
 
@@ -69,6 +69,9 @@ public:
       Client()->perform(fct, param, &_poll);
   }
 
+  inline void		watchEventOnSocket(Socket *s, int e) { _poll.watchEvent(s->getFd(), e); }
+  inline void	        unwatchEventOnSocket(Socket *s, int e) {_poll.stopWatchingEvent(s->getFd(), e);}
+
 public: // nested classes definition
 
   class Server {
@@ -82,6 +85,7 @@ public: // nested classes definition
     ~Server();
 
     void	perform(void (*fct)(void *, Socket *, int), void *param, Poll *poll);
+    inline int	getMasterSocket() const { return _masterSocket; } 
   }; // !Server
 
 

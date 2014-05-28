@@ -5,34 +5,38 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu May 22 14:42:09 2014 buret_j
-// Last update Mon May 26 18:28:58 2014 buret_j
+// Last update Wed May 28 15:12:47 2014 buret_j
 //
 
 #ifndef SOCKET_HPP_
 # define SOCKET_HPP_
 
-# define SOCKET_BUFLEN 500
+# include <unistd.h>
+# include <iostream>
+# include <ext/stdio_filebuf.h>
 
 class Socket {
 
-  std::istream *	_in;
-  std::ostream *	_out;
-  int			_fd;
+  __gnu_cxx::stdio_filebuf<char> * __in;
+  __gnu_cxx::stdio_filebuf<char> * __out;
+  std::istream *		   _in;
+  std::ostream *		   _out;
+  int				   _fd;
 
 public:
   Socket(int fd) {
-    __gnu_cxx::stdio_filebuf<char> in(fd, std::ios:in, false, SOCKET_BUFLEN);
-    __gnu_cxx::stdio_filebuf<char> out(fd, std::ios::out, false, SOCKET_BUFLEN);
+    __in = new __gnu_cxx::stdio_filebuf<char>(fd, std::ios::in);
+    __out = new __gnu_cxx::stdio_filebuf<char>(fd, std::ios::out);
 
     _fd = fd;
-    _in = new std::istream(in);
-    _out = new std::ostream(out);
+    _in = new std::istream(__in);
+    _out = new std::ostream(__out);
   }
-  ~Socket() { close(_fd); }
+  ~Socket() { delete _in; delete _out; delete __in; delete __out; close(_fd); }
 
   inline int  getFd() const { return _fd; }
   inline void getLine(std::string &toFill) { getline(*_in, toFill); }
-  inline void write(std::string const &toWrite) { _out << toWrite << std::endl; }
+  inline void write(std::string const &toWrite) { *_out << toWrite << std::endl; }
 };
 
 #endif /* !SOCKET_HPP_ */

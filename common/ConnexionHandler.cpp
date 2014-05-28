@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Mon May 26 17:52:35 2014 buret_j
+// Last update Wed May 28 13:18:12 2014 buret_j
 //
 
 #include "ConnexionHandler.hpp"
@@ -46,11 +46,6 @@ ConnexionHandler::Server::accept() {
   _poll.watchEvent(fd, POLLOUT);
 }
 
-/* *****************
-** <- Server
-** Client ->
-*/
-
 void
 ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, int),
 				  void *param,
@@ -74,6 +69,11 @@ ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, int),
     }
   }
 }
+
+/* *****************
+** <- Server
+** Client ->
+*/
 
 ConnexionHandler::Client::Client(int port, std::string const &ip) {
   protoent *	pe = getprotobyname("TCP");
