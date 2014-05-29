@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Mon May 26 17:35:41 2014 julie franel
+// Last update Thu May 29 16:51:20 2014 buret_j
 */
 
 #ifndef SERVER_HPP_
@@ -22,6 +22,7 @@
 # include "SafeQueue.hpp"
 # include "Filter.hpp"
 # include "Exception.hpp"
+# include "ConnexionHandler.hpp"
 
 namespace Server {
 
@@ -32,12 +33,14 @@ namespace Server {
 
     std::list<std::string>	_mapNames;
     Map *			_map;
-    Game::type			_gameType;
-    Game::time			_gameTimeMult;
+    // Game::Type		_gameType;
+    // Game::Time		_gameTimeMult;
     timeval			_dateEnd;
 
     SafeQueue<t_cmd *>		_events;
     SafeQueue<t_cmd *>		_bomb;
+
+    ConnexionHandler test;
 
     struct			t_msg
     {

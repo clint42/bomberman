@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Wed May 28 16:11:32 2014 buret_j
+// Last update Wed May 28 16:20:34 2014 buret_j
 //
 
 #ifndef PLAYER_HPP_
@@ -70,7 +70,7 @@ namespace Server {
 	(_lastCommand.tv_sec % 1000 * 1000 + _lastCommand.tv_usec / 1000);
     }
 
-    inline Socket *getSocket() { return _socket; }
+    inline Socket *getSocket() const { return _socket; }
     inline size_t getSocketPartner() { return _socketPartner; }
     inline void	  setSocketPartner(size_t id) { _socketPartner = id; }
 
