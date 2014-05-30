@@ -5,14 +5,16 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Fri May 30 15:08:13 2014 lafitt_g
+** Last update Fri May 30 21:26:36 2014 lafitt_g
 */
 
 #ifndef SERVER_HPP_
 # define SERVER_HPP_
 
 # include <list>
+# include <vector>
 # include <map>
+# include <sstream>
 # include <cstdlib>
 
 # include "Game.hpp"
@@ -25,6 +27,20 @@
 // # include "ConnexionHandler.hpp"
 
 namespace Server {
+
+  struct                          t_cmd{
+    size_t                        id;
+    timeval                       date;
+    std::pair<size_t, size_t>     pos;
+    std::string                   action;
+    std::vector<std::string>      params;
+  };
+
+  struct                      t_msg{
+    timeval                   _date;
+    std::string               _msg;
+  };
+
 
   class	Server {
     std::map<std::pair<size_t, size_t>, Player *> _playersAlive;
@@ -39,6 +55,7 @@ namespace Server {
 
     SafeQueue<t_cmd *>		_events;
     SafeQueue<t_cmd *>		_bomb;
+    SafeQueue<t_cmd *>		_ext;
 
     // ConnexionHandler test;
 
@@ -46,6 +63,11 @@ namespace Server {
 
     size_t	retrieveMapNames();
     void	setTime();
+
+    //
+    void	getInformation(const std::string &, size_t *, size_t, size_t);
+    void	filterCmd(const t_msg &);
+    void	putCmdInQueue(t_cmd *);
 
     //
     void	isDead(size_t, std::pair<size_t, size_t>);

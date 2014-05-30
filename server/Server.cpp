@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Mon May 26 18:54:51 2014 buret_j
+** Last update Fri May 30 21:22:35 2014 lafitt_g
 */
 
 #include "Server.hpp"
@@ -73,4 +73,73 @@ Server::Server::putInPlayersAlive()
       ++countAlive;
       --countDead;
     }
+}
+
+/*
+** FILTER
+*/
+
+void
+Server::Server::getInformation(const std::string &msg, size_t *field, size_t cur_1, size_t cur_2)
+{
+  if (cur_1 != std::string::npos && cur_2 != std::string::npos)
+    {
+      std::stringstream convert(msg.substr(cur_1, cur_2));
+      convert >> *field;
+    }
+  else
+    field = 0;
+}
+
+void
+Server::Server::filterCmd(const t_msg &msg)
+{
+  t_cmd         *cmd = new t_cmd;
+  size_t        cur_1 = 0;
+  size_t        cur_2 = 0;
+
+  cmd->date = msg._date;
+  cur_1 = msg._msg.find(" ", cur_1);
+  this->getInformation(msg._msg, &cmd->id, cur_2, cur_1);
+  cur_2 = msg._msg.find(" ", cur_1 + 1);
+  this->getInformation(msg._msg, &cmd->pos.first, cur_1 + 1, cur_2 - (cur_1 + 1));
+  cur_1 = msg._msg.find(" ", cur_2 + 1);
+  this->getInformation(msg._msg, &cmd->pos.first, cur_2 + 1, cur_1 - (cur_2 + 1));
+  cur_2 = msg._msg.find(" ", cur_1 + 1);
+  cmd->action = msg._msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1));
+  while (cur_2 != std::string::npos && cur_1 != std::string::npos)
+    {
+      cur_1 = msg._msg.find(" ", cur_2 + 1);
+      cmd->params.push_back(msg._msg.substr(cur_2 + 1, cur_1 - (cur_2 + 1)));
+      if (cur_1 != std::string::npos && (cur_2 = msg._msg.find(" ", cur_1 + 1)) != std::string::npos)
+        cmd->params.push_back(msg._msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1)));
+    }
+  this->putCmdInQueue(cmd);
+}
+
+void
+Server::Server::putCmdInQueue(t_cmd *cmd)
+{
+  // std::map<std::string, SafeQueue> dispatch;
+
+  // dispatch["MOVE"] = this->_events;
+  // dispatch["BOMB"] = this->_bomb;
+  // dispatch["PAUSE"] = this->_cmd;
+  // dispatch["CONNECT"] = &SafeQueue::push;
+
+  // this->dispatch["MOVE"](cmd);
+
+  if (cmd->action.compare("MOVE") == 0 &&
+      cmd->params.size() == 1 &&
+      (cmd->params[0].compare("UP") == 0 ||
+       cmd->params[0].compare("DOWN") == 0 ||
+       cmd->params[0].compare("LEFT") == 0 ||
+       cmd->params[0].compare("RIGHt") == 0))
+    this->_events.push(cmd);
+  else if (cmd->action.compare("BOMB") == 0 &&
+	   cmd->params.size() == 1)
+    this->_bomb.push(cmd);
+  else if ((cmd->action.compare("PAUSE") && cmd->params.size() == 0) ||
+	   (cmd->action.compare("CONNECT") && cmd->params.size() == 3))
+    this->_ext.push(cmd);
 }
