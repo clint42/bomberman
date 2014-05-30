@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Fri May 23 14:16:00 2014 lafitt_g
-** Last update Fri May 30 14:58:13 2014 lafitt_g
+** Last update Fri May 30 15:08:42 2014 lafitt_g
 */
 
 #ifndef FILTER_HPP_
@@ -23,6 +23,12 @@ struct				t_cmd
   std::pair<size_t, size_t>	pos;
   std::string			action;
   std::vector<std::string>	params;
+};
+
+struct                      t_msg
+{
+  timeval                   _date;
+  std::string               _msg;
 };
 
 class		Filter
