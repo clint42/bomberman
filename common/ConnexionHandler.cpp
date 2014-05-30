@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Mon May 26 17:52:35 2014 buret_j
+// Last update Wed May 28 19:22:13 2014 buret_j
 //
 
 #include "ConnexionHandler.hpp"
@@ -46,34 +46,30 @@ ConnexionHandler::Server::accept() {
   _poll.watchEvent(fd, POLLOUT);
 }
 
-/* *****************
-** <- Server
-** Client ->
-*/
-
 void
-ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, int),
+ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, bool b[3]),
 				  void *param,
 				  Poll *poll) {
-  int	event;
+  bool	event[3];
 
   for (std::vector<Socket *>::iterator it = _sockets.begin();
        it != _sockets.end(); ++it) {
     if ((*it)->getFd() == _masterSocket)
       this->accept();
     else {
-      event = 0
-	if (poll.isEventOccured((*it)->getFd(), POLLIN) == true)
-	  event = event | POLLIN;
-      if (poll.isEventOccured((*it)->getFd(), POLLOUT) == true)
-	event = event | POLLOUT;
-      if (poll.isDisconnected((*it)->getFd()) == true)
-	event = event | POLLRDHUP;
-      if (event)
+      event[0] = poll->isEventOccured((*it)->getFd(), POLLIN);
+      event[1] = poll->isEventOccured((*it)->getFd(), POLLOUT);
+      event[2] = poll->isDisconnected((*it)->getFd());
+      if (event[0] || event[1] || event[2])
 	fct(param, *it, event);
     }
   }
 }
+
+/* *****************
+** <- Server
+** Client ->
+*/
 
 ConnexionHandler::Client::Client(int port, std::string const &ip) {
   protoent *	pe = getprotobyname("TCP");
@@ -91,17 +87,14 @@ ConnexionHandler::Client::~Client() {
 }
 
 void
-ConnexionHandler::Client::perform(void (*fct)(void *, Socket *, int),
+ConnexionHandler::Client::perform(void (*fct)(void *, Socket *, bool b[3]),
 				  void *param,
 				  Poll *poll) {
-  int	event = 0;
+  bool	event[3];
 
-  if (poll.isEventOccured(_socket->getFd(), POLLIN) == true)
-    event = event | POLLIN;
-  if (poll.isEventOccured(_socket->getFd(), POLLOUT) == true)
-    event = event | POLLOUT;
-  if (poll.isDisconnected(_socket->getFd()) == true)
-    event = event | POLLRDHUP;
-  if (event)
-    fct(param, _socket, event);
+  event[0] = poll->isEventOccured(_socket->getFd(), POLLIN);
+  event[1] = poll->isEventOccured(_socket->getFd(), POLLOUT);
+  event[2] = poll->isDisconnected(_socket->getFd());
+  if (event[0] || event[1] || event[2])
+    fct(param, *it, event);
 }

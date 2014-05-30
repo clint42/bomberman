@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Mon May 26 18:37:44 2014 buret_j
+## Last update Fri May 30 11:28:04 2014 aurelien prieur
 ##
 
 CXX		=	clang++
@@ -19,8 +19,8 @@ SRC		=	main.cpp			\
 			common/Exception.cpp		\
 			common/Select.cpp		\
 			common/SafeQueue.cpp		\
+			common/Mutex.cpp		\
 			common/ScopedLock.cpp		\
-\
 			server/Server.cpp		\
 			server/Player.cpp		\
 			server/Team.cpp			\

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Mon May 19 17:08:19 2014 buret_j
+// Last update Wed May 28 16:20:34 2014 buret_j
 //
 
 #ifndef PLAYER_HPP_
@@ -13,11 +13,16 @@
 
 # include <sys/time.h>
 # include <cstdlib>
+# include <iostream>
 
 # include "Team.hpp"
+# include "Socket.hpp"
 
 # define TIME(t)  gettimeofday(&t, 0)
-# define DELAY	  350 // msec
+
+# define DELAY		   350 // (in msec) default time of all actions.
+# define DELAY_MULT_ORIENT 0.2 // multiplier of orientation action time.
+# define DELAY_MULT_MOVE   1.0
 
 namespace Server {
 
@@ -31,9 +36,12 @@ namespace Server {
     size_t	_bombsLimit;
     size_t	_bombsOnFloor;
 
-    timeval	_lastCommand;
+    timeval	_lastCommand;// date of the action
     double	_lastCommandTimeMultiplier;// differentiating displacement & orientation commands
-    double	_commandTimeMultiplier;// used by bonus, '1' by default
+    double	_commandTimeMultiplier;// used by bonus, '1' by default. ex: 0.5 = speed increased by 2.
+
+    Socket *	_socket;
+    size_t	_socketPartner;
 
   public:
     Player(size_t, Team *, bool);
@@ -45,11 +53,11 @@ namespace Server {
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
 
-    inline void	setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
-    inline void setTeam(Team *t) { this->_team = t; }
+    inline void	  setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
+    inline void	  setTeam(Team *t) { this->_team = t; }
 
-    inline void	poseBomb() { if (_bombsLimit < _bombsOnFloor) _bombsOnFloor += 1; }
-    inline void destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }
+    inline void	  poseBomb() { if (_bombsLimit < _bombsOnFloor) _bombsOnFloor += 1; }
+    inline void   destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }
 
     inline void   updateDateOfLastCommand() { TIME(_lastCommand); }
     inline double getLastCommandMultiplier() const { return _lastCommandTimeMultiplier; }
@@ -61,6 +69,10 @@ namespace Server {
       return (t.tv_sec % 1000 * 1000 + t.tv_usec / 1000) -
 	(_lastCommand.tv_sec % 1000 * 1000 + _lastCommand.tv_usec / 1000);
     }
+
+    inline Socket *getSocket() const { return _socket; }
+    inline size_t getSocketPartner() { return _socketPartner; }
+    inline void	  setSocketPartner(size_t id) { _socketPartner = id; }
 
   };// ! class Player
 

@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Fri May 23 14:16:00 2014 lafitt_g
-** Last update Mon May 26 20:30:56 2014 lafitt_g
+** Last update Fri May 30 14:52:21 2014 lafitt_g
 */
 
 #ifndef FILTER_HPP_
@@ -38,8 +38,5 @@ public:
 private:
   t_msg		_msg;
 };
-
-template class SafeQueue<t_cmd *>;
-
 
 #endif /* !FILTER_HPP_ */
