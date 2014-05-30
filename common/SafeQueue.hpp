@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon Apr 21 20:37:45 2014 buret_j
-// Last update Mon May 26 18:53:20 2014 buret_j
+// Last update Fri May 30 16:04:37 2014 aurelien prieur
 //
 
 #ifndef SAFEQUEUE_HPP_

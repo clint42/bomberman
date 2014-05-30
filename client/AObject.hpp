@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:05:44 2014 aurelien prieur
-// Last update Mon May 19 14:34:49 2014 aurelien prieur
+// Last update Fri May 30 13:50:20 2014 aurelien prieur
 //
 
 #ifndef AOBJECT_HPP_
@@ -34,6 +34,7 @@ protected:
   glm::vec3	_pos;
   glm::vec3	_rotation;
   glm::vec3	_scale;
+
 public:
   AObject();
   virtual	~AObject();

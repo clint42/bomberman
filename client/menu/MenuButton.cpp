@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:29:16 2014 aurelien prieur
-// Last update Sat May 24 20:04:43 2014 aurelien prieur
+// Last update Thu May 29 15:02:00 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -15,12 +15,15 @@ MenuButton::MenuButton(std::pair<size_t, size_t> const &pos,
 		       std::pair<size_t, size_t> const &size,
 		       std::string const &label,
 		       glm::vec4 const &color,
-		       glm::vec4 const &colorHover): _pos(pos),
-						     _size(size),
-						     _color(color),
-						     _colorHover(colorHover),
-						     _label(label, std::pair<size_t, size_t>(pos.first + 5, pos.second + 5),
-							    glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 10)
+		       glm::vec4 const &colorHover,
+		       std::string const &font): _pos(pos),
+						 _size(size),
+						 _color(color),
+						 _colorHover(colorHover),
+						 _label(label,
+							std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
+							glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20,
+							font)
 {
   this->initialize("test");
 }
@@ -31,7 +34,7 @@ MenuButton::~MenuButton()
 
 bool	MenuButton::initialize(std::string const &textureName)
 {
-  if (_texture.load("./stone3.tga") == false)
+  if (_texture.load("./ressources/gradationGreyTex.tga") == false)
     {
       std::cerr << "Couldn't load texture." << std::endl;
       return (false);
@@ -42,10 +45,11 @@ bool	MenuButton::initialize(std::string const &textureName)
   _geometry.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second + _size.second, -1));
   _geometry.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second, -1));
   
+  _geometry.pushUv(glm::vec2(0, 1));  
   _geometry.pushUv(glm::vec2(0, 0));
   _geometry.pushUv(glm::vec2(1, 0));
   _geometry.pushUv(glm::vec2(1, 1));
-  _geometry.pushUv(glm::vec2(0, 1));
+
   _geometry.build();
 
   _geometryHover.setColor(_colorHover);
@@ -54,10 +58,10 @@ bool	MenuButton::initialize(std::string const &textureName)
   _geometryHover.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second + _size.second, -1));
   _geometryHover.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second, -1));
   
+  _geometryHover.pushUv(glm::vec2(0, 1));
   _geometryHover.pushUv(glm::vec2(0, 0));
   _geometryHover.pushUv(glm::vec2(1, 0));
   _geometryHover.pushUv(glm::vec2(1, 1));
-  _geometryHover.pushUv(glm::vec2(0, 1));
   _geometryHover.build();
   return (true);
 }
