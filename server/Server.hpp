@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Fri May 30 15:08:13 2014 lafitt_g
+// Last update Fri May 30 17:38:01 2014 julie franel
 */
 
 #ifndef SERVER_HPP_
@@ -39,6 +39,7 @@ namespace Server {
 
     SafeQueue<t_cmd *>		_events;
     SafeQueue<t_cmd *>		_bomb;
+    SafeQueue<t_cmd *>		_cmd;
 
     // ConnexionHandler test;
 
