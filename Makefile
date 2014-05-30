@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Fri May 30 11:28:04 2014 aurelien prieur
+## Last update Fri May 30 12:05:44 2014 julie franel
 ##
 
 CXX		=	clang++
@@ -34,7 +34,7 @@ CXXFLAGS	=	-Wall -Wextra -Werror 	\
 all:			$(NAME)
 
 $(NAME):		$(OBJ)
-			$(CXX) -o $(NAME) $(OBJ) -lssl -lcrypto
+			$(CXX) -o $(NAME) $(OBJ) -lssl -lcrypto -lpthread
 
 clean:
 			$(RM) -f $(OBJ)

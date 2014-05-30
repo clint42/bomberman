@@ -1,11 +1,11 @@
 //
 // ConnexionHandler.cpp for  in /home/buret_j/rendu/bomberman
-// 
+//
 // Made by buret_j
 // Login   <buret_j@epitech.net>
-// 
+//
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Wed May 28 19:22:13 2014 buret_j
+// Last update Fri May 30 12:05:01 2014 julie franel
 //
 
 #include "ConnexionHandler.hpp"
@@ -14,7 +14,7 @@ ConnexionHandler::Server::Server(int p) {
   int		fd = socket(PF_INET, SOCK_STREAM, 0);
   sockaddr_in	sin;
 
-  sin.sin.sin_addr.s_addr = htonl(INADDR_ANY);
+  sin.sin_addr.s_addr = htonl(INADDR_ANY);
   sin.sin_family = AF_INET;
   sin.sin_port = htons(p);
   if (fd == -1
@@ -22,7 +22,7 @@ ConnexionHandler::Server::Server(int p) {
       || listen(fd, 10) == -1)
     throw ConnexionException;
   _sockets[fd] = new Socket(fd);
-  _masterSocket = fd;      
+  _masterSocket = fd;
 }
 
 ConnexionHandler::Server::~Server() {
@@ -73,7 +73,7 @@ ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, bool b[3]),
 
 ConnexionHandler::Client::Client(int port, std::string const &ip) {
   protoent *	pe = getprotobyname("TCP");
-  int		fd = socket(PF_INET, SOCK_STREAM, pe);
+  int		fd = socket(PF_INET, SOCK_STREAM, pe->p_proto);
   sockaddr_in	sin;
 
   sin.sin_family = AF_INET;
