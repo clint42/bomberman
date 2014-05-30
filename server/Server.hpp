@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Thu May 29 16:51:20 2014 buret_j
+** Last update Fri May 30 15:08:13 2014 lafitt_g
 */
 
 #ifndef SERVER_HPP_
@@ -22,7 +22,7 @@
 # include "SafeQueue.hpp"
 # include "Filter.hpp"
 # include "Exception.hpp"
-# include "ConnexionHandler.hpp"
+// # include "ConnexionHandler.hpp"
 
 namespace Server {
 
@@ -40,13 +40,8 @@ namespace Server {
     SafeQueue<t_cmd *>		_events;
     SafeQueue<t_cmd *>		_bomb;
 
-    ConnexionHandler test;
+    // ConnexionHandler test;
 
-    struct			t_msg
-    {
-      timeval			_date;
-      std::string		_msg;
-    };
     std::list<t_msg *>		_messages;
 
     size_t	retrieveMapNames();

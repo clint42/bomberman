@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Fri May 23 14:16:00 2014 lafitt_g
-// Last update Mon May 26 19:56:26 2014 buret_j
+** Last update Fri May 30 15:08:42 2014 lafitt_g
 */
 
 #ifndef FILTER_HPP_
@@ -14,19 +14,27 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "Server.hpp"
 
 struct				t_cmd
 {
   size_t			id;
+  timeval			date;
   std::pair<size_t, size_t>	pos;
   std::string			action;
   std::vector<std::string>	params;
 };
 
+struct                      t_msg
+{
+  timeval                   _date;
+  std::string               _msg;
+};
+
 class		Filter
 {
 public:
-  Filter(std::string);
+  Filter(const t_msg &);
   ~Filter();
 
   void	setCmd(std::string);
@@ -34,7 +42,8 @@ public:
   t_cmd *filterCmd();
 
 private:
-  std::string	_cmd;
+  t_msg		_msg;
 };
+
 
 #endif /* !FILTER_HPP_ */

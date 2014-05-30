@@ -1,22 +1,26 @@
 //
 // ConnexionHandler.hpp for  in /home/buret_j/rendu/bomberman
-// 
+//
 // Made by buret_j
 // Login   <buret_j@epitech.net>
-// 
+//
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Thu May 29 16:16:36 2014 buret_j
+// Last update Fri May 30 12:04:35 2014 julie franel
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
 # define CONNEXIONHANDLER_HPP_
 
+# include <netdb.h>
 # include <netinet/in.h>
 # include <sys/types.h>
 # include <sys/socket.h>
+# include <arpa/inet.h>
+
 
 # include <vector>
 
+# include "Exception.hpp"
 # include "Socket.hpp"
 # include "Poll.hpp"
 
@@ -26,13 +30,13 @@ public:
 
   class Server;
   class Client;
-  
+
 private:
 
   Server *	_server;
   Client *	_client;
   Poll		_poll;
-  
+
 public:
 
   ConnexionHandler() {}
@@ -46,7 +50,7 @@ public:
   inline Server *	Server() { return _server; }
 
   inline Client *	Client() { return _client; }
-  inline Client *	Client(int port, std::string const &ip) { 
+  inline Client *	Client(int port, std::string const &ip) {
     if (!_client && !_server) _client = new Client(port, ip);
     return _client;
   }
@@ -86,7 +90,7 @@ public: // nested classes definition
     ~Server();
 
     void	perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
-    inline int	getMasterSocket() const { return _masterSocket; } 
+    inline int	getMasterSocket() const { return _masterSocket; }
   }; // !Server
 
 
@@ -96,7 +100,7 @@ public: // nested classes definition
   public:
     Client(int port, std::string const &ip);
     ~Client();
-    
+
     void	perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
   }; // !Client
 
