@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Fri May 30 11:31:24 2014 aurelien prieur
+## Last update Fri May 30 16:31:55 2014 buret_j
 ##
 
 CXX =	clang++
@@ -24,7 +24,6 @@ SRC =   main.cpp \
 	ClientCore.cpp \
 	Model.cpp \
 	../common/Mutex.cpp \
-	../common/SafeQueue.cpp \
 	../common/ScopedLock.cpp \
 	../common/Select.cpp \
 	ThreadUI.cpp \
