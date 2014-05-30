@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Fri May 23 14:16:00 2014 lafitt_g
-** Last update Fri May 30 14:52:21 2014 lafitt_g
+** Last update Fri May 30 14:58:13 2014 lafitt_g
 */
 
 #ifndef FILTER_HPP_
@@ -38,5 +38,6 @@ public:
 private:
   t_msg		_msg;
 };
+
 
 #endif /* !FILTER_HPP_ */
