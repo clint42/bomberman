@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:42 2014 aurelien prieur
-// Last update Mon May 12 18:24:38 2014 aurelien prieur
+// Last update Fri May 30 13:49:37 2014 aurelien prieur
 //
 
 #ifndef MODEL_HPP_
@@ -20,12 +20,13 @@ class	Model: public AObject
   gdl::Model	_model;
   float		_speed;
   bool		_toDraw;
+
 public:
   Model();
   virtual ~Model();
   virtual bool	initialize();
   virtual bool	update(gdl::Clock const &clock, gdl::Input &input);
-  virtual void	draw(gdl::AShader &shadeer, gdl::Clock const &clock);
+  virtual void	draw(gdl::AShader &shader, gdl::Clock const &clock);
 };
 
 #endif // !MODEL_HPP_

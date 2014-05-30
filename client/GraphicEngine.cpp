@@ -5,14 +5,19 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Fri May 23 16:17:16 2014 aurelien prieur
+// Last update Fri May 30 15:38:02 2014 aurelien prieur
 //
 
 #include <iostream>
 #include "GraphicEngine.hpp"
 #include "Model.hpp"
 
-GraphicEngine::GraphicEngine(GameEntities &objects): objects(objects)
+GraphicEngine::GraphicEngine(EventsHandler &eventsHandler,
+			     GameEntities &gameEntities,
+			     SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs):
+  createInstructs(createInstructs),
+  eventsHandler(eventsHandler),
+  objects(gameEntities)
 {
 }
 
@@ -24,12 +29,11 @@ bool	GraphicEngine::initialize()
 {
   glm::mat4	projection;
   glm::mat4	transformation;
-  AObject	*model;
 
   this->sdlContext.start(800, 600, "Test LibGDL");
   glEnable(GL_DEPTH_TEST);
-  if (!shader.load("./shaders/basic.fp", GL_FRAGMENT_SHADER)
-      || !shader.load("./shaders/basic.vp", GL_VERTEX_SHADER)
+  if (!shader.load("/home/prieur_b/LibBomberman_linux_x64/shaders/basic.fp", GL_FRAGMENT_SHADER)
+      || !shader.load("/home/prieur_b/LibBomberman_linux_x64/shaders/basic.vp", GL_VERTEX_SHADER)
       || !shader.build())
     {
       std::cerr << "Shader loading error" << std::endl;
@@ -40,31 +44,46 @@ bool	GraphicEngine::initialize()
   shader.bind();
   shader.setUniform("view", transformation);
   shader.setUniform("projection", projection);
+  // model = new Model();
+  // if (model->initialize() == false)
+  //   return (false); 
+  std::cout << "End of init" << std::endl;
   return (true);
 }
 
 bool	GraphicEngine::update()
 {
+  std::pair<std::pair<size_t, size_t>, ObjectType>	instruct;
+
   this->sdlContext.updateClock(this->clock);
   this->sdlContext.updateInputs(this->input);
   if (this->input.getKey(SDLK_ESCAPE) || this->input.getInput(SDL_QUIT, false))
     return (false);
+
+  //EXEC CREATE INSTRUCT
+  while (createInstructs.getSize() > 0)
+    {
+      createInstructs.tryPop(&instruct);
+      objects.addEntity(instruct);
+    }
+  this->objects.lock();
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
        it != this->objects.getEntities().end(); ++it)
     it->second->update(this->clock, this->input);
+  this->objects.unlock();
   return (true);
 }
 
 void	GraphicEngine::draw()
 {
-  std::cout << "DRAW" << std::endl;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  //  std::cout << "Before shader bind" << std::endl;
   shader.bind();
-  //std::cout << "After shader bind" << std::endl;
+  //model->draw(this->shader, this->clock);
+  this->objects.lock();
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
        it != this->objects.getEntities().end(); ++it)
     it->second->draw(this->shader, this->clock);
+  this->objects.unlock();
   this->sdlContext.flush();
 }
 

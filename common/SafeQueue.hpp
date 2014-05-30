@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon Apr 21 20:37:45 2014 buret_j
-// Last update Mon May 26 18:53:20 2014 buret_j
+// Last update Fri May 30 16:33:30 2014 buret_j
 //
 
 #ifndef SAFEQUEUE_HPP_
@@ -26,10 +26,31 @@ public:
   SafeQueue(void) { }
   ~SafeQueue(void) { }
 
-  void		push(T);
-  bool		tryPop(T*);
-  bool		empty(void); // not const of of Mutex locked
-  size_t	getSize(void); // same
+  void		push(T v) {
+    ScopedLock l_mutex(&this->_mutex);
+    this->_queue.push_back(v);
+  }
+
+  bool		tryPop(T* v) {
+    ScopedLock l_mutex(&this->_mutex);
+    if (this->_queue.empty() == false)
+      {
+	*v = this->_queue.front();
+	this->_queue.pop_front();
+	return (true);
+      }
+    return (false);
+  }
+
+  bool		empty(void) {
+    ScopedLock l_mutex(&this->_mutex);
+    return this->_queue.empty();
+  } // not const of of Mutex locked
+
+  size_t	getSize(void) {
+    ScopedLock l_mutex(&this->_mutex);
+    return this->_queue.size();
+  } // same
 };
 
 #endif

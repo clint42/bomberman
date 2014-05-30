@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:30 2014 aurelien prieur
-// Last update Fri May 23 14:17:07 2014 virol_g
+// Last update Fri May 30 14:04:19 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -22,16 +22,17 @@ Model::~Model()
 bool	Model::initialize()
 {
   _speed = 10.0f;
-  if (_texture.load("./assets/marvin.fbm/Main_texture_diffuse2.tga") == false)
+  if (_texture.load("/home/prieur_b/LibBomberman_linux_x64/assets/marvin.fbm/Main_texture_diffuse2.tga") == false)
     {
       std::cerr << "Couldn't load texture." << std::endl;
       return (false);
     }
-  if (_model.load("./assets/marvin.fbx") == false)
+  if (_model.load("/home/prieur_b/LibBomberman_linux_x64/assets/marvin.fbx") == false)
     {
       std::cerr << "Couldn't load model." << std::endl;
       return (false);
     }
+  std::cout << "Texture id: " << _texture.getId() << std::endl;
   if (_model.createSubAnim(0, "run", 0, 60) == false)
     return (false);
   return (true);
@@ -39,7 +40,6 @@ bool	Model::initialize()
 
 bool	Model::update(gdl::Clock const &clock, gdl::Input &input)
 {
-  std::cout << "UPDATE MODEL" << std::endl;
   if (input.getKey(SDLK_UP))
     {
       _rotation.y = 180;
@@ -60,7 +60,7 @@ bool	Model::update(gdl::Clock const &clock, gdl::Input &input)
     }
   if (input.getKey(SDLK_RIGHT))
     {
-       _model.setCurrentAnim("run", true);
+       _model.setCurrentSubAnim("run", true);
       _rotation.y = 90;
       translate(glm::vec3(1, 0, 0) * static_cast<float>(clock.getElapsed()) * _speed);
     }  
@@ -69,6 +69,7 @@ return (true);
 
 void	Model::draw(gdl::AShader &shader, gdl::Clock const &clock)
 {
+  std::cout << "Texture: " << _texture.getId() << std::endl;
   _texture.bind();
   _model.draw(shader, getTransformation(), clock.getElapsed());
 }

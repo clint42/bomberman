@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon Apr 21 23:49:03 2014 buret_j
-// Last update Mon May 26 18:55:20 2014 buret_j
+// Last update Fri May 30 15:44:47 2014 aurelien prieur
 //
 
 #include "SafeQueue.hpp"

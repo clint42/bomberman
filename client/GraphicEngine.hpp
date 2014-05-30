@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:00:09 2014 aurelien prieur
-// Last update Sat May 24 11:05:13 2014 aurelien prieur
+// Last update Fri May 30 15:18:45 2014 aurelien prieur
 //
 
 #ifndef GRAPHICENGINE_HPP_
@@ -23,17 +23,24 @@
 # include <glm/glm.hpp>
 # include <glm/gtc/matrix_transform.hpp>
 # include "GameEntities.hpp"
+# include "EventsHandler.hpp"
+# include "Model.hpp"
+# include "SafeQueue.hpp"
 
 class			GraphicEngine: public gdl::Game
 {
   GameEntities		&objects;
+  EventsHandler		&eventsHandler;
   gdl::SdlContext	sdlContext;
   gdl::Clock		clock;
   gdl::Input		input;
   gdl::BasicShader	shader;
-  
+  SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs;
+  Model			*model;
+
 public:
-  GraphicEngine(GameEntities &objects);
+  GraphicEngine(EventsHandler &eventsHandler, GameEntities &objects,
+		SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs);
   ~GraphicEngine();
   virtual bool	initialize();
   virtual bool	update();

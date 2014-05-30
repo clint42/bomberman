@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:11:21 2014 julie franel
-// Last update Wed May  7 14:18:37 2014 julie franel
+// Last update Fri May 30 16:59:07 2014 julie franel
 */
 
 #ifndef			MAP_HPP_
@@ -39,13 +39,13 @@ private:
   std::map<std::pair<size_t, size_t>, int>	_map;
 
   static size_t		getSizeT(const std::string &size);
-  static void		getMap(const size_t &width, const size_t &height, std::ifstream &file,
+  static void		getMap(const size_t width, const size_t height, std::ifstream &file,
 			       std::map<std::pair<size_t, size_t>, int> &_map);
 
   void			md5It(std::string &);
 
 public:
-  Map(const size_t &width, const size_t &height, const size_t &nbPlayers, const std::string &filename,
+  Map(const size_t width, const size_t height, const size_t nbPlayers, const std::string &filename,
       const std::map<std::pair<size_t, size_t>, int> &_map);
   ~Map();
 
@@ -55,7 +55,7 @@ public:
   const std::string	&getKey() const;
   const std::map<std::pair<size_t, size_t>, int>	&getMap() const;
 
-  void			deleteElem(const size_t &posX, const size_t &posY);
+  void			deleteElem(const size_t posX, const size_t posY);
 
   static Map		*parseMap(const std::string &filename);
   static void		generateMap();

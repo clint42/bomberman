@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Fri May 30 21:26:36 2014 lafitt_g
+** Last update Fri May 30 21:37:15 2014 lafitt_g
 */
 
 #ifndef SERVER_HPP_

@@ -5,12 +5,17 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:19:12 2014 aurelien prieur
-// Last update Mon May 19 15:01:35 2014 aurelien prieur
+// Last update Fri May 30 15:14:12 2014 aurelien prieur
 //
 
 #include "ThreadUI.hpp"
 
-ThreadUI::ThreadUI(GameEntities &gameEntities): _gameEntities(gameEntities)
+ThreadUI::ThreadUI(EventsHandler &eventsHandler,
+		   GameEntities &gameEntities,
+		   SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs):
+  _eventsHandler(eventsHandler),
+  _createInstructs(createInstructs),
+  _gameEntities(gameEntities)
 {
   if (pthread_create(&_thread, 0, ThreadUI::threadLaunch, static_cast<void *>(this)) != 0)
     throw ThreadException("Unable to launch thread");
@@ -31,7 +36,7 @@ void		*ThreadUI::threadLaunch(void *thread)
 
 void		*ThreadUI::run()
 {
-  UI		ui(_gameEntities);
+  UI		ui(_eventsHandler, _gameEntities, _createInstructs);
 
   if (!ui.run())
     {
@@ -39,6 +44,11 @@ void		*ThreadUI::run()
     }
   //RETURN SUCCESS
   return (NULL);
+}
+
+GameEntities	&ThreadUI::getGameEntities()
+{
+  return (_gameEntities);
 }
 
 bool		ThreadUI::join()

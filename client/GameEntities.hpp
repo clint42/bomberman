@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Mon May 19 17:11:23 2014 aurelien prieur
+// Last update Fri May 30 15:23:09 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -16,7 +16,7 @@
 # include <utility>
 # include "AObject.hpp"
 # include "ThreadException.hpp"
-# include "../common/Mutex.hpp"
+# include "Mutex.hpp"
 
 class	GameEntities
 {
@@ -28,7 +28,7 @@ public:
   ~GameEntities();
   bool		lock();
   bool		unlock();
-  bool		addEntity(std::pair<size_t, size_t> const &coord, ObjectType type);
+  bool		addEntity(std::pair<std::pair<size_t, size_t>, ObjectType> const &coord);
   bool		deleteEntity(std::pair<size_t, size_t> const &coord);
   AObject	*getEntity(std::pair<size_t, size_t> const &coord);
   std::map<std::pair<size_t, size_t>, AObject *>  &getEntities();

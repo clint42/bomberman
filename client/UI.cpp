@@ -5,12 +5,15 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:52:00 2014 aurelien prieur
-// Last update Mon May 19 15:10:15 2014 aurelien prieur
+// Last update Fri May 30 15:14:39 2014 aurelien prieur
 //
 
 #include "UI.hpp"
 
-UI::UI(GameEntities &gameEntities): _graphicEngine(gameEntities)
+UI::UI(EventsHandler &eventsHandler,
+       GameEntities &gameEntities,
+       SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs):
+  _graphicEngine(eventsHandler, gameEntities, createInstructs)
 {
 }
 

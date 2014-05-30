@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:16:41 2014 aurelien prieur
-// Last update Sat May 24 19:04:59 2014 aurelien prieur
+// Last update Thu May 29 14:42:48 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -20,7 +20,7 @@ GraphicalText::GraphicalText(std::string const &text, std::pair<size_t, size_t> 
 {
   GraphicalLetter	*letter;
 
-  if (_abcTex.load("../impact.tga") == false)
+  if (_abcTex.load("./ressources/fonts/" + fontName + ".tga") == false)
     {
       std::cerr << "Couldn load font texture." << std::endl;
       throw std::runtime_error("Failed to load font");
