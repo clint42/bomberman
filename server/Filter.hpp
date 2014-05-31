@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Fri May 23 14:16:00 2014 lafitt_g
-** Last update Fri May 30 15:08:42 2014 lafitt_g
+** Last update Fri May 30 18:24:54 2014 lafitt_g
 */
 
 #ifndef FILTER_HPP_
@@ -37,11 +37,11 @@ public:
   Filter(const t_msg &);
   ~Filter();
 
-  void	setCmd(std::string);
-  std::string getCmd() const;
   t_cmd *filterCmd();
 
 private:
+  void	getInformation(size_t *, size_t, size_t);
+
   t_msg		_msg;
 };
 
