@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Fri May 30 21:37:15 2014 lafitt_g
+// Last update Sat May 31 16:05:25 2014 julie franel
 */
 
 #ifndef SERVER_HPP_
@@ -74,10 +74,14 @@ namespace Server {
     void	allDead();
     void	putInPlayersAlive();
 
+    Player	*getPlayer(const size_t, const size_t);
+    Player	*getPlayer(const size_t id);
+
   public:
     Server();
     ~Server();
 
+    void	run();
   };
 
 }
