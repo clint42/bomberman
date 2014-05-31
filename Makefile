@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Fri May 30 12:05:44 2014 julie franel
+## Last update Sat May 31 16:47:36 2014 buret_j
 ##
 
 CXX		=	clang++
@@ -15,13 +15,15 @@ RM		=	rm
 NAME		=	bomberman
 
 SRC		=	main.cpp			\
+\
 			common/Map.cpp			\
 			common/Exception.cpp		\
 			common/Select.cpp		\
-			common/SafeQueue.cpp		\
 			common/Mutex.cpp		\
 			common/ScopedLock.cpp		\
+\
 			server/Server.cpp		\
+			server/Game.cpp			\
 			server/Player.cpp		\
 			server/Team.cpp			\
 			server/ColorGenerator.cpp	\
