@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Mon Jun  2 14:50:48 2014 julie franel
+** Last update Mon Jun  2 15:41:51 2014 lafitt_g
 */
 
 #ifndef SERVER_HPP_
@@ -68,6 +68,7 @@ namespace Server {
     void	getInformation(const std::string &, size_t *, size_t, size_t);
     void	filterCmd(const t_msg &);
     void	putCmdInQueue(t_cmd *);
+    t_msg	*filterMsg(const t_cmd &);
 
     //
     void	isDead(size_t, std::pair<size_t, size_t>);

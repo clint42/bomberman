@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Mon Jun  2 15:18:51 2014 julie franel
+** Last update Mon Jun  2 15:49:02 2014 lafitt_g
 */
 
 #include "Server.hpp"
@@ -135,11 +135,24 @@ Server::Server::putCmdInQueue(t_cmd *cmd)
     this->_ext.push(cmd);
 }
 
-// void
-// Server::Server::filterMsg(const t_cmd &cmd)
-// {
+Server::t_msg *
+Server::Server::filterMsg(const t_cmd &cmd)
+{
+  t_msg	*msg = new t_msg;
+  std::stringstream convert;
 
-// }
+  msg->_date = cmd.date;
+  convert << cmd.id << " " << cmd.pos.first << " " << cmd.pos.second << " " << cmd.action;
+  msg->_msg = convert.str();
+  for (std::vector<std::string>::const_iterator it = cmd.params.begin(); it != cmd.params.end(); ++it)
+    {
+      convert.str(std::string());
+      convert.clear();
+      convert << " " << *it;
+      msg->_msg += convert.str();
+    }
+  return (msg);
+}
 
 /*
 ** RUNSERVER
