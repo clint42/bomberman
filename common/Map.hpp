@@ -5,17 +5,19 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:11:21 2014 julie franel
-// Last update Fri May 30 16:59:07 2014 julie franel
+// Last update Mon Jun  2 14:06:28 2014 buret_j
 */
 
 #ifndef			MAP_HPP_
 # define		MAP_HPP_
 
-# include		<iostream>
-# include		<string>
-# include		<map>
-# include		<utility>
-# include		<cstdlib>
+# include <iostream>
+# include <string>
+# include <map>
+# include <utility>
+# include <cstdlib>
+
+# include "macros.hpp"
 
 class			Map
 {
@@ -31,33 +33,30 @@ public:
     };
 
 private:
-  size_t		_width;
-  size_t		_height;
-  size_t		_nbPlayers;
-  std::string		_key;
-  std::string		_filename;
+  size_t	_width;
+  size_t	_height;
+  size_t	_nbPlayers;
+  std::string	_key;
+  std::string	_filename;
   std::map<std::pair<size_t, size_t>, int>	_map;
 
-  static size_t		getSizeT(const std::string &size);
-  static void		getMap(const size_t width, const size_t height, std::ifstream &file,
-			       std::map<std::pair<size_t, size_t>, int> &_map);
-
-  void			md5It(std::string &);
+  void		getMap(size_t width, size_t height, std::ifstream &file);
+  void		md5It(std::string &);
 
 public:
-  Map(const size_t width, const size_t height, const size_t nbPlayers, const std::string &filename,
+  Map(std::string const &);
+  Map(size_t width, size_t height, size_t nbPlayers, std::string const &filename,
       const std::map<std::pair<size_t, size_t>, int> &_map);
   ~Map();
 
-  const size_t		&getWidth() const;
-  const size_t		&getHeight() const;
-  const size_t		&getNbrSlot() const;
-  const std::string	&getKey() const;
-  const std::map<std::pair<size_t, size_t>, int>	&getMap() const;
+  inline size_t		getWidth() const { return _width; }
+  inline size_t		getHeight() const { return _height; }
+  inline size_t		getNbrSlot() const { return _nbPlayers; }
+  inline std::string const &	getKey() const { return _key; }
+  inline std::map<std::pair<size_t, size_t>, int> const &getMap() const { return _map; }
 
   void			deleteElem(const size_t posX, const size_t posY);
 
-  static Map		*parseMap(const std::string &filename);
   static void		generateMap();
 
 };
