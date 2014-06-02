@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Mon Jun  2 18:12:34 2014 buret_j
+// Last update Mon Jun  2 18:37:36 2014 aurelien prieur
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -79,6 +79,7 @@ public:
       _server->getMasterSocket();
     else if (this->Client() != NULL)
       _client->getMasterSocket();
+    return (NULL);
   }
 
   inline void		watchEventOnSocket(Socket *s, int e) { _poll.watchEvent(s->getFd(), e); }
