@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Sat May 31 16:05:25 2014 julie franel
+// Last update Mon Jun  2 14:50:48 2014 julie franel
 */
 
 #ifndef SERVER_HPP_
@@ -76,6 +76,9 @@ namespace Server {
 
     Player	*getPlayer(const size_t, const size_t);
     Player	*getPlayer(const size_t id);
+
+    void	movePlayer();
+    void	createPlayer();
 
   public:
     Server();

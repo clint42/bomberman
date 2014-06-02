@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-** Last update Mon Jun  2 13:41:20 2014 lafitt_g
+// Last update Mon Jun  2 15:18:51 2014 julie franel
 */
 
 #include "Server.hpp"
@@ -169,23 +169,47 @@ Server::Player		*Server::Server::getPlayer(size_t id)
   return (NULL);
 }
 
+void		Server::Server::movePlayer()
+{
+  std::cout << "move player" << std::endl;
+}
+
+void		Server::Server::createPlayer()
+{
+  // Player	*_p = new Player(1, NULL, 0);
+  // this->_playersAlive[] = ;
+}
+
 void		Server::Server::run()
 {
   t_cmd		*_cmd;
   Player	*_player;
+  std::map<std::string, void (Server::Server::*)()>	_action;
+  t_cmd             _tmp;
 
-  while (1)
+  _action["MOVE"] = &Server::Server::movePlayer;
+  _tmp.id = 1;
+  TIME(_tmp.date);
+  std::pair<size_t, size_t> pos(0, 0);
+  _tmp.pos = pos;
+  _tmp.action.append("MOVE");
+  _tmp.params.push_back("UP");
+  this->_events.push(&_tmp);
+
+  // while (1)
+  //   {
+  if (this->_events.tryPop(&_cmd) == false)
+    throw ServerException("Nothing in queue");
+  if ((_player = this->getPlayer(_cmd->pos.first, _cmd->pos.second)) == NULL)
     {
-      this->_events.tryPop(&_cmd); // verifier retour
-      if ((_player = this->getPlayer(_cmd->pos.first, _cmd->pos.second)) == NULL)
-	{
-	  _player = this->getPlayer(_cmd->id);
-	  _player->setPos(_cmd->pos.first, _cmd->pos.second);
-	}
-      if (_player->getTimeSinceLastCommand() <= (DELAY * _player->getLastCommandMultiplier()
-						 * _player->getCommandTimeMultiplier()))
-	{
-	  std::cout << "do_action" << std::endl;
-	}
+      if ((_player = this->getPlayer(_cmd->id)) == NULL)
+	throw ServerException("No player found");
+      _player->setPos(_cmd->pos.first, _cmd->pos.second);
     }
+  if (_player->getTimeSinceLastCommand() <= (DELAY * _player->getLastCommandMultiplier()
+					     * _player->getCommandTimeMultiplier()))
+    {
+      (this->*_action[_cmd->action])();
+    }
+  // }
 }
