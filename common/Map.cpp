@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Mon Jun  2 14:06:24 2014 buret_j
+// Last update Mon Jun  2 19:06:39 2014 buret_j
 */
 
 #include <openssl/md5.h>
@@ -110,6 +110,13 @@ Map::generateMap() {
 /*
 ** MODIFIERS
 */
+
+
+int
+Map::getElemAtPos(size_t x, size_t y) {
+  std::pair<x, y> p;
+  return _map[p];
+}
 
 void	Map::deleteElem(const size_t posX, const size_t posY)
 {
