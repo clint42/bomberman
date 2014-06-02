@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Sat May 31 16:04:24 2014 julie franel
+** Last update Mon Jun  2 13:41:20 2014 lafitt_g
 */
 
 #include "Server.hpp"
@@ -120,15 +120,6 @@ Server::Server::filterCmd(const t_msg &msg)
 void
 Server::Server::putCmdInQueue(t_cmd *cmd)
 {
-  // std::map<std::string, SafeQueue> dispatch;
-
-  // dispatch["MOVE"] = this->_events;
-  // dispatch["BOMB"] = this->_bomb;
-  // dispatch["PAUSE"] = this->_cmd;
-  // dispatch["CONNECT"] = &SafeQueue::push;
-
-  // this->dispatch["MOVE"](cmd);
-
   if (cmd->action.compare("MOVE") == 0 &&
       cmd->params.size() == 1 &&
       (cmd->params[0].compare("UP") == 0 ||
@@ -144,6 +135,15 @@ Server::Server::putCmdInQueue(t_cmd *cmd)
     this->_ext.push(cmd);
 }
 
+// void
+// Server::Server::filterMsg(const t_cmd &cmd)
+// {
+
+// }
+
+/*
+** RUNSERVER
+*/
 
 Server::Player		*Server::Server::getPlayer(size_t posx, size_t posy)
 {
