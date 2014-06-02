@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Fri May 30 12:05:01 2014 julie franel
+// Last update Mon Jun  2 18:10:49 2014 buret_j
 //
 
 #include "ConnexionHandler.hpp"
@@ -22,7 +22,7 @@ ConnexionHandler::Server::Server(int p) {
       || listen(fd, 10) == -1)
     throw ConnexionException;
   _sockets[fd] = new Socket(fd);
-  _masterSocket = fd;
+  _masterSocket = _sockets[fd];
 }
 
 ConnexionHandler::Server::~Server() {

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Mon Jun  2 13:17:00 2014 buret_j
+// Last update Mon Jun  2 18:12:34 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -74,6 +74,13 @@ public:
       _client->perform(fct, param, &_poll);
   }
 
+  inline Socket *	getMasterSocket() const {
+    if (this->Server() != NULL)
+      _server->getMasterSocket();
+    else if (this->Client() != NULL)
+      _client->getMasterSocket();
+  }
+
   inline void		watchEventOnSocket(Socket *s, int e) { _poll.watchEvent(s->getFd(), e); }
   inline void	        unwatchEventOnSocket(Socket *s, int e) {_poll.stopWatchingEvent(s->getFd(), e);}
 
@@ -91,8 +98,8 @@ public: // nested classes definition
     Server(int p);
     ~Server();
 
-    void	perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
-    inline int	getMasterSocket() const { return _masterSocket; }
+    void		perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
+    inline Socket *	getMasterSocket() const { return _masterSocket; }
   }; // !Server
 
 
@@ -103,7 +110,8 @@ public: // nested classes definition
     Client(int port, std::string const &ip);
     ~Client();
 
-    void	perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
+    void		perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
+    inline Socket *	getMasterSocket() const { return _socket; }
   }; // !Client
 
 };
