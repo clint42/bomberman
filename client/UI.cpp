@@ -5,9 +5,10 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:52:00 2014 aurelien prieur
-// Last update Fri May 30 15:14:39 2014 aurelien prieur
+// Last update Fri May 30 17:01:59 2014 aurelien prieur
 //
 
+#include <unistd.h>
 #include "UI.hpp"
 
 UI::UI(EventsHandler &eventsHandler,

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Fri May 30 12:04:35 2014 julie franel
+// Last update Mon Jun  2 13:17:00 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -69,13 +69,15 @@ public:
 
   inline void	        perform(void (*fct)(void *, Socket *, bool b[3]), void *param) {
     if (this->Server() != NULL)
-      Server()->perform(fct, param, &_poll);
+      _server->perform(fct, param, &_poll);
     else if (this->Client() != NULL)
-      Client()->perform(fct, param, &_poll);
+      _client->perform(fct, param, &_poll);
   }
 
   inline void		watchEventOnSocket(Socket *s, int e) { _poll.watchEvent(s->getFd(), e); }
   inline void	        unwatchEventOnSocket(Socket *s, int e) {_poll.stopWatchingEvent(s->getFd(), e);}
+
+  inline int		update(int t) { return _poll.pollFn(t); }
 
 public: // nested classes definition
 

@@ -5,10 +5,11 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Fri May 30 15:53:29 2014 aurelien prieur
+// Last update Sat May 31 15:23:24 2014 aurelien prieur
 //
 
 #include <unistd.h>
+#include <iostream>
 #include "GameEntities.hpp"
 #include "EventsHandler.hpp"
 #include "ThreadUI.hpp"

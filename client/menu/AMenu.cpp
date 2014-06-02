@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 11:12:45 2014 aurelien prieur
-// Last update Mon May 26 13:24:06 2014 aurelien prieur
+// Last update Sat May 31 15:19:27 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -26,8 +26,6 @@ bool    AMenu::initialize()
 {
   glm::mat4     projection;
 
-  this->_sdlContext.start(800, 600, "Test LibGDL");
-  //glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   if (!_shader.load("../shaders/basic.fp", GL_FRAGMENT_SHADER)

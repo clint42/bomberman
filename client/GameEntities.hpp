@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Fri May 30 15:23:09 2014 aurelien prieur
+// Last update Fri May 30 17:15:21 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_

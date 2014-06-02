@@ -5,23 +5,24 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:05:44 2014 aurelien prieur
-// Last update Fri May 30 13:50:20 2014 aurelien prieur
+// Last update Fri May 30 20:48:29 2014 aurelien prieur
 //
 
 #ifndef AOBJECT_HPP_
 # define AOBJECT_HPP_
 
-#include <OpenGL.hh>
-#include <Game.hh>
-#include <Clock.hh>
-#include <Input.hh>
-#include <SdlContext.hh>
-#include <Geometry.hh>
-#include <Texture.hh>
-#include <BasicShader.hh>
-#include <Model.hh>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+# include <OpenGL.hh>
+# include <Game.hh>
+# include <Clock.hh>
+# include <Input.hh>
+# include <SdlContext.hh>
+# include <Geometry.hh>
+# include <Texture.hh>
+# include <BasicShader.hh>
+# include <Model.hh>
+# include <glm/glm.hpp>
+# include <glm/gtc/matrix_transform.hpp>
+# include "EventsHandler.hpp"
 
 enum	ObjectType
   {
@@ -39,7 +40,7 @@ public:
   AObject();
   virtual	~AObject();
   virtual bool	initialize();
-  virtual bool	update(gdl::Clock const &clock, gdl::Input &input);
+  virtual bool	update(gdl::Clock const &clock, EventsHandler const &events);
   virtual void	draw(gdl::AShader &shader, gdl::Clock const &clock) = 0;
 
   void		translate(glm::vec3 const &v);
