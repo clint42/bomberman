@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:29:16 2014 aurelien prieur
-// Last update Thu May 29 15:02:00 2014 aurelien prieur
+// Last update Mon Jun  2 14:36:57 2014 virol_g
 //
 
 #include <iostream>
@@ -16,16 +16,16 @@ MenuButton::MenuButton(std::pair<size_t, size_t> const &pos,
 		       std::string const &label,
 		       glm::vec4 const &color,
 		       glm::vec4 const &colorHover,
-		       std::string const &font): _pos(pos),
-						 _size(size),
-						 _color(color),
+		       std::string const &font): _color(color),
 						 _colorHover(colorHover),
+						 _pos(pos),
+						 _size(size),
 						 _label(label,
 							std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
 							glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20,
 							font)
 {
-  this->initialize("test");
+  this->initialize("./ressources/gradationGreyTex.tga");
 }
 
 MenuButton::~MenuButton()
@@ -34,7 +34,7 @@ MenuButton::~MenuButton()
 
 bool	MenuButton::initialize(std::string const &textureName)
 {
-  if (_texture.load("./ressources/gradationGreyTex.tga") == false)
+  if (_texture.load(textureName) == false)
     {
       std::cerr << "Couldn't load texture." << std::endl;
       return (false);
@@ -68,6 +68,8 @@ bool	MenuButton::initialize(std::string const &textureName)
 
 bool	MenuButton::update(gdl::Clock const &clock, gdl::Input &input)
 {
+  (void)clock;
+  (void)input;
   return (true);
 }
 

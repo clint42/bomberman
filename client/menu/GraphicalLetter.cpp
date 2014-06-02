@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 13:23:05 2014 aurelien prieur
-// Last update Sat May 24 19:05:29 2014 aurelien prieur
+// Last update Mon Jun  2 14:33:53 2014 virol_g
 //
 
 #include <iostream>
@@ -16,8 +16,8 @@ GraphicalLetter::GraphicalLetter(char letter, std::pair<size_t, size_t> const &p
 				 float const &fontSize,
 				 gdl::Texture const &texture): _abcTex(texture), 
 							       _pos(pos),
-							       _color(color),
-							       _fontSize(fontSize)
+							       _fontSize(fontSize),
+							       _color(color)
 {
   float	origX;
   float	origY;
