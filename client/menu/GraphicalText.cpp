@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:16:41 2014 aurelien prieur
-// Last update Thu May 29 14:42:48 2014 aurelien prieur
+// Last update Mon Jun  2 14:35:02 2014 virol_g
 //
 
 #include <iostream>
@@ -14,9 +14,9 @@
 
 GraphicalText::GraphicalText(std::string const &text, std::pair<size_t, size_t> const &pos,
 			     glm::vec4 const &color, float const &fontSize,
-			     std::string const &fontName): _color(color),
+			     std::string const &fontName): _pos(pos),
 							   _fontSize(fontSize),
-							   _pos(pos)
+							   _color(color)
 {
   GraphicalLetter	*letter;
 

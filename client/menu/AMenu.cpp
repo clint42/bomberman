@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 11:12:45 2014 aurelien prieur
-// Last update Sat May 31 15:19:27 2014 aurelien prieur
+// Last update Mon Jun  2 14:04:27 2014 virol_g
 //
 
 #include <unistd.h>
@@ -26,6 +26,7 @@ bool    AMenu::initialize()
 {
   glm::mat4     projection;
 
+  this->_sdlContext.start(800, 600, "Menu", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   if (!_shader.load("../shaders/basic.fp", GL_FRAGMENT_SHADER)
@@ -55,14 +56,14 @@ bool    AMenu::update()
     return (false);
   if (_selected >= 0)
     _menuElems[_selected]->hover(false);
-  if (_input.getKey(SDLK_DOWN))
+  if (_input.getKey(SDLK_LEFT))
     _key[1] = true;
-  else if (_input.getKey(SDLK_UP))
+  else if (_input.getKey(SDLK_RIGHT))
     _key[0] = true;
   else if (_key[1])
     {
       _key[1] = false;
-      _selected = (_selected + 1 < _menuElems.size()) ? _selected + 1 : 0;
+      _selected = (_selected + 1 < static_cast<int>(_menuElems.size())) ? _selected + 1 : 0;
     }  
   else if (_key[0])
     {

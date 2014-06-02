@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 26 16:09:25 2014 aurelien prieur
-// Last update Mon May 26 16:27:44 2014 aurelien prieur
+// Last update Mon Jun  2 14:35:44 2014 virol_g
 //
 
 #include <iostream>
@@ -13,7 +13,7 @@
 
 MenuBackground::MenuBackground()
 {
-  this->initialize("test");
+  this->initialize("./ressources/mainMenuBg.tga");
 }
 
 MenuBackground::~MenuBackground()
@@ -22,7 +22,7 @@ MenuBackground::~MenuBackground()
 
 bool	MenuBackground::initialize(std::string const &textureName)
 {
-  if (_texture.load("./ressources/mainMenuBg.tga") == false)
+  if (_texture.load(textureName) == false)
     {
       std::cerr << "Couldn't load background texture." << std::endl;
       return (false);
@@ -42,6 +42,8 @@ bool	MenuBackground::initialize(std::string const &textureName)
 
 bool	MenuBackground::update(gdl::Clock const &clock, gdl::Input &input)
 {
+  (void)clock;
+  (void)input;
   return (true);
 }
 
@@ -54,6 +56,7 @@ void	MenuBackground::draw(gdl::AShader &shader, gdl::Clock const &clock)
 
 void	MenuBackground::hover(bool isHover)
 {
+  (void)isHover;
 }
 
 
