@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Fri May 30 19:41:35 2014 buret_j
+// Last update Mon Jun  2 15:09:25 2014 buret_j
 //
 
 #include "Game.hpp"
@@ -27,14 +27,15 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
   //   }
   _params = g_Plays[type];
   _started = false;
-  _time = t;
-  _totalPlayers = 0;
-  _totalBots = 0;
+  _paused = false;
+  _time = (Time)t;
+  _maxPlayers = p;
+  _maxBots = b;
+  _round = 0;
 }
 
 Server::Game::~Game() {
-  if (_map)
-    delete _map;
+  delete _map;
 }
 
 void
@@ -60,4 +61,12 @@ Server::Game::timeLeft() const {
     return _endAt.tv_sec - tmp.tv_sec;
   }
   return _endAt.tv_sec - _pausedAt.tv_sec;
+}
+
+void
+Server::Game::pause() {
+  if (_started && !_paused) {
+    gettimeofday(&_pausedAt, NULL);
+    _paused = true;
+  }
 }
