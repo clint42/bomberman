@@ -5,41 +5,59 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 16:01:34 2014 aurelien prieur
-// Last update Thu May 29 17:49:56 2014 aurelien prieur
+// Last update Mon Jun  2 12:12:58 2014 aurelien prieur
 //
 
+#include <iostream>
 #include "EventsHandler.hpp"
 
-EventsHandler::EventsHandler()
+EventsHandler::EventsHandler(): _current(NULL)
 {
-  _lastEvents.resize(SDLK_LAST);
-  _currentEvents.resize(SDLK_LAST);
-  for (int i = 0; i < SDLK_LAST; ++i)
-    {
-      _lastEvents[i] = false;
-      _currentEvents[i] = false;
-    }
+
 }
 
 EventsHandler::~EventsHandler()
 {
 }
 
-bool	EventsHandler::getKeyReleased(int input)
+EventsHandler::keyStatus	EventsHandler::getInputStatus(int input)
 {
-  if (_lastEvents[input] && !_currentEvents[input])
-    {
-      _lastEvents[input] = false;
-      return (true);
-    }
-  return (false);
+  EventsHandler::keyStatus	res;
+
+  _mutex.lock();
+  if (_current == NULL)
+    return (NONE);
+  res = EventsHandler::NONE;
+  if (!_last.getKey(input) && _current->getKey(input))
+    res = EventsHandler::DOWN;
+  else if (_last.getKey(input) && !_current->getKey(input))
+    res = EventsHandler::UP;
+  else if (_last.getKey(input) && _current->getKey(input))
+    res = EventsHandler::HOLD;
+  _mutex.unlock();
+  return (res);
 }
 
-void	EventsHandler::clearEvents()
+void		EventsHandler::initialize(gdl::Input *inputs)
 {
-  for (int i = 0; i < SDLK_LAST; ++i)
-    {
-      _currentEvents[i] = false;
-      _lastEvents[i] = false;
-    }
+  _mutex.lock();
+  _current = inputs;
+  _mutex.unlock();
+}
+
+void		EventsHandler::setEvents(gdl::Input last)
+{
+  _mutex.lock();
+  _last = last;
+  _mutex.unlock();
+}
+
+void		EventsHandler::signal(void)
+{
+  _condVar.signal();
+}
+
+void		EventsHandler::wait(void)
+{
+  _condVar.wait();
 }

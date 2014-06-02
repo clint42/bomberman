@@ -5,29 +5,42 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 15:57:53 2014 aurelien prieur
-// Last update Thu May 29 17:49:07 2014 aurelien prieur
+// Last update Mon Jun  2 13:19:52 2014 aurelien prieur
 //
 
 #ifndef EVENTSHANDLER_HPP_
 # define EVENTSHANDLER_HPP_
 
-# include <SdlContext.hh>
+# include <Input.hh>
 # include <vector>
 # include <utility>
 # include "Mutex.hpp"
 
 # define SDLK_LAST 323
 
-class			EventsHandler
+class		EventsHandler
 {
-  std::vector<bool>	_lastEvents;	
-  std::vector<bool>	_currentEvents;
+  gdl::Input		_last;
+  gdl::Input		*_current;
+  std::ostringstream	_bufOut;
   Mutex			_mutex;
+  Condvar		_condVar;
+
 public:
+  enum	keyStatus
+    {
+      DOWN,
+      HOLD,
+      UP,
+      NONE
+    };
   EventsHandler();
   ~EventsHandler();
-  bool			getKeyReleased(int input);
-  void			clearEvents();
+  keyStatus		getInputStatus(int input);
+  void			setEvents(gdl::Input last);
+  void			initialize(gdl::Input *inputs);
+  void			signal(void);
+  void			wait(void);
 };
 
 #endif // !EVENTHANDLER_HPP_
