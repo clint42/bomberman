@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:11:27 2014 aurelien prieur
-// Last update Mon May 19 14:35:17 2014 aurelien prieur
+// Last update Fri May 30 20:48:53 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -34,7 +34,7 @@ bool	AObject::initialize()
   return (true);
 }
 
-bool	AObject::update(gdl::Clock const &clock, gdl::Input &Input)
+bool	AObject::update(gdl::Clock const &clock, EventsHandler const &events)
 {
   return (true);
 }

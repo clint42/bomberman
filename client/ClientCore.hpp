@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 15:42:09 2014 aurelien prieur
-// Last update Fri May 30 15:12:46 2014 aurelien prieur
+// Last update Mon Jun  2 12:14:25 2014 aurelien prieur
 //
 
 #ifndef CLIENTCORE_HPP_
@@ -21,11 +21,13 @@ class		ClientCore
   GameEntities	&_gameEntities;
   EventsHandler	&_eventsHandler;
   SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &_createInstructs;
+  
 public:
   ClientCore(GameEntities &gameEntities, EventsHandler &eventsHandler,
 	     SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs);
   ~ClientCore();
   bool		initialize();
+  bool		run();
 };
 
 #endif // !CLIENTCORE_HPP_
