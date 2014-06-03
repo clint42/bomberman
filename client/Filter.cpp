@@ -5,7 +5,7 @@
 ** Login   <lafitt_g@lafittg>
 ** 
 ** Started on  Mon Jun  2 17:54:14 2014 lafitt_g
-** Last update Mon Jun  2 18:21:00 2014 lafitt_g
+** Last update Mon Jun  2 18:55:14 2014 lafitt_g
 */
 
 #include "Filter.hpp"
@@ -22,7 +22,7 @@ getInformation(const std::string &msg, size_t *field, size_t cur_1, size_t cur_2
     field = 0;
 }
 
-void
+t_cmd *
 filterCmd(const t_msg &msg)
 {
   t_cmd	*cmd = new t_cmd;
@@ -45,4 +45,5 @@ filterCmd(const t_msg &msg)
       if (cur_1 != std::string::npos && (cur_2 = msg._msg.find(" ", cur_1 + 1)) != std::string::npos)
 	cmd->params.push_back(msg._msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1)));
     }
+  return (cmd);
 }
