@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Mon Jun  2 18:37:36 2014 aurelien prieur
+// Last update Tue Jun  3 11:21:56 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -42,45 +42,17 @@ public:
   ConnexionHandler() {}
   ~ConnexionHandler() {}
 
-  inline Server *	Server(int port) {
-    if (!_server && !_client) { _server = new Server(port); }
-    _poll.watchEvent(Server()->getMasterSocket(), POLLIN);
-    return _server;
-  }
-  inline Server *	Server() { return _server; }
+  inline Server *	server() { return _server; }
+  Server *		server(int port);
+  inline Client *	client() { return _client; }
+  Client *		client(int port, std::string const &ip);
 
-  inline Client *	Client() { return _client; }
-  inline Client *	Client(int port, std::string const &ip) {
-    if (!_client && !_server) _client = new Client(port, ip);
-    return _client;
-  }
+  void			reset();
+  void			rmSocket(Socket *s);
 
-  inline void		reset() {
-    delete _server; _server = NULL;
-    delete _client; _client = NULL;
-  }
+  void		        perform(void (*fct)(void *, Socket *, bool b[3]), void *param);
 
-  inline void		rmSocket(Socket *s) {
-    if (_sockets[s->getFd()] != NULL) {
-      _sockets[s->getFd()] = NULL;
-      delete s;
-    }
-  }
-
-  inline void	        perform(void (*fct)(void *, Socket *, bool b[3]), void *param) {
-    if (this->Server() != NULL)
-      _server->perform(fct, param, &_poll);
-    else if (this->Client() != NULL)
-      _client->perform(fct, param, &_poll);
-  }
-
-  inline Socket *	getMasterSocket() const {
-    if (this->Server() != NULL)
-      _server->getMasterSocket();
-    else if (this->Client() != NULL)
-      _client->getMasterSocket();
-    return (NULL);
-  }
+  Socket *		getMasterSocket();
 
   inline void		watchEventOnSocket(Socket *s, int e) { _poll.watchEvent(s->getFd(), e); }
   inline void	        unwatchEventOnSocket(Socket *s, int e) {_poll.stopWatchingEvent(s->getFd(), e);}
@@ -91,7 +63,7 @@ public: // nested classes definition
 
   class Server {
     std::vector<Socket *> _sockets;
-    int			  _masterSocket;
+    Socket *		  _masterSocket;
 
     void	accept();
 
@@ -100,7 +72,8 @@ public: // nested classes definition
     ~Server();
 
     void		perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
-    inline Socket *	getMasterSocket() const { return _masterSocket; }
+    inline Socket *	getMasterSocket() { return _masterSocket; }
+    void	        rmSocket(Socket *s);
   }; // !Server
 
 
@@ -112,7 +85,8 @@ public: // nested classes definition
     ~Client();
 
     void		perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
-    inline Socket *	getMasterSocket() const { return _socket; }
+    inline Socket *	getMasterSocket() { return _socket; }
+    
   }; // !Client
 
 };

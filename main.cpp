@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Tue May  6 11:22:17 2014 julie franel
-// Last update Mon Jun  2 14:53:34 2014 julie franel
+// Last update Tue Jun  3 10:54:18 2014 buret_j
 //
 
 #include <cstdlib>
@@ -17,9 +17,11 @@
 int	main()
 {
   srand(time(0));
+  ConnexionHandler ch;
+
   try
     {
-      Server::Server	_server;
+      Server::Server	_server(&ch);
 
       _server.run();
     }

@@ -5,10 +5,71 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Mon Jun  2 18:10:49 2014 buret_j
+// Last update Tue Jun  3 11:29:18 2014 buret_j
 //
 
 #include "ConnexionHandler.hpp"
+
+Server *
+ConnexionHandler::server(int port) {
+  if (!_server && !_client) { _server = new Server(port); }
+  _poll.watchEvent(server()->getMasterSocket()->getFd(), POLLIN);
+  return _server;
+}
+
+Client *
+ConnexionHandler::client(int port, std::string const &ip) {
+  if (!_client && !_server)
+    _client = new Client(port, ip);
+  return _client;
+}
+
+void
+ConnexionHandler::reset() {
+  delete _server;
+  _server = NULL;
+  delete _client;
+  _client = NULL;
+}
+
+void
+ConnexionHandler::rmSocket(Socket *s) {
+  try {
+    _poll.stopWatchingEvent(s);
+  } catch PollException { }
+  if (_server)
+    _server->rmSocket(s);
+}
+
+void
+ConnexionHandler::perform(void (*fct)(void *, Socket *, bool b[3]), void *param) {
+  if (this->server() != NULL)
+    _server->perform(fct, param, &_poll);
+  else if (this->client() != NULL)
+    _client->perform(fct, param, &_poll);
+}
+
+Socket *
+ConnexionHandler::getMasterSocket() {
+  if (this->server() != NULL)
+    return _server->getMasterSocket();
+  else if (this->client() != NULL)
+    return _client->getMasterSocket();
+  return (NULL);
+}
+
+void
+ConnexionHandler::rmSocket(Socket *s) {
+  if (_sockets[s->getFd()] != NULL) {
+    _sockets[s->getFd()] = NULL;
+    delete s;
+  }
+}
+
+/*
+** <-- main
+** server -->
+*/
 
 ConnexionHandler::Server::Server(int p) {
   int		fd = socket(PF_INET, SOCK_STREAM, 0);
@@ -84,6 +145,7 @@ ConnexionHandler::Client::Client(int port, std::string const &ip) {
 }
 
 ConnexionHandler::Client::~Client() {
+  delete _socket;
 }
 
 void
