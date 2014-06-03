@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Tue May 20 09:42:06 2014 aurelien prieur
-// Last update Fri May 23 15:35:17 2014 aurelien prieur
+// Last update Tue Jun  3 11:00:02 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -61,7 +61,7 @@ bool		Poll::isEventOccurred(int fd, int event)
   static size_t	lastCheck = 0;
   
   if (_fds[lastCheck].fd == fd)
-    return ((_fds[i].revents & event) == event);
+    return ((_fds[lastCheck].revents & event) == event);
   for (size_t i = 0; i < _fds.size(); ++i)
     {
       if (_fds[i].fd == fd)
