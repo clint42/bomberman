@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Mon Jun  2 15:41:51 2014 lafitt_g
+// Last update Tue Jun  3 18:21:32 2014 julie franel
 */
 
 #ifndef SERVER_HPP_
@@ -78,9 +78,14 @@ namespace Server {
     Player	*getPlayer(const size_t, const size_t);
     Player	*getPlayer(const size_t id);
 
-    void	movePlayer();
+    void	movePlayer(const t_cmd &cmd);
     void	createPlayer();
 
+    std::pair<size_t, size_t>	generatePos(const size_t, const size_t);
+    std::pair<size_t, size_t>	newPosUp(const size_t, const size_t);
+    std::pair<size_t, size_t>	newPosDown(const size_t, const size_t);
+    std::pair<size_t, size_t>	newPosRight(const size_t, const size_t);
+    std::pair<size_t, size_t>	newPosLeft(const size_t, const size_t);
   public:
     Server();
     ~Server();

@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Tue May  6 11:22:17 2014 julie franel
-// Last update Tue Jun  3 10:54:18 2014 buret_j
+// Last update Tue Jun  3 15:40:50 2014 julie franel
 //
 
 #include <cstdlib>
@@ -17,15 +17,19 @@
 int	main()
 {
   srand(time(0));
-  ConnexionHandler ch;
+  // ConnexionHandler ch;
 
   try
     {
-      Server::Server	_server(&ch);
+      Server::Server	_server;
 
       _server.run();
     }
   catch (ServerException e)
+    {
+      std::cerr << e.message() << std::endl;
+    }
+  catch (MapException e)
     {
       std::cerr << e.message() << std::endl;
     }

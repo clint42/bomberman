@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Sat May 31 16:51:24 2014 buret_j
+## Last update Mon Jun  2 13:57:29 2014 julie franel
 ##
 
 CXX		=	clang++
@@ -23,7 +23,6 @@ SRC		=	main.cpp			\
 			common/ScopedLock.cpp		\
 \
 			server/Server.cpp		\
-			server/Game.cpp			\
 			server/Player.cpp		\
 			server/Team.cpp			\
 			server/ColorGenerator.cpp	\
