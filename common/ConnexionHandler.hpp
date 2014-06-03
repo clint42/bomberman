@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Tue Jun  3 11:21:56 2014 buret_j
+// Last update Tue Jun  3 15:21:41 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -16,7 +16,6 @@
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <arpa/inet.h>
-
 
 # include <vector>
 
@@ -65,7 +64,7 @@ public: // nested classes definition
     std::vector<Socket *> _sockets;
     Socket *		  _masterSocket;
 
-    void	accept();
+    void	acceptPeer(Poll *);
 
   public:
     Server(int p);

@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Tue May  6 11:11:14 2014 julie franel
-// Last update Mon Jun  2 14:09:56 2014 julie franel
+// Last update Tue Jun  3 13:38:20 2014 buret_j
 //
 
 #ifndef EXCEPTION_HPP_
@@ -52,6 +52,12 @@ class		ServerException : public ABombermanException
 public:
   ServerException(const std::string &msg) throw();
   virtual ~ServerException(void) throw();
+};
+
+class		ConnexionException : public ABombermanException {
+public:
+  ConnexionException(std::string const &) throw ();
+  virtual ~ConnexionException() throw ();
 };
 
 #endif /* !EXCEPTION_HPP_ */

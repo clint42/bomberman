@@ -5,19 +5,19 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Tue Jun  3 11:29:18 2014 buret_j
+// Last update Tue Jun  3 15:20:05 2014 buret_j
 //
 
 #include "ConnexionHandler.hpp"
 
-Server *
+ConnexionHandler::Server *
 ConnexionHandler::server(int port) {
   if (!_server && !_client) { _server = new Server(port); }
   _poll.watchEvent(server()->getMasterSocket()->getFd(), POLLIN);
   return _server;
 }
 
-Client *
+ConnexionHandler::Client *
 ConnexionHandler::client(int port, std::string const &ip) {
   if (!_client && !_server)
     _client = new Client(port, ip);
@@ -35,8 +35,8 @@ ConnexionHandler::reset() {
 void
 ConnexionHandler::rmSocket(Socket *s) {
   try {
-    _poll.stopWatchingEvent(s);
-  } catch PollException { }
+    _poll.stopWatchingEvent(s->getFd());
+  } catch (PollException) { }
   if (_server)
     _server->rmSocket(s);
 }
@@ -58,14 +58,6 @@ ConnexionHandler::getMasterSocket() {
   return (NULL);
 }
 
-void
-ConnexionHandler::rmSocket(Socket *s) {
-  if (_sockets[s->getFd()] != NULL) {
-    _sockets[s->getFd()] = NULL;
-    delete s;
-  }
-}
-
 /*
 ** <-- main
 ** server -->
@@ -79,9 +71,9 @@ ConnexionHandler::Server::Server(int p) {
   sin.sin_family = AF_INET;
   sin.sin_port = htons(p);
   if (fd == -1
-      || bind(fd, (sockaddr*)&sin, sizeof serveur->sin) == -1
+      || bind(fd, (sockaddr*)&sin, sizeof sin) == -1
       || listen(fd, 10) == -1)
-    throw ConnexionException;
+    throw ConnexionException("Can't create socket properly");
   _sockets[fd] = new Socket(fd);
   _masterSocket = _sockets[fd];
 }
@@ -94,17 +86,17 @@ ConnexionHandler::Server::~Server() {
 }
 
 void
-ConnexionHandler::Server::accept() {
+ConnexionHandler::Server::acceptPeer(Poll *p) {
   sockaddr_in	sin;
   socklen_t     sin_len;
   int		fd;
   Socket *	socket;
 
-  fd = accept(s->sockfd, (sockaddr *)&sin, &sin_len);
-  socket = new Socket(fd)
+  fd = accept(_masterSocket->getFd(), (sockaddr *)&sin, &sin_len);
+  socket = new Socket(fd);
   _sockets.push_back(socket);
-  _poll.watchEvent(fd, POLLIN);
-  _poll.watchEvent(fd, POLLOUT);
+  p->watchEvent(fd, POLLIN);
+  p->watchEvent(fd, POLLOUT);
 }
 
 void
@@ -115,15 +107,23 @@ ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, bool b[3]),
 
   for (std::vector<Socket *>::iterator it = _sockets.begin();
        it != _sockets.end(); ++it) {
-    if ((*it)->getFd() == _masterSocket)
-      this->accept();
+    if (*it == _masterSocket)
+      this->acceptPeer(poll);
     else {
-      event[0] = poll->isEventOccured((*it)->getFd(), POLLIN);
-      event[1] = poll->isEventOccured((*it)->getFd(), POLLOUT);
+      event[0] = poll->isEventOccurred((*it)->getFd(), POLLIN);
+      event[1] = poll->isEventOccurred((*it)->getFd(), POLLOUT);
       event[2] = poll->isDisconnected((*it)->getFd());
       if (event[0] || event[1] || event[2])
 	fct(param, *it, event);
     }
+  }
+}
+
+void
+ConnexionHandler::Server::rmSocket(Socket *s) {
+  if (_sockets[s->getFd()] != NULL) {
+    _sockets[s->getFd()] = NULL;
+    delete s;
   }
 }
 
@@ -140,7 +140,7 @@ ConnexionHandler::Client::Client(int port, std::string const &ip) {
   sin.sin_family = AF_INET;
   sin.sin_port = htons(port);
   sin.sin_addr.s_addr = inet_addr(ip.c_str());
-  if (!pe || fd == -1 || connect(fd) == -1) throw ConnexionException;
+  if (!pe || fd == -1 || connect(fd, (sockaddr *)&sin, sizeof sin) == -1) throw ConnexionException("Can't create Client properly");
   _socket = new Socket(fd);
 }
 
@@ -154,9 +154,9 @@ ConnexionHandler::Client::perform(void (*fct)(void *, Socket *, bool b[3]),
 				  Poll *poll) {
   bool	event[3];
 
-  event[0] = poll->isEventOccured(_socket->getFd(), POLLIN);
-  event[1] = poll->isEventOccured(_socket->getFd(), POLLOUT);
+  event[0] = poll->isEventOccurred(_socket->getFd(), POLLIN);
+  event[1] = poll->isEventOccurred(_socket->getFd(), POLLOUT);
   event[2] = poll->isDisconnected(_socket->getFd());
   if (event[0] || event[1] || event[2])
-    fct(param, *it, event);
+    fct(param, _socket, event);
 }

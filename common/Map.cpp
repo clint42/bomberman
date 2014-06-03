@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Mon Jun  2 19:06:39 2014 buret_j
+// Last update Tue Jun  3 15:21:10 2014 buret_j
 */
 
 #include <openssl/md5.h>
@@ -114,7 +114,7 @@ Map::generateMap() {
 
 int
 Map::getElemAtPos(size_t x, size_t y) {
-  std::pair<x, y> p;
+  std::pair<size_t, size_t> p(x, y);
   return _map[p];
 }
 
