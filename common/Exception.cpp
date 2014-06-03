@@ -5,17 +5,17 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Tue May  6 11:18:51 2014 julie franel
-// Last update Tue Jun  3 15:40:58 2014 buret_j
+// Last update Tue Jun  3 16:57:00 2014 aurelien prieur
 //
 
 #include "Exception.hpp"
 
 ABombermanException::ABombermanException(std::string const &msg) throw() : _message(msg) {}
 ABombermanException::~ABombermanException(void) throw() {}
-std::string const &
-ABombermanException::message(void) const throw()
+const char
+*ABombermanException::what(void) const throw()
 {
-  return this->_message;
+  return this->_message.c_str();
 }
 
 Md5Exception::Md5Exception(void) throw() : ABombermanException("Couldn't open the map") {}
