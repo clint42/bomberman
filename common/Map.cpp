@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Tue Jun  3 15:21:10 2014 buret_j
+// Last update Tue Jun  3 16:04:24 2014 julie franel
 */
 
 #include <openssl/md5.h>
@@ -35,7 +35,7 @@ Map::Map(std::string const &filename) {
   this->getMap(_width, _height, file);
   file.close();
 
-  if (_nbPlayers > (_width * _height) - (_map.size() - 1))
+  if (this->_nbPlayers > ((_width * _height) - (_map.size() - 1)))
     throw MapException("Map is invalid: there is not enough place for players.");
 }
 
@@ -62,25 +62,27 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
   size_t			_w = 0;
   size_t			_h = 0;
 
-  while (file.get(_c)) {
-    _c -= '0';
+  while (file.get(_c))
+    {
+      _c -= '0';
+      if (!(_c >= 0 || _c <= 2 || _c == ('\n' - '0')))
+	throw MapException("Invalid block identifier");
+      if (_c == ('\n' - '0'))
+	{
+	  _w = 0;
+	  _h += 1;
+	}
+      else if (_c == 1 || _c == 2)
+	{
+	  if (_w >= width || _h >= height)
+	    throw MapException("Map size wrong.");
 
-    if (_c <= 0 || _c >= 2 || _c != '\n' - '0')
-      throw MapException("Invalid block identifier");
+	  std::pair<size_t, size_t> _pos(_w, _h);
+	  _map[_pos] = _c;
+	  _w++;
+	}
 
-    if (_c == '\n') {
-      _w = 0;
-      _h += 1;
-    } else {
-      if (_w >= width || _h >= height)
-	throw MapException("Map size wrong.");
-
-      std::pair<size_t, size_t> _pos(_w, _h);
-      _map[_pos] = _c;
-      _w++;
     }
-
-  }
 }
 
 void

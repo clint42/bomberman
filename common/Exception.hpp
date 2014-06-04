@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Tue May  6 11:11:14 2014 julie franel
-// Last update Tue Jun  3 13:38:20 2014 buret_j
+// Last update Tue Jun  3 16:56:29 2014 aurelien prieur
 //
 
 #ifndef EXCEPTION_HPP_
@@ -23,7 +23,7 @@ public:
   ABombermanException(std::string const &) throw();
   virtual ~ABombermanException(void) throw();
 
-  virtual std::string const &message(void) const throw();
+  virtual const char *what(void) const throw();
 };
 
 class		Md5Exception : public ABombermanException
