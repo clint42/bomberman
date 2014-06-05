@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Mon Jun  2 15:09:25 2014 buret_j
+// Last update Thu Jun  5 16:33:40 2014 buret_j
 //
 
 #include "Game.hpp"
@@ -18,7 +18,7 @@ static Server::Game::Play g_Plays[] = {
 };
 
 
-Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type) {
+Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type, std::list<Player *> const &) {
   // try {
     _map = new Map(m);
   // } catch MapException {

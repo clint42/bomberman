@@ -1,0 +1,33 @@
+//
+// Types.hpp for  in /home/buret_j/rendu/bomberman
+// 
+// Made by buret_j
+// Login   <buret_j@epitech.net>
+// 
+// Started on  Thu Jun  5 15:57:23 2014 buret_j
+// Last update Thu Jun  5 16:32:32 2014 buret_j
+//
+
+#ifndef TYPES_HPP_
+# define TYPES_HPP_
+
+# include <string>
+# include <vector>
+
+namespace Server {
+  struct                          t_cmd{
+    size_t                        id;
+    timeval                       date;
+    std::pair<size_t, size_t>     pos;
+    std::string                   action;
+    std::vector<std::string>      params;
+  };
+
+  struct                      t_msg{
+    timeval                   _date;
+    std::string               _msg;
+  };
+
+}
+
+#endif /* !TYPES_HPP_ */

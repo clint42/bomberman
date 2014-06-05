@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 15:57:53 2014 aurelien prieur
-// Last update Mon Jun  2 13:19:52 2014 aurelien prieur
+// Last update Wed Jun  4 17:13:51 2014 aurelien prieur
 //
 
 #ifndef EVENTSHANDLER_HPP_
@@ -14,33 +14,57 @@
 # include <Input.hh>
 # include <vector>
 # include <utility>
+# include <map>
+# include <sstream>
+# include <string>
+# include "ConnexionHandler.hpp"
 # include "Mutex.hpp"
-
-# define SDLK_LAST 323
+# include "CondVar.hpp"
 
 class		EventsHandler
 {
-  gdl::Input		_last;
-  gdl::Input		*_current;
-  std::ostringstream	_bufOut;
-  Mutex			_mutex;
-  Condvar		_condVar;
-
 public:
   enum	keyStatus
     {
-      DOWN,
-      HOLD,
-      UP,
-      NONE
+      DOWN = 1,
+      HOLD = 2,
+      UP = 4,
+      NONE = 8
     };
-  EventsHandler();
+private:
+  class		PlayerEvent
+  {
+    int		_player;
+    int		_ks;
+    std::string	_cmd;
+  public:
+    PlayerEvent(int player, std::string const &cmd, int ks);
+    ~PlayerEvent();
+    int		getPlayer(void) const;
+    std::string	const &getCmd(void) const;
+    bool	hasOccured(keyStatus ks) const;
+  };
+  std::map<int, PlayerEvent>	_syntaxTab;
+  std::map<int, bool>		_lastEvent;
+  std::map<int, bool>		_curEvent;
+  std::list<PlayerEvent *>	_playerEvents;
+  ConnexionHandler		&_connexion;
+  Mutex				_mutex;
+  bool				_finished;
+
+public:
+  EventsHandler(ConnexionHandler &connexionHandler);
   ~EventsHandler();
-  keyStatus		getInputStatus(int input);
-  void			setEvents(gdl::Input last);
+  keyStatus		getInputStatus(int input, bool withoutLock = false);
   void			initialize(gdl::Input *inputs);
-  void			signal(void);
-  void			wait(void);
+  void			update(gdl::Input &input);
+  void			interpret(void);
+  bool			isFinished(void);
+  void			finish(void);
+  bool			cmdToString(std::string &str,
+				     int idPlayer1, std::pair<size_t, size_t> const &coord1,
+				     int idPlayer2 = -1,
+				     std::pair<size_t, size_t> const &coord2 = (std::pair<size_t, size_t>(0, 0)));
 };
 
 #endif // !EVENTHANDLER_HPP_

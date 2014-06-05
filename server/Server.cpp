@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Thu Jun  5 16:21:07 2014 buret_j
+// Last update Thu Jun  5 16:31:55 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -86,29 +86,34 @@ Server::Server::getInformation(const std::string &msg, size_t *field, size_t cur
 }
 
 void
-Server::Server::filterCmd(const t_msg &msg)
+Server::Server::filterCmd()
 {
   t_cmd         *cmd = new t_cmd;
   size_t        cur_1 = 0;
   size_t        cur_2 = 0;
 
-  cmd->date = msg._date;
-  cur_1 = msg._msg.find(" ", cur_1);
-  this->getInformation(msg._msg, &cmd->id, cur_2, cur_1);
-  cur_2 = msg._msg.find(" ", cur_1 + 1);
-  this->getInformation(msg._msg, &cmd->pos.first, cur_1 + 1, cur_2 - (cur_1 + 1));
-  cur_1 = msg._msg.find(" ", cur_2 + 1);
-  this->getInformation(msg._msg, &cmd->pos.first, cur_2 + 1, cur_1 - (cur_2 + 1));
-  cur_2 = msg._msg.find(" ", cur_1 + 1);
-  cmd->action = msg._msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1));
-  while (cur_2 != std::string::npos && cur_1 != std::string::npos)
+  if (this->_messages.size() > 0)
     {
-      cur_1 = msg._msg.find(" ", cur_2 + 1);
-      cmd->params.push_back(msg._msg.substr(cur_2 + 1, cur_1 - (cur_2 + 1)));
-      if (cur_1 != std::string::npos && (cur_2 = msg._msg.find(" ", cur_1 + 1)) != std::string::npos)
-        cmd->params.push_back(msg._msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1)));
+      t_msg		*msg = this->_messages.front();
+      cmd->date = msg->_date;
+      cur_1 = msg->_msg.find(" ", cur_1);
+      this->getInformation(msg->_msg, &cmd->id, cur_2, cur_1);
+      cur_2 = msg->_msg.find(" ", cur_1 + 1);
+      this->getInformation(msg->_msg, &cmd->pos.first, cur_1 + 1, cur_2 - (cur_1 + 1));
+      cur_1 = msg->_msg.find(" ", cur_2 + 1);
+      this->getInformation(msg->_msg, &cmd->pos.first, cur_2 + 1, cur_1 - (cur_2 + 1));
+      cur_2 = msg->_msg.find(" ", cur_1 + 1);
+      cmd->action = msg->_msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1));
+      while (cur_2 != std::string::npos && cur_1 != std::string::npos)
+	{
+	  cur_1 = msg->_msg.find(" ", cur_2 + 1);
+	  cmd->params.push_back(msg->_msg.substr(cur_2 + 1, cur_1 - (cur_2 + 1)));
+	  if (cur_1 != std::string::npos && (cur_2 = msg->_msg.find(" ", cur_1 + 1)) != std::string::npos)
+	    cmd->params.push_back(msg->_msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1)));
+	}
+      delete this->_messages.front();
+      this->putCmdInQueue(cmd);
     }
-  this->putCmdInQueue(cmd);
 }
 
 void
@@ -224,43 +229,43 @@ Server::Server::run() {
   while (_run && _co->update(0) >= 0) {
     _co->perform(&trampoline, this);
     filterCmd();
-    _game->update();
+    // _game->update();
     // ..
   }
 
 }
 
 
-void		Server::Server::run()
-{
-  t_cmd		*_cmd;
-  Player	*_player;
-  std::map<std::string, void (Server::Server::*)()>	_action;
-  t_cmd             _tmp;
+// void		Server::Server::run()
+// {
+//   t_cmd		*_cmd;
+//   Player	*_player;
+//   std::map<std::string, void (Server::Server::*)()>	_action;
+//   t_cmd             _tmp;
 
-  _action["MOVE"] = &Server::Server::movePlayer;
-  _tmp.id = 1;
-  TIME(_tmp.date);
-  std::pair<size_t, size_t> pos(0, 0);
-  _tmp.pos = pos;
-  _tmp.action.append("MOVE");
-  _tmp.params.push_back("UP");
-  this->_events.push(&_tmp);
+//   _action["MOVE"] = &Server::Server::movePlayer;
+//   _tmp.id = 1;
+//   TIME(_tmp.date);
+//   std::pair<size_t, size_t> pos(0, 0);
+//   _tmp.pos = pos;
+//   _tmp.action.append("MOVE");
+//   _tmp.params.push_back("UP");
+//   this->_events.push(&_tmp);
 
-  // while (1)
-  //   {
-  if (this->_events.tryPop(&_cmd) == false)
-    throw ServerException("Nothing in queue");
-  if ((_player = this->getPlayer(_cmd->pos.first, _cmd->pos.second)) == NULL)
-    {
-      if ((_player = this->getPlayer(_cmd->id)) == NULL)
-	throw ServerException("No player found");
-      _player->setPos(_cmd->pos.first, _cmd->pos.second);
-    }
-  if (_player->getTimeSinceLastCommand() <= (DELAY * _player->getLastCommandMultiplier()
-					     * _player->getCommandTimeMultiplier()))
-    {
-      (this->*_action[_cmd->action])();
-    }
-  // }
-}
+//   // while (1)
+//   //   {
+//   if (this->_events.tryPop(&_cmd) == false)
+//     throw ServerException("Nothing in queue");
+//   if ((_player = this->getPlayer(_cmd->pos.first, _cmd->pos.second)) == NULL)
+//     {
+//       if ((_player = this->getPlayer(_cmd->id)) == NULL)
+// 	throw ServerException("No player found");
+//       _player->setPos(_cmd->pos.first, _cmd->pos.second);
+//     }
+//   if (_player->getTimeSinceLastCommand() <= (DELAY * _player->getLastCommandMultiplier()
+// 					     * _player->getCommandTimeMultiplier()))
+//     {
+//       (this->*_action[_cmd->action])();
+//     }
+//   // }
+// }

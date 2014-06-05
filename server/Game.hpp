@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Mon Jun  2 15:08:54 2014 buret_j
+// Last update Thu Jun  5 16:04:26 2014 buret_j
 //
 
 #ifndef SERVER__GAME_HPP_
@@ -16,6 +16,9 @@
 
 # include <sys/time.h>
 # include "Map.hpp"
+# include "Player.hpp"
+# include "SafeQueue.hpp"
+# include "Types.hpp"
 
 namespace	Server {
 
@@ -47,9 +50,16 @@ namespace	Server {
     size_t	_maxBots;
     size_t	_round;
 
+    std::map<std::pair<size_t, size_t>, Player *> _players;
+    std::list<Team *>		_teams;
+
+    SafeQueue<t_cmd *>		_events;
+    SafeQueue<t_cmd *>		_bomb;
+
+
   public:
 
-    Game(std::string const &m, size_t p, size_t b, size_t t, Type type);
+    Game(std::string const &m, size_t p, size_t b, size_t t, Type type, std::list<Player *> const &);
     ~Game();
 
     inline Map const *	getMap() const { return _map; }
@@ -60,11 +70,14 @@ namespace	Server {
     inline bool		isStarted() const { return _started; }
     void		pause();
     inline bool		isPaused() const { return _paused; }
-    inline bool		isEnded() const {
+    bool		isEnded() const {
       timeval t;
       gettimeofday(&t, NULL);
       return (_started && !_paused && t.tv_usec > _endAt.tv_usec) ? true : false;
     }
+
+    inline void		addEvent(t_cmd *c) { _events.push(c); }
+    inline void		addBomb(t_cmd *c) { _bomb.push(c); }
 
   };
 

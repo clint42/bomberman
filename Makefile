@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Sat May 31 16:51:24 2014 buret_j
+## Last update Thu Jun  5 16:36:26 2014 buret_j
 ##
 
 CXX		=	clang++
@@ -16,6 +16,8 @@ NAME		=	bomberman
 
 SRC		=	main.cpp			\
 \
+			common/Poll.cpp			\
+			common/ConnexionHandler.cpp	\
 			common/Map.cpp			\
 			common/Exception.cpp		\
 			common/Select.cpp		\

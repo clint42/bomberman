@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Tue Jun  3 15:20:05 2014 buret_j
+// Last update Thu Jun  5 16:16:39 2014 buret_j
 //
 
 #include "ConnexionHandler.hpp"
@@ -63,13 +63,21 @@ ConnexionHandler::getMasterSocket() {
 ** server -->
 */
 
-ConnexionHandler::Server::Server(int p) {
+ConnexionHandler::Server::Server(int p) : _masterSocket(0), _port(p) {
+  this->initialise();
+}
+
+void
+ConnexionHandler::Server::initialise() {
+  if (_masterSocket)
+    throw ConnexionException("Server already initialised");
+
   int		fd = socket(PF_INET, SOCK_STREAM, 0);
   sockaddr_in	sin;
 
   sin.sin_addr.s_addr = htonl(INADDR_ANY);
   sin.sin_family = AF_INET;
-  sin.sin_port = htons(p);
+  sin.sin_port = htons(_port);
   if (fd == -1
       || bind(fd, (sockaddr*)&sin, sizeof sin) == -1
       || listen(fd, 10) == -1)
@@ -86,17 +94,17 @@ ConnexionHandler::Server::~Server() {
 }
 
 void
-ConnexionHandler::Server::acceptPeer(Poll *p) {
+ConnexionHandler::Server::acceptPeer(Poll *poll, void *srv) {
   sockaddr_in	sin;
   socklen_t     sin_len;
   int		fd;
-  Socket *	socket;
 
+  (void)srv;
   fd = accept(_masterSocket->getFd(), (sockaddr *)&sin, &sin_len);
-  socket = new Socket(fd);
-  _sockets.push_back(socket);
-  p->watchEvent(fd, POLLIN);
-  p->watchEvent(fd, POLLOUT);
+  _sockets[fd] = new Socket(fd);
+  poll->watchEvent(fd, POLLIN);
+  poll->watchEvent(fd, POLLOUT);
+  // ((Server::Server *)srv)->addPeer(_sockets[fd]);
 }
 
 void
@@ -107,13 +115,14 @@ ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, bool b[3]),
 
   for (std::vector<Socket *>::iterator it = _sockets.begin();
        it != _sockets.end(); ++it) {
-    if (*it == _masterSocket)
-      this->acceptPeer(poll);
-    else {
-      event[0] = poll->isEventOccurred((*it)->getFd(), POLLIN);
-      event[1] = poll->isEventOccurred((*it)->getFd(), POLLOUT);
-      event[2] = poll->isDisconnected((*it)->getFd());
-      if (event[0] || event[1] || event[2])
+    
+    event[0] = poll->isEventOccurred((*it)->getFd(), POLLIN);
+    event[1] = poll->isEventOccurred((*it)->getFd(), POLLOUT);
+    event[2] = poll->isDisconnected((*it)->getFd());
+    if (event[0] || event[1] || event[2]) {
+      if (_masterSocket && *it == _masterSocket)
+	this->acceptPeer(poll, param);
+      else
 	fct(param, *it, event);
     }
   }
@@ -123,6 +132,8 @@ void
 ConnexionHandler::Server::rmSocket(Socket *s) {
   if (_sockets[s->getFd()] != NULL) {
     _sockets[s->getFd()] = NULL;
+    if (s == _masterSocket)
+      _masterSocket = NULL;
     delete s;
   }
 }

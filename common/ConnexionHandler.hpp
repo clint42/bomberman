@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Tue Jun  3 15:21:41 2014 buret_j
+// Last update Thu Jun  5 16:14:33 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -63,13 +63,15 @@ public: // nested classes definition
   class Server {
     std::vector<Socket *> _sockets;
     Socket *		  _masterSocket;
+    int			  _port;
 
-    void	acceptPeer(Poll *);
+    void	acceptPeer(Poll *, void *srv);
 
   public:
     Server(int p);
     ~Server();
 
+    void		initialise();
     void		perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
     inline Socket *	getMasterSocket() { return _masterSocket; }
     void	        rmSocket(Socket *s);

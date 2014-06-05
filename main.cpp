@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Tue May  6 11:22:17 2014 julie franel
-// Last update Tue Jun  3 10:54:18 2014 buret_j
+// Last update Thu Jun  5 16:07:12 2014 buret_j
 //
 
 #include <cstdlib>
@@ -27,7 +27,7 @@ int	main()
     }
   catch (ServerException e)
     {
-      std::cerr << e.message() << std::endl;
+      std::cerr << e.what() << std::endl;
     }
   return (0);
 }

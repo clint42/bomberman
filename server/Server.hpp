@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Thu Jun  5 16:17:57 2014 buret_j
+// Last update Thu Jun  5 16:27:42 2014 buret_j
 */
 
 #ifndef SERVER_HPP_
@@ -40,7 +40,7 @@ namespace Server {
 
     //
     void	getInformation(const std::string &, size_t *, size_t, size_t);
-    void	filterCmd(const t_msg &);
+    void	filterCmd();
     void	putCmdInQueue(t_cmd *);
     t_msg	*filterMsg(const t_cmd &);
 
