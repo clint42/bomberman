@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:00:09 2014 aurelien prieur
-// Last update Sat May 31 16:03:05 2014 aurelien prieur
+// Last update Wed Jun  4 17:45:52 2014 aurelien prieur
 //
 
 #ifndef GRAPHICENGINE_HPP_
@@ -38,15 +38,16 @@ class			GraphicEngine: public gdl::Game
   gdl::Input		input;
   gdl::BasicShader	shader;
   Floor			floor;
-  SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs;
+  SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs;
 
 public:
   GraphicEngine(EventsHandler &eventsHandler, GameEntities &objects,
-		SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs);
+		SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs);
   ~GraphicEngine();
   virtual bool	initialize();
   virtual bool	update();
   virtual void	draw();
+  virtual void	stop();
 };
 
 #endif // !GRAPHICENGINE_HPP_

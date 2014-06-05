@@ -5,12 +5,12 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Fri May 30 16:31:55 2014 buret_j
+## Last update Thu Jun  5 15:23:24 2014 aurelien prieur
 ##
 
 CXX =	clang++
 
-CXXFLAGS += -I/home/prieur_b/LibBomberman_linux_x64/includes -I../common -ggdb
+CXXFLAGS += -I/home/prieur_b/LibBomberman_linux_x64/includes -I../common -ggdb -Wall -Wextra
 
 LXXFLAGS =  -L/home/prieur_b/LibBomberman_linux_x64/libs -lgdl_gl -lGL -lGLEW -ldl -lrt -lfbxsdk -lSDL2 -lpthread
 
@@ -23,12 +23,17 @@ SRC =   main.cpp \
 	EventsHandler.cpp \
 	ClientCore.cpp \
 	Model.cpp \
+	Floor.cpp \
+	Block.cpp \
+	Bomb.cpp \
+	../common/CondVar.cpp \
 	../common/Mutex.cpp \
 	../common/ScopedLock.cpp \
-	../common/Select.cpp \
+	../common/Poll.cpp \
+	../common/ConnexionHandler.cpp \
+	../common/Exception.cpp \
 	ThreadUI.cpp \
 	UI.cpp
-
 OBJ =	$(SRC:.cpp=.o)
 
 $(NAME): all

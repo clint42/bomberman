@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:42 2014 aurelien prieur
-// Last update Fri May 30 21:12:52 2014 aurelien prieur
+// Last update Thu Jun  5 16:14:24 2014 aurelien prieur
 //
 
 #ifndef MODEL_HPP_
@@ -16,17 +16,17 @@
 
 class	Model: public AObject
 {
-  gdl::Geometry	_geometry;
-  gdl::Texture	_texture;
   gdl::Model	_model;
   float		_speed;
   bool		_toDraw;
+  bool		_mainAnimStarted;
   void		setAnim(EventsHandler const &events);
 
 public:
-  Model();
+  Model(int id);
   virtual ~Model();
-  virtual bool	initialize();
+  virtual bool	initialize(std::pair<size_t, size_t> const &pos = (std::pair<size_t, size_t>(0, 0)));
+  virtual void	updateMovement(void);
   virtual bool	update(gdl::Clock const &clock, EventsHandler const &events);
   virtual void	draw(gdl::AShader &shader, gdl::Clock const &clock);
 };

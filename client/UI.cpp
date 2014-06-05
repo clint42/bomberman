@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:52:00 2014 aurelien prieur
-// Last update Fri May 30 17:01:59 2014 aurelien prieur
+// Last update Wed Jun  4 17:45:34 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -13,7 +13,7 @@
 
 UI::UI(EventsHandler &eventsHandler,
        GameEntities &gameEntities,
-       SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs):
+       SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs):
   _graphicEngine(eventsHandler, gameEntities, createInstructs)
 {
 }
@@ -30,5 +30,6 @@ bool	UI::run()
     {
       _graphicEngine.draw();
     }
+  _graphicEngine.stop();
   return (true);
 }

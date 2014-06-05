@@ -5,14 +5,14 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Fri May 30 15:23:54 2014 aurelien prieur
+// Last update Thu Jun  5 12:03:13 2014 aurelien prieur
 //
 
 #include <iostream>
 #include "Model.hpp"
 #include "GameEntities.hpp"
 
-GameEntities::GameEntities()
+GameEntities::GameEntities(): _player(NULL)
 {
 }
 
@@ -30,21 +30,26 @@ bool		GameEntities::unlock()
   return (_locker.unlock());
 }
 
-bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, ObjectType> const &desc)
+bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &desc)
 {
   AObject	*entity;
   std::pair<std::map<std::pair<size_t, size_t>, AObject *>::iterator, bool>	ret;
 
-  //entity = AObject::create(type);
   _locker.lock();
-  // ret = _entities.insert(std::pair<std::pair<size_t, size_t>, AObject *>(coord, entity));
-  // //ret.first->second->setPos(glm::vec3(coord.first, 0, coord.second));
-  entity = new Model();
-  if (entity->initialize() == false)
-    return (false);
-  std::cout << "ENTITY: " << entity << std::endl;
-  _entities.insert(std::pair<std::pair<size_t, size_t>, AObject *>(desc.first, entity));
-  //entity->scale(glm::vec3(0.02, 0.02, 0.02));
+  if ((entity = AObject::create(desc.second)) != NULL)
+    {
+      if (entity->initialize(desc.first) == false)
+	{
+	  _locker.unlock();
+	  return (false);
+	}
+      _entities.insert(std::pair<std::pair<size_t, size_t>, AObject *>(desc.first, entity));
+    }
+  else
+    {
+      _locker.unlock();
+      return (false);
+    }
   _locker.unlock();
   return (true);
 }
@@ -68,4 +73,49 @@ AObject		*GameEntities::getEntity(std::pair<size_t, size_t> const &coord)
 std::map<std::pair<size_t, size_t>, AObject *> &GameEntities::getEntities()
 {
   return (_entities);
+}
+
+bool		GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
+					 AObject::EventIn event)
+{
+  AObject	*entity;
+
+  _locker.lock();
+  entity = getEntity(coord);
+  entity->addMoveEvent(event);
+  _locker.unlock();
+  return (true);
+}
+
+bool		GameEntities::rotateEntity(std::pair<size_t, size_t> const &coord,
+					   AObject::EventIn event)
+{
+  AObject	*entity;
+  glm::vec3	rotVal;
+
+  _locker.lock();
+  entity = getEntity(coord);
+  rotVal.y = event * 90;
+  entity->setRotation(rotVal);
+  _locker.unlock();
+  return (true);
+}
+
+void		GameEntities::setPlayer(int id)
+{
+  _locker.lock();
+  for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = _entities.begin();
+       it != _entities.end();
+       ++it)
+    {
+      std::cout << "it->second->getId()" << it->second->getId() << std::endl;
+      if (it->second->getId() == id)
+	_player = it->second;
+    }
+  _locker.unlock();
+}
+
+AObject const	*GameEntities::getPlayer(void) const
+{
+  return (_player);
 }

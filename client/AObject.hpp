@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:05:44 2014 aurelien prieur
-// Last update Fri May 30 20:48:29 2014 aurelien prieur
+// Last update Thu Jun  5 15:24:37 2014 aurelien prieur
 //
 
 #ifndef AOBJECT_HPP_
@@ -22,34 +22,59 @@
 # include <Model.hh>
 # include <glm/glm.hpp>
 # include <glm/gtc/matrix_transform.hpp>
+# include <list>
 # include "EventsHandler.hpp"
 
+//PLAYER must be the last of ObjectType enum
 enum	ObjectType
   {
+    BLOCK,
+    BOMB,
     PLAYER
   };
 
 class	AObject
 {
+public:
+  enum	EventIn
+    {
+      DOWN = 0,
+      RIGHT = 1,
+      UP = 2,
+      LEFT = 3
+    };
 protected:
-  glm::vec3	_pos;
-  glm::vec3	_rotation;
-  glm::vec3	_scale;
+  int				_id;
+  glm::vec3			_pos;
+  glm::vec3			_rotation;
+  glm::vec3			_scale;
+  bool				_moving;
+  EventIn			_direction;
+  std::list<EventIn>		_moveEvents;
+  glm::vec3			_target;
+  std::vector<glm::vec3>	_moveVectors;	
+  bool		equalVec3(glm::vec3 const &vec1, glm::vec3 const &vec2);
+  bool		superiorVec3(glm::vec3 const &vec1, glm::vec3 const &vec2, EventIn direction);
 
 public:
   AObject();
+  AObject(int id);
   virtual	~AObject();
-  virtual bool	initialize();
+  virtual bool	initialize(std::pair<size_t, size_t> const &pos = (std::pair<size_t, size_t>(0, 0)));
   virtual bool	update(gdl::Clock const &clock, EventsHandler const &events);
   virtual void	draw(gdl::AShader &shader, gdl::Clock const &clock) = 0;
-
-  void		translate(glm::vec3 const &v);
-  void		rotate(glm::vec3 const &axis, float angle);
-  void		scale(glm::vec3 const &scale);
-  glm::mat4	getTransformation();
-  void		setPos(glm::vec3 const &pos);
-  void		setScale(glm::vec3 const &scale);
-  static AObject	*create(ObjectType type);
+  void			translate(glm::vec3 const &v);
+  void			rotate(glm::vec3 const &axis, float angle);
+  void			scale(glm::vec3 const &scale);
+  glm::mat4		getTransformation();
+  void			setPos(glm::vec3 const &pos);
+  glm::vec3 const	&getPos(void) const;
+  void			setScale(glm::vec3 const &scale);
+  void			setRotation(glm::vec3 const &rotation);
+  glm::vec3	const	&getRotation() const;
+  void			addMoveEvent(EventIn event);
+  int			getId(void) const;
+  static AObject	*create(int objectType);
 };
 
 #endif // !AOBJECT_HPP_
