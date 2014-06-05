@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-** Last update Mon Jun  2 15:49:02 2014 lafitt_g
+** Last update Thu Jun  5 13:51:00 2014 lafitt_g
 */
 
 #include "Server.hpp"
@@ -98,23 +98,28 @@ Server::Server::filterCmd(const t_msg &msg)
   size_t        cur_1 = 0;
   size_t        cur_2 = 0;
 
-  cmd->date = msg._date;
-  cur_1 = msg._msg.find(" ", cur_1);
-  this->getInformation(msg._msg, &cmd->id, cur_2, cur_1);
-  cur_2 = msg._msg.find(" ", cur_1 + 1);
-  this->getInformation(msg._msg, &cmd->pos.first, cur_1 + 1, cur_2 - (cur_1 + 1));
-  cur_1 = msg._msg.find(" ", cur_2 + 1);
-  this->getInformation(msg._msg, &cmd->pos.first, cur_2 + 1, cur_1 - (cur_2 + 1));
-  cur_2 = msg._msg.find(" ", cur_1 + 1);
-  cmd->action = msg._msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1));
-  while (cur_2 != std::string::npos && cur_1 != std::string::npos)
+  if (this->_messages.size() > 0)
     {
-      cur_1 = msg._msg.find(" ", cur_2 + 1);
-      cmd->params.push_back(msg._msg.substr(cur_2 + 1, cur_1 - (cur_2 + 1)));
-      if (cur_1 != std::string::npos && (cur_2 = msg._msg.find(" ", cur_1 + 1)) != std::string::npos)
-        cmd->params.push_back(msg._msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1)));
+      t_msg		*msg = this->_messages.front();
+      cmd->date = msg._date;
+      cur_1 = msg->_msg.find(" ", cur_1);
+      this->getInformation(msg->_msg, &cmd->id, cur_2, cur_1);
+      cur_2 = msg->_msg.find(" ", cur_1 + 1);
+      this->getInformation(msg->_msg, &cmd->pos.first, cur_1 + 1, cur_2 - (cur_1 + 1));
+      cur_1 = msg->_msg.find(" ", cur_2 + 1);
+      this->getInformation(msg->_msg, &cmd->pos.first, cur_2 + 1, cur_1 - (cur_2 + 1));
+      cur_2 = msg->_msg.find(" ", cur_1 + 1);
+      cmd->action = msg->_msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1));
+      while (cur_2 != std::string::npos && cur_1 != std::string::npos)
+	{
+	  cur_1 = msg->_msg.find(" ", cur_2 + 1);
+	  cmd->params.push_back(msg->_msg.substr(cur_2 + 1, cur_1 - (cur_2 + 1)));
+	  if (cur_1 != std::string::npos && (cur_2 = msg->_msg.find(" ", cur_1 + 1)) != std::string::npos)
+	    cmd->params.push_back(msg->_msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1)));
+	}
+      delete this->_messages.front();
+      this->putCmdInQueue(cmd);
     }
-  this->putCmdInQueue(cmd);
 }
 
 void
