@@ -5,75 +5,69 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-** Last update Mon Jun  2 15:49:02 2014 lafitt_g
+// Last update Thu Jun  5 16:21:07 2014 buret_j
 */
 
 #include "Server.hpp"
 
-Server::Server::Server() {
-  this->retrieveMapNames();
+Server::Server::Server(ConnexionHandler *c) : _run(true), _co(c) {
+  _game = NULL;
+  _co->server(4242);
 }
 
 Server::Server::~Server() {
 }
 
-size_t
-Server::Server::retrieveMapNames() {
-  // opens `mapcycle.cfg' and fill _mapNames attribute.
-  // ?? should it collect game infos specified for each map too ??
-  return (0);
-}
+// void
+// Server::Server::isDead(size_t id, std::pair<size_t, size_t> pos)
+// {
+//   std::map<std::pair<size_t, size_t>, Player *>::iterator it;
 
-void
-Server::Server::isDead(size_t id, std::pair<size_t, size_t> pos)
-{
-  std::map<std::pair<size_t, size_t>, Player *>::iterator it;
+//   it = this->_playersAlive.find(pos);
+//   if (it != this->_playersAlive.end() && it->second->getID() == id)
+//     {
+//       this->_playersDead.insert(std::pair<std::pair<size_t, size_t>, Player *>(it->first, it->second));
+//       this->_playersAlive.erase(it);
+//     }
+// }
 
-  it = this->_playersAlive.find(pos);
-  if (it != this->_playersAlive.end() && it->second->getID() == id)
-    {
-      this->_playersDead.insert(std::pair<std::pair<size_t, size_t>, Player *>(it->first, it->second));
-      this->_playersAlive.erase(it);
-    }
-}
+// void
+// Server::Server::allDead()
+// {
+//   std::map<std::pair<size_t, size_t>, Player *>::iterator it;
+//   size_t        len;
 
-void
-Server::Server::allDead()
-{
-  std::map<std::pair<size_t, size_t>, Player *>::iterator it;
-  size_t        len;
+//   len = this->_playersAlive.size();
+//   while (len > 0)
+//     {
+//       it = this->_playersAlive.begin();
+//       this->_playersDead.insert(std::pair<std::pair<size_t, size_t>, Player *>(it->first, it->second));
+//       this->_playersAlive.erase(it);
+//       --len;
+//     }
+// }
 
-  len = this->_playersAlive.size();
-  while (len > 0)
-    {
-      it = this->_playersAlive.begin();
-      this->_playersDead.insert(std::pair<std::pair<size_t, size_t>, Player *>(it->first, it->second));
-      this->_playersAlive.erase(it);
-      --len;
-    }
-}
+// void
+// Server::Server::putInPlayersAlive()
+// {
+//   size_t        maxPlayer;
+//   size_t        countAlive;
+//   size_t        countDead;
+//   std::map<std::pair<size_t, size_t>, Player *>::iterator it;
 
-void
-Server::Server::putInPlayersAlive()
-{
-  size_t        maxPlayer;
-  size_t        countAlive;
-  size_t        countDead;
-  std::map<std::pair<size_t, size_t>, Player *>::iterator it;
+//   maxPlayer = this->_map->getNbrSlot();
+//   countAlive = this->_playersAlive.size();
+//   countDead = this->_playersDead.size();
 
-  maxPlayer = this->_map->getNbrSlot();
-  countAlive = this->_playersAlive.size();
-  countDead = this->_playersDead.size();
-
-  while (countAlive < maxPlayer && countDead > 0)
-    {
-      it = this->_playersDead.begin();
-      this->_playersAlive.insert(std::pair<std::pair<size_t, size_t>, Player *> (it->first, it->second));
-      this->_playersDead.erase(it);
-      ++countAlive;
-      --countDead;
-    }
-}
+//   while (countAlive < maxPlayer && countDead > 0)
+//     {
+//       it = this->_playersDead.begin();
+//       this->_playersAlive.insert(std::pair<std::pair<size_t, size_t>, Player *> (it->first, it->second));
+//       this->_playersDead.erase(it);
+//       ++countAlive;
+//       --countDead;
+//     }
+// }
 
 /*
 ** FILTER
@@ -125,13 +119,13 @@ Server::Server::putCmdInQueue(t_cmd *cmd)
       (cmd->params[0].compare("UP") == 0 ||
        cmd->params[0].compare("DOWN") == 0 ||
        cmd->params[0].compare("LEFT") == 0 ||
-       cmd->params[0].compare("RIGHt") == 0))
-    this->_events.push(cmd);
+       cmd->params[0].compare("RIGHT") == 0))
+    this->_game->addEvent(cmd);
   else if (cmd->action.compare("BOMB") == 0 &&
 	   cmd->params.size() == 1)
-    this->_bomb.push(cmd);
+    this->_game->addBomb(cmd);
   else if ((cmd->action.compare("PAUSE") && cmd->params.size() == 0) ||
-	   (cmd->action.compare("CONNECT") && cmd->params.size() == 3))
+	   (cmd->action.compare("CONFIG") && cmd->params.size() == 3))
     this->_ext.push(cmd);
 }
 
@@ -158,40 +152,84 @@ Server::Server::filterMsg(const t_cmd &cmd)
 ** RUNSERVER
 */
 
-Server::Player		*Server::Server::getPlayer(size_t posx, size_t posy)
-{
-  std::map<std::pair<size_t, size_t>, Player *>::iterator	it;
+// Server::Player		*Server::Server::getPlayer(size_t posx, size_t posy)
+// {
+//   std::map<std::pair<size_t, size_t>, Player *>::iterator	it;
 
-  for (it = this->_playersAlive.begin(); it != this->_playersAlive.end(); ++it)
-    {
-      if (posx == it->first.first && posy == it->first.second)
-	return (it->second);
-    }
-  return (NULL);
-}
+//   for (it = this->_playersAlive.begin(); it != this->_playersAlive.end(); ++it)
+//     {
+//       if (posx == it->first.first && posy == it->first.second)
+// 	return (it->second);
+//     }
+//   return (NULL);
+// }
 
-Server::Player		*Server::Server::getPlayer(size_t id)
-{
-  std::map<std::pair<size_t, size_t>, Player *>::iterator	it;
+// Server::Player		*Server::Server::getPlayer(size_t id)
+// {
+//   std::map<std::pair<size_t, size_t>, Player *>::iterator	it;
 
-  for (it = this->_playersAlive.begin(); it != this->_playersAlive.end(); ++it)
-    {
-      if (it->second->getID() == id)
-	return (it->second);
-    }
-  return (NULL);
-}
+//   for (it = this->_playersAlive.begin(); it != this->_playersAlive.end(); ++it)
+//     {
+//       if (it->second->getID() == id)
+// 	return (it->second);
+//     }
+//   return (NULL);
+// }
 
-void		Server::Server::movePlayer()
-{
-  std::cout << "move player" << std::endl;
-}
+// void		Server::Server::movePlayer()
+// {
+//   std::cout << "move player" << std::endl;
+// }
 
 void		Server::Server::createPlayer()
 {
   // Player	*_p = new Player(1, NULL, 0);
   // this->_playersAlive[] = ;
 }
+
+// void
+// Server::Server::addMessage(Socket *s) {
+//   Server::t_msg *m = new Server::t_msg;
+
+//   gettimeofday(&m->_date, NULL);
+//   s->getline(m->_msg);
+//   _messages.push_back(m);
+// }
+
+// void
+// Server::Server::sendMessage(Socket *s) {
+//   t_msgToSend { size_t left; std::string toSnd; }
+//   Player { std::list<t_msgToSend *> toSnd; }
+//   player.toSnd.pop_front() [ ->left -= 1; s->write(); ]
+// }
+
+static void
+trampoline(void *p, Socket *s, bool b[3]) {
+
+  if (b[0])
+    ;
+  (void)p;
+  (void)s;
+  //   ((Server::Server *)p)->addMessage(s);
+  // if (b[1])
+  //   ((Server::Server *)p)->sendMessage(s);
+  if (b[2])
+    ;
+  
+}
+
+void
+Server::Server::run() {
+
+  while (_run && _co->update(0) >= 0) {
+    _co->perform(&trampoline, this);
+    filterCmd();
+    _game->update();
+    // ..
+  }
+
+}
+
 
 void		Server::Server::run()
 {

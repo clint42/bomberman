@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Mon Jun  2 15:41:51 2014 lafitt_g
+// Last update Thu Jun  5 16:17:57 2014 buret_j
 */
 
 #ifndef SERVER_HPP_
@@ -19,50 +19,24 @@
 
 # include "Game.hpp"
 # include "Player.hpp"
-# include "Map.hpp"
 # include "Team.hpp"
+# include "Types.hpp"
 # include "SafeQueue.hpp"
 # include "Filter.hpp"
 # include "Exception.hpp"
-// # include "ConnexionHandler.hpp"
+# include "ConnexionHandler.hpp"
 
 namespace Server {
-
-  struct                          t_cmd{
-    size_t                        id;
-    timeval                       date;
-    std::pair<size_t, size_t>     pos;
-    std::string                   action;
-    std::vector<std::string>      params;
-  };
-
-  struct                      t_msg{
-    timeval                   _date;
-    std::string               _msg;
-  };
-
-
   class	Server {
-    std::map<std::pair<size_t, size_t>, Player *> _playersAlive;
-    std::map<std::pair<size_t, size_t>, Player *> _playersDead;
-    std::list<Team *>	_teams;
 
-    std::list<std::string>	_mapNames;
-    Map *			_map;
-    // Game::Type		_gameType;
-    // Game::Time		_gameTimeMult;
-    timeval			_dateEnd;
+    bool			_run;
 
-    SafeQueue<t_cmd *>		_events;
-    SafeQueue<t_cmd *>		_bomb;
-    SafeQueue<t_cmd *>		_ext;
-
-    // ConnexionHandler test;
+    ConnexionHandler *		_co;
+    std::list<Player *>		_peers;
+    Game *			_game;
 
     std::list<t_msg *>		_messages;
-
-    size_t	retrieveMapNames();
-    void	setTime();
+    SafeQueue<t_cmd *>		_ext;
 
     //
     void	getInformation(const std::string &, size_t *, size_t, size_t);
@@ -71,9 +45,9 @@ namespace Server {
     t_msg	*filterMsg(const t_cmd &);
 
     //
-    void	isDead(size_t, std::pair<size_t, size_t>);
-    void	allDead();
-    void	putInPlayersAlive();
+    // void	isDead(size_t, std::pair<size_t, size_t>);
+    // void	allDead();
+    // void	putInPlayersAlive();
 
     Player	*getPlayer(const size_t, const size_t);
     Player	*getPlayer(const size_t id);
@@ -82,7 +56,7 @@ namespace Server {
     void	createPlayer();
 
   public:
-    Server();
+    Server(ConnexionHandler *);
     ~Server();
 
     void	run();
