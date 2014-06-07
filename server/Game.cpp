@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Sat Jun  7 18:54:25 2014 buret_j
+// Last update Sat Jun  7 19:51:22 2014 buret_j
 //
 
 #include "Game.hpp"
@@ -112,5 +112,7 @@ Server::Game::filterMsg(t_cmd const *cmd, std::string &msg) const {
 }
 
 bool
-Server::Game::process(t_cmd *c, Player *p) {
+Server::Game::process(Server::t_cmd *c, Player *p) {
+  if (!this->isDateNextCommandExpired(p))
+    return false;
 }

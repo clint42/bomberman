@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu Jun  5 17:15:53 2014 buret_j
-// Last update Sat Jun  7 15:26:13 2014 buret_j
+// Last update Sat Jun  7 19:55:15 2014 buret_j
 //
 
 #ifndef MESSENGER_HPP_
@@ -32,21 +32,21 @@ namespace Server {
 	_queues.resize(s->getFd() + 1);
       if (!_queues[s->getFd()])
 	_queues[s->getFd()] = new std::string;
-      _queues[s->getFd()] += toAdd;
+      *_queues[s->getFd()] += toAdd;
     }
     void	retrieveMessage(Socket const *s, std::string &toFill) {
       if (_queues[s->getFd()])
-	toFill = _queues[s->getFd()];
+	toFill = *_queues[s->getFd()];
       else
 	toFill = "";
       _queues[s->getFd()]->clear();
     }
     void	clearAll() {
-      for (std::vector<std::string>::iterator it = _queues.begin(); it != _queues.end(); ++it)
+      for (std::vector<std::string *>::iterator it = _queues.begin(); it != _queues.end(); ++it)
 	delete *it;
     }
     void	broadcastMessage(std::string const &toAdd) {
-      for (std::vector<std::string>::iterator it = _queues.begin(); it != _queues.end(); ++it) {
+      for (std::vector<std::string *>::iterator it = _queues.begin(); it != _queues.end(); ++it) {
 	if (*it)
 	  **it += toAdd;
       }
