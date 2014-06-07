@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Fri Jun  6 17:52:07 2014 buret_j
+** Last update Sat Jun  7 18:02:37 2014 lafitt_g
 */
 
 #ifndef SERVER_HPP_
@@ -28,6 +28,8 @@
 # include "ConnexionHandler.hpp"
 # include "Messenger.hpp"
 
+typedef void (*func_admin)();
+
 namespace Server {
   class	Server {
 
@@ -39,7 +41,7 @@ namespace Server {
     Game *			_game;
 
     std::list<t_msg *>		_messages;
-    SafeQueue<t_cmd *>		_ext;
+    std::list<t_cmd *>		_ext;
 
     //
     void	getInformation(const std::string &, size_t *, size_t, size_t);
