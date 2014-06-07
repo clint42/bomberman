@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-** Last update Sat Jun  7 20:57:24 2014 lafitt_g
+// Last update Sat Jun  7 22:13:23 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -195,20 +195,21 @@ bool
 Server::Server::manageAdminCommand()
 {
   std::map<std::string, func_admin> func;
-  func["PAUSE"] = &funcPause;
-  func["CONFIG"] = &funcWelcome;
-  func["KILL"] = &funcKill;
+  // func["PAUSE"] = &funcPause;
+  // func["CONFIG"] = &funcWelcome;
+  // func["KILL"] = &funcKill;
   bool ret = false;
 
   if (this->_ext.front()->id == 1)
     ret = func[this->_ext.front()->action]();
   this->_ext.pop_front();
+  return ret;
 }
 
 void
 Server::Server::run() {
   while (_run && _co->update(0) >= 0) {
-    _co->perform(&trampoline, this, &_messenger);
+    _co->perform(&trampoline, this);
     filterMsg();
     if (!(_ext.size() && manageAdminCommand()) && _game && !_game->isPaused())
       _game->update();

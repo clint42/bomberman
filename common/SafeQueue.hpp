@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon Apr 21 20:37:45 2014 buret_j
-// Last update Fri May 30 16:53:41 2014 aurelien prieur
+// Last update Sat Jun  7 22:33:10 2014 buret_j
 //
 
 #ifndef SAFEQUEUE_HPP_
@@ -42,15 +42,10 @@ public:
     return (false);
   }
 
-  bool		empty(void) {
-    ScopedLock l_mutex(&this->_mutex);
-    return this->_queue.empty();
-  } // not const of of Mutex locked
-
-  size_t	getSize(void) {
-    ScopedLock l_mutex(&this->_mutex);
-    return this->_queue.size();
-  } // same
+  inline bool	empty() const { return this->_queue.empty(); }
+  inline size_t	size() const { return this->_queue.size(); }
+  inline T	front() const { return _queue.front(); }
+  
 };
 
 #endif

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Sat Jun  7 19:59:35 2014 buret_j
+// Last update Sun Jun  8 00:19:43 2014 buret_j
 //
 
 #include "Game.hpp"
@@ -19,7 +19,7 @@ static Server::Game::Play g_Plays[] = {
 
 
 Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type,
-		   std::list<Player *> const &peers, Messenger *m) {
+		   std::list<Player *> const &peers, Messenger *mes) {
   // try {
     _map = new Map(m);
   // } catch MapException {
@@ -33,6 +33,8 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
   _maxPlayers = p;
   _maxBots = b;
   _round = 0;
+  (void)peers;
+  _messenger = mes;
 }
 
 Server::Game::~Game() {
@@ -76,25 +78,23 @@ Server::Game::pause() {
 
 void
 Server::Game::update() {
-  if (!_events.size())
+  t_cmd *c;
+  if (!_events.tryPop(&c))
     return ;
 
-  t_cmd *c = _events.front();
-  _events.pop_front();
-
-  Player *p = map[c->pos];
-  if (!p || p->getId() != c->id)
+  Player *p = _players[c->pos];
+  if (!p || p->getID() != c->id)
     return ;
 
   if (this->process(c, p)) {
     std::string m;
-    this->filterMsg(c, m);
+    this->filterCmd(c, m);
     _messenger->broadcastMessage(m);
   }
 }
 
 void
-Server::Game::filterCmd(t_cmd const *cmd, std::string &msg) const {
+Server::Game::filterCmd(Server::t_cmd const *cmd, std::string &msg) const {
   std::stringstream convert;
 
   convert << cmd->id << " " << cmd->pos.first << " " << 
@@ -113,6 +113,14 @@ Server::Game::filterCmd(t_cmd const *cmd, std::string &msg) const {
 
 bool
 Server::Game::process(Server::t_cmd *c, Player *p) {
-  if (!this->isDateNextCommandExpired(p))
+  if (!this->hasDateNextCommandExpired(p))
     return false;
+
+  (void)c;
+  return true;
+}
+
+void
+Server::Game::killPlayer(Player *p) {
+  (void)p;
 }
