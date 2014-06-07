@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:00:09 2014 aurelien prieur
-// Last update Wed Jun  4 17:45:52 2014 aurelien prieur
+// Last update Sat Jun  7 19:24:52 2014 aurelien prieur
 //
 
 #ifndef GRAPHICENGINE_HPP_
@@ -27,9 +27,15 @@
 # include "Model.hpp"
 # include "Floor.hpp"
 # include "SafeQueue.hpp"
+# include "GraphicalText.hpp"
+# include "Chrono.hpp"
+
+# define W_WIDTH 1920
+# define W_HEIGHT 1080
 
 class			GraphicEngine: public gdl::Game
 {
+  bool			isDouble;
   std::vector<int>	watchedEvents;
   GameEntities		&objects;
   EventsHandler		&eventsHandler;
@@ -39,6 +45,16 @@ class			GraphicEngine: public gdl::Game
   gdl::BasicShader	shader;
   Floor			floor;
   SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs;
+  GraphicalText		*score1;
+  GraphicalText		*score2;
+  Chrono		chrono;
+  gdl::Geometry		background;
+  gdl::Texture		bgTex;
+  void			drawPlayer(int nPlayer);
+  void			drawScore(int nPlayer);
+  bool			mkBackground(void);
+  void			drawBackground(void);
+  void			draw2D(void);
 
 public:
   GraphicEngine(EventsHandler &eventsHandler, GameEntities &objects,

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:11:27 2014 aurelien prieur
-// Last update Thu Jun  5 15:25:27 2014 aurelien prieur
+// Last update Sat Jun  7 19:34:12 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -13,6 +13,7 @@
 #include "Model.hpp"
 #include "Block.hpp"
 #include "Bomb.hpp"
+#include "Fire.hpp"
 
 AObject::AObject(): _id(0), _pos(0, 0, 0), _rotation(0, 0, 0), _scale(1, 1, 1), _target(0, 0, 0),
 		    _direction(DOWN), _moving(false), _moveVectors(4)
@@ -37,11 +38,15 @@ AObject	*AObject::create(int objectType)
 {
   if (objectType == BLOCK)
     {
-      return (new Block());
+      return (new Block);
     }
   else if (objectType == BOMB)
     {
-      return (new Bomb());
+      return (new Bomb);
+    }
+  else if (objectType == FIRE)
+    {
+      return (new Fire);
     }
   else if (objectType > PLAYER)
     {
@@ -52,11 +57,14 @@ AObject	*AObject::create(int objectType)
 
 bool	AObject::initialize(std::pair<size_t, size_t> const &pos)
 {
+  (void)(pos);
   return (true);
 }
 
 bool	AObject::update(gdl::Clock const &clock, EventsHandler const &events)
 {
+  (void)(events);
+  (void)(clock);
   return (true);
 }
 

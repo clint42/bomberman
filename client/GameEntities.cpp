@@ -5,14 +5,16 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Thu Jun  5 12:03:13 2014 aurelien prieur
+// Last update Sat Jun  7 14:18:01 2014 aurelien prieur
 //
 
 #include <iostream>
 #include "Model.hpp"
 #include "GameEntities.hpp"
 
-GameEntities::GameEntities(): _player(NULL)
+GameEntities::GameEntities(): _player(NULL), _player2(NULL),
+			      _playerScore(0), _player2Score(0),
+			      _timeLeft(0)
 {
 }
 
@@ -56,6 +58,7 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
 
 bool		GameEntities::deleteEntity(std::pair<size_t, size_t> const &coord)
 {
+  //TODO: Before erase elem from map, delete entity
   _entities.erase(coord);
   return (true);
 }
@@ -75,16 +78,33 @@ std::map<std::pair<size_t, size_t>, AObject *> &GameEntities::getEntities()
   return (_entities);
 }
 
-bool		GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
-					 AObject::EventIn event)
+bool				GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
+							 AObject::EventIn event)
 {
-  AObject	*entity;
+  AObject			*entity;
+  std::pair<size_t, size_t>	newCoord(coord);
+  bool				ret;
 
   _locker.lock();
+  ret = false;
   entity = getEntity(coord);
-  entity->addMoveEvent(event);
+  if (entity != NULL)
+    {
+      entity->addMoveEvent(event);
+      if (event == AObject::DOWN)
+	newCoord.second += 1;
+      else if (event == AObject::UP)
+	newCoord.second -= 1;
+      else if (event == AObject::LEFT)
+	newCoord.first -= 1;
+      else if (event == AObject::RIGHT)
+	newCoord.first += 1;
+      _entities[newCoord] = _entities[coord];
+      _entities.erase(coord);
+      ret = true;
+    }
   _locker.unlock();
-  return (true);
+  return (ret);
 }
 
 bool		GameEntities::rotateEntity(std::pair<size_t, size_t> const &coord,
@@ -92,16 +112,22 @@ bool		GameEntities::rotateEntity(std::pair<size_t, size_t> const &coord,
 {
   AObject	*entity;
   glm::vec3	rotVal;
+  bool		ret;
 
   _locker.lock();
+  ret = false;
   entity = getEntity(coord);
-  rotVal.y = event * 90;
-  entity->setRotation(rotVal);
+  if (entity != NULL)
+    {
+      rotVal.y = event * 90;
+      entity->setRotation(rotVal);
+      ret = true;
+    }
   _locker.unlock();
-  return (true);
+  return (ret);
 }
 
-void		GameEntities::setPlayer(int id)
+void		GameEntities::setPlayer(int id, int nPlayer)
 {
   _locker.lock();
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = _entities.begin();
@@ -110,12 +136,79 @@ void		GameEntities::setPlayer(int id)
     {
       std::cout << "it->second->getId()" << it->second->getId() << std::endl;
       if (it->second->getId() == id)
-	_player = it->second;
+	{
+	  if (nPlayer == 0)
+	    _player = it->second;
+	  else
+	    _player2 = it->second;
+	}
     }
   _locker.unlock();
 }
 
-AObject const	*GameEntities::getPlayer(void) const
+AObject const	*GameEntities::getPlayer(bool withoutLock, int nPlayer)
 {
-  return (_player);
+  AObject	*retVal;
+  
+  if (!withoutLock)
+    _locker.lock();
+  if (nPlayer == 0)
+    retVal = _player;
+  else
+    retVal = _player2;
+  if (!withoutLock)
+    _locker.unlock();
+  return (retVal);
+}
+
+void		GameEntities::setPlayerScore(int score, int nPlayer)
+{
+  _locker.lock();
+  if (nPlayer == 0)
+    _playerScore = score;
+  else
+    _player2Score = score;
+  _locker.unlock();
+}
+
+int		GameEntities::getPlayerScore(bool withoutLock, int nPlayer)
+{
+  int		retVal;
+
+  if (!withoutLock)
+    _locker.lock();
+  if (nPlayer == 0)
+    retVal = _playerScore;
+  else
+    retVal = _player2Score;
+  if (!withoutLock)
+    _locker.unlock();
+  return (retVal);
+}
+
+void		GameEntities::setTimeLeft(float const &timeLeft)
+{
+  _locker.lock();
+  _timeLeft = timeLeft;
+  _locker.unlock();
+}
+
+void		GameEntities::decreaseTimeLeft(float const &val)
+{
+  _locker.lock();
+  if (_timeLeft < val)
+    _timeLeft -= val;
+  else
+    _timeLeft = 0;
+  _locker.unlock();
+}
+
+float		GameEntities::getTimeLeft(void)
+{
+  float		retVal;
+
+  _locker.lock();
+  retVal = _timeLeft;
+  _locker.unlock();
+  return (retVal);
 }

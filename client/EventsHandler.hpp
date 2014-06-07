@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 15:57:53 2014 aurelien prieur
-// Last update Wed Jun  4 17:13:51 2014 aurelien prieur
+// Last update Sat Jun  7 19:37:10 2014 aurelien prieur
 //
 
 #ifndef EVENTSHANDLER_HPP_
@@ -35,8 +35,8 @@ private:
   class		PlayerEvent
   {
     int		_player;
-    int		_ks;
     std::string	_cmd;
+    int		_ks;
   public:
     PlayerEvent(int player, std::string const &cmd, int ks);
     ~PlayerEvent();

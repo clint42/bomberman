@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:05:44 2014 aurelien prieur
-// Last update Thu Jun  5 15:24:37 2014 aurelien prieur
+// Last update Sat Jun  7 19:33:29 2014 aurelien prieur
 //
 
 #ifndef AOBJECT_HPP_
@@ -30,6 +30,7 @@ enum	ObjectType
   {
     BLOCK,
     BOMB,
+    FIRE,
     PLAYER
   };
 
@@ -48,10 +49,10 @@ protected:
   glm::vec3			_pos;
   glm::vec3			_rotation;
   glm::vec3			_scale;
-  bool				_moving;
-  EventIn			_direction;
-  std::list<EventIn>		_moveEvents;
   glm::vec3			_target;
+  EventIn			_direction;
+  bool				_moving;
+  std::list<EventIn>		_moveEvents;
   std::vector<glm::vec3>	_moveVectors;	
   bool		equalVec3(glm::vec3 const &vec1, glm::vec3 const &vec2);
   bool		superiorVec3(glm::vec3 const &vec1, glm::vec3 const &vec2, EventIn direction);
