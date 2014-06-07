@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Sat Jun  7 19:08:23 2014 lafitt_g
+** Last update Sat Jun  7 21:08:45 2014 lafitt_g
 */
 
 #ifndef SERVER_HPP_
@@ -28,7 +28,7 @@
 # include "ConnexionHandler.hpp"
 # include "Messenger.hpp"
 
-typedef void (*func_admin)();
+typedef bool (*func_admin)();
 
 namespace Server {
   class	Server {
@@ -44,7 +44,7 @@ namespace Server {
     std::list<t_cmd *>		_ext;
 
     //
-    void	getInformation(const std::string &, size_t *, size_t, size_t);
+    void	getInformation(const std::string *, size_t *, size_t, size_t);
     void	filterMsg(); // pop t_msg => t_cmd; calls putCmdInQueue()
     void	putCmdInQueue(t_cmd *);
 
@@ -61,8 +61,10 @@ namespace Server {
 
     void	run();
     void	addPeer(Socket *);
+    void	peerDisconnected(Socket *);
     void	addMessage(Socket *);
     void	sendMessage(Socket *);
+    bool	manageAdminCommand();
   };
 
 }
