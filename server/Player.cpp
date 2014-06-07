@@ -5,22 +5,28 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 12:24:05 2014 buret_j
-// Last update Wed Jun  4 15:07:39 2014 buret_j
+// Last update Sat Jun  7 18:12:29 2014 buret_j
 */
 
 #include "Player.hpp"
 
-Server::Player::Player(size_t id, Server::Team *t, bool bot)
-  : _id(id), _bot(bot), _team(t), _posX(0), _posY(0), _orientation(UP),
+Server::Player::Player(size_t id, Socket *s)
+  : _id(id), _bot(false), _team(0), _posX(0), _posY(0), _orientation(DOWN),
     _bombsLimit(1), _bombsOnFloor(0) {
+  _socket = s;
 }
 
 Server::Player::~Player() {
 }
 
-size_t
-Server::Player::getTimeSinceLastCommand() const {
-  timeval t; TIME(t);
-  return (t.tv_sec % 1000 * 1000 + t.tv_usec / 1000) -
-    (_lastCommand.tv_sec % 1000 * 1000 + _lastCommand.tv_usec / 1000);
+void
+Server::Player::updateDateNextCommand(Server::Player::Action a, size_t date) {
+  double mult;
+  if (a == MOVE)	 mult = DELAY_MULT_MOVE;
+  else if (a == ORIENT)  mult = DELAY_MULT_ORIENT;
+  else			 mult = DELAY_MULT_BOMB;
+
+  _dateNextCommand = (date - (DELAY * mult / _commandTimeMultiplier) < 0)
+    ? 0
+    : (date - (DELAY * mult / _commandTimeMultiplier));
 }

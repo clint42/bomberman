@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Sat Jun  7 14:54:41 2014 buret_j
+// Last update Sat Jun  7 19:01:27 2014 buret_j
 //
 
 #ifndef SERVER__GAME_HPP_
@@ -83,6 +83,7 @@ namespace	Server {
     inline void		addBomb(t_cmd *c) { _bomb.push(c); }
 
     void		update();
+    void		killPlayer(Player *);
 
   private:
 

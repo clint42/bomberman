@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Fri Jun  6 17:52:07 2014 buret_j
+// Last update Sat Jun  7 18:33:46 2014 buret_j
 */
 
 #ifndef SERVER_HPP_
@@ -38,7 +38,7 @@ namespace Server {
     std::list<Player *>		_peers;
     Game *			_game;
 
-    std::list<t_msg *>		_messages;
+    std::list<std::string *>	_messages;
     SafeQueue<t_cmd *>		_ext;
 
     //

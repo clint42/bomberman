@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Fri Jun  6 16:01:15 2014 buret_j
+// Last update Sat Jun  7 18:05:43 2014 buret_j
 //
 
 #ifndef PLAYER_HPP_
@@ -23,6 +23,7 @@
 # define DELAY		   350 // (in msec) default time of all actions.
 # define DELAY_MULT_ORIENT 1.0 // multiplier of orientation action time.
 # define DELAY_MULT_MOVE   2.0
+# define DELAY_MULT_BOMB   0.0
 
 namespace Server {
 
@@ -31,6 +32,7 @@ namespace Server {
   public:
 
     typedef enum { UP = 0, RIGHT, DOWN, LEFT } Dir;
+    typedef enum { MOVE = 0, ORIENT, BOMB } Action;
 
   private:
 
@@ -44,8 +46,7 @@ namespace Server {
     size_t	_bombsLimit;
     size_t	_bombsOnFloor;
 
-    timeval	_lastCommand;// date of the action
-    double	_lastCommandTimeMultiplier;// differentiating displacement & orientation commands
+    size_t	_dateNextCommand;
     double	_commandTimeMultiplier;// used by bonus, '1' by default. ex: 0.5 = speed increased by 2.
 
     Socket *	_socket;
@@ -69,12 +70,11 @@ namespace Server {
     inline void	  poseBomb() { if (_bombsLimit > _bombsOnFloor) _bombsOnFloor += 1; }
     inline void   destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }
 
-    inline void   updateDateOfLastCommand() { TIME(_lastCommand); }
-    inline double getLastCommandMultiplier() const { return _lastCommandTimeMultiplier; }
+    inline size_t getDateNextCommand() const { return _dateNextCommand; }
+    void	  updateDateNextCommand();
+
     inline double getCommandTimeMultiplier() const { return _commandTimeMultiplier; }
-    inline void   setLastCommandMultiplier(double m) { _lastCommandTimeMultiplier = m; }
     inline void   setCommandTimeMultiplier(double m) { _commandTimeMultiplier = m;  }
-    size_t	  getTimeSinceLastCommand() const;
 
     inline Socket *getSocket() const { return _socket; }
 

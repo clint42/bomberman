@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Fri Jun  6 17:53:02 2014 buret_j
+// Last update Sat Jun  7 18:59:55 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -86,16 +86,16 @@ Server::Server::getInformation(const std::string &msg, size_t *field, size_t cur
 }
 
 void
-Server::Server::filterCmd()
-{
-  t_cmd         *cmd = new t_cmd;
+Server::Server::filterCmd() { // je te laisse virer tous les msg->_msg etc :)
+  t_cmd *	cmd = new t_cmd;
   size_t        cur_1 = 0;
   size_t        cur_2 = 0;
 
   if (this->_messages.size() > 0)
     {
-      t_msg		*msg = this->_messages.front();
-      cmd->date = msg->_date;
+      std::string *msg = this->_messages.front();
+      if (_game)
+	cmd->date = _game->timeLeft();
       cur_1 = msg->_msg.find(" ", cur_1);
       this->getInformation(msg->_msg, &cmd->id, cur_2, cur_1);
       cur_2 = msg->_msg.find(" ", cur_1 + 1);
@@ -104,21 +104,23 @@ Server::Server::filterCmd()
       this->getInformation(msg->_msg, &cmd->pos.first, cur_2 + 1, cur_1 - (cur_2 + 1));
       cur_2 = msg->_msg.find(" ", cur_1 + 1);
       cmd->action = msg->_msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1));
-      while (cur_2 != std::string::npos && cur_1 != std::string::npos)
-	{
-	  cur_1 = msg->_msg.find(" ", cur_2 + 1);
-	  cmd->params.push_back(msg->_msg.substr(cur_2 + 1, cur_1 - (cur_2 + 1)));
-	  if (cur_1 != std::string::npos && (cur_2 = msg->_msg.find(" ", cur_1 + 1)) != std::string::npos)
-	    cmd->params.push_back(msg->_msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1)));
-	}
-      delete this->_messages.front();
+      while (cur_2 != std::string::npos && cur_1 != std::string::npos) {
+	cur_1 = msg->_msg.find(" ", cur_2 + 1);
+	cmd->params.push_back(msg->_msg.substr(cur_2 + 1, cur_1 - (cur_2 + 1)));
+	if (cur_1 != std::string::npos && (cur_2 = msg->_msg.find(" ", cur_1 + 1)) != std::string::npos)
+	  cmd->params.push_back(msg->_msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1)));
+      }
+      _messages.pop_front();
+      delete msg;
       this->putCmdInQueue(cmd);
     }
 }
 
 void
 Server::Server::putCmdInQueue(t_cmd *cmd)
-{
+{ // sert à rien de regarder plus loin si on trouve MOVE ou BOMB et que !date
+  // enfin débrouille toi
+  // pense juste a pas push (mais qu'en mm delete) le t_cmd* si on en fait rien
   if (cmd->action.compare("MOVE") == 0 &&
       cmd->params.size() == 1 &&
       (cmd->params[0].compare("UP") == 0 ||
@@ -138,35 +140,6 @@ Server::Server::putCmdInQueue(t_cmd *cmd)
 ** RUNSERVER
 */
 
-// Server::Player		*Server::Server::getPlayer(size_t posx, size_t posy)
-// {
-//   std::map<std::pair<size_t, size_t>, Player *>::iterator	it;
-
-//   for (it = this->_playersAlive.begin(); it != this->_playersAlive.end(); ++it)
-//     {
-//       if (posx == it->first.first && posy == it->first.second)
-// 	return (it->second);
-//     }
-//   return (NULL);
-// }
-
-// Server::Player		*Server::Server::getPlayer(size_t id)
-// {
-//   std::map<std::pair<size_t, size_t>, Player *>::iterator	it;
-
-//   for (it = this->_playersAlive.begin(); it != this->_playersAlive.end(); ++it)
-//     {
-//       if (it->second->getID() == id)
-// 	return (it->second);
-//     }
-//   return (NULL);
-// }
-
-// void		Server::Server::movePlayer()
-// {
-//   std::cout << "move player" << std::endl;
-// }
-
 void
 Server::Server::addPeer(Socket *s) {
   static size_t id = 1;
@@ -182,10 +155,8 @@ Server::Server::addPeer(Socket *s) {
 
 void
 Server::Server::addMessage(Socket *s) {
-  Server::t_msg *m = new Server::t_msg;
-
-  gettimeofday(&m->_date, NULL);
-  s->getline(m->_msg);
+  std::string *m = new std::string;
+  s->getline(m);
   _messages.push_back(m);
 }
 
@@ -226,42 +197,7 @@ Server::Server::run() {
   while (_run && _co->update(0) >= 0) {
     _co->perform(&trampoline, this, &_messenger);
     filterCmd();
-    if (_ext.size())		 manageAdminCommand();
-    else if (!_game->isPaused()) _game->update();
+    if (!(_ext.size() && manageAdmin()) && _game && !_game->isPaused())
+      _game->update();
   }
 }
-
-
-// void		Server::Server::run()
-// {
-//   t_cmd		*_cmd;
-//   Player	*_player;
-//   std::map<std::string, void (Server::Server::*)()>	_action;
-//   t_cmd             _tmp;
-
-//   _action["MOVE"] = &Server::Server::movePlayer;
-//   _tmp.id = 1;
-//   TIME(_tmp.date);
-//   std::pair<size_t, size_t> pos(0, 0);
-//   _tmp.pos = pos;
-//   _tmp.action.append("MOVE");
-//   _tmp.params.push_back("UP");
-//   this->_events.push(&_tmp);
-
-//   // while (1)
-//   //   {
-//   if (this->_events.tryPop(&_cmd) == false)
-//     throw ServerException("Nothing in queue");
-//   if ((_player = this->getPlayer(_cmd->pos.first, _cmd->pos.second)) == NULL)
-//     {
-//       if ((_player = this->getPlayer(_cmd->id)) == NULL)
-// 	throw ServerException("No player found");
-//       _player->setPos(_cmd->pos.first, _cmd->pos.second);
-//     }
-//   if (_player->getTimeSinceLastCommand() <= (DELAY * _player->getLastCommandMultiplier()
-// 					     * _player->getCommandTimeMultiplier()))
-//     {
-//       (this->*_action[_cmd->action])();
-//     }
-//   // }
-// }
