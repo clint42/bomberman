@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:33:28 2014 aurelien prieur
-// Last update Fri May 30 15:11:16 2014 aurelien prieur
+// Last update Wed Jun  4 17:45:25 2014 aurelien prieur
 //
 
 #ifndef UI_HPP
@@ -21,7 +21,7 @@ class	UI
   GraphicEngine	_graphicEngine;
 public:
   UI(EventsHandler &eventsHandler, GameEntities &gamEntities,
-     SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstruct);
+     SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstruct);
   ~UI();
   bool	run();
 };

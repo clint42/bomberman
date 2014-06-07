@@ -5,14 +5,14 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:19:12 2014 aurelien prieur
-// Last update Fri May 30 15:14:12 2014 aurelien prieur
+// Last update Wed Jun  4 17:41:37 2014 aurelien prieur
 //
 
 #include "ThreadUI.hpp"
 
 ThreadUI::ThreadUI(EventsHandler &eventsHandler,
 		   GameEntities &gameEntities,
-		   SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs):
+		   SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs):
   _eventsHandler(eventsHandler),
   _createInstructs(createInstructs),
   _gameEntities(gameEntities)

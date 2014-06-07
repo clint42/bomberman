@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Tue May 20 09:42:06 2014 aurelien prieur
-// Last update Tue Jun  3 11:00:02 2014 aurelien prieur
+// Last update Wed Jun  4 13:37:05 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -87,6 +87,8 @@ bool		Poll::isDisconnected(int fd)
 
 int		Poll::pollFn(int timeout)
 {
+  int		res;
+
   return (poll(&_fds[0], _fds.size(), timeout));
 }
 

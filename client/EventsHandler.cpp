@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 16:01:34 2014 aurelien prieur
-// Last update Wed Jun  4 17:14:11 2014 aurelien prieur
+// Last update Wed Jun  4 19:23:30 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -54,18 +54,18 @@ EventsHandler::EventsHandler(ConnexionHandler &connexionHandler): _connexion(con
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_RIGHT,
 						EventsHandler::PlayerEvent(1, "MOVE RIGHT", DOWN | HOLD | UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_UP,
-						EventsHandler::PlayerEvent(1, "MOVE UP", DOWN | HOLD | UP)));
-  _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_DOWN,
 						EventsHandler::PlayerEvent(1, "MOVE DOWN", DOWN | HOLD | UP)));
+  _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_DOWN,
+						EventsHandler::PlayerEvent(1, "MOVE UP", DOWN | HOLD | UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_KP_0, EventsHandler::PlayerEvent(1, "BOMB", UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_q,
 						EventsHandler::PlayerEvent(0, "MOVE LEFT", DOWN | HOLD | UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_d,
 						EventsHandler::PlayerEvent(0, "MOVE RIGHT", DOWN | HOLD | UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_z,
-						EventsHandler::PlayerEvent(0, "MOVE UP", DOWN | HOLD | UP)));
+						EventsHandler::PlayerEvent(0, "MOVE DOWN", DOWN | HOLD | UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_s,
-						EventsHandler::PlayerEvent(1, "MOVE DOWN", DOWN | HOLD | UP)));
+						EventsHandler::PlayerEvent(1, "MOVE UP", DOWN | HOLD | UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_SPACE, EventsHandler::PlayerEvent(1, "BOMB", UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_p, EventsHandler::PlayerEvent(-1, "PAUSE", DOWN)));
 }
