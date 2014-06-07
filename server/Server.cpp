@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Sat Jun  7 18:59:55 2014 buret_j
+// Last update Sat Jun  7 19:04:13 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -190,6 +190,19 @@ trampoline(void *p, Socket *s, bool b[3]) {
     ((Server::Server *)p)->sendMessage(s);
   if (b[2])
     ((Server::Server *)p)->peerDisconnected(s);
+}
+
+void
+Server::Server::manageAdminCommand()
+{
+  std::map<std::string, func_admin> func;
+  func["PAUSE"] = &funcPause;
+  func["CONFIG"] = &funcWelcome;
+  func["KILL"] = &funcKill;
+
+  if (this->_ext.front()->id == 1)
+    func[this->_ext.front()->action]();
+  this->_ext.pop_front();
 }
 
 void
