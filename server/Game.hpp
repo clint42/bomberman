@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Sat Jun  7 13:48:41 2014 buret_j
+// Last update Sat Jun  7 14:54:41 2014 buret_j
 //
 
 #ifndef SERVER__GAME_HPP_
@@ -81,6 +81,8 @@ namespace	Server {
 
     inline void		addEvent(t_cmd *c) { _events.push(c); }
     inline void		addBomb(t_cmd *c) { _bomb.push(c); }
+
+    void		update();
 
   private:
 

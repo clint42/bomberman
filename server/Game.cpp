@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Sat Jun  7 14:43:04 2014 buret_j
+// Last update Sat Jun  7 15:30:53 2014 buret_j
 //
 
 #include "Game.hpp"
@@ -86,7 +86,7 @@ Server::Game::update() {
   if (this->process(c, p)) {
     std::string m;
     this->filterMsg(c, m);
-    _messenger->addMessage(p->getSocket(), m);
+    _messenger->broadcastMessage(m);
   }
 }
 
