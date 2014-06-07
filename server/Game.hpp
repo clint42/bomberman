@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Sat Jun  7 19:01:27 2014 buret_j
+** Last update Sat Jun  7 19:09:20 2014 lafitt_g
 //
 
 #ifndef SERVER__GAME_HPP_
@@ -87,7 +87,7 @@ namespace	Server {
 
   private:
 
-    void		filterMsg(Server::t_cmd const *, std::string &) const;
+    void		filterCmd(Server::t_cmd const *, std::string &) const;
     bool		process(Server::t_cmd const *, Player *);
 
   };

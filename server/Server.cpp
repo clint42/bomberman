@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Sat Jun  7 19:04:13 2014 buret_j
+** Last update Sat Jun  7 19:40:00 2014 lafitt_g
 */
 
 #include "Server.hpp"
@@ -86,7 +86,7 @@ Server::Server::getInformation(const std::string &msg, size_t *field, size_t cur
 }
 
 void
-Server::Server::filterCmd() { // je te laisse virer tous les msg->_msg etc :)
+Server::Server::filterMsg() {
   t_cmd *	cmd = new t_cmd;
   size_t        cur_1 = 0;
   size_t        cur_2 = 0;
@@ -96,19 +96,19 @@ Server::Server::filterCmd() { // je te laisse virer tous les msg->_msg etc :)
       std::string *msg = this->_messages.front();
       if (_game)
 	cmd->date = _game->timeLeft();
-      cur_1 = msg->_msg.find(" ", cur_1);
-      this->getInformation(msg->_msg, &cmd->id, cur_2, cur_1);
-      cur_2 = msg->_msg.find(" ", cur_1 + 1);
-      this->getInformation(msg->_msg, &cmd->pos.first, cur_1 + 1, cur_2 - (cur_1 + 1));
-      cur_1 = msg->_msg.find(" ", cur_2 + 1);
-      this->getInformation(msg->_msg, &cmd->pos.first, cur_2 + 1, cur_1 - (cur_2 + 1));
-      cur_2 = msg->_msg.find(" ", cur_1 + 1);
-      cmd->action = msg->_msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1));
+      cur_1 = msg->find(" ", cur_1);
+      this->getInformation(msg, &cmd->id, cur_2, cur_1);
+      cur_2 = msg->find(" ", cur_1 + 1);
+      this->getInformation(msg, &cmd->pos.first, cur_1 + 1, cur_2 - (cur_1 + 1));
+      cur_1 = msg->find(" ", cur_2 + 1);
+      this->getInformation(msg, &cmd->pos.first, cur_2 + 1, cur_1 - (cur_2 + 1));
+      cur_2 = msg->find(" ", cur_1 + 1);
+      cmd->action = msg->substr(cur_1 + 1, cur_2 - (cur_1 + 1));
       while (cur_2 != std::string::npos && cur_1 != std::string::npos) {
-	cur_1 = msg->_msg.find(" ", cur_2 + 1);
-	cmd->params.push_back(msg->_msg.substr(cur_2 + 1, cur_1 - (cur_2 + 1)));
-	if (cur_1 != std::string::npos && (cur_2 = msg->_msg.find(" ", cur_1 + 1)) != std::string::npos)
-	  cmd->params.push_back(msg->_msg.substr(cur_1 + 1, cur_2 - (cur_1 + 1)));
+	cur_1 = msg->find(" ", cur_2 + 1);
+	cmd->params.push_back(msg->substr(cur_2 + 1, cur_1 - (cur_2 + 1)));
+	if (cur_1 != std::string::npos && (cur_2 = msg->find(" ", cur_1 + 1)) != std::string::npos)
+	  cmd->params.push_back(msg->substr(cur_1 + 1, cur_2 - (cur_1 + 1)));
       }
       _messages.pop_front();
       delete msg;
@@ -118,22 +118,20 @@ Server::Server::filterCmd() { // je te laisse virer tous les msg->_msg etc :)
 
 void
 Server::Server::putCmdInQueue(t_cmd *cmd)
-{ // sert à rien de regarder plus loin si on trouve MOVE ou BOMB et que !date
-  // enfin débrouille toi
-  // pense juste a pas push (mais qu'en mm delete) le t_cmd* si on en fait rien
-  if (cmd->action.compare("MOVE") == 0 &&
-      cmd->params.size() == 1 &&
-      (cmd->params[0].compare("UP") == 0 ||
-       cmd->params[0].compare("DOWN") == 0 ||
-       cmd->params[0].compare("LEFT") == 0 ||
-       cmd->params[0].compare("RIGHT") == 0))
+{
+  if (this->_game && cmd->params.size() == 1 &&
+      (cmd->action.compare("BOMB") || (cmd->action.compare("MOVE") == 0 &&
+       (cmd->params[0].compare("UP") == 0 ||
+	cmd->params[0].compare("DOWN") == 0 ||
+	cmd->params[0].compare("LEFT") == 0 ||
+	cmd->params[0].compare("RIGHT") == 0))))
     this->_game->addEvent(cmd);
-  else if (cmd->action.compare("BOMB") == 0 &&
-	   cmd->params.size() == 1)
-    this->_game->addBomb(cmd);
-  else if ((cmd->action.compare("PAUSE") && cmd->params.size() == 0) ||
+  else if (((cmd->action.compare("PAUSE") ||
+	     cmd->action.compare("KILL")) && cmd->params.size() == 0) ||
 	   (cmd->action.compare("CONFIG") && cmd->params.size() == 3))
     this->_ext.push(cmd);
+  else
+    delete cmd;
 }
 
 /*
@@ -209,7 +207,7 @@ void
 Server::Server::run() {
   while (_run && _co->update(0) >= 0) {
     _co->perform(&trampoline, this, &_messenger);
-    filterCmd();
+    filterMsg();
     if (!(_ext.size() && manageAdmin()) && _game && !_game->isPaused())
       _game->update();
   }

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Sat Jun  7 18:54:25 2014 buret_j
+** Last update Sat Jun  7 19:09:00 2014 lafitt_g
 //
 
 #include "Game.hpp"
@@ -94,7 +94,7 @@ Server::Game::update() {
 }
 
 void
-Server::Game::filterMsg(t_cmd const *cmd, std::string &msg) const {
+Server::Game::filterCmd(t_cmd const *cmd, std::string &msg) const {
   std::stringstream convert;
 
   convert << cmd->id << " " << cmd->pos.first << " " << 
