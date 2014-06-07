@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Thu Jun  5 16:14:33 2014 buret_j
+// Last update Thu Jun  5 18:46:37 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -49,7 +49,7 @@ public:
   void			reset();
   void			rmSocket(Socket *s);
 
-  void		        perform(void (*fct)(void *, Socket *, bool b[3]), void *param);
+  void			perform(void (*fct)(void *, Socket *, bool b[3]), void *param);
 
   Socket *		getMasterSocket();
 

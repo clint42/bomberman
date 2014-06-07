@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Thu Jun  5 16:04:26 2014 buret_j
+// Last update Sat Jun  7 13:48:41 2014 buret_j
 //
 
 #ifndef SERVER__GAME_HPP_
@@ -19,6 +19,7 @@
 # include "Player.hpp"
 # include "SafeQueue.hpp"
 # include "Types.hpp"
+# include "Messenger.hpp"
 
 namespace	Server {
 
@@ -39,6 +40,7 @@ namespace	Server {
     Map *	_map;
     Play	_params;
     Time	_time;
+    Messenger *	_messenger;
 
     bool	_started;
     timeval	_startedAt;
@@ -59,7 +61,8 @@ namespace	Server {
 
   public:
 
-    Game(std::string const &m, size_t p, size_t b, size_t t, Type type, std::list<Player *> const &);
+    Game(std::string const &m, size_t p, size_t b, size_t t, Type type,
+	 std::list<Player *> const &, Messenger *);
     ~Game();
 
     inline Map const *	getMap() const { return _map; }
@@ -78,6 +81,11 @@ namespace	Server {
 
     inline void		addEvent(t_cmd *c) { _events.push(c); }
     inline void		addBomb(t_cmd *c) { _bomb.push(c); }
+
+  private:
+
+    void		filterMsg(Server::t_cmd const *, std::string &) const;
+    bool		process(Server::t_cmd const *, Player *);
 
   };
 

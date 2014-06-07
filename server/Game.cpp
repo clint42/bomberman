@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Thu Jun  5 16:33:40 2014 buret_j
+// Last update Sat Jun  7 14:43:04 2014 buret_j
 //
 
 #include "Game.hpp"
@@ -44,12 +44,14 @@ Server::Game::start() {
     gettimeofday(&_startedAt, NULL);
     _endAt.tv_usec = _startedAt.tv_usec + (GAME_TIME * _time * 60 * 1000000);
     _endAt.tv_sec = _endAt.tv_usec / 1000000;
+    // create bombs' thread
     _started = true;
   } else if (_paused) {
     timeval tmp;
     gettimeofday(&tmp, NULL);
     _endAt.tv_usec += tmp.tv_usec - _pausedAt.tv_usec;
     _paused = false;
+    // pause bomb thread (var cond)
   }
 }
 
@@ -69,4 +71,43 @@ Server::Game::pause() {
     gettimeofday(&_pausedAt, NULL);
     _paused = true;
   }
+}
+
+void
+Server::Game::update() {
+  if (!_events.size())		 return ;
+
+  t_cmd *c = _events.front();
+  _events.pop_front();
+
+  Player *p = map[c->pos];
+  if (!p || p->getId() != c->id) return ;
+
+  if (this->process(c, p)) {
+    std::string m;
+    this->filterMsg(c, m);
+    _messenger->addMessage(p->getSocket(), m);
+  }
+}
+
+void
+Server::Game::filterMsg(t_cmd const *cmd, std::string &msg) const {
+  std::stringstream convert;
+
+  convert << cmd->id << " " << cmd->pos.first << " " << 
+    cmd->pos.second << " " << cmd->action;
+  msg = convert.str();
+  for (std::vector<std::string>::const_iterator it = cmd->params.begin();
+       it != cmd->params.end(); ++it) {
+    convert.str(std::string());
+    convert.clear();
+    convert << " " << *it;
+    msg += convert.str();
+  }
+  delete cmd;
+}
+
+bool
+Server::Game::process(t_cmd *c, Player *p) {
+  
 }

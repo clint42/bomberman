@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Tue May 20 09:31:20 2014 aurelien prieur
-// Last update Tue Jun  3 11:07:29 2014 aurelien prieur
+// Last update Fri Jun  6 15:18:17 2014 buret_j
 //
 
 #ifndef POLL_HPP_
@@ -33,11 +33,12 @@ class	Poll
 public:
   Poll();
   ~Poll();
-  void	watchEvent(int fd, int event);
-  void	stopWatchingEvent(int fd, int event = (POLLIN | POLLOUT));
-  bool	isEventOccurred(int fd, int event);
-  bool	isDisconnected(int fd);
-  int	pollFn(int timeout);
+  void		watchEvent(int fd, int event);
+  void		stopWatchingEvent(int fd, int event = (POLLIN | POLLOUT));
+  inline void	disconnected(int fd) { stopWatchingEvent(fd, POLLIN | POLLOUT | POLLRDHUP); }
+  bool		isEventOccurred(int fd, int event);
+  bool		isDisconnected(int fd);
+  int		pollFn(int timeout);
 };
 
 

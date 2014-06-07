@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Thu Jun  5 16:31:55 2014 buret_j
+// Last update Fri Jun  6 17:53:02 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -134,25 +134,6 @@ Server::Server::putCmdInQueue(t_cmd *cmd)
     this->_ext.push(cmd);
 }
 
-Server::t_msg *
-Server::Server::filterMsg(const t_cmd &cmd)
-{
-  t_msg	*msg = new t_msg;
-  std::stringstream convert;
-
-  msg->_date = cmd.date;
-  convert << cmd.id << " " << cmd.pos.first << " " << cmd.pos.second << " " << cmd.action;
-  msg->_msg = convert.str();
-  for (std::vector<std::string>::const_iterator it = cmd.params.begin(); it != cmd.params.end(); ++it)
-    {
-      convert.str(std::string());
-      convert.clear();
-      convert << " " << *it;
-      msg->_msg += convert.str();
-    }
-  return (msg);
-}
-
 /*
 ** RUNSERVER
 */
@@ -186,53 +167,68 @@ Server::Server::filterMsg(const t_cmd &cmd)
 //   std::cout << "move player" << std::endl;
 // }
 
-void		Server::Server::createPlayer()
-{
-  // Player	*_p = new Player(1, NULL, 0);
-  // this->_playersAlive[] = ;
+void
+Server::Server::addPeer(Socket *s) {
+  static size_t id = 1;
+  Player *p = new Player(id, s);
+  std::string welcome;
+
+  _peers.push_back(p);
+  CVRT_SIZET_TO_STRING(welcome, id);
+  welcome += "0 0 WELCOME";
+  _messenger.addMessage(s, welcome);
+  ++id;
 }
 
-// void
-// Server::Server::addMessage(Socket *s) {
-//   Server::t_msg *m = new Server::t_msg;
+void
+Server::Server::addMessage(Socket *s) {
+  Server::t_msg *m = new Server::t_msg;
 
-//   gettimeofday(&m->_date, NULL);
-//   s->getline(m->_msg);
-//   _messages.push_back(m);
-// }
+  gettimeofday(&m->_date, NULL);
+  s->getline(m->_msg);
+  _messages.push_back(m);
+}
 
-// void
-// Server::Server::sendMessage(Socket *s) {
-//   t_msgToSend { size_t left; std::string toSnd; }
-//   Player { std::list<t_msgToSend *> toSnd; }
-//   player.toSnd.pop_front() [ ->left -= 1; s->write(); ]
-// }
+void
+Server::Server::sendMessage(Socket *s) {
+  std::string m;
+  _messenger.retrieveMessage(s, m);
+  s->write(m);
+}
+
+void
+Server::Server::peerDisconnected(Socket *s) {
+  for (int occurences = 0; std::list<Player *>::iterator it = _peers.begin();
+       occurences != 2, it != _peers.end(); ++it) {
+    if ((*it)->getSocket() == s) {
+      if (_game)
+	_game->killPlayer(*it);
+      it = _peers.erase(it);
+      --it;
+      ++occurences;
+    }
+  }
+  _co->rmSocket(s);
+}
 
 static void
 trampoline(void *p, Socket *s, bool b[3]) {
-
   if (b[0])
-    ;
-  (void)p;
-  (void)s;
-  //   ((Server::Server *)p)->addMessage(s);
-  // if (b[1])
-  //   ((Server::Server *)p)->sendMessage(s);
+    ((Server::Server *)p)->addMessage(s);
+  if (b[1])
+    ((Server::Server *)p)->sendMessage(s);
   if (b[2])
-    ;
-  
+    ((Server::Server *)p)->peerDisconnected(s);
 }
 
 void
 Server::Server::run() {
-
   while (_run && _co->update(0) >= 0) {
-    _co->perform(&trampoline, this);
+    _co->perform(&trampoline, this, &_messenger);
     filterCmd();
-    // _game->update();
-    // ..
+    if (_ext.size())		 manageAdminCommand();
+    else if (!_game->isPaused()) _game->update();
   }
-
 }
 
 

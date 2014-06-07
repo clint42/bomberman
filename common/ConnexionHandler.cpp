@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Thu Jun  5 16:16:39 2014 buret_j
+// Last update Fri Jun  6 15:20:18 2014 buret_j
 //
 
 #include "ConnexionHandler.hpp"
@@ -35,7 +35,7 @@ ConnexionHandler::reset() {
 void
 ConnexionHandler::rmSocket(Socket *s) {
   try {
-    _poll.stopWatchingEvent(s->getFd());
+    _poll.disconnected(s->getFd());
   } catch (PollException) { }
   if (_server)
     _server->rmSocket(s);
@@ -104,13 +104,12 @@ ConnexionHandler::Server::acceptPeer(Poll *poll, void *srv) {
   _sockets[fd] = new Socket(fd);
   poll->watchEvent(fd, POLLIN);
   poll->watchEvent(fd, POLLOUT);
-  // ((Server::Server *)srv)->addPeer(_sockets[fd]);
+  ((Server::Server *)srv)->addPeer(_sockets[fd]);
 }
 
 void
 ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, bool b[3]),
-				  void *param,
-				  Poll *poll) {
+				  void *param, Poll *poll) {
   bool	event[3];
 
   for (std::vector<Socket *>::iterator it = _sockets.begin();
