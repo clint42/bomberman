@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu Jun  5 17:15:53 2014 buret_j
-// Last update Fri Jun  6 14:42:37 2014 buret_j
+// Last update Sat Jun  7 15:26:13 2014 buret_j
 //
 
 #ifndef MESSENGER_HPP_
@@ -20,7 +20,7 @@ namespace Server {
 
   class	Messenger {
 
-    std::vector<std::string> _queues;
+    std::vector<std::string *> _queues;
 
   public:
 
@@ -30,15 +30,26 @@ namespace Server {
     void	addMessage(Socket const *s, std::string const &toAdd)  {
       if (_queues.capacity() < (size_t)s->getFd())
 	_queues.resize(s->getFd() + 1);
+      if (!_queues[s->getFd()])
+	_queues[s->getFd()] = new std::string;
       _queues[s->getFd()] += toAdd;
     }
     void	retrieveMessage(Socket const *s, std::string &toFill) {
-      toFill = _queues[s->getFd()];
-      _queues[s->getFd()].clear();
+      if (_queues[s->getFd()])
+	toFill = _queues[s->getFd()];
+      else
+	toFill = "";
+      _queues[s->getFd()]->clear();
     }
     void	clearAll() {
-      for (std::vector<std::string>::iterator it = _queues.begin(); it != _queues.end(); ++it) 
-	(*it).clear();
+      for (std::vector<std::string>::iterator it = _queues.begin(); it != _queues.end(); ++it)
+	delete *it;
+    }
+    void	broadcastMessage(std::string const &toAdd) {
+      for (std::vector<std::string>::iterator it = _queues.begin(); it != _queues.end(); ++it) {
+	if (*it)
+	  **it += toAdd;
+      }
     }
   };
 
