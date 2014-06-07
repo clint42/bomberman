@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Sat Jun  7 14:43:04 2014 buret_j
+** Last update Sat Jun  7 15:38:08 2014 lafitt_g
 //
 
 #include "Game.hpp"
@@ -104,6 +104,7 @@ Server::Game::filterMsg(t_cmd const *cmd, std::string &msg) const {
     convert << " " << *it;
     msg += convert.str();
   }
+  msg += "\n";
   delete cmd;
 }
 
