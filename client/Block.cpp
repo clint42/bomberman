@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu Jun  5 12:08:48 2014 aurelien prieur
-// Last update Thu Jun  5 13:58:05 2014 aurelien prieur
+// Last update Sat Jun  7 19:38:03 2014 aurelien prieur
 //
 
 #include "Block.hpp"
@@ -77,13 +77,9 @@ bool	Block::initialize(std::pair<size_t, size_t> const &pos)
   return (true);
 }
 
-bool	Block::update(gdl::Clock const &clock, EventsHandler const &events)
-{
-  return (true);
-}
-
 void	Block::draw(gdl::AShader &shader, gdl::Clock const &clock)
 {
+  (void)(clock);
   _texture.bind();
   _geometry.draw(shader, getTransformation(), GL_QUADS);
 }

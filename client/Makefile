@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Thu Jun  5 15:23:24 2014 aurelien prieur
+## Last update Sat Jun  7 19:42:32 2014 aurelien prieur
 ##
 
 CXX =	clang++
@@ -26,6 +26,10 @@ SRC =   main.cpp \
 	Floor.cpp \
 	Block.cpp \
 	Bomb.cpp \
+	Fire.cpp \
+	Chrono.cpp \
+	GraphicalText.cpp \
+	GraphicalLetter.cpp \
 	../common/CondVar.cpp \
 	../common/Mutex.cpp \
 	../common/ScopedLock.cpp \
@@ -34,6 +38,7 @@ SRC =   main.cpp \
 	../common/Exception.cpp \
 	ThreadUI.cpp \
 	UI.cpp
+
 OBJ =	$(SRC:.cpp=.o)
 
 $(NAME): all

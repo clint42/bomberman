@@ -5,9 +5,10 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:30 2014 aurelien prieur
-// Last update Thu Jun  5 15:41:31 2014 aurelien prieur
+// Last update Sat Jun  7 19:27:15 2014 aurelien prieur
 //
 
+#include <cstdlib>
 #include <iostream>
 #include "Model.hpp"
 
@@ -19,15 +20,15 @@ Model::~Model()
 {
 }
 
+float	Model::genColorComponent(void) const
+{
+  return (0.5);
+}
+
 bool	Model::initialize(std::pair<size_t, size_t> const &pos)
 {
   _speed = 10.0f;
-  // if (_texture.load("/home/prieur_b/LibBomberman_linux_x64/assets/marvin.fbm/Main_texture_diffuse2.tga") == false)
-  //   {
-  //     std::cerr << "Couldn't load texture." << std::endl;
-  //     return (false);
-  //   }
-  if (_model.load("/home/prieur_b/LibBomberman_linux_x64/assets/marvin.fbx") == false)
+  if (_model.load("./assets/marvin.fbx") == false)
     {
       std::cerr << "Couldn't load model." << std::endl;
       return (false);
@@ -47,8 +48,6 @@ bool	Model::initialize(std::pair<size_t, size_t> const &pos)
 
 void	Model::updateMovement(void)
 {
-  // std::cout << "POS: " << _pos.x << " " << _pos.y << " " << _pos.z << std::endl;
-  // std::cout << "TARGET: " << _target.x << " " << _target.y << " " << _target.z << std::endl;
   if (equalVec3(_pos, _target))
     {
       if (_moving)
@@ -81,6 +80,7 @@ bool	Model::update(gdl::Clock const &clock, EventsHandler const &events)
 {
   glm::vec3	transVec(0, 0, 0);
 
+  (void)(events);
   updateMovement();
   if (_moving)
     {
@@ -89,37 +89,11 @@ bool	Model::update(gdl::Clock const &clock, EventsHandler const &events)
 	transVec = _target - _pos;
       translate(transVec);
     }
-  
-  // if (_direction = EventIn::UP)
-  //   {
-  //     _rotation.y = 180;
-  //     translate(glm::vec3(0, 0, -0.5) * static_cast<float>(clock.getElapsed()) * _speed);
-  //   }
-  // if (input.getKey(SDLK_DOWN))
-  //   {
-  //     _model.setCurrentSubAnim("end", true);
-  //     _rotation.y = 0;
-  //     translate(glm::vec3(0, 0, 0.5) * static_cast<float>(clock.getElapsed()) * _speed);
-  //   } 
-  // if (input.getKey(SDLK_LEFT))
-  //   {
-      
-  //     _model.setCurrentSubAnim("start", true);
-  //     _rotation.y = -90;
-  //     translate(glm::vec3(-0.5, 0, 0) * static_cast<float>(clock.getElapsed()) * _speed);
-  //   }
-  // if (input.getKey(SDLK_RIGHT))
-  //   {
-  //      _model.setCurrentSubAnim("run", true);
-  //     _rotation.y = 90;
-  //     translate(glm::vec3(0.5, 0, 0) * static_cast<float>(clock.getElapsed()) * _speed);
-  //   }  
-return (true);
+  return (true);
 }
 
 void	Model::draw(gdl::AShader &shader, gdl::Clock const &clock)
 {
-  //_texture.bind();
   _model.draw(shader, getTransformation(), clock.getElapsed());
 }
 

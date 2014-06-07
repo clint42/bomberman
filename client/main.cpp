@@ -5,11 +5,12 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Wed Jun  4 17:40:32 2014 aurelien prieur
+// Last update Sat Jun  7 18:49:46 2014 aurelien prieur
 //
 
-#include <unistd.h>
+#include <cstdlib>
 #include <iostream>
+#include <unistd.h>
 #include "GameEntities.hpp"
 #include "EventsHandler.hpp"
 #include "ThreadUI.hpp"
@@ -19,6 +20,7 @@
 
 int	main()
 {
+  srand(time(0));
   //Launch graphic thread
   ConnexionHandler	connexionHandler;
   EventsHandler		eventsHandler(connexionHandler);

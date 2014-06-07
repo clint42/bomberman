@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:16:05 2014 aurelien prieur
-// Last update Wed Jun  4 17:41:26 2014 aurelien prieur
+// Last update Sat Jun  7 19:41:46 2014 aurelien prieur
 //
 
 #ifndef THREADUI_HPP_
@@ -24,8 +24,8 @@ class	ThreadUI
 {
   pthread_t	_thread;
   EventsHandler	&_eventsHandler;
-  GameEntities	&_gameEntities;
   SafeQueue<std::pair<std::pair<size_t, size_t>, int> >	&_createInstructs;
+  GameEntities	&_gameEntities;
   static void	*threadLaunch(void *);
   void		*run();
 

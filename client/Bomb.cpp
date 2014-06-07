@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu Jun  5 14:24:09 2014 aurelien prieur
-// Last update Thu Jun  5 16:14:32 2014 aurelien prieur
+// Last update Sat Jun  7 19:40:25 2014 aurelien prieur
 //
 
 #include "Bomb.hpp"
@@ -27,11 +27,6 @@ bool	Bomb::initialize(std::pair<size_t, size_t> const &pos)
     }
   this->scale(glm::vec3(0.002, 0.002, 0.002));
   this->setPos(glm::vec3(pos.first + 0.5, 0.5, pos.second + 0.5));
-  return (true);
-}
-
-bool	Bomb::update(gdl::Clock const &clock, EventsHandler const &events)
-{
   return (true);
 }
 

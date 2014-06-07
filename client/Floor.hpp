@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 30 17:36:18 2014 aurelien prieur
-// Last update Fri May 30 17:45:31 2014 aurelien prieur
+// Last update Sat Jun  7 19:19:20 2014 aurelien prieur
 //
 
 #ifndef FLOOR_HPP_
@@ -22,8 +22,8 @@ class	Floor: public AObject
 public:
   Floor(std::pair<size_t, size_t> const &size);
   virtual ~Floor();
-  virtual bool	initialize();
-  virtual bool	update();
+  virtual bool	initialize(std::pair<size_t, size_t> const &pos = (std::pair<size_t, size_t>(0, 0)));
+  virtual bool	update(gdl::Clock const &clock, EventsHandler const &events);
   virtual void	draw(gdl::AShader &shader, gdl::Clock const &clock);
 };
 

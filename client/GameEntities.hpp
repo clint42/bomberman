@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Wed Jun  4 18:23:29 2014 aurelien prieur
+// Last update Sat Jun  7 19:36:49 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -21,6 +21,10 @@
 class	GameEntities
 {
   AObject						*_player;
+  AObject						*_player2;
+  int							_playerScore;
+  int							_player2Score;
+  float							_timeLeft;
   std::map<std::pair<size_t, size_t>, AObject *>	_entities;
   Mutex							_locker;
 
@@ -37,8 +41,13 @@ public:
 			   AObject::EventIn event);
   bool		rotateEntity(std::pair<size_t, size_t> const &coord,
 			     AObject::EventIn event);
-  void		setPlayer(int id);
-  AObject const	*getPlayer(void) const;
+  void		setPlayer(int id, int nPlayer = 0);
+  AObject const	*getPlayer(bool withoutLock = false, int nPlayer = 0);
+  void		setPlayerScore(int score, int nPlayer = 0);
+  int		getPlayerScore(bool withoutLock = false, int nPlayer = 0);
+  void		decreaseTimeLeft(float const &val);
+  float		getTimeLeft(void);
+  void		setTimeLeft(float const &timeLeft);
 };
 
 #endif // !GAMEENTITIES_HPP_
