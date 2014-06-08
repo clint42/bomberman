@@ -1,11 +1,11 @@
 //
 // SafeQueue.hh for  in /home/buret_j/rendu/cpp_plazza/tp/ex5
-// 
+//
 // Made by buret_j
 // Login   <buret_j@epitech.net>
-// 
+//
 // Started on  Mon Apr 21 20:37:45 2014 buret_j
-// Last update Sat Jun  7 22:33:10 2014 buret_j
+// Last update Sun Jun  8 13:55:21 2014 julie franel
 //
 
 #ifndef SAFEQUEUE_HPP_
@@ -31,6 +31,15 @@ public:
     this->_queue.push_back(v);
   }
 
+  void          push(std::list<T> v) {
+    ScopedLock l_mutex(&this->_mutex);
+
+    for (typename std::list<T>::iterator it = v.begin(); it != v.end(); ++it)
+      {
+	this->_queue.push_back(*it);
+      }
+  }
+
   bool		tryPop(T* v) {
     ScopedLock l_mutex(&this->_mutex);
     if (this->_queue.empty() == false)
@@ -45,7 +54,7 @@ public:
   inline bool	empty() const { return this->_queue.empty(); }
   inline size_t	size() const { return this->_queue.size(); }
   inline T	front() const { return _queue.front(); }
-  
+
 };
 
 #endif
