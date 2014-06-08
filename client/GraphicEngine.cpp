@@ -5,13 +5,14 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sat Jun  7 19:26:58 2014 aurelien prieur
+// Last update Sun Jun  8 15:45:36 2014 aurelien prieur
 //
 
 #include <unistd.h>
 #include <iostream>
 #include "GraphicEngine.hpp"
 #include "Model.hpp"
+#include "Block.hpp"
 
 GraphicEngine::GraphicEngine(EventsHandler &eventsHandler,
 			     GameEntities &gameEntities,
@@ -65,13 +66,14 @@ bool	GraphicEngine::initialize()
       std::cerr << "Shader loading error" << std::endl;
       return (false);
     }
+  Block::loadTextures();
   if (this->mkBackground() == false)
     return (false);
   this->floor.initialize();
   score1 = new GraphicalText("100", std::pair<size_t, size_t>(320, 0), glm::vec4(1, 1, 1, 1), 50, "airstrikeBold");
   score2 = new GraphicalText("100", std::pair<size_t, size_t>(W_WIDTH / 2 + 400, 0), glm::vec4(1, 1, 1, 1), 50, "airstrikeBold");
   this->chrono.initialize();
-  this->chrono.setTime(360.f);
+  this->chrono.setTime(60.f);
   return (true);
 }
 
@@ -89,7 +91,7 @@ bool	GraphicEngine::update()
       return (false);
     }
   //EXEC CREATE INSTRUCT
-  while (createInstructs.getSize() > 0)
+  while (createInstructs.size() > 0)
     {
       createInstructs.tryPop(&instruct);
       objects.addEntity(instruct);

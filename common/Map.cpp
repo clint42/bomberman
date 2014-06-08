@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Tue Jun  3 16:04:24 2014 julie franel
+// Last update Sun Jun  8 17:43:45 2014 julie franel
 */
 
 #include <openssl/md5.h>
@@ -81,7 +81,8 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
 	  _map[_pos] = _c;
 	  _w++;
 	}
-
+      else
+	_w++;
     }
 }
 

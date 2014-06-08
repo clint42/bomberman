@@ -5,7 +5,8 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-** Last update Sun Jun  8 18:52:35 2014 lafitt_g
+<<<<<<< HEAD
+** Last update Sun Jun  8 20:07:14 2014 lafitt_g
 */
 
 #ifndef SERVER__GAME_HPP_
@@ -15,11 +16,14 @@
 # define RESPAWN_DELAY 5 // (in sec)
 
 # include <sstream>
-
 # include <sys/time.h>
+
 # include "Map.hpp"
 # include "Player.hpp"
+# include "Thread.hpp"
 # include "SafeQueue.hpp"
+# include "CondSafeQueue.hpp"
+# include "CondVar.hpp"
 # include "Types.hpp"
 # include "Messenger.hpp"
 
@@ -58,7 +62,7 @@ namespace	Server {
     std::list<Team *>		_teams;
 
     SafeQueue<t_cmd *>		_events;
-    SafeQueue<t_cmd *>		_bomb;
+    CondSafeQueue<t_cmd *>	_bombs;
 
 
   public:
@@ -82,7 +86,7 @@ namespace	Server {
     }
 
     inline void		addEvent(t_cmd *c) { _events.push(c); }
-    inline void		addBomb(t_cmd *c) { _bomb.push(c); }
+    inline void		addBomb(t_cmd *c) { _bombs.push(c); }
 
     bool		moveUp(Player *);
     bool		moveRight(Player *);
@@ -95,6 +99,7 @@ namespace	Server {
     bool		orientLeft(Player *);
 
     void		update();
+    void		bombsProcessing();
     void		killPlayer(Player *);
 
   private:

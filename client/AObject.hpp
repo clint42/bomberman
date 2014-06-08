@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:05:44 2014 aurelien prieur
-// Last update Sat Jun  7 19:33:29 2014 aurelien prieur
+// Last update Sun Jun  8 16:14:15 2014 aurelien prieur
 //
 
 #ifndef AOBJECT_HPP_
@@ -28,9 +28,11 @@
 //PLAYER must be the last of ObjectType enum
 enum	ObjectType
   {
+    VOID,
     BLOCK,
     BOMB,
     FIRE,
+    BOX,
     PLAYER
   };
 

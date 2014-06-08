@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat Jun  7 14:24:13 2014 aurelien prieur
-// Last update Sat Jun  7 19:39:54 2014 aurelien prieur
+// Last update Sat Jun  7 21:02:35 2014 aurelien prieur
 //
 
 #include "GraphicEngine.hpp"
@@ -30,8 +30,14 @@ bool	Chrono::initialize(std::pair<size_t, size_t> const &pos)
 
 bool	Chrono::update(gdl::Clock const &clock, EventsHandler const &events)
 {
+  float	elapsed;
+
   (void)(events);
-  _time -= clock.getElapsed();
+  elapsed = clock.getElapsed();
+  if (_time > elapsed)
+    _time -= elapsed;
+  else
+    _time = 0;
   buildTimeText();
   return (true);
 }

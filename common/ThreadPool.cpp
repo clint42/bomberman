@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed Apr 23 18:11:48 2014 buret_j
-// Last update Sun Apr 27 22:46:12 2014 buret_j
+// Last update Sun Jun  8 16:20:31 2014 buret_j
 //
 
 #include "ThreadPool.hpp"
@@ -100,16 +100,3 @@ ThreadTrampoline(void *param) {
   ((ThreadPool *)param)->run();
   return (NULL);
 }
-
-ThreadPool::Thread::Thread(ThreadPool *tp, void *(*f)(void *)) {
-  pthread_create(&this->_thread, NULL, f, tp);
-}
-
-ThreadPool::Thread::~Thread(void) {
-}
-
-void
-ThreadPool::Thread::join(void) {
-  pthread_join(this->_thread, NULL);
-}
-
