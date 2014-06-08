@@ -1,12 +1,12 @@
-//
+/*
 // Game.hpp for  in /home/buret_j/rendu/bomberman
 // 
 // Made by buret_j
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Sun Jun  8 00:14:55 2014 buret_j
-//
+** Last update Sun Jun  8 18:52:35 2014 lafitt_g
+*/
 
 #ifndef SERVER__GAME_HPP_
 # define SERVER__GAME_HPP_
@@ -83,6 +83,16 @@ namespace	Server {
 
     inline void		addEvent(t_cmd *c) { _events.push(c); }
     inline void		addBomb(t_cmd *c) { _bomb.push(c); }
+
+    bool		moveUp(Player *);
+    bool		moveRight(Player *);
+    bool		moveDown(Player *);
+    bool		moveLeft(Player *);
+
+    bool		orientUp(Player *);
+    bool		orientRight(Player *);
+    bool		orientDown(Player *);
+    bool		orientLeft(Player *);
 
     void		update();
     void		killPlayer(Player *);

@@ -1,12 +1,12 @@
-//
+/*
 // Player.hpp for  in /home/buret_j/rendu/bomberman
 // 
 // Made by buret_j
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Sun Jun  8 00:17:18 2014 buret_j
-//
+** Last update Sun Jun  8 19:54:32 2014 lafitt_g
+*/
 
 #ifndef PLAYER_HPP_
 # define PLAYER_HPP_
@@ -14,6 +14,7 @@
 # include <sys/time.h>
 # include <cstdlib>
 # include <iostream>
+# include <map>
 
 # include "Team.hpp"
 # include "Socket.hpp"
@@ -78,6 +79,20 @@ namespace Server {
 
     inline Socket *getSocket() const { return _socket; }
 
+    bool	  moveUp();
+    bool	  moveRight();
+    bool	  moveDown();
+    bool	  moveLeft();
+
+    bool	  orientUp();
+    bool	  orientRight();
+    bool	  orientDown();
+    bool	  orientLeft();
+
+    void	  getAction(Action *, Dir *, const std::string &);
+
+    static std::map<std::string, Dir>	_toDir;
+    static bool				_isInit;
   };// ! class Player
 
 }// ! namespace
