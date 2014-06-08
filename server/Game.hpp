@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Sun Jun  8 17:21:44 2014 buret_j
+// Last update Sun Jun  8 20:52:17 2014 buret_j
 //
 
 #ifndef SERVER__GAME_HPP_
@@ -25,6 +25,7 @@
 # include "CondVar.hpp"
 # include "Types.hpp"
 # include "Messenger.hpp"
+# include "Exception.hpp"
 
 namespace	Server {
 

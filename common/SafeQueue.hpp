@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon Apr 21 20:37:45 2014 buret_j
-// Last update Sun Jun  8 13:55:21 2014 julie franel
+// Last update Sun Jun  8 18:57:39 2014 buret_j
 //
 
 #ifndef SAFEQUEUE_HPP_
@@ -29,6 +29,11 @@ public:
   void		push(T v) {
     ScopedLock l_mutex(&this->_mutex);
     this->_queue.push_back(v);
+  }
+  void		push_front(T v) {
+    _mutex.lock();
+    _queue.push_front(v);
+    _mutex.unlock();
   }
 
   void          push(std::list<T> v) {

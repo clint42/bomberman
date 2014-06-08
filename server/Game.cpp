@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Sun Jun  8 17:38:50 2014 buret_j
+// Last update Sun Jun  8 20:56:07 2014 buret_j
 //
 
 #include "Game.hpp"
@@ -19,22 +19,26 @@ static Server::Game::Play g_Plays[] = {
 
 
 Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type,
-		   std::list<Player *> const &peers, Messenger *mes) {
-  // try {
+		   std::list<Player *> const &peers, Messenger *mes)
+  : _map(0), _params(g_Plays[type]), _time(static_cast<Time>(t)), _messenger(mes),
+    _started(false), _paused(false),
+    _maxPlayers(p), _maxBots(b), _round(0) {
+  (void)_round;
+  try {
     _map = new Map(m);
-  // } catch MapException {
-  //     _map = 0;
-  //     throw GameException;
-  //   }
-  _params = g_Plays[type];
-  _started = false;
-  _paused = false;
-  _time = (Time)t;
-  _maxPlayers = p;
-  _maxBots = b;
-  _round = 0;
-  (void)peers;
-  _messenger = mes;
+  } catch (MapException) {
+      _map = 0;
+      throw GameException("Map not found");
+    }
+    if (_maxPlayers > _map->getNbrSlot()) {
+      _maxPlayers = _map->getNbrSlot();
+      p = _maxPlayers;
+    }
+    if (_maxBots + _maxPlayers > _map->getNbrSlot())
+      _maxBots = _map->getNbrSlot() - _maxPlayers;
+    for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
+      _players[(*it)->getPos()] = *it;
+    }
 }
 
 Server::Game::~Game() {
@@ -52,13 +56,22 @@ Server::Game::bombsProcessing() {
   t_cmd *	c;
 
   while (!this->isEnded()) {
-    if (!_bombs.tryPop(&c)) {
+    if (_paused || !_bombs.tryPop(&c)) {
       _bombs.wait();
     } else {
       if (!_bombs.empty())
 	_bombs.signal();
-      // do
-      delete c;
+      { // code
+	if (this->timeLeft() - c->date > 0)
+	  usleep(this->timeLeft() - c->date);
+	if (_paused) {
+	  _bombs.push_front(c);
+	} else {
+	  c->action += " EXPLOSE";
+	  _events.push_front(c);
+	}
+      } // !code
+      // delete c; // pas delete puisqu'on repush !! sigsegf autrement...
     }
   }
 
@@ -77,7 +90,7 @@ Server::Game::start() {
     gettimeofday(&tmp, NULL);
     _endAt.tv_usec += tmp.tv_usec - _pausedAt.tv_usec;
     _paused = false;
-    // pause bomb thread (var cond)
+    _bombs.signal(); // unpause bomb thread (var cond)
   }
 }
 

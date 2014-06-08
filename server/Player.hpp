@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Sun Jun  8 12:48:00 2014 buret_j
+// Last update Sun Jun  8 20:50:10 2014 buret_j
 //
 
 #ifndef PLAYER_HPP_
@@ -61,6 +61,7 @@ namespace Server {
     inline bool   isBot() const { return this->_bot; }
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
+    std::pair<size_t, size_t> getPos() const { std::pair<size_t, size_t> ret(_posX, _posY); return ret; }
 
     void	  getAction(Action &, std::string const &);
 

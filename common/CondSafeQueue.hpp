@@ -5,13 +5,13 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Sun Jun  8 16:38:49 2014 buret_j
-// Last update Sun Jun  8 17:24:32 2014 buret_j
+// Last update Sun Jun  8 18:12:52 2014 buret_j
 //
 
 #ifndef CONDSAFEQUEUE_HPP_
 # define CONDSAFEQUEUE_HPP_
 
-# include <queue>
+# include <list>
 # include "Mutex.hpp"
 # include "CondVar.hpp"
 
@@ -20,7 +20,7 @@ class	CondSafeQueue {
 
   Mutex		_mutex;
   CondVar	_cond;
-  std::queue<T>	_queue;
+  std::list<T>	_queue;
 
   CondSafeQueue(CondSafeQueue const &c) { (void)c; }
   CondSafeQueue &operator=(CondSafeQueue const &c) { (void)c; return *this; }
@@ -32,9 +32,14 @@ public:
 
   void	push(T v) {
     _mutex.lock();
-    _queue.push(v);
+    _queue.push_back(v);
     _mutex.unlock();
     _cond.signal();
+  }
+  void	push_front(T v) {
+    _mutex.lock();
+    _queue.push_front(v);
+    _mutex.unlock();
   }
 
   bool	tryPop(T *v) {
@@ -42,7 +47,7 @@ public:
     if (this->_queue.empty() == false)
       {
 	*v = this->_queue.front();
-	this->_queue.pop();
+	this->_queue.pop_front();
 	_mutex.unlock();
 	return (true);
       }
@@ -50,7 +55,7 @@ public:
     return (false);
   }
 
-  void	wait() { _cond.wait();  }
+  void	wait() { _cond.wait(); }
   void  signal() { _cond.signal(); }
   bool	empty() { return _queue.empty(); }
 
