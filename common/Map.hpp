@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:11:21 2014 julie franel
-// Last update Sat Jun  7 23:40:32 2014 buret_j
+// Last update Sun Jun  8 15:55:04 2014 aurelien prieur
 */
 
 #ifndef			MAP_HPP_
