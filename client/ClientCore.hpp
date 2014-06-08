@@ -1,11 +1,11 @@
 //
 // ClientCore.hpp for bomberman in /home/prieur_b/tek2/cpp/bomberman/client
-// 
+//
 // Made by aurelien prieur
 // Login   <prieur_b@epitech.net>
-// 
+//
 // Started on  Thu May 29 15:42:09 2014 aurelien prieur
-// Last update Wed Jun  4 17:57:30 2014 aurelien prieur
+// Last update Sun Jun  8 16:22:14 2014 julie franel
 //
 
 #ifndef CLIENTCORE_HPP_
@@ -16,6 +16,9 @@
 # include "GameEntities.hpp"
 # include "EventsHandler.hpp"
 # include "SafeQueue.hpp"
+# include "macros.hpp"
+
+class		Parser;
 
 class		ClientCore
 {
@@ -25,6 +28,7 @@ class		ClientCore
   Socket		*_socket;
   ConnexionHandler	&_connexion;
   SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &_createInstructs;
+  Parser		*_parser;
   bool			read(void);
   bool			write(void);
 

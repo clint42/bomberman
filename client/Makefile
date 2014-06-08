@@ -5,14 +5,14 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Sat Jun  7 19:42:32 2014 aurelien prieur
+## Last update Sun Jun  8 16:19:54 2014 julie franel
 ##
 
 CXX =	clang++
 
-CXXFLAGS += -I/home/prieur_b/LibBomberman_linux_x64/includes -I../common -ggdb -Wall -Wextra
+CXXFLAGS += -I/home/franel_j/LibBomberman_linux_x64/includes -I../common -ggdb -Wall -Wextra
 
-LXXFLAGS =  -L/home/prieur_b/LibBomberman_linux_x64/libs -lgdl_gl -lGL -lGLEW -ldl -lrt -lfbxsdk -lSDL2 -lpthread
+LXXFLAGS =  -L/home/franel_j/LibBomberman_linux_x64/libs -lgdl_gl -lGL -lGLEW -ldl -lrt -lfbxsdk -lSDL2 -lpthread
 
 NAME =	client
 
@@ -22,6 +22,7 @@ SRC =   main.cpp \
 	GraphicEngine.cpp \
 	EventsHandler.cpp \
 	ClientCore.cpp \
+	Parser.cpp \
 	Model.cpp \
 	Floor.cpp \
 	Block.cpp \
