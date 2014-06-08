@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:11:27 2014 aurelien prieur
-// Last update Sat Jun  7 19:34:12 2014 aurelien prieur
+// Last update Sun Jun  8 15:42:24 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -36,9 +36,9 @@ AObject::~AObject()
 
 AObject	*AObject::create(int objectType)
 {
-  if (objectType == BLOCK)
+  if (objectType == BLOCK || objectType == BOX)
     {
-      return (new Block);
+      return (new Block(static_cast<ObjectType>(objectType)));
     }
   else if (objectType == BOMB)
     {
