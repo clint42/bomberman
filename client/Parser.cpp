@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun  8 16:26:44 2014 julie franel
+// Last update Sun Jun  8 18:07:17 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -35,6 +35,7 @@ Parser::Parser(GameEntities &gameEntities,
   this->_fct["CREATE"] = &Parser::parseCreate;
   this->_fct["ROTATE"] = &Parser::parseRotate;
   this->_fct["DESTROY"] = &Parser::parseDestroy;
+  this->_fct["CHRONO"] = &Parser::parseChrono;
 }
 
 Parser::~Parser()
@@ -50,6 +51,15 @@ Parser::~Parser()
 void		Parser::parseMove(const t_parser &_parser)
 {
   this->_gameEntities.moveEntity(_parser.pos, this->_dir[_parser.params.front()]);
+}
+
+void		Parser::parseChrono(const t_parser &_parser)
+{
+  size_t	_chrono;
+
+  CVRT_STRING_TO_SIZET(_parser.params[0], _chrono);
+  std::cout << "CHRONO: " << _chrono << std::endl;
+  this->_gameEntities.setTimeLeft(static_cast<float>(_chrono));
 }
 
 void		Parser::parseCreate(const t_parser &_parser)
