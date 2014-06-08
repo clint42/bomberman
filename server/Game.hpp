@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Sun Jun  8 00:14:55 2014 buret_j
+// Last update Sun Jun  8 17:21:44 2014 buret_j
 //
 
 #ifndef SERVER__GAME_HPP_
@@ -15,11 +15,14 @@
 # define RESPAWN_DELAY 5 // (in sec)
 
 # include <sstream>
-
 # include <sys/time.h>
+
 # include "Map.hpp"
 # include "Player.hpp"
+# include "Thread.hpp"
 # include "SafeQueue.hpp"
+# include "CondSafeQueue.hpp"
+# include "CondVar.hpp"
 # include "Types.hpp"
 # include "Messenger.hpp"
 
@@ -58,7 +61,7 @@ namespace	Server {
     std::list<Team *>		_teams;
 
     SafeQueue<t_cmd *>		_events;
-    SafeQueue<t_cmd *>		_bomb;
+    CondSafeQueue<t_cmd *>	_bombs;
 
 
   public:
@@ -82,9 +85,10 @@ namespace	Server {
     }
 
     inline void		addEvent(t_cmd *c) { _events.push(c); }
-    inline void		addBomb(t_cmd *c) { _bomb.push(c); }
+    inline void		addBomb(t_cmd *c) { _bombs.push(c); }
 
     void		update();
+    void		bombsProcessing();
     void		killPlayer(Player *);
 
   private:

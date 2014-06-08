@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Sun Jun  8 00:17:18 2014 buret_j
+// Last update Sun Jun  8 12:48:00 2014 buret_j
 //
 
 #ifndef PLAYER_HPP_
@@ -23,7 +23,7 @@
 # define DELAY		   350 // (in msec) default time of all actions.
 # define DELAY_MULT_ORIENT 1.0 // multiplier of orientation action time.
 # define DELAY_MULT_MOVE   2.0
-# define DELAY_MULT_BOMB   0.0
+# define DELAY_MULT_BOMB   1.0
 
 namespace Server {
 
@@ -61,8 +61,8 @@ namespace Server {
     inline bool   isBot() const { return this->_bot; }
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
-    
-    inline Dir	  getOrientation() const { return this->_orientation; }
+
+    void	  getAction(Action &, std::string const &);
 
     inline void	  setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
     inline void	  setTeam(Team *t) { this->_team = t; }

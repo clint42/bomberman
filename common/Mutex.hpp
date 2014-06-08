@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon Apr 21 14:24:02 2014 buret_j
-// Last update Fri May 30 11:25:49 2014 aurelien prieur
+// Last update Sun Jun  8 16:48:39 2014 buret_j
 //
 
 #ifndef MUTEX_HH_
@@ -25,7 +25,7 @@ public:
   bool lock(void);
   bool unlock(void);
   bool trylock(void);
-  pthread_mutex_t  *getMutex(void);
+  pthread_mutex_t &getMutex(void);
 };
 
 #endif
