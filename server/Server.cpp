@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Sat Jun  7 22:13:23 2014 buret_j
+// Last update Mon Jun  9 00:11:02 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -17,57 +17,6 @@ Server::Server::Server(ConnexionHandler *c) : _run(true), _co(c) {
 
 Server::Server::~Server() {
 }
-
-// void
-// Server::Server::isDead(size_t id, std::pair<size_t, size_t> pos)
-// {
-//   std::map<std::pair<size_t, size_t>, Player *>::iterator it;
-
-//   it = this->_playersAlive.find(pos);
-//   if (it != this->_playersAlive.end() && it->second->getID() == id)
-//     {
-//       this->_playersDead.insert(std::pair<std::pair<size_t, size_t>, Player *>(it->first, it->second));
-//       this->_playersAlive.erase(it);
-//     }
-// }
-
-// void
-// Server::Server::allDead()
-// {
-//   std::map<std::pair<size_t, size_t>, Player *>::iterator it;
-//   size_t        len;
-
-//   len = this->_playersAlive.size();
-//   while (len > 0)
-//     {
-//       it = this->_playersAlive.begin();
-//       this->_playersDead.insert(std::pair<std::pair<size_t, size_t>, Player *>(it->first, it->second));
-//       this->_playersAlive.erase(it);
-//       --len;
-//     }
-// }
-
-// void
-// Server::Server::putInPlayersAlive()
-// {
-//   size_t        maxPlayer;
-//   size_t        countAlive;
-//   size_t        countDead;
-//   std::map<std::pair<size_t, size_t>, Player *>::iterator it;
-
-//   maxPlayer = this->_map->getNbrSlot();
-//   countAlive = this->_playersAlive.size();
-//   countDead = this->_playersDead.size();
-
-//   while (countAlive < maxPlayer && countDead > 0)
-//     {
-//       it = this->_playersDead.begin();
-//       this->_playersAlive.insert(std::pair<std::pair<size_t, size_t>, Player *> (it->first, it->second));
-//       this->_playersDead.erase(it);
-//       ++countAlive;
-//       --countDead;
-//     }
-// }
 
 /*
 ** FILTER
@@ -208,10 +157,15 @@ Server::Server::manageAdminCommand()
 
 void
 Server::Server::run() {
-  while (_run && _co->update(0) >= 0) {
+  DEBUG("Server::server::run()", 1);
+  size_t timeLoop = 0;
+  while (_run && _co->update(timeLoop) >= 0) {
     _co->perform(&trampoline, this);
     filterMsg();
     if (!(_ext.size() && manageAdminCommand()) && _game && !_game->isPaused())
       _game->update();
+    else if (!_game || !_game->hasSomethingToDo())
+      timeLoop = 2000;
   }
+  DEBUG("! Server::server::run()", -1);
 }

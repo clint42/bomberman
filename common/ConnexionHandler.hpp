@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Thu Jun  5 18:46:37 2014 buret_j
+// Last update Sun Jun  8 22:12:16 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -22,6 +22,7 @@
 # include "Exception.hpp"
 # include "Socket.hpp"
 # include "Poll.hpp"
+# include "macros.hpp"
 
 class	ConnexionHandler {
 
@@ -38,7 +39,7 @@ private:
 
 public:
 
-  ConnexionHandler() {}
+  ConnexionHandler() : _server(0), _client(0) {}
   ~ConnexionHandler() {}
 
   inline Server *	server() { return _server; }

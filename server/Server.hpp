@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-** Last update Sat Jun  7 21:08:45 2014 lafitt_g
+// Last update Sun Jun  8 21:08:40 2014 buret_j
 */
 
 #ifndef SERVER_HPP_
@@ -43,15 +43,9 @@ namespace Server {
     std::list<std::string *>	_messages;
     std::list<t_cmd *>		_ext;
 
-    //
     void	getInformation(const std::string *, size_t *, size_t, size_t);
     void	filterMsg(); // pop t_msg => t_cmd; calls putCmdInQueue()
     void	putCmdInQueue(t_cmd *);
-
-    //
-    // void	isDead(size_t, std::pair<size_t, size_t>);
-    // void	allDead();
-    // void	putInPlayersAlive();
 
     inline size_t countPeers() const { return _peers.size(); }
 

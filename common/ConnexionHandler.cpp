@@ -5,15 +5,17 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-** Last update Sat Jun  7 20:01:01 2014 lafitt_g
+// Last update Sun Jun  8 23:39:19 2014 buret_j
 */
 
 #include "ConnexionHandler.hpp"
 
 ConnexionHandler::Server *
 ConnexionHandler::server(int port) {
+  DEBUG("ConnexionHandler::server()", 1);
   if (!_server && !_client) { _server = new Server(port); }
   _poll.watchEvent(server()->getMasterSocket()->getFd(), POLLIN);
+  DEBUG("! ConnexionHandler::server()", -1);
   return _server;
 }
 
@@ -43,10 +45,12 @@ ConnexionHandler::rmSocket(Socket *s) {
 
 void
 ConnexionHandler::perform(void (*fct)(void *, Socket *, bool b[3]), void *param) {
+  DEBUG("ConnexionHandler::perform()", 1);
   if (this->server() != NULL)
     _server->perform(fct, param, &_poll);
   else if (this->client() != NULL)
     _client->perform(fct, param, &_poll);
+  DEBUG("! ConnexionHandler::perform()", -1);
 }
 
 Socket *
@@ -64,6 +68,7 @@ ConnexionHandler::getMasterSocket() {
 */
 
 ConnexionHandler::Server::Server(int p) : _masterSocket(0), _port(p) {
+  std::cout << "MOTHER FUCKER" << std::endl;
   this->initialise();
 }
 
@@ -82,7 +87,13 @@ ConnexionHandler::Server::initialise() {
       || bind(fd, (sockaddr*)&sin, sizeof sin) == -1
       || listen(fd, 10) == -1)
     throw ConnexionException("Can't create socket properly");
+
+  if (_sockets.capacity() < (size_t)fd)
+    _sockets.resize(fd + 1);
   _sockets[fd] = new Socket(fd);
+
+  printf("&socket: %p\n", _sockets[fd]);
+  std::cout << "mother fucker" << std::endl;
   _masterSocket = _sockets[fd];
 }
 
@@ -101,20 +112,23 @@ ConnexionHandler::Server::acceptPeer(Poll *poll, void *srv) {
 
   (void)srv;
   fd = accept(_masterSocket->getFd(), (sockaddr *)&sin, &sin_len);
+  if (_sockets.capacity() < (size_t)fd)
+    _sockets.resize(fd + 1);
   _sockets[fd] = new Socket(fd);
   poll->watchEvent(fd, POLLIN);
   poll->watchEvent(fd, POLLOUT);
   // ((Server::Server *)srv)->addPeer(_sockets[fd]);
 }
-
+#include <cstdio>
 void
 ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, bool b[3]),
 				  void *param, Poll *poll) {
   bool	event[3];
 
+  DEBUG("ConnexionHandler::Server::perform()", 1);
   for (std::vector<Socket *>::iterator it = _sockets.begin();
        it != _sockets.end(); ++it) {
-    
+    if (!*it)	continue ;    
     event[0] = poll->isEventOccurred((*it)->getFd(), POLLIN);
     event[1] = poll->isEventOccurred((*it)->getFd(), POLLOUT);
     event[2] = poll->isDisconnected((*it)->getFd());
@@ -125,6 +139,7 @@ ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, bool b[3]),
 	fct(param, *it, event);
     }
   }
+  DEBUG("! ConnexionHandler::Server::perform()", -1);
 }
 
 void
