@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-** Last update Sat Jun  7 19:40:00 2014 lafitt_g
+// Last update Sat Jun  7 22:13:23 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -74,11 +74,11 @@ Server::Server::~Server() {
 */
 
 void
-Server::Server::getInformation(const std::string &msg, size_t *field, size_t cur_1, size_t cur_2)
+Server::Server::getInformation(const std::string *msg, size_t *field, size_t cur_1, size_t cur_2)
 {
   if (cur_1 != std::string::npos && cur_2 != std::string::npos)
     {
-      std::stringstream convert(msg.substr(cur_1, cur_2));
+      std::stringstream convert(msg->substr(cur_1, cur_2));
       convert >> *field;
     }
   else
@@ -129,7 +129,7 @@ Server::Server::putCmdInQueue(t_cmd *cmd)
   else if (((cmd->action.compare("PAUSE") ||
 	     cmd->action.compare("KILL")) && cmd->params.size() == 0) ||
 	   (cmd->action.compare("CONFIG") && cmd->params.size() == 3))
-    this->_ext.push(cmd);
+    this->_ext.push_back(cmd);
   else
     delete cmd;
 }
@@ -154,7 +154,7 @@ Server::Server::addPeer(Socket *s) {
 void
 Server::Server::addMessage(Socket *s) {
   std::string *m = new std::string;
-  s->getline(m);
+  s->getLine(*m);
   _messages.push_back(m);
 }
 
@@ -167,8 +167,9 @@ Server::Server::sendMessage(Socket *s) {
 
 void
 Server::Server::peerDisconnected(Socket *s) {
-  for (int occurences = 0; std::list<Player *>::iterator it = _peers.begin();
-       occurences != 2, it != _peers.end(); ++it) {
+  int occurences = 0;
+  for (std::list<Player *>::iterator it = _peers.begin();
+       occurences != 2 && it != _peers.end(); ++it) {
     if ((*it)->getSocket() == s) {
       if (_game)
 	_game->killPlayer(*it);
@@ -190,25 +191,27 @@ trampoline(void *p, Socket *s, bool b[3]) {
     ((Server::Server *)p)->peerDisconnected(s);
 }
 
-void
+bool
 Server::Server::manageAdminCommand()
 {
   std::map<std::string, func_admin> func;
-  func["PAUSE"] = &funcPause;
-  func["CONFIG"] = &funcWelcome;
-  func["KILL"] = &funcKill;
+  // func["PAUSE"] = &funcPause;
+  // func["CONFIG"] = &funcWelcome;
+  // func["KILL"] = &funcKill;
+  bool ret = false;
 
   if (this->_ext.front()->id == 1)
-    func[this->_ext.front()->action]();
+    ret = func[this->_ext.front()->action]();
   this->_ext.pop_front();
+  return ret;
 }
 
 void
 Server::Server::run() {
   while (_run && _co->update(0) >= 0) {
-    _co->perform(&trampoline, this, &_messenger);
+    _co->perform(&trampoline, this);
     filterMsg();
-    if (!(_ext.size() && manageAdmin()) && _game && !_game->isPaused())
+    if (!(_ext.size() && manageAdminCommand()) && _game && !_game->isPaused())
       _game->update();
   }
 }

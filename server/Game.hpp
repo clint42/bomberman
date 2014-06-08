@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-** Last update Sat Jun  7 19:09:20 2014 lafitt_g
+// Last update Sun Jun  8 00:14:55 2014 buret_j
 //
 
 #ifndef SERVER__GAME_HPP_
@@ -13,6 +13,8 @@
 
 # define GAME_TIME     5 // (in min)	total time of a map. Must be multiplied by e_time.
 # define RESPAWN_DELAY 5 // (in sec)
+
+# include <sstream>
 
 # include <sys/time.h>
 # include "Map.hpp"
@@ -88,8 +90,10 @@ namespace	Server {
   private:
 
     void		filterCmd(Server::t_cmd const *, std::string &) const;
-    bool		process(Server::t_cmd const *, Player *);
-
+    bool		process(Server::t_cmd *, Player *);
+    inline bool		hasDateNextCommandExpired(Player *p) const {
+      return (p->getDateNextCommand() < this->timeLeft()) ? true : false;
+    }
   };
 
 }

@@ -1,12 +1,12 @@
-//
+/*
 // ConnexionHandler.cpp for  in /home/buret_j/rendu/bomberman
 //
 // Made by buret_j
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Fri Jun  6 15:20:18 2014 buret_j
-//
+** Last update Sat Jun  7 20:01:01 2014 lafitt_g
+*/
 
 #include "ConnexionHandler.hpp"
 
@@ -104,7 +104,7 @@ ConnexionHandler::Server::acceptPeer(Poll *poll, void *srv) {
   _sockets[fd] = new Socket(fd);
   poll->watchEvent(fd, POLLIN);
   poll->watchEvent(fd, POLLOUT);
-  ((Server::Server *)srv)->addPeer(_sockets[fd]);
+  // ((Server::Server *)srv)->addPeer(_sockets[fd]);
 }
 
 void

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Sat Jun  7 18:05:43 2014 buret_j
+// Last update Sun Jun  8 00:17:18 2014 buret_j
 //
 
 #ifndef PLAYER_HPP_
@@ -71,7 +71,7 @@ namespace Server {
     inline void   destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }
 
     inline size_t getDateNextCommand() const { return _dateNextCommand; }
-    void	  updateDateNextCommand();
+    void	  updateDateNextCommand(Action, size_t);
 
     inline double getCommandTimeMultiplier() const { return _commandTimeMultiplier; }
     inline void   setCommandTimeMultiplier(double m) { _commandTimeMultiplier = m;  }
