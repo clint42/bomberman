@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun  8 16:23:02 2014 julie franel
+// Last update Sun Jun  8 19:04:23 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -14,6 +14,7 @@
 #include "ClientCore.hpp"
 #include "EventsHandler.hpp"
 #include "Parser.hpp"
+#include "MapRender.hpp"
 
 ClientCore::ClientCore(GameEntities &gameEntities, EventsHandler &eventsHandler,
 		       SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs,
@@ -33,6 +34,14 @@ ClientCore::~ClientCore()
 bool		ClientCore::initialize()
 {
   try {
+    MapRender	map("../test.map");
+    map.render(_createInstructs);
+    _gameEntities.setMapSize(std::pair<size_t, size_t>(map.getWidth(), map.getHeight()));
+  }
+  catch (MapException e) {
+    std::cerr << "Invalid map: " << e.what() << std::endl;
+  }
+  try {
   _connexion.client(8080, "127.0.0.1");
   }
   catch (ConnexionException e) {
@@ -41,9 +50,11 @@ bool		ClientCore::initialize()
   }
   _socket = _connexion.getMasterSocket();
   _connexion.watchEventOnSocket(_socket, POLLIN);
-  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(0, 0), PLAYER + 1));
-  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(4, 1), BOMB));
-  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(1, 1), BLOCK));
+  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(8, 6), PLAYER + 1));
+  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(1, 6), PLAYER + 2));
+  _gameEntities.setDouble();
+  // _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(4, 1), BOMB));
+  // _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(1, 1), BLOCK));
   return (true);
 }
 
@@ -58,6 +69,8 @@ bool		ClientCore::run()
     {
       if (_gameEntities.getPlayer() == NULL)
 	_gameEntities.setPlayer(1);
+      if (_gameEntities.getPlayer(1) == NULL)
+	_gameEntities.setPlayer(2, 1);
       _connexion.perform(&trampoline, this);
     }
   return (true);

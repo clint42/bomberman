@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 12:24:05 2014 buret_j
-// Last update Sun Jun  8 12:47:46 2014 buret_j
+** Last update Sun Jun  8 20:15:08 2014 lafitt_g
 */
 
 #include "Player.hpp"
@@ -31,20 +31,97 @@ Server::Player::updateDateNextCommand(Server::Player::Action a, size_t date) {
     : (date - (DELAY * mult / _commandTimeMultiplier));
 }
 
-static struct { std::string s; Server::Player::Dir d; } g_tab[] = {
-  { "UP", Server::Player::UP },
-  { "RIGHT", Server::Player::RIGHT },
-  { "DOWN", Server::Player::DOWN },
-  { "LEFT", Server::Player::LEFT }
-};
+bool Server::Player::_isInit = false;
+std::map<std::string, Server::Player::Dir> Server::Player::_toDir;
 
 void
-Server::Player::getAction(Server::Player::Action &a, std::string const &s) {
-  Dir d = DOWN;
-  for (int i = 0; i < 4; ++i)
-    if (g_tab[i].s == s) {
-      d = g_tab[i].d;
-      break ;
+Server::Player::getAction(Server::Player::Action *a, Server::Player::Dir *dir, const std::string &param)
+{
+  if (Server::Player::_isInit == false)
+    {
+      Server::Player::_isInit = true;
+      Server::Player::_toDir["UP"] = UP;
+      Server::Player::_toDir["RIGHT"] = RIGHT;
+      Server::Player::_toDir["DOWN"] = DOWN;
+      Server::Player::_toDir["LEFT"] = LEFT;
     }
-  a = d == _orientation ? MOVE : ORIENT;
+  if (this->_orientation == Server::Player::_toDir[param])
+    *a = MOVE;
+  else
+    *a = ORIENT;
+  *dir = Server::Player::_toDir[param];
 }
+
+bool
+Server::Player::moveUp()
+{
+  this->_posY -= 1;
+  return (true);
+}
+
+bool
+Server::Player::moveRight()
+{
+  this->_posX += 1;
+  return (true);
+}
+
+bool
+Server::Player::moveDown()
+{
+  this->_posY += 1;
+  return (true);
+}
+
+bool
+Server::Player::moveLeft()
+{
+  this->_posX -= 1;
+  return (true);
+}
+
+bool
+Server::Player::orientUp()
+{
+  this->_orientation = UP;
+  return (true);
+}
+
+bool
+Server::Player::orientRight()
+{
+  this->_orientation = RIGHT;
+  return (true);
+}
+
+bool
+Server::Player::orientDown()
+{
+  this->_orientation = DOWN;
+  return (true);
+}
+
+bool
+Server::Player::orientLeft()
+{
+  this->_orientation = LEFT;
+  return (true);
+}
+
+// static struct { std::string s; Server::Player::Dir d; } g_tab[] = {
+//   { "UP", Server::Player::UP },
+//   { "RIGHT", Server::Player::RIGHT },
+//   { "DOWN", Server::Player::DOWN },
+//   { "LEFT", Server::Player::LEFT }
+// };
+
+// void
+// Server::Player::getAction(Server::Player::Action &a, std::string const &s) {
+//   Dir d = DOWN;
+//   for (int i = 0; i < 4; ++i)
+//     if (g_tab[i].s == s) {
+//       d = g_tab[i].d;
+//       break ;
+//     }
+//   a = d == _orientation ? MOVE : ORIENT;
+// }

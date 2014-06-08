@@ -5,14 +5,15 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sat Jun  7 14:18:01 2014 aurelien prieur
+// Last update Sun Jun  8 19:02:38 2014 aurelien prieur
 //
 
 #include <iostream>
 #include "Model.hpp"
 #include "GameEntities.hpp"
 
-GameEntities::GameEntities(): _player(NULL), _player2(NULL),
+GameEntities::GameEntities(): _isDouble(false),
+			      _player(NULL), _player2(NULL),
 			      _playerScore(0), _player2Score(0),
 			      _timeLeft(0)
 {
@@ -134,7 +135,6 @@ void		GameEntities::setPlayer(int id, int nPlayer)
        it != _entities.end();
        ++it)
     {
-      std::cout << "it->second->getId()" << it->second->getId() << std::endl;
       if (it->second->getId() == id)
 	{
 	  if (nPlayer == 0)
@@ -211,4 +211,39 @@ float		GameEntities::getTimeLeft(void)
   retVal = _timeLeft;
   _locker.unlock();
   return (retVal);
+}
+
+
+std::pair<size_t, size_t> const &GameEntities::getMapSize(void)
+{
+  _locker.lock();
+  std::pair<size_t, size_t> const &retVal = _mapSize;
+  _locker.unlock();
+  return (retVal);
+}
+
+void	GameEntities::setMapSize(std::pair<size_t, size_t> const &mapSize)
+{
+  _locker.lock();
+  _mapSize = mapSize;
+  _locker.unlock();
+}
+
+bool	GameEntities::isDouble(bool withoutLock)
+{
+  bool	retVal;
+
+  if (!withoutLock)
+    _locker.lock();
+  retVal = _isDouble;
+  if (!withoutLock)
+    _locker.unlock();
+  return (retVal);
+}
+
+void	GameEntities::setDouble(void)
+{
+  _locker.lock();
+  _isDouble = true;
+  _locker.unlock();
 }

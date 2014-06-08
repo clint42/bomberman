@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Sat Jun  7 19:36:49 2014 aurelien prieur
+// Last update Sun Jun  8 19:01:46 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -20,11 +20,13 @@
 
 class	GameEntities
 {
+  bool							_isDouble;
   AObject						*_player;
   AObject						*_player2;
   int							_playerScore;
   int							_player2Score;
   float							_timeLeft;
+  std::pair<size_t, size_t>				_mapSize;
   std::map<std::pair<size_t, size_t>, AObject *>	_entities;
   Mutex							_locker;
 
@@ -48,6 +50,10 @@ public:
   void		decreaseTimeLeft(float const &val);
   float		getTimeLeft(void);
   void		setTimeLeft(float const &timeLeft);
+  std::pair<size_t, size_t> const	&getMapSize(void);
+  void					setMapSize(std::pair<size_t, size_t> const &mapSize);
+  bool					isDouble(bool withoutLock = false);
+  void					setDouble(void);
 };
 
 #endif // !GAMEENTITIES_HPP_
