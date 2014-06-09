@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Sun Jun  8 18:39:24 2014 aurelien prieur
+## Last update Mon Jun  9 10:44:41 2014 aurelien prieur
 ##
 
 CXX =	clang++
@@ -24,7 +24,7 @@ SRC =   main.cpp \
 	EventsHandler.cpp \
 	ClientCore.cpp \
 	Parser.cpp \
-	Model.cpp \
+	Player.cpp \
 	Floor.cpp \
 	Block.cpp \
 	Bomb.cpp \

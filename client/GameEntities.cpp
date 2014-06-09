@@ -5,11 +5,10 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sun Jun  8 19:02:38 2014 aurelien prieur
+// Last update Mon Jun  9 10:45:06 2014 aurelien prieur
 //
 
 #include <iostream>
-#include "Model.hpp"
 #include "GameEntities.hpp"
 
 GameEntities::GameEntities(): _isDouble(false),

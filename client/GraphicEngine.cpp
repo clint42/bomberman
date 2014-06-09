@@ -5,22 +5,19 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sun Jun  8 15:45:36 2014 aurelien prieur
+// Last update Mon Jun  9 10:45:30 2014 aurelien prieur
 //
 
 #include <unistd.h>
 #include <iostream>
 #include "GraphicEngine.hpp"
-#include "Model.hpp"
 #include "Block.hpp"
 
 GraphicEngine::GraphicEngine(EventsHandler &eventsHandler,
 			     GameEntities &gameEntities,
 			     SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs):
-  isDouble(true),
   objects(gameEntities),
   eventsHandler(eventsHandler),
-  floor(std::pair<size_t, size_t>(40, 40)),
   createInstructs(createInstructs)
 {
 }
@@ -69,6 +66,7 @@ bool	GraphicEngine::initialize()
   Block::loadTextures();
   if (this->mkBackground() == false)
     return (false);
+  this->floor.setSize(this->objects.getMapSize());
   this->floor.initialize();
   score1 = new GraphicalText("100", std::pair<size_t, size_t>(320, 0), glm::vec4(1, 1, 1, 1), 50, "airstrikeBold");
   score2 = new GraphicalText("100", std::pair<size_t, size_t>(W_WIDTH / 2 + 400, 0), glm::vec4(1, 1, 1, 1), 50, "airstrikeBold");
@@ -110,13 +108,13 @@ void		GraphicEngine::drawPlayer(int nPlayer)
   glm::mat4	transformation;
   glm::mat4	projection;
 
-  projection = glm::perspective(60.0f, (((float)(W_WIDTH) / 2.f) - 5.f) / ((float)(W_HEIGHT) - 50.f), 0.1f, 100.f);
+  viewPortPlayer(nPlayer);
+  getPlayerProjection(projection);
   this->shader.setUniform("projection", projection);
-  glViewport((((float)(W_WIDTH) / 2.f) + 5.f) * nPlayer, 0, ((float)(W_WIDTH) / 2.f) - 5.f, (float)(W_HEIGHT) - 50.f);
-  AObject const *player = this->objects.getPlayer(true, 0);
+  AObject const *player = this->objects.getPlayer(true, nPlayer);
   if (player != NULL)
     {
-         transformation = glm::lookAt(glm::vec3(0, 14, 10) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
+         transformation = glm::lookAt(glm::vec3(0, 17, 10) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
       this->shader.setUniform("view", transformation);
     }
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
@@ -173,7 +171,8 @@ void		GraphicEngine::draw2D(void)
   shader.setUniform("view", glm::mat4(1));
   drawBackground();
   drawScore(0);
-  drawScore(1);
+  if (this->objects.isDouble(true))
+    drawScore(1);
   chrono.draw(this->shader, this->clock);
   glDisable(GL_BLEND);
 }
@@ -188,7 +187,7 @@ void		GraphicEngine::draw()
   shader.bind();
   draw2D();
   drawPlayer(0);
-  if (isDouble)
+  if (this->objects.isDouble(true))
     drawPlayer(1);
   this->objects.unlock();
   this->sdlContext.flush();
@@ -197,4 +196,22 @@ void		GraphicEngine::draw()
 void	GraphicEngine::stop()
 {
   sdlContext.stop();
+}
+
+void	GraphicEngine::viewPortPlayer(int nPlayer) const
+{
+  if (!this->objects.isDouble(true))
+    {
+      glViewport(0, 0, (float)(W_WIDTH), (float)(W_HEIGHT) - 50.f);
+    }
+  else
+    glViewport((((float)(W_WIDTH) / 2.f) + 5.f) * nPlayer, 0, ((float)(W_WIDTH) / 2.f) - 5.f, (float)(W_HEIGHT) - 50.f);
+}
+
+void	GraphicEngine::getPlayerProjection(glm::mat4 &projection) const
+{
+  if (!this->objects.isDouble(true))
+      projection = glm::perspective(60.0f, (float)(W_WIDTH) / (float)(W_HEIGHT), 0.1f, 100.f);
+  else
+    projection = glm::perspective(60.0f, (((float)(W_WIDTH) / 2.f) - 5.f) / ((float)(W_HEIGHT) - 50.f), 0.1f, 100.f);
 }

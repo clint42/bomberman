@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:00:09 2014 aurelien prieur
-// Last update Sat Jun  7 19:24:52 2014 aurelien prieur
+// Last update Mon Jun  9 10:45:40 2014 aurelien prieur
 //
 
 #ifndef GRAPHICENGINE_HPP_
@@ -24,7 +24,7 @@
 # include <glm/gtc/matrix_transform.hpp>
 # include "GameEntities.hpp"
 # include "EventsHandler.hpp"
-# include "Model.hpp"
+# include "Player.hpp"
 # include "Floor.hpp"
 # include "SafeQueue.hpp"
 # include "GraphicalText.hpp"
@@ -35,7 +35,6 @@
 
 class			GraphicEngine: public gdl::Game
 {
-  bool			isDouble;
   std::vector<int>	watchedEvents;
   GameEntities		&objects;
   EventsHandler		&eventsHandler;
@@ -50,6 +49,8 @@ class			GraphicEngine: public gdl::Game
   Chrono		chrono;
   gdl::Geometry		background;
   gdl::Texture		bgTex;
+  void			getPlayerProjection(glm::mat4 &projection) const;
+  void			viewPortPlayer(int nPlayer = 0) const;
   void			drawPlayer(int nPlayer);
   void			drawScore(int nPlayer);
   bool			mkBackground(void);

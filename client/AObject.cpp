@@ -5,12 +5,12 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:11:27 2014 aurelien prieur
-// Last update Sun Jun  8 17:15:39 2014 aurelien prieur
+// Last update Mon Jun  9 10:44:14 2014 aurelien prieur
 //
 
 #include <iostream>
 #include "AObject.hpp"
-#include "Model.hpp"
+#include "Player.hpp"
 #include "Block.hpp"
 #include "Bomb.hpp"
 #include "Fire.hpp"
@@ -50,7 +50,7 @@ AObject	*AObject::create(int objectType)
     }
   else if (objectType > PLAYER)
     {
-      return (new Model(objectType - PLAYER));
+      return (new Player(objectType - PLAYER));
     }
   return (NULL);
 }
