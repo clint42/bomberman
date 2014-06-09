@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Mon Jun  9 14:13:23 2014 buret_j
+// Last update Mon Jun  9 15:17:35 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -139,8 +139,10 @@ trampoline(void *p, Socket *s, bool b[3]) {
     reinterpret_cast<Server::Server *>(p)->peerDisconnected(s);
   }
   else {
-    if (b[0])
+    if (b[0]) {
+      DEBUG("trampoline() => socket autorise a lire dessus", 0);
       reinterpret_cast<Server::Server *>(p)->addMessage(s);
+    }
     if (b[1]) {
       DEBUG("trampoline() => socket autorise a ecrire dessus", 0);
       reinterpret_cast<Server::Server *>(p)->sendMessage(s);
@@ -169,11 +171,15 @@ Server::Server::run() {
   size_t timeLoop = 0;
   while (_run && _co->update(timeLoop) >= 0) {
     _co->perform(&trampoline, this);
+    DEBUG("Server::Server::run() => 1", 0);
     filterMsg();
+    DEBUG("Server::Server::run() => 2", 0);
     if (!(_ext.size() && manageAdminCommand()) && _game && !_game->isPaused())
       _game->update();
     else if (!_game || !_game->hasSomethingToDo())
       timeLoop = 2000;
+    else
+      timeLoop = 0;
   }
   DEBUG("! Server::server::run()", -1);
 }

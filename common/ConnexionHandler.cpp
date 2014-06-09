@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Mon Jun  9 14:18:01 2014 buret_j
+// Last update Mon Jun  9 15:52:37 2014 buret_j
 */
 
 #include "ConnexionHandler.hpp"
@@ -112,31 +112,41 @@ ConnexionHandler::Serveur::acceptPeer(Poll *poll, void *srv) {
   int		fd;
 
   (void)srv;
-  fd = accept(_masterSocket->getFd(), (sockaddr *)&sin, &sin_len);
-  if (_sockets.capacity() < (size_t)fd)
-    _sockets.resize(fd + 1);
+  fd = accept(_masterSocket->getFd(), (sockaddr *)&sin, &sin_len); // have to throw except° & catch it
+  //
+  int optval = 1;
+  if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &optval, (socklen_t)(sizeof optval)) == -1)
+    exit(-1);
+  //
+  if (_sockets.capacity() < (size_t)fd + 1)
+    _sockets.resize(fd + 5);
   _sockets[fd] = new Socket(fd);
+  printf("acceptPeer : %p \n", _sockets[fd]);
   poll->watchEvent(fd, POLLIN | POLLOUT);
   reinterpret_cast<Server::Server *>(srv)->addPeer(_sockets[fd]);
 }
 
 void
 ConnexionHandler::Serveur::perform(void (*fct)(void *, Socket *, bool b[3]),
-				  void *param, Poll *poll) {
+				   void *param, Poll *poll) {
   bool	event[3];
-
   // DEBUG("ConnexionHandler::Server::perform()", 1);
+  std::cout << "size: " << _sockets.size() << std::endl;
   for (std::vector<Socket *>::iterator it = _sockets.begin();
        it != _sockets.end(); ++it) {
-    if (!*it)	continue ;    
-    event[0] = poll->isEventOccurred((*it)->getFd(), POLLIN);
-    event[1] = poll->isEventOccurred((*it)->getFd(), POLLOUT);
-    event[2] = poll->isDisconnected((*it)->getFd());
-    if (event[0] || event[1] || event[2]) {
-      if (_masterSocket && *it == _masterSocket)
-	this->acceptPeer(poll, param);
-      else
-	fct(param, *it, event);
+    printf("=================\n");
+    printf("perform : %p \n", *it);
+    if (*it) {
+      std::cout << "CH::Serveur::perform : " << (*it)->getFd() << std::endl;
+      event[0] = poll->isEventOccurred((*it)->getFd(), POLLIN);
+      event[1] = poll->isEventOccurred((*it)->getFd(), POLLOUT);
+      event[2] = poll->isDisconnected((*it)->getFd());
+      if (event[0] || event[1] || event[2]) {
+	if (_masterSocket && *it == _masterSocket)
+	  this->acceptPeer(poll, param);
+	else
+	  fct(param, *it, event);
+      }
     }
   }
   // DEBUG("! ConnexionHandler::Server::perform()", -1);

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu Jun  5 17:15:53 2014 buret_j
-// Last update Mon Jun  9 14:04:07 2014 buret_j
+// Last update Mon Jun  9 15:53:42 2014 buret_j
 //
 
 #ifndef MESSENGER_HPP_
@@ -29,8 +29,8 @@ namespace Server {
 
     void	addMessage(Socket const *s, std::string const &toAdd)  {
       DEBUG("Server::Messenger::addMessage()", 1);
-      if (_queues.capacity() < (size_t)s->getFd()) {
-	_queues.resize(s->getFd() + 1);
+      if (_queues.capacity() < (size_t)s->getFd() + 1) {
+	_queues.resize(s->getFd() + 5);
 	DEBUG("Server::Messenger::addMessage() => premier if", 0);
       }
       if (!_queues[s->getFd()]) {
