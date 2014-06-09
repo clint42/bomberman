@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Mon Jun  9 19:14:32 2014 julie franel
+// Last update Mon Jun  9 19:18:56 2014 julie franel
 */
 
 #include "Server.hpp"
@@ -162,12 +162,13 @@ bool		Server::Server::funcWelcome(const t_cmd *_cmd)
   try
     {
       size_t	p;
+      size_t	b;
       size_t	t;
 
       CVRT_STRING_TO_SIZET(_cmd->params[1], p);
-      CVRT_STRING_TO_SIZET(_cmd->params[2], t);
-      // TODO remplacer 0 par le nb de bots quand JG se sera decide a repondre
-      this->_game = new Game(_cmd->params[0], p, 0, t, _types[_cmd->params[3]], this->_peers, &this->_messenger);
+      CVRT_STRING_TO_SIZET(_cmd->params[2], b);
+      CVRT_STRING_TO_SIZET(_cmd->params[3], t);
+      this->_game = new Game(_cmd->params[0], p, b, t, _types[_cmd->params[4]], this->_peers, &this->_messenger);
       return (true);
     }
   catch (GameException e)
