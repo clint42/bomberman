@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Mon Jun  9 19:29:55 2014 buret_j
+// Last update Mon Jun  9 19:57:11 2014 julie franel
 */
 
 #include "Server.hpp"
@@ -150,12 +150,14 @@ trampoline(void *p, Socket *s, bool b[3]) {
 
 bool		Server::Server::funcWelcome(const t_cmd *_cmd)
 {
-  std::map<std::string, Game::Type>	_types;
-
-  _types["LAST_MAN_STANDING"] = Game::LAST_MAN_STANDING;
-  _types["FREE_FOR_ALL"] = Game::FREE_FOR_ALL;
-  _types["TEAM_DEATH_MATCH"] = Game::TEAM_DEATH_MATCH;
-  _types["TEAM_SURVIVOR"] = Game::TEAM_SURVIVOR;
+  if (Game::_isInit == false)
+    {
+      Game::_isInit = true;
+      Game::_types["LAST_MAN_STANDING"] = Game::LAST_MAN_STANDING;
+      Game::_types["FREE_FOR_ALL"] = Game::FREE_FOR_ALL;
+      Game::_types["TEAM_DEATH_MATCH"] = Game::TEAM_DEATH_MATCH;
+      Game::_types["TEAM_SURVIVOR"] = Game::TEAM_SURVIVOR;
+    }
 
   try
     {
@@ -166,7 +168,7 @@ bool		Server::Server::funcWelcome(const t_cmd *_cmd)
       CVRT_STRING_TO_SIZET(_cmd->params[1], p);
       CVRT_STRING_TO_SIZET(_cmd->params[2], b);
       CVRT_STRING_TO_SIZET(_cmd->params[3], t);
-      this->_game = new Game(_cmd->params[0], p, b, t, _types[_cmd->params[4]], this->_peers, &this->_messenger);
+      this->_game = new Game(_cmd->params[0], p, b, t, Game::_types[_cmd->params[4]], this->_peers, &this->_messenger);
       return (true);
     }
   catch (GameException e)

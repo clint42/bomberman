@@ -1,11 +1,11 @@
 /*
 // Game.hpp for  in /home/buret_j/rendu/bomberman
-// 
+//
 // Made by buret_j
 // Login   <buret_j@epitech.net>
-// 
+//
 // Started on  Wed May 28 17:23:30 2014 buret_j
-** Last update Mon Jun  9 20:16:29 2014 lafitt_g
+// Last update Mon Jun  9 20:17:48 2014 julie franel
 */
 
 #ifndef SERVER__GAME_HPP_
@@ -111,6 +111,9 @@ namespace	Server {
     void		update();
     void		bombsProcessing();
     void		killPlayer(Player *);
+
+    static std::map<std::string, Game::Type>    _types;
+    static bool                         _isInit;
 
   private:
 
