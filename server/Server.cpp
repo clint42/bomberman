@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Mon Jun  9 00:11:02 2014 buret_j
+// Last update Mon Jun  9 14:13:23 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -93,6 +93,8 @@ Server::Server::addPeer(Socket *s) {
   Player *p = new Player(id, s);
   std::string welcome;
 
+  DEBUG("Server::Server::addPeer()", 0);
+  
   _peers.push_back(p);
   CVRT_SIZET_TO_STRING(welcome, id);
   welcome += "0 0 WELCOME";
@@ -132,12 +134,18 @@ Server::Server::peerDisconnected(Socket *s) {
 
 static void
 trampoline(void *p, Socket *s, bool b[3]) {
-  if (b[0])
-    ((Server::Server *)p)->addMessage(s);
-  if (b[1])
-    ((Server::Server *)p)->sendMessage(s);
-  if (b[2])
-    ((Server::Server *)p)->peerDisconnected(s);
+  if (b[2]) {
+    DEBUG("trampoline() => socket closed", 1);
+    reinterpret_cast<Server::Server *>(p)->peerDisconnected(s);
+  }
+  else {
+    if (b[0])
+      reinterpret_cast<Server::Server *>(p)->addMessage(s);
+    if (b[1]) {
+      DEBUG("trampoline() => socket autorise a ecrire dessus", 0);
+      reinterpret_cast<Server::Server *>(p)->sendMessage(s);
+    }
+  }
 }
 
 bool

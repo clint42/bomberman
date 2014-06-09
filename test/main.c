@@ -5,7 +5,7 @@
 ** Login   <prieur_b@epitech.net>
 ** 
 ** Started on  Mon Jun  9 13:38:42 2014 aurelien prieur
-** Last update Mon Jun  9 13:48:38 2014 aurelien prieur
+** Last update Mon Jun  9 14:00:20 2014 buret_j
 */
 
 #include <stdlib.h>
@@ -21,7 +21,7 @@
 static int cs = -1;
 void	catch_sig(int signum)
 {
-  shutdown(cs, SHUT_WR);
+  close(cs);
 }
 
 int	connection(char **av)
@@ -58,10 +58,14 @@ int	connection(char **av)
 int	main(int ac, char **av)
 {
   int	sock;
+  char  buf[500];
 
   if ((sock = connection(av)) != -1)
     {
       signal(SIGINT, catch_sig);
     }
+  bzero(buf, 500);
+  read(sock, buf, 499);
+  printf("%s", buf);
   return (0);
 }

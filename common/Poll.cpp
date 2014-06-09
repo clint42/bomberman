@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Tue May 20 09:42:06 2014 aurelien prieur
-// Last update Sat Jun  7 19:41:22 2014 aurelien prieur
+// Last update Mon Jun  9 14:16:49 2014 buret_j
 //
 
 #include <iostream>
@@ -36,7 +36,7 @@ void		Poll::watchEvent(int fd, int event)
     }
   _fds.resize(_fds.size() + 1);
   _fds[i].fd = fd;
-  _fds[i].events = event | POLLRDHUP;
+  _fds[i].events |= event | POLLRDHUP | POLLHUP;
   _fds[i].revents = 0;
 } 
 
@@ -75,11 +75,13 @@ bool		Poll::isEventOccurred(int fd, int event)
 
 bool		Poll::isDisconnected(int fd)
 {
+  // DEBUG("Poll::isDisconnected", 1);
   for (size_t i = 0; i < _fds.size(); ++i)
     {
       if (_fds[i].fd == fd)
 	{
-	  return ((_fds[i].revents & POLLRDHUP) == POLLRDHUP);
+	  // DEBUG("! Poll::isDisconnected", -1);
+	  return ((_fds[i].revents & (POLLRDHUP | POLLHUP)));
 	}
     }
   throw PollException("fd not set");

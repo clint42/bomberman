@@ -5,17 +5,18 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Sun Jun  8 23:39:19 2014 buret_j
+// Last update Mon Jun  9 14:18:01 2014 buret_j
 */
 
 #include "ConnexionHandler.hpp"
+#include "../server/Server.hpp" // cf ConnexionHandler::Serveur::addPeer()
 
-ConnexionHandler::Server *
+ConnexionHandler::Serveur *
 ConnexionHandler::server(int port) {
-  DEBUG("ConnexionHandler::server()", 1);
-  if (!_server && !_client) { _server = new Server(port); }
+  // DEBUG("ConnexionHandler::server()", 1);
+  if (!_server && !_client) { _server = new Serveur(port); }
   _poll.watchEvent(server()->getMasterSocket()->getFd(), POLLIN);
-  DEBUG("! ConnexionHandler::server()", -1);
+  // DEBUG("! ConnexionHandler::server()", -1);
   return _server;
 }
 
@@ -45,12 +46,12 @@ ConnexionHandler::rmSocket(Socket *s) {
 
 void
 ConnexionHandler::perform(void (*fct)(void *, Socket *, bool b[3]), void *param) {
-  DEBUG("ConnexionHandler::perform()", 1);
+  // DEBUG("ConnexionHandler::perform()", 1);
   if (this->server() != NULL)
     _server->perform(fct, param, &_poll);
   else if (this->client() != NULL)
     _client->perform(fct, param, &_poll);
-  DEBUG("! ConnexionHandler::perform()", -1);
+  // DEBUG("! ConnexionHandler::perform()", -1);
 }
 
 Socket *
@@ -67,13 +68,13 @@ ConnexionHandler::getMasterSocket() {
 ** server -->
 */
 
-ConnexionHandler::Server::Server(int p) : _masterSocket(0), _port(p) {
+ConnexionHandler::Serveur::Serveur(int p) : _masterSocket(0), _port(p) {
   std::cout << "MOTHER FUCKER" << std::endl;
   this->initialise();
 }
 
 void
-ConnexionHandler::Server::initialise() {
+ConnexionHandler::Serveur::initialise() {
   if (_masterSocket)
     throw ConnexionException("Server already initialised");
 
@@ -97,7 +98,7 @@ ConnexionHandler::Server::initialise() {
   _masterSocket = _sockets[fd];
 }
 
-ConnexionHandler::Server::~Server() {
+ConnexionHandler::Serveur::~Serveur() {
   for (std::vector<Socket *>::iterator it = _sockets.begin();
        it != _sockets.end(); ++it) {
     delete (*it);
@@ -105,7 +106,7 @@ ConnexionHandler::Server::~Server() {
 }
 
 void
-ConnexionHandler::Server::acceptPeer(Poll *poll, void *srv) {
+ConnexionHandler::Serveur::acceptPeer(Poll *poll, void *srv) {
   sockaddr_in	sin;
   socklen_t     sin_len;
   int		fd;
@@ -115,17 +116,16 @@ ConnexionHandler::Server::acceptPeer(Poll *poll, void *srv) {
   if (_sockets.capacity() < (size_t)fd)
     _sockets.resize(fd + 1);
   _sockets[fd] = new Socket(fd);
-  poll->watchEvent(fd, POLLIN);
-  poll->watchEvent(fd, POLLOUT);
-  // ((Server::Server *)srv)->addPeer(_sockets[fd]);
+  poll->watchEvent(fd, POLLIN | POLLOUT);
+  reinterpret_cast<Server::Server *>(srv)->addPeer(_sockets[fd]);
 }
-#include <cstdio>
+
 void
-ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, bool b[3]),
+ConnexionHandler::Serveur::perform(void (*fct)(void *, Socket *, bool b[3]),
 				  void *param, Poll *poll) {
   bool	event[3];
 
-  DEBUG("ConnexionHandler::Server::perform()", 1);
+  // DEBUG("ConnexionHandler::Server::perform()", 1);
   for (std::vector<Socket *>::iterator it = _sockets.begin();
        it != _sockets.end(); ++it) {
     if (!*it)	continue ;    
@@ -139,11 +139,11 @@ ConnexionHandler::Server::perform(void (*fct)(void *, Socket *, bool b[3]),
 	fct(param, *it, event);
     }
   }
-  DEBUG("! ConnexionHandler::Server::perform()", -1);
+  // DEBUG("! ConnexionHandler::Server::perform()", -1);
 }
 
 void
-ConnexionHandler::Server::rmSocket(Socket *s) {
+ConnexionHandler::Serveur::rmSocket(Socket *s) {
   if (_sockets[s->getFd()] != NULL) {
     _sockets[s->getFd()] = NULL;
     if (s == _masterSocket)

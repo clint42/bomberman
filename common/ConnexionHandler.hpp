@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Sun Jun  8 22:12:16 2014 buret_j
+// Last update Mon Jun  9 12:22:44 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -28,12 +28,12 @@ class	ConnexionHandler {
 
 public:
 
-  class Server;
+  class Serveur;
   class Client;
 
 private:
 
-  Server *	_server;
+  Serveur *	_server;
   Client *	_client;
   Poll		_poll;
 
@@ -42,8 +42,8 @@ public:
   ConnexionHandler() : _server(0), _client(0) {}
   ~ConnexionHandler() {}
 
-  inline Server *	server() { return _server; }
-  Server *		server(int port);
+  inline Serveur *	server() { return _server; }
+  Serveur *		server(int port);
   inline Client *	client() { return _client; }
   Client *		client(int port, std::string const &ip);
 
@@ -61,7 +61,7 @@ public:
 
 public: // nested classes definition
 
-  class Server {
+  class Serveur {
     std::vector<Socket *> _sockets;
     Socket *		  _masterSocket;
     int			  _port;
@@ -69,8 +69,8 @@ public: // nested classes definition
     void	acceptPeer(Poll *, void *srv);
 
   public:
-    Server(int p);
-    ~Server();
+    Serveur(int p);
+    ~Serveur();
 
     void		initialise();
     void		perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
