@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 12:24:05 2014 buret_j
-** Last update Sun Jun  8 20:15:08 2014 lafitt_g
+** Last update Mon Jun  9 18:57:33 2014 lafitt_g
 */
 
 #include "Player.hpp"
@@ -81,47 +81,15 @@ Server::Player::moveLeft()
 }
 
 bool
-Server::Player::orientUp()
+Server::Player::orient(Dir d)
 {
-  this->_orientation = UP;
+  this->_orientation = d;
   return (true);
 }
 
 bool
-Server::Player::orientRight()
+Server::Player::dropBomb()
 {
-  this->_orientation = RIGHT;
+  this->_bombsOnFloor += 1;
   return (true);
 }
-
-bool
-Server::Player::orientDown()
-{
-  this->_orientation = DOWN;
-  return (true);
-}
-
-bool
-Server::Player::orientLeft()
-{
-  this->_orientation = LEFT;
-  return (true);
-}
-
-// static struct { std::string s; Server::Player::Dir d; } g_tab[] = {
-//   { "UP", Server::Player::UP },
-//   { "RIGHT", Server::Player::RIGHT },
-//   { "DOWN", Server::Player::DOWN },
-//   { "LEFT", Server::Player::LEFT }
-// };
-
-// void
-// Server::Player::getAction(Server::Player::Action &a, std::string const &s) {
-//   Dir d = DOWN;
-//   for (int i = 0; i < 4; ++i)
-//     if (g_tab[i].s == s) {
-//       d = g_tab[i].d;
-//       break ;
-//     }
-//   a = d == _orientation ? MOVE : ORIENT;
-// }

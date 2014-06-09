@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Sun Jun  8 21:02:00 2014 buret_j
+** Last update Mon Jun  9 20:14:26 2014 lafitt_g
 */
 
 #include "Game.hpp"
@@ -133,7 +133,7 @@ void
 Server::Game::filterCmd(Server::t_cmd const *cmd, std::string &msg) const {
   std::stringstream convert;
 
-  convert << cmd->id << " " << cmd->pos.first << " " << 
+  convert << cmd->id << " " << cmd->pos.first << " " <<
     cmd->pos.second << " " << cmd->action;
   msg = convert.str();
   for (std::vector<std::string>::const_iterator it = cmd->params.begin();
@@ -147,61 +147,157 @@ Server::Game::filterCmd(Server::t_cmd const *cmd, std::string &msg) const {
   delete cmd;
 }
 
+/*
+** PROCESS
+*/
+
 bool
 Server::Game::moveUp(Player *p)
 {
-  if (p->getPosY() == 0 || this->_map->getElemAtPos(p->getPosX(), p->getPosY()))
-    return (false);
-  return (p->moveUp());
+  if (p->getPosY())
+    {
+      std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() - 1);
+      std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
+      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end())
+	{
+	  this->_players[pos] = this->_players[oldPos];
+	  this->_players.erase(oldPos);
+	  return (p->moveUp());
+	}
+    }
+  return false;
 }
 
 bool
 Server::Game::moveRight(Player *p)
 {
-  if (p->getPosX() == (this->_map->getWidth() - 1) || this->_map->getElemAtPos(p->getPosX(), p->getPosY()))
-    return (false);
-  return (p->moveRight());
+  if (p->getPosX() != this->_map->getWidth() - 1)
+    {
+      std::pair<size_t, size_t> pos(p->getPosX() + 1, p->getPosY());
+      std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
+      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end())
+	{
+	  this->_players[pos] = this->_players[oldPos];
+	  this->_players.erase(oldPos);
+	  return (p->moveRight());
+	}
+    }
+  return false;
 }
 
 bool
 Server::Game::moveDown(Player *p)
 {
-  if (p->getPosY() == (this->_map->getHeight() - 1) || this->_map->getElemAtPos(p->getPosX(), p->getPosY()))
-    return (false);
-  return (p->moveDown());
+  if (p->getPosY() != this->_map->getHeight() - 1)
+    {
+      std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() + 1);
+      std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
+      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end())
+	{
+	  this->_players[pos] = this->_players[oldPos];
+	  this->_players.erase(oldPos);
+	  return (p->moveDown());
+	}
+    }
+  return false;
 }
 
 bool
 Server::Game::moveLeft(Player *p)
 {
-  if (p->getPosX() == 0 || this->_map->getElemAtPos(p->getPosX(), p->getPosY()))
-    return (false);
-  return (p->moveLeft());
+  if (p->getPosX())
+    {
+      std::pair<size_t, size_t> pos(p->getPosX() - 1, p->getPosY());
+      std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
+      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end())
+	{
+	  this->_players[pos] = this->_players[oldPos];
+	  this->_players.erase(oldPos);
+	  return (p->moveLeft());
+	}
+    }
+  return false;
 }
 
 bool
 Server::Game::orientUp(Player *p)
 {
-  return(p->orientUp());
+  return(p->orient(Server::Player::UP));
 }
 
 bool
 Server::Game::orientRight(Player *p)
 {
-  return(p->orientRight());
+  return(p->orient(Server::Player::RIGHT));
 }
 
 bool
 Server::Game::orientDown(Player *p)
 {
-  return(p->orientDown());
+  return(p->orient(Server::Player::DOWN));
 }
 
 bool
 Server::Game::orientLeft(Player *p)
 {
-  return(p->orientLeft());
+  return(p->orient(Server::Player::LEFT));
 }
+
+bool
+Server::Game::bombUp(Player *p)
+{
+  if (p->getPosY())
+    {
+      std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() - 1);
+      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
+	  p->getBombsLimit() > p->getBombsOnFloor())
+	return (p->dropBomb());
+    }
+  return false;
+}
+
+bool
+Server::Game::bombRight(Player *p)
+{
+  if (p->getPosX() != this->_map->getWidth() - 1)
+    {
+      std::pair<size_t, size_t> pos(p->getPosX() + 1, p->getPosY());
+      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
+	  p->getBombsLimit() > p->getBombsOnFloor())
+	return (p->dropBomb());
+    }
+  return false;
+}
+
+bool
+Server::Game::bombDown(Player *p)
+{
+  if (p->getPosY() != this->_map->getHeight() - 1)
+    {
+      std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() + 1);
+      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
+	  p->getBombsLimit() > p->getBombsOnFloor())
+	return (p->dropBomb());
+    }
+  return false;
+}
+
+bool
+Server::Game::bombLeft(Player *p)
+{
+  if (p->getPosX())
+    {
+      std::pair<size_t, size_t> pos(p->getPosX() - 1, p->getPosY());
+      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
+	  p->getBombsLimit() > p->getBombsOnFloor())
+	return (p->dropBomb());
+    }
+  return false;
+}
+
+bool Server::Game::_isGame = false;
+std::map<std::pair<Server::Player::Action, Server::Player::Dir>,
+	 bool (Server::Game::*)(Server::Player *)> Server::Game::func;
 
 bool
 Server::Game::process(Server::t_cmd *c, Player *p)
@@ -211,8 +307,6 @@ Server::Game::process(Server::t_cmd *c, Player *p)
 
   Server::Player::Action a;
   Server::Player::Dir	 d;
-  std::map<std::pair<Server::Player::Action, Server::Player::Dir>,
-	   bool (Server::Game::*)(Server::Player *)> func;
 
   func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::UP)] = &Server::Game::moveUp;
   func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::RIGHT)] = &Server::Game::moveRight;
@@ -222,20 +316,43 @@ Server::Game::process(Server::t_cmd *c, Player *p)
   func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::RIGHT)] = &Server::Game::orientRight;
   func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::DOWN)] = &Server::Game::orientDown;
   func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::LEFT)] = &Server::Game::orientLeft;
-
+  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::UP)] = &Server::Game::bombUp;
+  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::RIGHT)] = &Server::Game::bombRight;
+  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::DOWN)] = &Server::Game::bombDown;
+  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::LEFT)] = &Server::Game::bombLeft;
   if (c->action == "MOVE")
+    {
       p->getAction(&a, &d, c->params[0]);
+      if ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p))
+	{
+	  std::string msg;
+	  this->filterCmd(c, msg);
+	  this->_messenger->addMessage(p->getSocket(), msg);
+	}
+    }
   // else if (c->action == "BOMB")
   //   {
   //     a = Server::Player::BOMB;
   //     d = p->getOrientation();
+  //     if ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p))
+  // 	{
+  // 	  t_cmd * cmd = new t_cmd;
+  // 	  cmd->id = c->id;
+  // 	  cmd->date = c->date;
+  // 	  cmd->pos = c->pos;
+  // 	  cmd->action = c->action;
+  // 	  this->_bombs.push(cmd);
+	  
+  // 	  std::string msg;
+  // 	  this->filterCmd(c, msg);
+  // 	  this->_messenger->addMessage(p->getSocket(), msg);
+  // 	}
   //   }
   // else if (c->action == "BOMB EXPLOSE")
   //   {
   //     // send directly to messenger
   //   }
-  (this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p);
-  
+
   return (true);
 }
 

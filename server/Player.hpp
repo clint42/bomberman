@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Sun Jun  8 21:02:27 2014 buret_j
+** Last update Mon Jun  9 19:04:28 2014 lafitt_g
 */
 
 #ifndef PLAYER_HPP_
@@ -51,7 +51,6 @@ namespace Server {
     double	_commandTimeMultiplier;// used by bonus, '1' by default. ex: 0.5 = speed increased by 2.
 
     Socket *	_socket;
-    
 
   public:
     Player(size_t, Socket *);
@@ -62,6 +61,9 @@ namespace Server {
     inline bool   isBot() const { return this->_bot; }
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
+    inline Player::Dir getOrientation() const { return this->_orientation; }
+    inline size_t getBombsOnFloor() const { return this->_bombsOnFloor; }
+    inline size_t getBombsLimit() const { return this->_bombsLimit; }
     std::pair<size_t, size_t> getPos() const { std::pair<size_t, size_t> ret(_posX, _posY); return ret; }
 
     void	  getAction(Action &, std::string const &);
@@ -80,20 +82,18 @@ namespace Server {
 
     inline Socket *getSocket() const { return _socket; }
 
+    static std::map<std::string, Dir>	_toDir;
+    static bool				_isInit;
+
     bool	  moveUp();
     bool	  moveRight();
     bool	  moveDown();
     bool	  moveLeft();
 
-    bool	  orientUp();
-    bool	  orientRight();
-    bool	  orientDown();
-    bool	  orientLeft();
+    bool	  orient(Dir);
+    bool	  dropBomb();
 
     void	  getAction(Action *, Dir *, const std::string &);
-
-    static std::map<std::string, Dir>	_toDir;
-    static bool				_isInit;
   };// ! class Player
 
 }// ! namespace

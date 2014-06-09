@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Mon Jun  9 00:13:09 2014 buret_j
+** Last update Mon Jun  9 18:29:10 2014 lafitt_g
 */
 
 #ifndef SERVER__GAME_HPP_
@@ -89,6 +89,10 @@ namespace	Server {
     inline void		addEvent(t_cmd *c) { _events.push(c); }
     inline void		addBomb(t_cmd *c) { _bombs.push(c); }
 
+    static bool		_isGame;
+    static std::map<std::pair<Server::Player::Action, Server::Player::Dir>,
+		    bool(Server::Game::*)(Server::Player *)> func;
+
     bool		moveUp(Player *);
     bool		moveRight(Player *);
     bool		moveDown(Player *);
@@ -98,6 +102,11 @@ namespace	Server {
     bool		orientRight(Player *);
     bool		orientDown(Player *);
     bool		orientLeft(Player *);
+
+    bool		bombUp(Player *);
+    bool		bombRight(Player *);
+    bool		bombDown(Player *);
+    bool		bombLeft(Player *);
 
     void		update();
     void		bombsProcessing();
