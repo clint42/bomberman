@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Mon Jun  9 19:57:11 2014 julie franel
+// Last update Mon Jun  9 20:46:20 2014 julie franel
 */
 
 #include "Server.hpp"
@@ -147,6 +147,9 @@ trampoline(void *p, Socket *s, bool b[3]) {
     }
   }
 }
+
+bool Server::Game::_isInit = false;
+std::map<std::string, Server::Game::Type> Server::Game::_types;
 
 bool		Server::Server::funcWelcome(const t_cmd *_cmd)
 {
