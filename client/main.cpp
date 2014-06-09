@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Sat Jun  7 18:49:46 2014 aurelien prieur
+// Last update Mon Jun  9 11:15:41 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -17,6 +17,10 @@
 #include "ClientCore.hpp"
 #include "SafeQueue.hpp"
 #include "AObject.hpp"
+
+//TODO: testing purpose only. Remove it.
+extern int debug_align;
+int debug_align = 0;
 
 int	main()
 {

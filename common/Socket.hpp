@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu May 22 14:42:09 2014 buret_j
-// Last update Wed Jun  4 12:20:31 2014 buret_j
+// Last update Mon Jun  9 14:38:57 2014 aurelien prieur
 //
 
 #ifndef SOCKET_HPP_
@@ -36,7 +36,7 @@ public:
 
   inline int  getFd() const { return _fd; }
   inline void getLine(std::string &toFill) { getline(*_in, toFill); }
-  inline void write(std::string const &toWrite) { *_out << toWrite; }
+  inline void write(std::string const &toWrite) { *_out << toWrite << std::endl; }
 };
 
 #endif /* !SOCKET_HPP_ */

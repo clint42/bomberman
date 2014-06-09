@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun  8 19:04:23 2014 aurelien prieur
+// Last update Mon Jun  9 14:29:55 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -42,7 +42,9 @@ bool		ClientCore::initialize()
     std::cerr << "Invalid map: " << e.what() << std::endl;
   }
   try {
-  _connexion.client(8080, "127.0.0.1");
+  _connexion.client(4242, "127.0.0.1");
+  //TODO: testing purpose only (remove)
+  _connexion.getMasterSocket()->write("CONFIG test.map 1 1 0");
   }
   catch (ConnexionException e) {
     std::cerr << "Connexion refused: " << e.what() << std::endl;
@@ -87,12 +89,14 @@ void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
   if (b[0])
     {
       this->_socket->getLine(string);
+      std::cout << string << std::endl;
       this->_parser->run(string);
     }
   if (b[1])
     {
       this->_eventsHandler.cmdToString(string, 1, std::pair<size_t, size_t>(0, 0),
 				       2, std::pair<size_t, size_t>(0, 0));
+      std::cout << "Sending data: " << string << std::endl;
       _connexion.getMasterSocket()->write(string);
       _connexion.unwatchEventOnSocket(_connexion.getMasterSocket(), POLLOUT);
     }
