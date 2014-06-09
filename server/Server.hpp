@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Sun Jun  8 21:08:40 2014 buret_j
+// Last update Mon Jun  9 19:12:24 2014 julie franel
 */
 
 #ifndef SERVER_HPP_
@@ -28,8 +28,6 @@
 # include "ConnexionHandler.hpp"
 # include "Messenger.hpp"
 
-typedef bool (*func_admin)();
-
 namespace Server {
   class	Server {
 
@@ -48,6 +46,11 @@ namespace Server {
     void	putCmdInQueue(t_cmd *);
 
     inline size_t countPeers() const { return _peers.size(); }
+
+
+    bool	funcWelcome(const t_cmd *);
+    bool	funcPause(const t_cmd *);
+    bool	funcKill(const t_cmd *);
 
   public:
     Server(ConnexionHandler *);
