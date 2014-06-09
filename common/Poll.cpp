@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Tue May 20 09:42:06 2014 aurelien prieur
-// Last update Mon Jun  9 14:16:49 2014 buret_j
+// Last update Mon Jun  9 19:01:45 2014 buret_j
 //
 
 #include <iostream>
@@ -19,8 +19,8 @@ Poll::~Poll()
 {
 }
 
-void		Poll::watchEvent(int fd, int event)
-{
+void
+Poll::watchEvent(int fd, int event) {
   size_t	i;
 
   i = 0;
@@ -40,24 +40,23 @@ void		Poll::watchEvent(int fd, int event)
   _fds[i].revents = 0;
 } 
 
-void		Poll::stopWatchingEvent(int fd, int event)
-{
+void
+Poll::stopWatchingEvent(int fd, int event) {
   for (std::vector<struct pollfd>::iterator it = _fds.begin();
-       it != _fds.end(); ++it)
-    {
-      if (it->fd == fd)
-	{
-	  it->events &= ~event;
-	  if (it->events == 0 && it->revents == 0)
-	    _fds.erase(it);
-	  return ;
-	}
+       it != _fds.end(); ++it) {
+    if (it->fd == fd) {
+      it->events &= ~event;
+      it->revents = 0;
+      if (it->events == 0)
+	_fds.erase(it);
+      return ;
     }
+  }
   throw PollException("fd not set");
 }
 
-bool		Poll::isEventOccurred(int fd, int event)
-{
+bool
+Poll::isEventOccurred(int fd, int event) {
   static size_t	lastCheck = 0;
   
   if (_fds[lastCheck].fd == fd)
@@ -73,17 +72,13 @@ bool		Poll::isEventOccurred(int fd, int event)
   throw PollException("fd not set");
 }
 
-bool		Poll::isDisconnected(int fd)
-{
-  // DEBUG("Poll::isDisconnected", 1);
-  for (size_t i = 0; i < _fds.size(); ++i)
-    {
-      if (_fds[i].fd == fd)
-	{
-	  // DEBUG("! Poll::isDisconnected", -1);
-	  return ((_fds[i].revents & (POLLRDHUP | POLLHUP)));
-	}
+bool
+Poll::isDisconnected(int fd) {
+  for (size_t i = 0; i < _fds.size(); ++i) {
+    if (_fds[i].fd == fd) {
+      return ((_fds[i].revents & (POLLRDHUP | POLLHUP)));
     }
+  }
   throw PollException("fd not set");
 }
 

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Mon Jun  9 15:52:37 2014 buret_j
+// Last update Mon Jun  9 19:27:33 2014 buret_j
 */
 
 #include "ConnexionHandler.hpp"
@@ -13,10 +13,8 @@
 
 ConnexionHandler::Serveur *
 ConnexionHandler::server(int port) {
-  // DEBUG("ConnexionHandler::server()", 1);
   if (!_server && !_client) { _server = new Serveur(port); }
   _poll.watchEvent(server()->getMasterSocket()->getFd(), POLLIN);
-  // DEBUG("! ConnexionHandler::server()", -1);
   return _server;
 }
 
@@ -38,6 +36,7 @@ ConnexionHandler::reset() {
 void
 ConnexionHandler::rmSocket(Socket *s) {
   try {
+    std::cout << "J'unwatch la socket" << std::endl; // debug
     _poll.disconnected(s->getFd());
   } catch (PollException) { }
   if (_server)
@@ -46,12 +45,10 @@ ConnexionHandler::rmSocket(Socket *s) {
 
 void
 ConnexionHandler::perform(void (*fct)(void *, Socket *, bool b[3]), void *param) {
-  // DEBUG("ConnexionHandler::perform()", 1);
   if (this->server() != NULL)
     _server->perform(fct, param, &_poll);
   else if (this->client() != NULL)
     _client->perform(fct, param, &_poll);
-  // DEBUG("! ConnexionHandler::perform()", -1);
 }
 
 Socket *
@@ -69,7 +66,6 @@ ConnexionHandler::getMasterSocket() {
 */
 
 ConnexionHandler::Serveur::Serveur(int p) : _masterSocket(0), _port(p) {
-  std::cout << "MOTHER FUCKER" << std::endl;
   this->initialise();
 }
 
@@ -89,12 +85,12 @@ ConnexionHandler::Serveur::initialise() {
       || listen(fd, 10) == -1)
     throw ConnexionException("Can't create socket properly");
 
-  if (_sockets.capacity() < (size_t)fd)
-    _sockets.resize(fd + 1);
+  if (_sockets.capacity() < (size_t)fd) {
+    std::vector<Socket *> tmp = _sockets;
+    _sockets = std::vector<Socket *>(fd + 5);
+    std::copy(tmp.begin(), tmp.end(), _sockets.begin());
+  }
   _sockets[fd] = new Socket(fd);
-
-  printf("&socket: %p\n", _sockets[fd]);
-  std::cout << "mother fucker" << std::endl;
   _masterSocket = _sockets[fd];
 }
 
@@ -106,24 +102,20 @@ ConnexionHandler::Serveur::~Serveur() {
 }
 
 void
-ConnexionHandler::Serveur::acceptPeer(Poll *poll, void *srv) {
+ConnexionHandler::Serveur::acceptPeer(Poll *poll, Server::Server *srv) {
   sockaddr_in	sin;
   socklen_t     sin_len;
   int		fd;
 
-  (void)srv;
   fd = accept(_masterSocket->getFd(), (sockaddr *)&sin, &sin_len); // have to throw except° & catch it
-  //
-  int optval = 1;
-  if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &optval, (socklen_t)(sizeof optval)) == -1)
-    exit(-1);
-  //
-  if (_sockets.capacity() < (size_t)fd + 1)
-    _sockets.resize(fd + 5);
+  if (_sockets.capacity() < (size_t)fd + 1) {
+    std::vector<Socket *> tmp = _sockets;
+    _sockets = std::vector<Socket *>(fd + 5);
+    std::copy(tmp.begin(), tmp.end(), _sockets.begin());
+  }
   _sockets[fd] = new Socket(fd);
-  printf("acceptPeer : %p \n", _sockets[fd]);
   poll->watchEvent(fd, POLLIN | POLLOUT);
-  reinterpret_cast<Server::Server *>(srv)->addPeer(_sockets[fd]);
+  srv->addPeer(_sockets[fd]);
 }
 
 void
@@ -131,19 +123,18 @@ ConnexionHandler::Serveur::perform(void (*fct)(void *, Socket *, bool b[3]),
 				   void *param, Poll *poll) {
   bool	event[3];
   // DEBUG("ConnexionHandler::Server::perform()", 1);
-  std::cout << "size: " << _sockets.size() << std::endl;
   for (std::vector<Socket *>::iterator it = _sockets.begin();
        it != _sockets.end(); ++it) {
-    printf("=================\n");
-    printf("perform : %p \n", *it);
     if (*it) {
-      std::cout << "CH::Serveur::perform : " << (*it)->getFd() << std::endl;
+    // printf("=================\n");
+    // printf("perform : %p \n", *it);
+    //   std::cout << "CH::Serveur::perform : " << (*it)->getFd() << std::endl;
       event[0] = poll->isEventOccurred((*it)->getFd(), POLLIN);
       event[1] = poll->isEventOccurred((*it)->getFd(), POLLOUT);
       event[2] = poll->isDisconnected((*it)->getFd());
       if (event[0] || event[1] || event[2]) {
 	if (_masterSocket && *it == _masterSocket)
-	  this->acceptPeer(poll, param);
+	  this->acceptPeer(poll, reinterpret_cast<Server::Server *>(param));
 	else
 	  fct(param, *it, event);
       }

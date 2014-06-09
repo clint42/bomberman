@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Sun Jun  8 21:02:00 2014 buret_j
+// Last update Mon Jun  9 17:57:57 2014 buret_j
 */
 
 #include "Game.hpp"
@@ -67,7 +67,7 @@ Server::Game::bombsProcessing() {
 	if (_paused) {
 	  _bombs.push_front(c);
 	} else {
-	  c->action += " EXPLOSE";
+	  if (c->action == "BOMB") c->action += " EXPLOSE";
 	  _events.push_front(c);
 	}
       } // !code
@@ -130,7 +130,7 @@ Server::Game::update() {
 }
 
 void
-Server::Game::filterCmd(Server::t_cmd const *cmd, std::string &msg) const {
+Server::Game::filterCmd(t_cmd const *cmd, std::string &msg) const {
   std::stringstream convert;
 
   convert << cmd->id << " " << cmd->pos.first << " " << 
@@ -204,7 +204,7 @@ Server::Game::orientLeft(Player *p)
 }
 
 bool
-Server::Game::process(Server::t_cmd *c, Player *p)
+Server::Game::process(t_cmd *c, Player *p)
 {
   if (!this->hasDateNextCommandExpired(p))
     return false;

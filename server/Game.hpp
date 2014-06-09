@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Mon Jun  9 00:13:09 2014 buret_j
+// Last update Mon Jun  9 17:30:18 2014 buret_j
 */
 
 #ifndef SERVER__GAME_HPP_
@@ -105,8 +105,8 @@ namespace	Server {
 
   private:
 
-    void		filterCmd(Server::t_cmd const *, std::string &) const;
-    bool		process(Server::t_cmd *, Player *);
+    void		filterCmd(t_cmd const *, std::string &) const;
+    bool		process(t_cmd *, Player *);
     inline bool		hasDateNextCommandExpired(Player *p) const {
       return (p->getDateNextCommand() < this->timeLeft()) ? true : false;
     }

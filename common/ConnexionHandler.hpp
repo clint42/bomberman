@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Mon Jun  9 12:22:44 2014 buret_j
+// Last update Mon Jun  9 17:28:32 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -23,6 +23,11 @@
 # include "Socket.hpp"
 # include "Poll.hpp"
 # include "macros.hpp"
+
+namespace Server {
+  class Server;
+}
+
 
 class	ConnexionHandler {
 
@@ -66,7 +71,7 @@ public: // nested classes definition
     Socket *		  _masterSocket;
     int			  _port;
 
-    void	acceptPeer(Poll *, void *srv);
+    void	acceptPeer(Poll *, Server::Server *srv);
 
   public:
     Serveur(int p);
