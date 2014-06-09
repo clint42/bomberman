@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Sun Jun  8 20:59:53 2014 buret_j
+## Last update Mon Jun  9 15:28:31 2014 buret_j
 ##
 
 CXX		=	clang++
@@ -32,7 +32,7 @@ SRC		=	main.cpp			\
 
 OBJ		=	$(SRC:.cpp=.o)
 
-CXXFLAGS	=	-Wall -Wextra -Werror 	\
+CXXFLAGS	=	-Wall -Wextra -Werror -ggdb	\
 			-Icommon/		\
 
 all:			$(NAME)

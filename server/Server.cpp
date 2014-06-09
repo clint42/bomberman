@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Mon Jun  9 14:13:23 2014 buret_j
+// Last update Mon Jun  9 19:29:55 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -93,11 +93,9 @@ Server::Server::addPeer(Socket *s) {
   Player *p = new Player(id, s);
   std::string welcome;
 
-  DEBUG("Server::Server::addPeer()", 0);
-  
   _peers.push_back(p);
   CVRT_SIZET_TO_STRING(welcome, id);
-  welcome += "0 0 WELCOME";
+  welcome += " 0 0 WELCOME";
   _messenger.addMessage(s, welcome);
   ++id;
 }
@@ -132,40 +130,85 @@ Server::Server::peerDisconnected(Socket *s) {
   _co->rmSocket(s);
 }
 
-static void
+static void // make it a Server::Server static class methode
 trampoline(void *p, Socket *s, bool b[3]) {
   if (b[2]) {
-    DEBUG("trampoline() => socket closed", 1);
+    // DEBUG("trampoline() => socket closed", 1);
     reinterpret_cast<Server::Server *>(p)->peerDisconnected(s);
   }
   else {
-    if (b[0])
+    if (b[0]) {
+      // DEBUG("trampoline() => socket autorise a lire dessus", 0);
       reinterpret_cast<Server::Server *>(p)->addMessage(s);
+    }
     if (b[1]) {
-      DEBUG("trampoline() => socket autorise a ecrire dessus", 0);
+      // DEBUG("trampoline() => socket autorise a ecrire dessus", 0);
       reinterpret_cast<Server::Server *>(p)->sendMessage(s);
     }
   }
 }
 
+bool		Server::Server::funcWelcome(const t_cmd *_cmd)
+{
+  std::map<std::string, Game::Type>	_types;
+
+  _types["LAST_MAN_STANDING"] = Game::LAST_MAN_STANDING;
+  _types["FREE_FOR_ALL"] = Game::FREE_FOR_ALL;
+  _types["TEAM_DEATH_MATCH"] = Game::TEAM_DEATH_MATCH;
+  _types["TEAM_SURVIVOR"] = Game::TEAM_SURVIVOR;
+
+  try
+    {
+      size_t	p;
+      size_t	b;
+      size_t	t;
+
+      CVRT_STRING_TO_SIZET(_cmd->params[1], p);
+      CVRT_STRING_TO_SIZET(_cmd->params[2], b);
+      CVRT_STRING_TO_SIZET(_cmd->params[3], t);
+      this->_game = new Game(_cmd->params[0], p, b, t, _types[_cmd->params[4]], this->_peers, &this->_messenger);
+      return (true);
+    }
+  catch (GameException e)
+    {
+      std::cerr << e.what() << std::endl;
+      return (false);
+    }
+}
+
+bool	Server::Server::funcPause(__attribute__((unused))const t_cmd *_cmd)
+{
+  if (this->_game->isPaused() == true)
+    this->_game->start();
+  else
+    this->_game->pause();
+  return (true);
+}
+
+bool	Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd)
+{
+  this->_run = false;
+  return (true);
+}
+
 bool
 Server::Server::manageAdminCommand()
 {
-  std::map<std::string, func_admin> func;
-  // func["PAUSE"] = &funcPause;
-  // func["CONFIG"] = &funcWelcome;
-  // func["KILL"] = &funcKill;
+  std::map<std::string, bool (Server::Server::*)(const t_cmd *)> _func;
+  _func["CONFIG"] = &Server::Server::funcWelcome;
+  _func["PAUSE"] = &Server::Server::funcPause;
+  _func["KILL"] = &Server::Server::funcKill;
   bool ret = false;
 
   if (this->_ext.front()->id == 1)
-    ret = func[this->_ext.front()->action]();
+    ret = (this->*_func[this->_ext.front()->action])(this->_ext.front());
   this->_ext.pop_front();
   return ret;
 }
 
 void
 Server::Server::run() {
-  DEBUG("Server::server::run()", 1);
+  // DEBUG("Server::server::run()", 1);
   size_t timeLoop = 0;
   while (_run && _co->update(timeLoop) >= 0) {
     _co->perform(&trampoline, this);
@@ -173,7 +216,9 @@ Server::Server::run() {
     if (!(_ext.size() && manageAdminCommand()) && _game && !_game->isPaused())
       _game->update();
     else if (!_game || !_game->hasSomethingToDo())
-      timeLoop = 2000;
+      timeLoop = 7000;
+    else
+      timeLoop = 0;
   }
-  DEBUG("! Server::server::run()", -1);
+  // DEBUG("! Server::server::run()", -1);
 }
