@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Wed May 28 17:23:30 2014 buret_j
-** Last update Tue Jun 10 19:03:40 2014 lafitt_g
+** Last update Tue Jun 10 19:30:22 2014 lafitt_g
 */
 
 #ifndef SERVER__GAME_HPP_
@@ -107,6 +107,8 @@ namespace	Server {
     bool		bombRight(Player *, t_cmd *);
     bool		bombDown(Player *, t_cmd *);
     bool		bombLeft(Player *, t_cmd *);
+
+    bool		bombExplose(Player *, t_cmd *);
 
     void		update();
     void		bombsProcessing();

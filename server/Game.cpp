@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-** Last update Tue Jun 10 19:22:30 2014 lafitt_g
+** Last update Tue Jun 10 19:38:47 2014 lafitt_g
 */
 
 #include "Game.hpp"
@@ -112,12 +112,18 @@ Server::Game::pause() {
   }
 }
 
-Player *
-Server::Game::findPlayerByID(size_t id)
+Server::Player *
+Server::Game::findPlayerByID(const size_t id)
 {
-  for (std::map<std::pair<size_t, size_t>, Player *>::iterator it = this->_players.begin(); it != this->_players.end; ++it)
-    if ((*it)->id == id)
-      return (*it);
+  (void)id;
+  for (std::map<std::pair<size_t, size_t>, Player *>::iterator it = this->_players.begin();
+       it != this->_players.end(); ++it)
+    {
+      if (!!(*it).second)
+	if ((*it).second->getID() == id)
+	  return (*it).second;
+    }
+  return 0;
 }
 
 void
@@ -362,10 +368,12 @@ Server::Game::bombLeft(Player *p, t_cmd *c)
 bool
 Server::Game::bombExplose(Player *p, t_cmd *c)
 {
-  int		x;
-  int		y;
+  // int		x;
+  // int		y;
 
-  
+  (void)p;
+  (void)c;
+  return (false);
 }
 
 bool Server::Game::_isGame = false;
