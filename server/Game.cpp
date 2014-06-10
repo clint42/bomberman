@@ -1,3 +1,13 @@
+/*
+// Game.cpp for  in /home/buret_j/rendu/bomberman
+// 
+// Made by buret_j
+// Login   <buret_j@epitech.net>
+// 
+// Started on  Fri May 30 16:58:20 2014 buret_j
+** Last update Tue Jun 10 17:53:21 2014 lafitt_g
+*/
+
 #include "Game.hpp"
 
 static Server::Game::Play g_Plays[] = {
@@ -243,12 +253,12 @@ Server::Game::orientLeft(Player *p, t_cmd *c)
 }
 
 void
-Server::Game::bombSwitchQueue(t_cmd *c)
+Server::Game::bombSwitchQueue(t_cmd *c, const std::pair<size_t, size_t> pos)
 {
   t_cmd * cmd = new t_cmd;
   cmd->id = c->id;
   cmd->date = c->date;
-  cmd->pos = c->pos;
+  cmd->pos = pos;
   cmd->action = c->action;
   this->_bombs.push(cmd);
 }
@@ -277,7 +287,7 @@ Server::Game::bombUp(Player *p, t_cmd *c)
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
 	{
-	  this->bombSwitchQueue(c);
+	  this->bombSwitchQueue(c, pos);
 	  this->buildCmdCreateBomb(c, pos);
 	  return (p->dropBomb());
 	}
@@ -294,7 +304,7 @@ Server::Game::bombRight(Player *p, t_cmd *c)
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
 	{
-	  this->bombSwitchQueue(c);
+	  this->bombSwitchQueue(c, pos);
 	  this->buildCmdCreateBomb(c, pos);
 	  return (p->dropBomb());
 	}
@@ -311,7 +321,7 @@ Server::Game::bombDown(Player *p, t_cmd *c)
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
 	{
-	  this->bombSwitchQueue(c);
+	  this->bombSwitchQueue(c, pos);
 	  this->buildCmdCreateBomb(c, pos);
 	  return (p->dropBomb());
 	}
@@ -328,7 +338,7 @@ Server::Game::bombLeft(Player *p, t_cmd *c)
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
 	{
-	  this->bombSwitchQueue(c);
+	  this->bombSwitchQueue(c, pos);
 	  this->buildCmdCreateBomb(c, pos);
 	  return (p->dropBomb());
 	}
@@ -382,10 +392,11 @@ Server::Game::process(t_cmd *c, Player *p)
 	  this->_messenger->addMessage(p->getSocket(), msg);
   	}
     }
-  // else if (c->action == "BOMB EXPLOSE")
-  //   {
-  //     // send directly to messenger
-  //   }
+  else if (c->action == "BOMB EXPLOSE")
+    {
+      this->bombExplose(p, c);
+      // send directly to messenger
+    }
 
   return (true);
 }
