@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Sun Jun  8 19:01:46 2014 aurelien prieur
+// Last update Tue Jun 10 19:02:47 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -35,6 +35,7 @@ public:
   ~GameEntities();
   bool		lock();
   bool		unlock();
+  bool		initializeScore();
   bool		addEntity(std::pair<std::pair<size_t, size_t>, int> const &coord);
   bool		deleteEntity(std::pair<size_t, size_t> const &coord);
   AObject	*getEntity(std::pair<size_t, size_t> const &coord);
@@ -45,7 +46,7 @@ public:
 			     AObject::EventIn event);
   void		setPlayer(int id, int nPlayer = 0);
   AObject const	*getPlayer(bool withoutLock = false, int nPlayer = 0);
-  void		setPlayerScore(int score, int nPlayer = 0);
+  void		addPoints(int points, int nPlayer = 0);
   int		getPlayerScore(bool withoutLock = false, int nPlayer = 0);
   void		decreaseTimeLeft(float const &val);
   float		getTimeLeft(void);

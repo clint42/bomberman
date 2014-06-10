@@ -5,14 +5,14 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 12:24:05 2014 buret_j
-** Last update Mon Jun  9 18:57:33 2014 lafitt_g
+** Last update Tue Jun 10 19:25:54 2014 lafitt_g
 */
 
 #include "Player.hpp"
 
 Server::Player::Player(size_t id, Socket *s)
   : _id(id), _bot(false), _team(0), _posX(0), _posY(0), _orientation(DOWN),
-    _bombsLimit(1), _bombsOnFloor(0) {
+    _bombsLimit(1), _bombsOnFloor(0), _bombRange(2) {
   _socket = s;
 }
 

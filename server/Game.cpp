@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-** Last update Tue Jun 10 19:38:47 2014 lafitt_g
+** Last update Tue Jun 10 19:39:56 2014 lafitt_g
 */
 
 #include "Game.hpp"
@@ -45,8 +45,8 @@ Server::Game::~Game() {
   delete _map;
 }
 
-static void *
-tramp(void *g) {
+void *
+Server::Game::trampoline_bombsProcessing(void *g) {
   static_cast<Server::Game *>(g)->bombsProcessing();
   return NULL;
 }
@@ -83,7 +83,7 @@ Server::Game::start() {
     gettimeofday(&_startedAt, NULL);
     _endAt.tv_usec = _startedAt.tv_usec + (GAME_TIME * _time * 60 * 1000000);
     _endAt.tv_sec = _endAt.tv_usec / 1000000;
-    Thread(&tramp, this); // create bombs' thread
+    Thread(&Server::Game::trampoline_bombsProcessing, this); // create bombs' thread
     _started = true;
   } else if (_paused) {
     timeval tmp;

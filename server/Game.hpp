@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Wed May 28 17:23:30 2014 buret_j
-** Last update Tue Jun 10 19:30:22 2014 lafitt_g
+** Last update Tue Jun 10 19:39:47 2014 lafitt_g
 */
 
 #ifndef SERVER__GAME_HPP_
@@ -73,6 +73,7 @@ namespace	Server {
 
     inline Map const *	getMap() const { return _map; }
     inline Play const &	getParams() const { return _params; }
+    inline std::string const &getMapName() const { return _map->getFilename(); }
     size_t		timeLeft() const;
     inline bool		hasSomethingToDo() const { return !(_events.empty() || _bombs.empty()); }
 
@@ -92,6 +93,7 @@ namespace	Server {
     static bool		_isGame;
     static std::map<std::pair<Player::Action, Player::Dir>,
 		    bool(Game::*)(Player *, t_cmd *)> func;
+    static void *       trampoline_bombsProcessing(void *);
 
     bool		moveUp(Player *, t_cmd *);
     bool		moveRight(Player *, t_cmd *);

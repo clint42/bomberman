@@ -91,13 +91,18 @@ Server::Server::addPeer(Socket *s) {
   _peers.push_back(p);
   CVRT_SIZET_TO_STRING(welcome, id);
   welcome += " 0 0 WELCOME";
+  if (_game) {
+    welcome += "\n";
+    CVRT_SIZET_TO_STRING(welcome, id);
+    welcome += " 0 0 MAP " += _game->getMapName();
+  }
   _messenger.addMessage(s, welcome);
   this->sendMessage(s);
   ++id;
 }
 
 void
-Server::Server::addMessage(Socket *s) {
+Server::Server::readMessage(Socket *s) {
   std::string *m = new std::string;
   s->getLine(*m);
   _messages.push_back(m);
@@ -128,21 +133,16 @@ Server::Server::peerDisconnected(Socket *s) {
   _co->rmSocket(s);
 }
 
-static void // make it a Server::Server static class methode
-trampoline(void *p, Socket *s, bool b[3]) {
+void
+Server::Server::trampoline_performResult(void *p, Socket *s, bool b[3]) {
   if (b[2]) {
-    // DEBUG("trampoline() => socket closed", 1);
     reinterpret_cast<Server::Server *>(p)->peerDisconnected(s);
   }
   else {
     if (b[0]) {
-      // DEBUG("trampoline() => socket autorise a lire dessus", 0);
-      reinterpret_cast<Server::Server *>(p)->addMessage(s); // on est censé ajouter ce msg
+      reinterpret_cast<Server::Server *>(p)->readMessage(s); // on est censé ajouter ce msg
     }
-    // if (b[1]) {
-      // DEBUG("trampoline() => socket autorise a ecrire dessus", 0);
-      reinterpret_cast<Server::Server *>(p)->sendMessage(s);
-    // }
+    reinterpret_cast<Server::Server *>(p)->sendMessage(s);
   }
 }
 
@@ -160,6 +160,8 @@ bool		Server::Server::funcWelcome(const t_cmd *_cmd)
       Game::_types["TEAM_SURVIVOR"] = Game::TEAM_SURVIVOR;
     }
 
+  DEBUG("Server::Server::funcConfig()", 1);
+
   try
     {
       size_t	p;
@@ -170,13 +172,14 @@ bool		Server::Server::funcWelcome(const t_cmd *_cmd)
       CVRT_STRING_TO_SIZET(_cmd->params[2], b);
       CVRT_STRING_TO_SIZET(_cmd->params[3], t);
       this->_game = new Game(_cmd->params[0], p, b, t, Game::_types[_cmd->params[4]], this->_peers, &this->_messenger);
-      return (true);
     }
   catch (GameException e)
     {
       std::cerr << e.what() << std::endl;
       return (false);
     }
+  DEBUG("! Server::Server::funcConfig()", -1);
+  return (true);
 }
 
 bool	Server::Server::funcPause(__attribute__((unused))const t_cmd *_cmd)
@@ -248,7 +251,7 @@ Server::Server::run() {
 
     if (ret) {
       DEBUG("je dois lire qqc", 0);
-      _co->perform(&trampoline, this);
+      _co->perform(&trampoline_performResult, this);
       this->filterMsg();
 
       std::cout << "ext size: " << _ext.size()  << std::endl;
