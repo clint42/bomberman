@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Wed May 28 17:23:30 2014 buret_j
-** Last update Tue Jun 10 17:53:10 2014 lafitt_g
+** Last update Tue Jun 10 19:03:40 2014 lafitt_g
 */
 
 #ifndef SERVER__GAME_HPP_
@@ -117,6 +117,7 @@ namespace	Server {
 
   private:
 
+    Player *		findPlayerByID(const size_t);
     void		filterCmd(t_cmd const *, std::string &) const;
     bool		process(t_cmd *, Player *);
     void		bombSwitchQueue(t_cmd *, const std::pair<size_t, size_t>);

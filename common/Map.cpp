@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Tue Jun 10 17:36:04 2014 julie franel
+** Last update Tue Jun 10 17:55:10 2014 lafitt_g
 */
 
 #include <openssl/md5.h>
@@ -119,8 +119,7 @@ Map::generateMap() {
 
 void	Map::setElemAtPos(const std::pair<size_t, size_t> &pos, const int &val)
 {
-  if (this->_map[pos])
-    this->_map[pos] = val;
+  this->_map[pos] = val;
 }
 
 int
