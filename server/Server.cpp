@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Mon Jun  9 20:46:20 2014 julie franel
+// Last update Tue Jun 10 12:18:12 2014 julie franel
 */
 
 #include "Server.hpp"
@@ -209,6 +209,26 @@ Server::Server::manageAdminCommand()
     ret = (this->*_func[this->_ext.front()->action])(this->_ext.front());
   this->_ext.pop_front();
   return ret;
+}
+
+void	Server::Server::watchEvent(int e)
+{
+  std::list<Player *>::iterator	it;
+
+  for (it = _peers.begin(); it != _peers.end(); ++it)
+    {
+      this->_co->watchEventOnSocket((*it)->getSocket(), e);
+    }
+}
+
+void	Server::Server::unwatchEvent(int e)
+{
+  std::list<Player *>::iterator	it;
+
+  for (it = _peers.begin(); it != _peers.end(); ++it)
+    {
+      this->_co->unwatchEventOnSocket((*it)->getSocket(), e);
+    }
 }
 
 void
