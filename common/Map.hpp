@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:11:21 2014 julie franel
-// Last update Sun Jun  8 15:55:04 2014 aurelien prieur
+// Last update Tue Jun 10 16:11:48 2014 buret_j
 */
 
 #ifndef			MAP_HPP_
@@ -41,7 +41,7 @@ private:
   std::map<std::pair<size_t, size_t>, int>	_map;
 
   void		getMap(size_t width, size_t height, std::ifstream &file);
-  void		md5It(std::string &);
+  void		md5It();
 
 public:
   Map(std::string const &);

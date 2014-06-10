@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Sun Jun  8 17:43:45 2014 julie franel
+// Last update Tue Jun 10 16:11:37 2014 buret_j
 */
 
 #include <openssl/md5.h>
@@ -33,6 +33,7 @@ Map::Map(std::string const &filename) {
     throw MapException("Map size be must equal to 4*4 or higher.");
 
   this->getMap(_width, _height, file);
+  this->md5It();
   file.close();
 
   if (this->_nbPlayers > ((_width * _height) - (_map.size() - 1)))
@@ -87,7 +88,7 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
 }
 
 void
-Map::md5It(std::string &save) {
+Map::md5It() {
   std::ifstream filemap(this->_filename.c_str(), std::ios::in);
 
   if(filemap) {
@@ -98,7 +99,7 @@ Map::md5It(std::string &save) {
       content += line;
     filemap.close();
     MD5((unsigned char *)content.c_str(), content.size(), (unsigned char *)key);
-    save = key;
+    _key = key;
   } else
     throw Md5Exception();
 }

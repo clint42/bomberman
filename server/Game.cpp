@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Fri May 30 16:58:20 2014 buret_j
-** Last update Mon Jun  9 20:16:44 2014 lafitt_g
+// Last update Tue Jun 10 16:06:08 2014 buret_j
 */
 
 #include "Game.hpp"
@@ -26,19 +26,20 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
   (void)_round;
   try {
     _map = new Map(m);
-  } catch (MapException) {
+  } catch (MapException e) {
       _map = 0;
+      std::cerr << e.what() << std::endl;
       throw GameException("Map not found");
     }
-    if (_maxPlayers > _map->getNbrSlot()) {
-      _maxPlayers = _map->getNbrSlot();
-      p = _maxPlayers;
-    }
-    if (_maxBots + _maxPlayers > _map->getNbrSlot())
-      _maxBots = _map->getNbrSlot() - _maxPlayers;
-    for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
-      _players[(*it)->getPos()] = *it;
-    }
+  if (_maxPlayers > _map->getNbrSlot()) {
+    _maxPlayers = _map->getNbrSlot();
+    p = _maxPlayers;
+  }
+  if (_maxBots + _maxPlayers > _map->getNbrSlot())
+    _maxBots = _map->getNbrSlot() - _maxPlayers;
+  for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
+    _players[(*it)->getPos()] = *it;
+  }
 }
 
 Server::Game::~Game() {
