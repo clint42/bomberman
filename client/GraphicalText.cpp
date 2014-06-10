@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:16:41 2014 aurelien prieur
-// Last update Tue Jun 10 14:11:31 2014 aurelien prieur
+// Last update Tue Jun 10 17:21:58 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -33,6 +33,7 @@ GraphicalText::GraphicalText(std::string const &text, std::pair<size_t, size_t> 
 	}
       std::cerr << " Default font (airstrike) set instead." << std::endl;
     }
+  _abcTex.bind();
   for (size_t i = 0; i < text.length(); ++i)
     {
       letter = new GraphicalLetter(text[i],

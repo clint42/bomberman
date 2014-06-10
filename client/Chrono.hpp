@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat Jun  7 14:21:33 2014 aurelien prieur
-// Last update Sat Jun  7 14:48:03 2014 aurelien prieur
+// Last update Tue Jun 10 17:03:32 2014 aurelien prieur
 //
 
 #ifndef CHRONO_HPP_
@@ -18,6 +18,8 @@ class	Chrono: public AObject
 {
   float		_time;
   GraphicalText	*_text;
+  gdl::Geometry	_geometry;
+  gdl::Texture	_texture;
   void		buildTimeText(void);
 
 public:
