@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:11:21 2014 julie franel
-// Last update Tue Jun 10 16:11:48 2014 buret_j
+// Last update Tue Jun 10 17:36:22 2014 julie franel
 */
 
 #ifndef			MAP_HPP_
@@ -56,7 +56,8 @@ public:
   inline std::map<std::pair<size_t, size_t>, int> const &getMap() const { return _map; }
 
   int			getElemAtPos(size_t, size_t);
-  int			getElemAtPos(std::pair<size_t, size_t> &k) { return _map[k]; }
+  int			getElemAtPos(const std::pair<size_t, size_t> &k);
+  void			setElemAtPos(const std::pair<size_t, size_t> &pos, const int &val);
   void			deleteElem(const size_t posX, const size_t posY);
 
   static void		generateMap();
