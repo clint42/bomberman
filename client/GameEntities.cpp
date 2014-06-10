@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Tue Jun 10 13:50:28 2014 aurelien prieur
+// Last update Tue Jun 10 19:03:05 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -20,6 +20,7 @@ GameEntities::GameEntities(): _isDouble(false),
 
 GameEntities::~GameEntities()
 {
+
 }
 
 bool		GameEntities::lock()
@@ -160,13 +161,13 @@ AObject const	*GameEntities::getPlayer(bool withoutLock, int nPlayer)
   return (retVal);
 }
 
-void		GameEntities::setPlayerScore(int score, int nPlayer)
+void		GameEntities::addPoints(int points, int nPlayer)
 {
   _locker.lock();
   if (nPlayer == 0)
-    _playerScore = score;
+    _playerScore += points;
   else
-    _player2Score = score;
+    _player2Score += points;
   _locker.unlock();
 }
 

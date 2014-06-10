@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Tue Jun 10 12:45:52 2014 aurelien prieur
+// Last update Tue Jun 10 19:09:55 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -52,9 +52,9 @@ bool		ClientCore::initialize()
   }
   _socket = _connexion.getMasterSocket();
   _connexion.watchEventOnSocket(_socket, POLLIN);
-  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(8, 6), PLAYER + 1));
-  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(1, 6), PLAYER + 2));
-  _gameEntities.setDouble();
+  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(8, 15), PLAYER + 1));
+  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(15, 20), PLAYER + 2));
+  //_gameEntities.setDouble();
   // _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(4, 1), BOMB));
   // _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(1, 1), BLOCK));
   return (true);

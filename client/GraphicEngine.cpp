@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Tue Jun 10 12:46:05 2014 aurelien prieur
+// Last update Tue Jun 10 19:07:47 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -18,7 +18,8 @@ GraphicEngine::GraphicEngine(EventsHandler &eventsHandler,
 			     SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs):
   objects(gameEntities),
   eventsHandler(eventsHandler),
-  createInstructs(createInstructs)
+  createInstructs(createInstructs),
+  scores(2)
 {
 }
 
@@ -55,8 +56,7 @@ bool	GraphicEngine::initialize()
   glm::mat4	transformation;
 
   std::cout << "Initialize Graphic engine" << std::endl;
-  this->sdlContext.start(W_WIDTH, W_HEIGHT, "Test LibGDL", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL // | SDL_WINDOW_FULLSCREEN
-			 );
+  this->sdlContext.start(W_WIDTH, W_HEIGHT, "Test LibGDL", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
   glEnable(GL_DEPTH_TEST);
   if (!this->shader.load("./shaders/basic.fp", GL_FRAGMENT_SHADER)
       || !this->shader.load("./shaders/basic.vp", GL_VERTEX_SHADER)
@@ -70,10 +70,15 @@ bool	GraphicEngine::initialize()
     return (false);
   this->floor.setSize(this->objects.getMapSize());
   this->floor.initialize();
-  score1 = new GraphicalText("100", std::pair<size_t, size_t>(320, 0), glm::vec4(1, 1, 1, 1), 50, "airstrikeBold");
-  score2 = new GraphicalText("100", std::pair<size_t, size_t>(W_WIDTH / 2 + 400, 0), glm::vec4(1, 1, 1, 1), 50, "airstrikeBold");
   this->chrono.initialize();
   this->chrono.setTime(60.f);
+  this->scores[0] = new Score(false);
+  this->scores[0]->initialize();
+  if (this->objects.isDouble())
+    {
+      this->scores[1] = new Score(true);
+      this->scores[1]->initialize();
+    }
   //TODO: testing purpose only. Find a better solution to load Player model before game start
   Player * test = new Player(0);
   test->initialize();
@@ -110,6 +115,9 @@ bool	GraphicEngine::update()
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
        it != this->objects.getEntities().end(); ++it)
     it->second->update(this->clock, this->eventsHandler);
+  this->scores[0]->update(this->objects.getPlayerScore(true, 0));
+  if (this->objects.isDouble(true))
+    this->scores[1]->update(this->objects.getPlayerScore(true, 1));
   this->objects.unlock();
   this->chrono.update(this->clock, this->eventsHandler);
   return (true);
@@ -126,7 +134,7 @@ void		GraphicEngine::drawPlayer(int nPlayer)
   AObject const *player = this->objects.getPlayer(true, nPlayer);
   if (player != NULL)
     {
-      transformation = glm::lookAt(glm::vec3(0, 17, 10) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
+      transformation = glm::lookAt(glm::vec3(0, 17, 8) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
       this->shader.setUniform("view", transformation);
     }
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
@@ -137,31 +145,13 @@ void		GraphicEngine::drawPlayer(int nPlayer)
 
 void		GraphicEngine::drawScore(int nPlayer)
 {
-  std::ostringstream	oss;
-  int			playerScore;
   int			i;
 
   i = 1;
   glViewport(0, 0, 1920, 1080);
-  //TODO: testing purpose only
   if (fps != NULL)
     fps->draw(this->shader);
-  playerScore = objects.getPlayerScore(true, nPlayer);
-  while ((playerScore /= 10) > 0)
-    ++i;
-  for (int j = 0; j < (6 - i) / 2; ++j)
-    oss <<  " ";
-  oss << objects.getPlayerScore(true, nPlayer);
-  if (nPlayer == 0)
-    {
-      score1->updateText(oss.str());
-      score1->draw(shader);
-    }
-  else
-    {
-      score2->updateText(oss.str());
-      score2->draw(shader);
-    }
+  scores[nPlayer]->draw(this->shader);
 }
 
 void		GraphicEngine::drawBackground(void)
@@ -217,10 +207,10 @@ void	GraphicEngine::viewPortPlayer(int nPlayer) const
 {
   if (!this->objects.isDouble(true))
     {
-      glViewport(0, 0, (float)(W_WIDTH), (float)(W_HEIGHT) - 50.f);
+      glViewport(0, 0, (float)(W_WIDTH), (float)(W_HEIGHT) - 80.f);
     }
   else
-    glViewport((((float)(W_WIDTH) / 2.f) + 5.f) * nPlayer, 0, ((float)(W_WIDTH) / 2.f) - 5.f, (float)(W_HEIGHT) - 50.f);
+    glViewport((((float)(W_WIDTH) / 2.f) + 5.f) * nPlayer, 0, ((float)(W_WIDTH) / 2.f) - 5.f, (float)(W_HEIGHT) - 80.f);
 }
 
 void	GraphicEngine::getPlayerProjection(glm::mat4 &projection) const

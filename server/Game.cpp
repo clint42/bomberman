@@ -16,20 +16,19 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
   (void)_round;
   try {
     _map = new Map(m);
-  } catch (MapException e) {
+  } catch (MapException) {
       _map = 0;
-      std::cerr << e.what() << std::endl;
       throw GameException("Map not found");
     }
-  if (_maxPlayers > _map->getNbrSlot()) {
-    _maxPlayers = _map->getNbrSlot();
-    p = _maxPlayers;
-  }
-  if (_maxBots + _maxPlayers > _map->getNbrSlot())
-    _maxBots = _map->getNbrSlot() - _maxPlayers;
-  for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
-    _players[(*it)->getPos()] = *it;
-  }
+    if (_maxPlayers > _map->getNbrSlot()) {
+      _maxPlayers = _map->getNbrSlot();
+      p = _maxPlayers;
+    }
+    if (_maxBots + _maxPlayers > _map->getNbrSlot())
+      _maxBots = _map->getNbrSlot() - _maxPlayers;
+    for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
+      _players[(*it)->getPos()] = *it;
+    }
 }
 
 Server::Game::~Game() {
@@ -103,6 +102,20 @@ Server::Game::pause() {
   }
 }
 
+Server::Player *
+Server::Game::findPlayerByID(const size_t id)
+{
+  (void)id;
+  for (std::map<std::pair<size_t, size_t>, Player *>::iterator it = this->_players.begin();
+       it != this->_players.end(); ++it)
+    {
+      if (!!(*it).second)
+	if ((*it).second->getID() == id)
+	  return (*it).second;
+    }
+  return 0;
+}
+
 void
 Server::Game::update() {
   t_cmd *c;
@@ -110,6 +123,8 @@ Server::Game::update() {
     return ;
 
   Player *p = _players[c->pos];
+  if (!p || p->getID() != c->id)
+    p = this->findPlayerByID(c->id);
   if (!p || p->getID() != c->id)
     return ;
 
@@ -279,6 +294,7 @@ Server::Game::bombUp(Player *p, t_cmd *c)
 	{
 	  this->bombSwitchQueue(c, pos);
 	  this->buildCmdCreateBomb(c, pos);
+	  this->_map->setElemAtPos(pos, Map::BOMB);
 	  return (p->dropBomb());
 	}
     }
@@ -296,6 +312,7 @@ Server::Game::bombRight(Player *p, t_cmd *c)
 	{
 	  this->bombSwitchQueue(c, pos);
 	  this->buildCmdCreateBomb(c, pos);
+	  this->_map->setElemAtPos(pos, Map::BOMB);
 	  return (p->dropBomb());
 	}
     }
@@ -313,6 +330,7 @@ Server::Game::bombDown(Player *p, t_cmd *c)
 	{
 	  this->bombSwitchQueue(c, pos);
 	  this->buildCmdCreateBomb(c, pos);
+	  this->_map->setElemAtPos(pos, Map::BOMB);
 	  return (p->dropBomb());
 	}
     }
@@ -330,10 +348,22 @@ Server::Game::bombLeft(Player *p, t_cmd *c)
 	{
 	  this->bombSwitchQueue(c, pos);
 	  this->buildCmdCreateBomb(c, pos);
+	  this->_map->setElemAtPos(pos, Map::BOMB);
 	  return (p->dropBomb());
 	}
     }
   return false;
+}
+
+bool
+Server::Game::bombExplose(Player *p, t_cmd *c)
+{
+  // int		x;
+  // int		y;
+
+  (void)p;
+  (void)c;
+  return (false);
 }
 
 bool Server::Game::_isGame = false;

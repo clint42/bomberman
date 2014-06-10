@@ -1,13 +1,3 @@
-/*
-// Map.hpp for  in /home/franel_j/tek2/cpp/bomberman/common
-//
-// Made by julie franel
-// Login   <franel_j@epitech.net>
-//
-// Started on  Mon May  5 17:11:21 2014 julie franel
-// Last update Tue Jun 10 18:02:32 2014 julie franel
-*/
-
 #ifndef			MAP_HPP_
 # define		MAP_HPP_
 

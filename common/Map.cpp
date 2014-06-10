@@ -1,13 +1,3 @@
-/*
-// map.cpp for  in /home/franel_j/tek2/cpp/bomberman/common
-//
-// Made by julie franel
-// Login   <franel_j@epitech.net>
-//
-// Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Tue Jun 10 17:36:04 2014 julie franel
-*/
-
 #include <openssl/md5.h>
 #include <vector>
 #include <fstream>
@@ -119,8 +109,7 @@ Map::generateMap() {
 
 void	Map::setElemAtPos(const std::pair<size_t, size_t> &pos, const int &val)
 {
-  if (this->_map[pos])
-    this->_map[pos] = val;
+  this->_map[pos] = val;
 }
 
 int

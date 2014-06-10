@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-** Last update Mon Jun  9 19:04:28 2014 lafitt_g
+** Last update Tue Jun 10 19:26:37 2014 lafitt_g
 */
 
 #ifndef PLAYER_HPP_
@@ -46,6 +46,7 @@ namespace Server {
 
     size_t	_bombsLimit;
     size_t	_bombsOnFloor;
+    size_t	_bombRange;
 
     size_t	_dateNextCommand;
     double	_commandTimeMultiplier;// used by bonus, '1' by default. ex: 0.5 = speed increased by 2.

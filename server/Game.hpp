@@ -102,6 +102,8 @@ namespace	Server {
     bool		bombDown(Player *, t_cmd *);
     bool		bombLeft(Player *, t_cmd *);
 
+    bool		bombExplose(Player *, t_cmd *);
+
     void		update();
     void		bombsProcessing();
     void		killPlayer(Player *);
@@ -111,6 +113,7 @@ namespace	Server {
 
   private:
 
+    Player *		findPlayerByID(const size_t);
     void		filterCmd(t_cmd const *, std::string &) const;
     bool		process(t_cmd *, Player *);
     void		bombSwitchQueue(t_cmd *, const std::pair<size_t, size_t>);
