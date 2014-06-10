@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Mon Jun  9 20:46:20 2014 julie franel
+// Last update Tue Jun 10 12:35:36 2014 buret_j
 */
 
 #include "Server.hpp"
@@ -214,16 +214,38 @@ Server::Server::manageAdminCommand()
 void
 Server::Server::run() {
   // DEBUG("Server::server::run()", 1);
-  size_t timeLoop = 0;
+  int	timeLoop = 0;
+  int	path = 0;
+
   while (_run && _co->update(timeLoop) >= 0) {
     _co->perform(&trampoline, this);
     filterMsg();
-    if (!(_ext.size() && manageAdminCommand()) && _game && !_game->isPaused())
-      _game->update();
-    else if (!_game || !_game->hasSomethingToDo())
-      timeLoop = 7000;
-    else
-      timeLoop = 0;
+
+    if (!_ext.empty() && this->manageAdminCommand()) {
+      if (path == 3)
+	this->wathEvent(POLLOUT);
+    }
+    else { // revoir ce block de conditions...
+      if (!_game || _game->isPaused()) {
+	timeLoop = 1000; // 1 sec
+	path = 1;
+      }
+      else if (_game->hasSomethingToDo()) {
+	_game->update();
+	if (path != 2) {
+	  this->watchEvent(POLLOUT);
+	  path = 2;
+	}
+	timeLoop = 0;
+      }
+      else {
+	if (path != 3) {
+	  this->unwatchEvent(POLLOUT);
+	  path = 3;
+	}
+	timeLoop = 1000: // 1 sec
+      }
+    } // !else
   }
   // DEBUG("! Server::server::run()", -1);
 }

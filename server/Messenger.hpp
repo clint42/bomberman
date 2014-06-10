@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu Jun  5 17:15:53 2014 buret_j
-// Last update Mon Jun  9 19:24:02 2014 buret_j
+// Last update Tue Jun 10 11:40:17 2014 buret_j
 //
 
 #ifndef MESSENGER_HPP_
@@ -26,6 +26,8 @@ namespace Server {
 
     Messenger() {  }
     ~Messenger() {  }
+
+    inline bool	hasSomethingToSay(Socket const *s) const { return *_queues[s->getFd()] != ""; }
 
     void	addMessage(Socket const *s, std::string const &toAdd)  {
       // DEBUG("Server::Messenger::addMessage()", 1);

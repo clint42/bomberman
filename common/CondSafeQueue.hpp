@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Sun Jun  8 16:38:49 2014 buret_j
-// Last update Sun Jun  8 18:12:52 2014 buret_j
+// Last update Tue Jun 10 12:34:05 2014 buret_j
 //
 
 #ifndef CONDSAFEQUEUE_HPP_
@@ -57,7 +57,7 @@ public:
 
   void	wait() { _cond.wait(); }
   void  signal() { _cond.signal(); }
-  bool	empty() { return _queue.empty(); }
+  bool	empty() const { return _queue.empty(); }
 
 };
 
