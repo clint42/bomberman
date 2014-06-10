@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Tue Jun 10 12:03:41 2014 aurelien prieur
-// Last update Tue Jun 10 12:21:30 2014 aurelien prieur
+// Last update Tue Jun 10 14:13:00 2014 aurelien prieur
 //
 
 #include <sstream>
@@ -13,7 +13,7 @@
 
 FpsDisplay::FpsDisplay(): _timer(0), _fps(0)
 {
-  _text = new GraphicalText("FPS: 0", std::pair<size_t, size_t>(10, 10), glm::vec4(1, 0, 0, 1), 50, "quartzMs");
+  _text = new GraphicalText("FPS: 0", std::pair<size_t, size_t>(10, 15), glm::vec4(1, 0, 0, 1), 20, "quartzMs");
 }
 
 FpsDisplay::~FpsDisplay()
