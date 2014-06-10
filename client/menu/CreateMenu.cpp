@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Tue Jun 10 21:43:33 2014 virol_g
+// Last update Wed Jun 11 01:48:30 2014 virol_g
 //
 
 #include	<sstream>
@@ -33,6 +33,8 @@ bool	CreateMenu::build()
   std::ifstream	file("maps");
   std::string	name;
 
+  _titles.push_back(new GraphicalText("Select a map", std::pair<size_t, size_t>(400, 360),
+				      glm::vec4(0.f, 0.f, 1.f, 1.f), 10, "airstrike"));
   _selectMap = new MenuScroll(std::pair<size_t, size_t>(400, 380),
   			      std::pair<size_t, size_t>(680, 380),
   			      std::pair<size_t, size_t>(80, 60),
@@ -51,12 +53,19 @@ bool	CreateMenu::build()
 	}
     }
   _menuBackground = new MenuBackground("./ressources/backgroundSubMenu.tga");
+  _titles.push_back(new GraphicalText("How many players ?", std::pair<size_t, size_t>(400, 60),
+				      glm::vec4(0.f, 0.f, 1.f, 1.f), 10, "airstrike"));
   _nbPlayers = new MenuInput(std::pair<size_t, size_t>(400, 80),
 			     std::pair<size_t, size_t>(250, 60),
 			     glm::vec4(1.f, 1.f, 1.f, 1.f));
+  _titles.push_back(new GraphicalText("How many bots ?", std::pair<size_t, size_t>(400, 160),
+				      glm::vec4(0.f, 0.f, 1.f, 1.f), 10, "airstrike"));
   _nbBots = new MenuInput(std::pair<size_t, size_t>(400, 180),
 			     std::pair<size_t, size_t>(250, 60),
 			     glm::vec4(1.f, 1.f, 1.f, 1.f));
+  _titles.push_back(new GraphicalText("How long the game will be ?",
+				      std::pair<size_t, size_t>(400, 360),
+				      glm::vec4(0.f, 0.f, 1.f, 1.f), 10, "airstrike"));
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 280),
 				      std::pair<size_t, size_t>(150, 40),
 				      "Short", glm::vec4(0.f, 0.f, 1.f, 1.f),
@@ -130,6 +139,8 @@ void	CreateMenu::draw()
   _selectMap->draw(_shader, _clock);
   for (size_t i = 0; i < _menuElems.size(); ++i)
     _menuElems[i]->draw(_shader, _clock);
+  for (size_t i = 0; i < _titles.size(); ++i)
+    _titles[i]->draw(_shader);
   _sdlContext.flush();
 }
 

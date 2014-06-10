@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:51:47 2014 virol_g
-// Last update Tue Jun 10 21:26:38 2014 virol_g
+// Last update Wed Jun 11 01:41:44 2014 virol_g
 //
 
 #ifndef		CREATEMENU_HPP_
@@ -16,6 +16,7 @@
 # include	"MenuInput.hpp"
 # include	"MenuScroll.hpp"
 # include	"MenuButton.hpp"
+# include	"GraphicalText.hpp"
 
 typedef struct	s_game
 {
@@ -30,7 +31,7 @@ class		CreateMenu : public AMenu
   MenuInput	*_nbPlayers;
   MenuInput	*_nbBots;
   MenuScroll	*_selectMap;
-  // std::vector<MenuButton *>	_timeGame;
+  std::vector<GraphicalText *>	_titles;
 
 public:
   CreateMenu(gdl::SdlContext sdlContext);
