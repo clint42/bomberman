@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Fri May 30 17:15:21 2014 aurelien prieur
+// Last update Tue Jun 10 19:02:47 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -20,6 +20,13 @@
 
 class	GameEntities
 {
+  bool							_isDouble;
+  AObject						*_player;
+  AObject						*_player2;
+  int							_playerScore;
+  int							_player2Score;
+  float							_timeLeft;
+  std::pair<size_t, size_t>				_mapSize;
   std::map<std::pair<size_t, size_t>, AObject *>	_entities;
   Mutex							_locker;
 
@@ -28,10 +35,26 @@ public:
   ~GameEntities();
   bool		lock();
   bool		unlock();
-  bool		addEntity(std::pair<std::pair<size_t, size_t>, ObjectType> const &coord);
+  bool		initializeScore();
+  bool		addEntity(std::pair<std::pair<size_t, size_t>, int> const &coord);
   bool		deleteEntity(std::pair<size_t, size_t> const &coord);
   AObject	*getEntity(std::pair<size_t, size_t> const &coord);
   std::map<std::pair<size_t, size_t>, AObject *>  &getEntities();
+  bool		moveEntity(std::pair<size_t, size_t> const &coord,
+			   AObject::EventIn event);
+  bool		rotateEntity(std::pair<size_t, size_t> const &coord,
+			     AObject::EventIn event);
+  void		setPlayer(int id, int nPlayer = 0);
+  AObject const	*getPlayer(bool withoutLock = false, int nPlayer = 0);
+  void		addPoints(int points, int nPlayer = 0);
+  int		getPlayerScore(bool withoutLock = false, int nPlayer = 0);
+  void		decreaseTimeLeft(float const &val);
+  float		getTimeLeft(void);
+  void		setTimeLeft(float const &timeLeft);
+  std::pair<size_t, size_t> const	&getMapSize(void);
+  void					setMapSize(std::pair<size_t, size_t> const &mapSize);
+  bool					isDouble(bool withoutLock = false);
+  void					setDouble(void);
 };
 
 #endif // !GAMEENTITIES_HPP_

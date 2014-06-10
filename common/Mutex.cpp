@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed Apr 23 19:35:42 2014 buret_j
-// Last update Mon May 19 17:12:57 2014 aurelien prieur
+// Last update Sun Jun  8 16:49:05 2014 buret_j
 //
 
 #include "Mutex.hpp"
@@ -37,8 +37,7 @@ Mutex::trylock(void) {
   return (pthread_mutex_trylock(&this->_mutex) == 0 ? true : false);
 }
 
-pthread_mutex_t *
-Mutex::getMutex(void) // const 
-{
-  return &this->_mutex;
+pthread_mutex_t &
+Mutex::getMutex(void) {
+  return _mutex;
 }

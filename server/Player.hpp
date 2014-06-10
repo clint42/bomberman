@@ -1,12 +1,12 @@
-//
+/*
 // Player.hpp for  in /home/buret_j/rendu/bomberman
 // 
 // Made by buret_j
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon May  5 17:14:40 2014 buret_j
-// Last update Wed May 28 16:20:34 2014 buret_j
-//
+** Last update Tue Jun 10 19:26:37 2014 lafitt_g
+*/
 
 #ifndef PLAYER_HPP_
 # define PLAYER_HPP_
@@ -14,6 +14,7 @@
 # include <sys/time.h>
 # include <cstdlib>
 # include <iostream>
+# include <map>
 
 # include "Team.hpp"
 # include "Socket.hpp"
@@ -21,59 +22,79 @@
 # define TIME(t)  gettimeofday(&t, 0)
 
 # define DELAY		   350 // (in msec) default time of all actions.
-# define DELAY_MULT_ORIENT 0.2 // multiplier of orientation action time.
-# define DELAY_MULT_MOVE   1.0
+# define DELAY_MULT_ORIENT 1.0 // multiplier of orientation action time.
+# define DELAY_MULT_MOVE   2.0
+# define DELAY_MULT_BOMB   1.0
 
 namespace Server {
 
   class Player {
-    size_t	 _id;
+
+  public:
+
+    typedef enum { UP = 0, RIGHT, DOWN, LEFT } Dir;
+    typedef enum { MOVE = 0, ORIENT, BOMB } Action;
+
+  private:
+
+    size_t	_id;
     // std::string  _name;
-    bool	 _bot;
-    Team	*_team;
-    size_t	 _posX, _posY;
+    bool	_bot;
+    Team *	_team;
+    size_t	_posX, _posY;
+    Player::Dir	_orientation;
 
     size_t	_bombsLimit;
     size_t	_bombsOnFloor;
+    size_t	_bombRange;
 
-    timeval	_lastCommand;// date of the action
-    double	_lastCommandTimeMultiplier;// differentiating displacement & orientation commands
+    size_t	_dateNextCommand;
     double	_commandTimeMultiplier;// used by bonus, '1' by default. ex: 0.5 = speed increased by 2.
 
     Socket *	_socket;
-    size_t	_socketPartner;
 
   public:
-    Player(size_t, Team *, bool);
+    Player(size_t, Socket *);
     ~Player();
 
     inline size_t getID() const { return this->_id; }
-    inline Team  *getTeam() const { return this->_team; }
+    inline Team * getTeam() const { return this->_team; }
     inline bool   isBot() const { return this->_bot; }
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
+    inline Player::Dir getOrientation() const { return this->_orientation; }
+    inline size_t getBombsOnFloor() const { return this->_bombsOnFloor; }
+    inline size_t getBombsLimit() const { return this->_bombsLimit; }
+    std::pair<size_t, size_t> getPos() const { std::pair<size_t, size_t> ret(_posX, _posY); return ret; }
+
+    void	  getAction(Action &, std::string const &);
 
     inline void	  setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
     inline void	  setTeam(Team *t) { this->_team = t; }
 
-    inline void	  poseBomb() { if (_bombsLimit < _bombsOnFloor) _bombsOnFloor += 1; }
+    inline void	  poseBomb() { if (_bombsLimit > _bombsOnFloor) _bombsOnFloor += 1; }
     inline void   destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }
 
-    inline void   updateDateOfLastCommand() { TIME(_lastCommand); }
-    inline double getLastCommandMultiplier() const { return _lastCommandTimeMultiplier; }
+    inline size_t getDateNextCommand() const { return _dateNextCommand; }
+    void	  updateDateNextCommand(Action, size_t);
+
     inline double getCommandTimeMultiplier() const { return _commandTimeMultiplier; }
-    inline void   setLastCommandMultiplier(double m) { _lastCommandTimeMultiplier = m; }
     inline void   setCommandTimeMultiplier(double m) { _commandTimeMultiplier = m;  }
-    inline size_t getTimeSinceLastCommand() const {
-      timeval t; TIME(t);
-      return (t.tv_sec % 1000 * 1000 + t.tv_usec / 1000) -
-	(_lastCommand.tv_sec % 1000 * 1000 + _lastCommand.tv_usec / 1000);
-    }
 
     inline Socket *getSocket() const { return _socket; }
-    inline size_t getSocketPartner() { return _socketPartner; }
-    inline void	  setSocketPartner(size_t id) { _socketPartner = id; }
 
+    static std::map<std::string, Dir>	_toDir;
+    static bool				_isInit;
+
+    bool	  moveUp();
+    bool	  moveRight();
+    bool	  moveDown();
+    bool	  moveLeft();
+
+    bool	  orient(Dir);
+    bool	  dropBomb();
+
+    void	  getAction(Action *, Dir *, const std::string &);
   };// ! class Player
 
 }// ! namespace

@@ -1,13 +1,3 @@
-/*
-// map.cpp for  in /home/franel_j/tek2/cpp/bomberman/common
-//
-// Made by julie franel
-// Login   <franel_j@epitech.net>
-//
-// Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Tue Jun  3 16:04:24 2014 julie franel
-*/
-
 #include <openssl/md5.h>
 #include <vector>
 #include <fstream>
@@ -23,6 +13,7 @@ Map::Map(std::string const &filename) {
   std::ifstream	file(filename.c_str(), std::ios::in);
   std::string	tmp;
 
+  this->_filename = filename;
   std::getline(file, tmp);
   CVRT_STRING_TO_SIZET(tmp, _width);
   std::getline(file, tmp);
@@ -33,6 +24,7 @@ Map::Map(std::string const &filename) {
     throw MapException("Map size be must equal to 4*4 or higher.");
 
   this->getMap(_width, _height, file);
+  this->md5It();
   file.close();
 
   if (this->_nbPlayers > ((_width * _height) - (_map.size() - 1)))
@@ -81,12 +73,13 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
 	  _map[_pos] = _c;
 	  _w++;
 	}
-
+      else
+	_w++;
     }
 }
 
 void
-Map::md5It(std::string &save) {
+Map::md5It() {
   std::ifstream filemap(this->_filename.c_str(), std::ios::in);
 
   if(filemap) {
@@ -97,7 +90,7 @@ Map::md5It(std::string &save) {
       content += line;
     filemap.close();
     MD5((unsigned char *)content.c_str(), content.size(), (unsigned char *)key);
-    save = key;
+    _key = key;
   } else
     throw Md5Exception();
 }
@@ -114,10 +107,24 @@ Map::generateMap() {
 */
 
 
+void	Map::setElemAtPos(const std::pair<size_t, size_t> &pos, const int &val)
+{
+  this->_map[pos] = val;
+}
+
 int
 Map::getElemAtPos(size_t x, size_t y) {
   std::pair<size_t, size_t> p(x, y);
-  return _map[p];
+  if (_map[p])
+    return _map[p];
+  return (0);
+}
+
+int
+Map::getElemAtPos(const std::pair<size_t, size_t> &p) {
+  if (_map[p])
+    return _map[p];
+  return (0);
 }
 
 void	Map::deleteElem(const size_t posX, const size_t posY)

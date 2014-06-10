@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Tue May  6 11:11:14 2014 julie franel
-// Last update Tue Jun  3 16:56:29 2014 aurelien prieur
+// Last update Sun Jun  8 20:52:54 2014 buret_j
 //
 
 #ifndef EXCEPTION_HPP_
@@ -38,6 +38,13 @@ class		MapException : public ABombermanException
 public:
   MapException(const std::string &msg) throw();
   virtual ~MapException(void) throw();
+};
+
+class		GameException : public ABombermanException
+{
+public:
+  GameException(const std::string &msg) throw();
+  virtual ~GameException(void) throw();
 };
 
 class		SocketException : public ABombermanException

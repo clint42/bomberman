@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Sat May 31 16:51:24 2014 buret_j
+## Last update Tue Jun 10 16:19:42 2014 buret_j
 ##
 
 CXX		=	clang++
@@ -16,9 +16,10 @@ NAME		=	bomberman
 
 SRC		=	main.cpp			\
 \
+			common/Poll.cpp			\
+			common/ConnexionHandler.cpp	\
 			common/Map.cpp			\
 			common/Exception.cpp		\
-			common/Select.cpp		\
 			common/Mutex.cpp		\
 			common/ScopedLock.cpp		\
 \
@@ -30,7 +31,7 @@ SRC		=	main.cpp			\
 
 OBJ		=	$(SRC:.cpp=.o)
 
-CXXFLAGS	=	-Wall -Wextra -Werror 	\
+CXXFLAGS	=	-Wall -Wextra -Werror -ggdb	\
 			-Icommon/		\
 
 all:			$(NAME)

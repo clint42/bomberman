@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Tue May  6 11:22:17 2014 julie franel
-// Last update Tue Jun  3 10:54:18 2014 buret_j
+// Last update Sun Jun  8 21:28:52 2014 buret_j
 //
 
 #include <cstdlib>
@@ -13,6 +13,8 @@
 #include "Exception.hpp"
 #include "Map.hpp"
 #include "server/Server.hpp"
+
+int debug_align = 0;
 
 int	main()
 {
@@ -22,12 +24,11 @@ int	main()
   try
     {
       Server::Server	_server(&ch);
-
       _server.run();
     }
   catch (ServerException e)
     {
-      std::cerr << e.message() << std::endl;
+      std::cerr << e.what() << std::endl;
     }
   return (0);
 }

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:00:09 2014 aurelien prieur
-// Last update Sat May 31 16:03:05 2014 aurelien prieur
+// Last update Tue Jun 10 18:51:14 2014 aurelien prieur
 //
 
 #ifndef GRAPHICENGINE_HPP_
@@ -24,10 +24,17 @@
 # include <glm/gtc/matrix_transform.hpp>
 # include "GameEntities.hpp"
 # include "EventsHandler.hpp"
-# include "Model.hpp"
+# include "Player.hpp"
 # include "Floor.hpp"
 # include "SafeQueue.hpp"
+# include "GraphicalText.hpp"
+# include "Chrono.hpp"
+# include "Score.hpp"
+# include "FpsDisplay.hpp"
 
+# define W_WIDTH 1920
+# define W_HEIGHT 1080
+# define SHOW_FPS 1
 class			GraphicEngine: public gdl::Game
 {
   std::vector<int>	watchedEvents;
@@ -38,15 +45,28 @@ class			GraphicEngine: public gdl::Game
   gdl::Input		input;
   gdl::BasicShader	shader;
   Floor			floor;
-  SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs;
+  SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs;
+  Chrono		chrono;
+  gdl::Geometry		background;
+  gdl::Texture		bgTex;
+  FpsDisplay		*fps;
+  std::vector<Score *>	scores;
+  void			getPlayerProjection(glm::mat4 &projection) const;
+  void			viewPortPlayer(int nPlayer = 0) const;
+  void			drawPlayer(int nPlayer);
+  void			drawScore(int nPlayer);
+  bool			mkBackground(void);
+  void			drawBackground(void);
+  void			draw2D(void);
 
 public:
   GraphicEngine(EventsHandler &eventsHandler, GameEntities &objects,
-		SafeQueue<std::pair<std::pair<size_t, size_t>, ObjectType> > &createInstructs);
+		SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs);
   ~GraphicEngine();
   virtual bool	initialize();
   virtual bool	update();
   virtual void	draw();
+  virtual void	stop();
 };
 
 #endif // !GRAPHICENGINE_HPP_

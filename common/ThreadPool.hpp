@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed Apr 23 11:05:56 2014 buret_j
-// Last update Thu May  1 14:51:32 2014 buret_j
+// Last update Sun Jun  8 16:12:59 2014 buret_j
 //
 
 #ifndef THREADPOOL_HPP_
@@ -72,7 +72,6 @@ public:
   void		addTask(ThreadPool::task_t *);
   void		setStop(void);
   void		setRun(void);
-
 
 }; // !ThreadPool
 
