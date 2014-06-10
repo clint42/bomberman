@@ -1,1 +1,1 @@
-clang++ *.cpp ../test.cpp -L/home/prieur_b/LibBomberman_linux_x64/libs -lgdl_gl -lGL -lGLEW -ldl -lrt -lfbxsdk -lSDL2 -lpthread -I/home/prieur_b/LibBomberman_linux_x64/includes -ggdb
+clang++ *.cpp ../test.cpp -L/home/virol_g/LibBomberman_linux_x64/libs -lgdl_gl -lGL -lGLEW -ldl -lrt -lfbxsdk -lSDL2 -lpthread -I/home/virol_g/LibBomberman_linux_x64/includes -ggdb

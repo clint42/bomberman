@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 11:18:47 2014 aurelien prieur
-// Last update Sat May 24 15:28:24 2014 aurelien prieur
+// Last update Sat Jun  7 15:19:12 2014 virol_g
 //
 
 #ifndef MENUELEM_HPP_
@@ -31,6 +31,9 @@ public:
   virtual bool	update(gdl::Clock const &clock, gdl::Input &input) = 0;
   virtual void	draw(gdl::AShader &shader, gdl::Clock const &clock) = 0;
   virtual void	hover(bool isHover) = 0;
+
+  virtual std::pair<size_t, size_t>	getPos() const = 0;
+  virtual std::pair<size_t, size_t>	getSize() const = 0;
 };
 
 #endif // !MENUELEM_HPP_

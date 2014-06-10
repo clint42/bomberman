@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 26 16:09:25 2014 aurelien prieur
-// Last update Mon Jun  2 14:35:44 2014 virol_g
+// Last update Sat Jun  7 15:15:18 2014 virol_g
 //
 
 #include <iostream>
@@ -59,4 +59,12 @@ void	MenuBackground::hover(bool isHover)
   (void)isHover;
 }
 
+std::pair<size_t, size_t>	MenuBackground::getPos() const
+{
+  return (std::pair<size_t, size_t>(0, 0));
+}
 
+std::pair<size_t, size_t>	MenuBackground::getSize() const
+{
+  return (std::pair<size_t, size_t>(0, 0));
+}

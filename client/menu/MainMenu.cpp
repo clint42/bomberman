@@ -1,4 +1,3 @@
-
 //
 // MainMenu.cpp for bomberman in /home/prieur_b/tek2/cpp/bomberman/client
 // 
@@ -6,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Thu May 29 14:56:12 2014 aurelien prieur
+// Last update Wed Jun  4 15:49:47 2014 virol_g
 //
 
 #include <algorithm>
@@ -16,17 +15,19 @@
 
 MainMenu::MainMenu()
 {
+  this->_sdlStarted = false;
 }
 
 MainMenu::~MainMenu()
 {
   for (size_t i = 0; i < _menuElems.size(); ++i)
     delete _menuElems[i];
+  delete _menuBackground;
 }
 
 bool	MainMenu::build()
 {
-  _menuElems.push_back(new MenuBackground());
+  _menuBackground = new MenuBackground();
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(30, 205),
 				      std::pair<size_t, size_t>(250, 60),
 				     "New game",

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 10:57:53 2014 aurelien prieur
-// Last update Mon May 26 13:15:56 2014 aurelien prieur
+// Last update Tue Jun 10 19:08:56 2014 virol_g
 //
 
 #ifndef AMENU_HPP_
@@ -27,15 +27,17 @@
 
 class	AMenu: public gdl::Game
 {
-  gdl::SdlContext		_sdlContext;
-  gdl::Clock			_clock;
-  gdl::Input			_input;
-  gdl::BasicShader		_shader;
   bool				_key[2];
 
 protected:
+  gdl::BasicShader		_shader;
+  gdl::Clock			_clock;
+  gdl::Input			_input;
+  gdl::SdlContext		_sdlContext;
+  IMenuElem			*_menuBackground;
   std::vector<IMenuElem *>	_menuElems;
   int				_selected;
+  bool				_sdlStarted;
   
 public:
   AMenu();
@@ -45,5 +47,22 @@ public:
   virtual bool	update();
   virtual void	draw();
   virtual void	timer();
+  virtual gdl::SdlContext	getContext() const;
 };
+
+typedef enum	e_timeGame
+  {
+    SHORT,
+    MEDIUM,
+    LONG
+  }		t_timeGame;
+
+typedef struct	s_paramGame
+{
+  size_t	nbPlayers;
+  size_t	serverPort;
+  std::string	mapName;
+  t_timeGame	timeGame;
+}		t_paramGame;
+
 #endif // !AMENU_HPP_
