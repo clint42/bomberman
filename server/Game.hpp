@@ -111,7 +111,7 @@ namespace	Server {
 
     void		filterCmd(t_cmd const *, std::string &) const;
     bool		process(t_cmd *, Player *);
-    void		bombSwitchQueue(t_cmd *);
+    void		bombSwitchQueue(t_cmd *, const std::pair<size_t, size_t>);
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
       return (p->getDateNextCommand() < this->timeLeft()) ? true : false;
