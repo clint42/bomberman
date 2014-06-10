@@ -41,6 +41,7 @@ namespace Server {
     bool	funcWelcome(const t_cmd *);
     bool	funcPause(const t_cmd *);
     bool	funcKill(const t_cmd *);
+    bool	funcMd5(const t_cmd *);
 
     void	watchEvent(int e);
     void	unwatchEvent(int e);

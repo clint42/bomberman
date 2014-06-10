@@ -195,6 +195,15 @@ Server::Server::funcPause(__attribute__((unused))const t_cmd *_cmd) {
 }
 
 bool
+Server::Server::funcMd5(t_cmd const *cmd) {
+  (void)cmd;
+  // je dois checker params[0] avec _game->getMapKey()
+  // si c'est == alors je garde le joueur
+  // si c'est != alors je dois degager le client
+  return (true);
+}
+
+bool
 Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd) {
   this->_run = false;
   return (true);
