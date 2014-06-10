@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Wed May 28 17:23:30 2014 buret_j
-// Last update Mon Jun  9 20:43:40 2014 julie franel
+** Last update Tue Jun 10 14:47:39 2014 lafitt_g
 */
 
 #ifndef SERVER__GAME_HPP_
@@ -91,22 +91,22 @@ namespace	Server {
 
     static bool		_isGame;
     static std::map<std::pair<Player::Action, Player::Dir>,
-		    bool(Game::*)(Player *)> func;
+		    bool(Game::*)(Player *, t_cmd *)> func;
 
-    bool		moveUp(Player *);
-    bool		moveRight(Player *);
-    bool		moveDown(Player *);
-    bool		moveLeft(Player *);
+    bool		moveUp(Player *, t_cmd *);
+    bool		moveRight(Player *, t_cmd *);
+    bool		moveDown(Player *, t_cmd *);
+    bool		moveLeft(Player *, t_cmd *);
 
-    bool		orientUp(Player *);
-    bool		orientRight(Player *);
-    bool		orientDown(Player *);
-    bool		orientLeft(Player *);
+    bool		orientUp(Player *, t_cmd *);
+    bool		orientRight(Player *, t_cmd *);
+    bool		orientDown(Player *, t_cmd *);
+    bool		orientLeft(Player *, t_cmd *);
 
-    bool		bombUp(Player *);
-    bool		bombRight(Player *);
-    bool		bombDown(Player *);
-    bool		bombLeft(Player *);
+    bool		bombUp(Player *, t_cmd *);
+    bool		bombRight(Player *, t_cmd *);
+    bool		bombDown(Player *, t_cmd *);
+    bool		bombLeft(Player *, t_cmd *);
 
     void		update();
     void		bombsProcessing();
@@ -119,6 +119,8 @@ namespace	Server {
 
     void		filterCmd(t_cmd const *, std::string &) const;
     bool		process(t_cmd *, Player *);
+    void		bombSwitchQueue(t_cmd *);
+    void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
       return (p->getDateNextCommand() < this->timeLeft()) ? true : false;
     }
