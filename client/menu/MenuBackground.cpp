@@ -5,15 +5,15 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 26 16:09:25 2014 aurelien prieur
-// Last update Sat Jun  7 15:15:18 2014 virol_g
+// Last update Tue Jun 10 20:25:45 2014 virol_g
 //
 
 #include <iostream>
 #include "MenuBackground.hpp"
 
-MenuBackground::MenuBackground()
+MenuBackground::MenuBackground(const std::string &textureName)
 {
-  this->initialize("./ressources/mainMenuBg.tga");
+  this->initialize(textureName);
 }
 
 MenuBackground::~MenuBackground()

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Wed Jun  4 15:49:47 2014 virol_g
+// Last update Tue Jun 10 20:27:00 2014 virol_g
 //
 
 #include <algorithm>
@@ -27,7 +27,7 @@ MainMenu::~MainMenu()
 
 bool	MainMenu::build()
 {
-  _menuBackground = new MenuBackground();
+  _menuBackground = new MenuBackground("./ressources/mainMenuBg.tga");
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(30, 205),
 				      std::pair<size_t, size_t>(250, 60),
 				     "New game",

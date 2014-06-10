@@ -5,9 +5,10 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Tue Jun 10 20:02:40 2014 virol_g
+// Last update Tue Jun 10 21:43:33 2014 virol_g
 //
 
+#include	<sstream>
 #include	<fstream>
 #include	"CreateMenu.hpp"
 
@@ -32,8 +33,8 @@ bool	CreateMenu::build()
   std::ifstream	file("maps");
   std::string	name;
 
-  _selectMap = new MenuScroll(std::pair<size_t, size_t>(400, 360),
-  			      std::pair<size_t, size_t>(650, 360),
+  _selectMap = new MenuScroll(std::pair<size_t, size_t>(400, 380),
+  			      std::pair<size_t, size_t>(680, 380),
   			      std::pair<size_t, size_t>(80, 60),
   			      glm::vec4(0.f, 0.f, 1.f, 1.f),
   			      glm::vec4(0.93, 0.9, 0.32, 1.f));
@@ -41,29 +42,31 @@ bool	CreateMenu::build()
     {
       while (getline(file, name))
 	{
-	  _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(400, 300),
-					    std::pair<size_t, size_t>(330, 60),
+	  if (name.size() > 8)
+	    name.resize(8);
+	  _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 380),
+					    std::pair<size_t, size_t>(210, 60),
 					    name, glm::vec4(0.f, 0.f, 1.f, 1.f),
 					    glm::vec4(0.93, 0.9, 0.32, 1.f)));
 	}
     }
-  _menuBackground = new MenuBackground();
+  _menuBackground = new MenuBackground("./ressources/backgroundSubMenu.tga");
   _nbPlayers = new MenuInput(std::pair<size_t, size_t>(400, 80),
 			     std::pair<size_t, size_t>(250, 60),
-			     glm::vec4(0.f, 0.f, 1.f, 1.f));
-  _nbBots = new MenuInput(std::pair<size_t, size_t>(400, 120),
+			     glm::vec4(1.f, 1.f, 1.f, 1.f));
+  _nbBots = new MenuInput(std::pair<size_t, size_t>(400, 180),
 			     std::pair<size_t, size_t>(250, 60),
-			     glm::vec4(0.f, 0.f, 1.f, 1.f));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 200),
-				      std::pair<size_t, size_t>(85, 60),
+			     glm::vec4(1.f, 1.f, 1.f, 1.f));
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 280),
+				      std::pair<size_t, size_t>(150, 40),
 				      "Short", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 200),
-				      std::pair<size_t, size_t>(85, 60),
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(550, 280),
+				      std::pair<size_t, size_t>(150, 60),
 				      "Medium", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 200),
-				      std::pair<size_t, size_t>(85, 60),
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(700, 280),
+				      std::pair<size_t, size_t>(150, 60),
 				      "Long", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
   return (true);
@@ -94,7 +97,18 @@ bool	CreateMenu::update()
 		_menuElems[_selected]->hover(false);
 	      _selected = i;
 	      _menuElems[i]->hover(true);
-	      // return (false);
+	    }
+	  if (mouse.x > _nbBots->getPos().first && mouse.x < _nbBots->getPos().first + _nbBots->getSize().first &&
+	      mouse.y > _nbBots->getPos().second && mouse.y < _nbBots->getPos().second + _nbBots->getSize().second)
+	    {
+	      _nbBots->hover(true);
+	      _nbPlayers->hover(false);
+	    }
+	  if (mouse.x > _nbPlayers->getPos().first && mouse.x < _nbPlayers->getPos().first + _nbPlayers->getSize().first &&
+	      mouse.y > _nbPlayers->getPos().second && mouse.y < _nbPlayers->getPos().second + _nbPlayers->getSize().second)
+	    {
+	      _nbBots->hover(false);
+	      _nbPlayers->hover(true);
 	    }
 	}
     }
@@ -102,6 +116,7 @@ bool	CreateMenu::update()
     _menuElems[i]->update(_clock, _input);
   _selectMap->update(_clock, _input);
   _nbPlayers->update(_clock, _input);
+  _nbBots->update(_clock, _input);
   return (true);
 }
 
@@ -111,8 +126,24 @@ void	CreateMenu::draw()
   _shader.bind();
   _menuBackground->draw(_shader, _clock);
   _nbPlayers->draw(_shader, _clock);
+  _nbBots->draw(_shader, _clock);
   _selectMap->draw(_shader, _clock);
   for (size_t i = 0; i < _menuElems.size(); ++i)
     _menuElems[i]->draw(_shader, _clock);
   _sdlContext.flush();
+}
+
+t_game		*CreateMenu::getChoice() const
+{
+  std::stringstream	ss;
+  std::stringstream	ss2;
+  t_game	*choice = new t_game;
+
+  choice->mapName = _selectMap->getChoice();
+  choice->timeGame = (_selected == -1) ? 1 : _selected;
+  ss << _nbBots->getInput();
+  ss >> choice->nbBots;
+  ss2 << _nbPlayers->getInput();
+  ss2 >> choice->nbPlayers;
+  return (choice);
 }

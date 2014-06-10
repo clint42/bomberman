@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:51:47 2014 virol_g
-// Last update Tue Jun 10 19:59:04 2014 virol_g
+// Last update Tue Jun 10 21:26:38 2014 virol_g
 //
 
 #ifndef		CREATEMENU_HPP_
@@ -21,7 +21,8 @@ typedef struct	s_game
 {
   std::string	mapName;
   size_t	nbPlayers;
-  size_t	timeGame;
+  size_t	nbBots;
+  size_t	timeGame; // 0 : short; 1 : medium; 2 : long
 }		t_game;
 
 class		CreateMenu : public AMenu

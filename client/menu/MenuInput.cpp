@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:35 2014 virol_g
-// Last update Tue Jun 10 19:42:03 2014 virol_g
+// Last update Tue Jun 10 21:11:47 2014 virol_g
 //
 
 #include	"MenuInput.hpp"
@@ -61,18 +61,21 @@ bool	MenuInput::initialize(const std::string &textureName)
 bool	MenuInput::update(const gdl::Clock &clock, gdl::Input &input)
 {
   (void)clock;
-  for (std::map<int, std::pair<char, bool> >::iterator it = _keys.begin(); it != _keys.end(); ++it)
+  if (_hover)
     {
-      if (input.getKey(it->first) == true && it->second.second == false)
+      for (std::map<int, std::pair<char, bool> >::iterator it = _keys.begin(); it != _keys.end(); ++it)
 	{
-	  if (it->first == SDLK_BACKSPACE)
-	    _output.delLetter();
-	  else
-	    _output.addLetter(it->second.first);
-	  it->second.second = true;
+	  if (input.getKey(it->first) == true && it->second.second == false)
+	    {
+	      if (it->first == SDLK_BACKSPACE)
+		_output.delLetter();
+	      else
+		_output.addLetter(it->second.first);
+	      it->second.second = true;
+	    }
+	  else if (input.getKey(it->first) == false)
+	    it->second.second = false;
 	}
-      else if (input.getKey(it->first) == false)
-	it->second.second = false;
     }
   return (true);
 }
@@ -88,7 +91,6 @@ void	MenuInput::draw(gdl::AShader &shader, const gdl::Clock &clock)
 void	MenuInput::hover(bool isHover)
 {
   _hover = isHover;
-  std::cout << "hover : " << std::boolalpha << _hover << std::endl;
 }
 
 std::string	MenuInput::getInput() const

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:29:16 2014 aurelien prieur
-// Last update Mon Jun  9 17:37:12 2014 virol_g
+// Last update Tue Jun 10 21:20:43 2014 virol_g
 //
 
 #include <iostream>
@@ -99,21 +99,7 @@ std::pair<size_t, size_t>	MenuButton::getSize() const
   return (_size);
 }
 
-void	MenuButton::setPos(const std::pair<size_t, size_t> &pos)
+std::string		MenuButton::getString() const
 {
-  std::cout << "SET POS" << std::endl;
-  this->_pos = pos;
-  _geometry.pushVertex(glm::vec3(_pos.first, _pos.second, -1));
-  _geometry.pushVertex(glm::vec3(_pos.first, _pos.second + _size.second, -1));
-  _geometry.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second + _size.second, -1));
-  _geometry.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second, -1));
-
-  _geometry.build();
-
-  _geometryHover.pushVertex(glm::vec3(_pos.first, _pos.second, -1));
-  _geometryHover.pushVertex(glm::vec3(_pos.first, _pos.second + _size.second, -1));
-  _geometryHover.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second + _size.second, -1));
-  _geometryHover.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second, -1));
-
-  std::cout << _pos.first << ", " << _pos.second << std::endl;
+  return (_label.getString());
 }

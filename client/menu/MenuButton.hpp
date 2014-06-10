@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:24:33 2014 aurelien prieur
-// Last update Mon Jun  9 14:06:34 2014 virol_g
+// Last update Tue Jun 10 21:20:54 2014 virol_g
 //
 
 #ifndef MENUBUTTON_HPP_
@@ -41,7 +41,8 @@ public:
 
   virtual std::pair<size_t, size_t>	getPos() const;
   virtual std::pair<size_t, size_t>	getSize() const;
-  void		setPos(const std::pair<size_t, size_t> &pos);
+
+  std::string	getString() const;
 };
 
 #endif // !MENUBUTTON_HPP_

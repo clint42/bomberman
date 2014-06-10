@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Sat Jun  7 17:58:22 2014 virol_g
-// Last update Tue Jun 10 19:45:05 2014 virol_g
+// Last update Tue Jun 10 21:23:31 2014 virol_g
 //
 
 #include	<iostream>
@@ -83,4 +83,9 @@ std::pair<size_t, size_t>	MenuScroll::getPos() const
 std::pair<size_t, size_t>	MenuScroll::getSize() const
 {
   return (_scroll.getSize());
+}
+
+std::string	MenuScroll::getChoice() const
+{
+  return (_list[_display]->getString());
 }
