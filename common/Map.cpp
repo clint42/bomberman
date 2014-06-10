@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:07:18 2014 julie franel
-// Last update Tue Jun 10 16:11:37 2014 buret_j
+// Last update Tue Jun 10 16:58:23 2014 julie franel
 */
 
 #include <openssl/md5.h>
@@ -23,6 +23,7 @@ Map::Map(std::string const &filename) {
   std::ifstream	file(filename.c_str(), std::ios::in);
   std::string	tmp;
 
+  this->_filename = filename;
   std::getline(file, tmp);
   CVRT_STRING_TO_SIZET(tmp, _width);
   std::getline(file, tmp);
