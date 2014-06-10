@@ -1,13 +1,3 @@
-/*
-// Server.cpp for  in /home/buret_j/rendu/bomberman
-//
-// Made by buret_j
-// Login   <buret_j@epitech.net>
-//
-// Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Tue Jun 10 15:59:56 2014 buret_j
-*/
-
 #include "Server.hpp"
 
 Server::Server::Server(ConnexionHandler *c) : _run(true), _co(c) {
@@ -203,13 +193,19 @@ bool	Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd)
   return (true);
 }
 
+bool Server::Server::_isInit = false;
+std::map<std::string, bool (Server::Server::*)(const Server::t_cmd *)> Server::Server::_func;
+
 bool
 Server::Server::manageAdminCommand()
 {
-  std::map<std::string, bool (Server::Server::*)(const t_cmd *)> _func;
-  _func["CONFIG"] = &Server::Server::funcWelcome;
-  _func["PAUSE"] = &Server::Server::funcPause;
-  _func["KILL"] = &Server::Server::funcKill;
+  if (Server::_isInit == false)
+    {
+      Server::_isInit = true;
+      Server::_func["CONFIG"] = &Server::Server::funcWelcome;
+      Server::_func["PAUSE"] = &Server::Server::funcPause;
+      Server::_func["KILL"] = &Server::Server::funcKill;
+    }
   bool ret = false;
 
   if (this->_ext.front()->id == 1)
@@ -267,7 +263,7 @@ Server::Server::run() {
     if (!ret) {
       DEBUG("je regarde si j'update le game", 0);
       if (!_game || _game->isPaused() || !_game->hasSomethingToDo()) {
-	timeLoop = -1; // 1 sec
+	timeLoop = -1; // set it back to 1000msec
 	DEBUG("j'ai rien a faire en fait", 0);
       }
       else {
@@ -279,41 +275,4 @@ Server::Server::run() {
 
     DEBUG("Server::server::run() => ! loop", 0);
   } // ! while
-
-
-
-
-  // while (_run && _co->update(timeLoop) >= 0) {
-  //   sleep(1);
-  //   DEBUG("Server::server::run() => loop", 0);
-  //   _co->perform(&trampoline, this);
-  //   filterMsg();
-
-  //   if (!_ext.empty() && this->manageAdminCommand()) {
-  //     DEBUG("Server::Server::run() => loop => admin command", 0);
-  //     // if (!watchOut) {
-  //     // 	watchEvent(POLLOUT);
-  //     // 	watchOut = true;
-  //     // }
-  //     timeLoop = 0;
-  //   }
-  //   else if (!_game || _game->isPaused() || !_game->hasSomethingToDo()) {
-  //     DEBUG("Server::Server::run() => loop => nothing to do", 0);
-  //     // if (watchOut) {
-  //     // 	unwatchEvent(POLLOUT);
-  //     // 	watchOut = false;
-  //     // }
-  //     timeLoop = -1;
-  //   }
-  //   else {
-  //     DEBUG("Server::Server::run() => loop => something to do", 0);
-  //     _game->update();
-  //     // if (!watchOut) {
-  //     // 	watchEvent(POLLOUT);
-  //     // 	watchOut = true;
-  //     // }
-  //     timeLoop = 0;
-  //   }
-  // }
-  // DEBUG("! Server::server::run()", -1);
 }

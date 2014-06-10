@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Mon Jun  9 14:35:51 2014 aurelien prieur
+## Last update Tue Jun 10 12:09:36 2014 aurelien prieur
 ##
 
 CXX =	clang++
@@ -30,6 +30,7 @@ SRC =   main.cpp \
 	Bomb.cpp \
 	Fire.cpp \
 	Chrono.cpp \
+	FpsDisplay.cpp \
 	GraphicalText.cpp \
 	GraphicalLetter.cpp \
 	../common/Map.cpp \

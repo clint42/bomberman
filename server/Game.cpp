@@ -1,13 +1,3 @@
-/*
-// Game.cpp for  in /home/buret_j/rendu/bomberman
-// 
-// Made by buret_j
-// Login   <buret_j@epitech.net>
-// 
-// Started on  Fri May 30 16:58:20 2014 buret_j
-// Last update Tue Jun 10 16:06:08 2014 buret_j
-*/
-
 #include "Game.hpp"
 
 static Server::Game::Play g_Plays[] = {
@@ -153,8 +143,9 @@ Server::Game::filterCmd(t_cmd const *cmd, std::string &msg) const {
 */
 
 bool
-Server::Game::moveUp(Player *p)
+Server::Game::moveUp(Player *p, t_cmd *c)
 {
+  (void)c;
   if (p->getPosY())
     {
       std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() - 1);
@@ -170,8 +161,9 @@ Server::Game::moveUp(Player *p)
 }
 
 bool
-Server::Game::moveRight(Player *p)
+Server::Game::moveRight(Player *p, t_cmd *c)
 {
+  (void)c;
   if (p->getPosX() != this->_map->getWidth() - 1)
     {
       std::pair<size_t, size_t> pos(p->getPosX() + 1, p->getPosY());
@@ -187,8 +179,9 @@ Server::Game::moveRight(Player *p)
 }
 
 bool
-Server::Game::moveDown(Player *p)
+Server::Game::moveDown(Player *p, t_cmd *c)
 {
+  (void)c;
   if (p->getPosY() != this->_map->getHeight() - 1)
     {
       std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() + 1);
@@ -204,8 +197,9 @@ Server::Game::moveDown(Player *p)
 }
 
 bool
-Server::Game::moveLeft(Player *p)
+Server::Game::moveLeft(Player *p, t_cmd *c)
 {
+  (void)c;
   if (p->getPosX())
     {
       std::pair<size_t, size_t> pos(p->getPosX() - 1, p->getPosY());
@@ -221,84 +215,130 @@ Server::Game::moveLeft(Player *p)
 }
 
 bool
-Server::Game::orientUp(Player *p)
+Server::Game::orientUp(Player *p, t_cmd *c)
 {
+  c->action = "ROTATE";
   return(p->orient(Server::Player::UP));
 }
 
 bool
-Server::Game::orientRight(Player *p)
+Server::Game::orientRight(Player *p, t_cmd *c)
 {
+  c->action = "ROTATE";
   return(p->orient(Server::Player::RIGHT));
 }
 
 bool
-Server::Game::orientDown(Player *p)
+Server::Game::orientDown(Player *p, t_cmd *c)
 {
+  c->action = "ROTATE";
   return(p->orient(Server::Player::DOWN));
 }
 
 bool
-Server::Game::orientLeft(Player *p)
+Server::Game::orientLeft(Player *p, t_cmd *c)
 {
+  c->action = "ROTATE";
   return(p->orient(Server::Player::LEFT));
 }
 
+void
+Server::Game::bombSwitchQueue(t_cmd *c)
+{
+  t_cmd * cmd = new t_cmd;
+  cmd->id = c->id;
+  cmd->date = c->date;
+  cmd->pos = c->pos;
+  cmd->action = c->action;
+  this->_bombs.push(cmd);
+}
+
+void
+Server::Game::buildCmdCreateBomb(t_cmd *c, const std::pair<size_t, size_t> pos)
+{
+  c->action = "CREATE";
+  c->params[0] = "BOMB";
+  c->params[1] = "0";
+  std::stringstream convert;
+  convert << pos.first;
+  c->params.push_back(convert.str());
+  convert.str(std::string());
+  convert.clear();
+  convert << pos.second;
+  c->params.push_back(convert.str());
+}
+
 bool
-Server::Game::bombUp(Player *p)
+Server::Game::bombUp(Player *p, t_cmd *c)
 {
   if (p->getPosY())
     {
       std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() - 1);
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
-	return (p->dropBomb());
+	{
+	  this->bombSwitchQueue(c);
+	  this->buildCmdCreateBomb(c, pos);
+	  return (p->dropBomb());
+	}
     }
   return false;
 }
 
 bool
-Server::Game::bombRight(Player *p)
+Server::Game::bombRight(Player *p, t_cmd *c)
 {
   if (p->getPosX() != this->_map->getWidth() - 1)
     {
       std::pair<size_t, size_t> pos(p->getPosX() + 1, p->getPosY());
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
-	return (p->dropBomb());
+	{
+	  this->bombSwitchQueue(c);
+	  this->buildCmdCreateBomb(c, pos);
+	  return (p->dropBomb());
+	}
     }
   return false;
 }
 
 bool
-Server::Game::bombDown(Player *p)
+Server::Game::bombDown(Player *p, t_cmd *c)
 {
   if (p->getPosY() != this->_map->getHeight() - 1)
     {
       std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() + 1);
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
-	return (p->dropBomb());
+	{
+	  this->bombSwitchQueue(c);
+	  this->buildCmdCreateBomb(c, pos);
+	  return (p->dropBomb());
+	}
     }
   return false;
 }
 
 bool
-Server::Game::bombLeft(Player *p)
+Server::Game::bombLeft(Player *p, t_cmd *c)
 {
   if (p->getPosX())
     {
       std::pair<size_t, size_t> pos(p->getPosX() - 1, p->getPosY());
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
-	return (p->dropBomb());
+	{
+	  this->bombSwitchQueue(c);
+	  this->buildCmdCreateBomb(c, pos);
+	  return (p->dropBomb());
+	}
     }
   return false;
 }
 
 bool Server::Game::_isGame = false;
 std::map<std::pair<Server::Player::Action, Server::Player::Dir>,
-	 bool (Server::Game::*)(Server::Player *)> Server::Game::func;
+	 bool (Server::Game::*)(Server::Player *, Server::t_cmd *)> Server::Game::func;
 
 bool
 Server::Game::process(t_cmd *c, Player *p)
@@ -324,31 +364,24 @@ Server::Game::process(t_cmd *c, Player *p)
   if (c->action == "MOVE")
     {
       p->getAction(&a, &d, c->params[0]);
-      if ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p))
+      if ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c))
 	{
 	  std::string msg;
 	  this->filterCmd(c, msg);
 	  this->_messenger->addMessage(p->getSocket(), msg);
 	}
     }
-  // else if (c->action == "BOMB")
-  //   {
-  //     a = Server::Player::BOMB;
-  //     d = p->getOrientation();
-  //     if ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p))
-  // 	{
-  // 	  t_cmd * cmd = new t_cmd;
-  // 	  cmd->id = c->id;
-  // 	  cmd->date = c->date;
-  // 	  cmd->pos = c->pos;
-  // 	  cmd->action = c->action;
-  // 	  this->_bombs.push(cmd);
-	  
-  // 	  std::string msg;
-  // 	  this->filterCmd(c, msg);
-  // 	  this->_messenger->addMessage(p->getSocket(), msg);
-  // 	}
-  //   }
+  else if (c->action == "BOMB")
+    {
+      a = Server::Player::BOMB;
+      d = p->getOrientation();
+      if ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c))
+  	{
+	  std::string msg;
+	  this->filterCmd(c, msg);
+	  this->_messenger->addMessage(p->getSocket(), msg);
+  	}
+    }
   // else if (c->action == "BOMB EXPLOSE")
   //   {
   //     // send directly to messenger

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Mon Jun  9 14:29:55 2014 aurelien prieur
+// Last update Tue Jun 10 12:45:52 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -69,9 +69,9 @@ bool		ClientCore::run()
 {
   while (_connexion.update(500) >= 0 && !_eventsHandler.isFinished())
     {
-      if (_gameEntities.getPlayer() == NULL)
-	_gameEntities.setPlayer(1);
-      if (_gameEntities.getPlayer(1) == NULL)
+      if (_gameEntities.getPlayer(false, 0) == NULL)
+	_gameEntities.setPlayer(1, 0);
+      if (_gameEntities.getPlayer(false, 1) == NULL)
 	_gameEntities.setPlayer(2, 1);
       _connexion.perform(&trampoline, this);
     }
