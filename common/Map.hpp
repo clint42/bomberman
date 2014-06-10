@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Mon May  5 17:11:21 2014 julie franel
-// Last update Tue Jun 10 17:36:22 2014 julie franel
+// Last update Tue Jun 10 18:02:32 2014 julie franel
 */
 
 #ifndef			MAP_HPP_
@@ -52,6 +52,7 @@ public:
   inline size_t		getWidth() const { return _width; }
   inline size_t		getHeight() const { return _height; }
   inline size_t		getNbrSlot() const { return _nbPlayers; }
+  inline const std::string	&getFilename() const { return _filename; }
   inline std::string const &	getKey() const { return _key; }
   inline std::map<std::pair<size_t, size_t>, int> const &getMap() const { return _map; }
 
