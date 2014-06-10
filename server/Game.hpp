@@ -64,6 +64,8 @@ namespace	Server {
     inline Map const *	getMap() const { return _map; }
     inline Play const &	getParams() const { return _params; }
     inline std::string const &getMapName() const { return _map->getFilename(); }
+    inline std::string const &getMapMd5() const { return _map->getKey(); }
+
     size_t		timeLeft() const;
     inline bool		hasSomethingToDo() const { return !(_events.empty() || _bombs.empty()); }
 

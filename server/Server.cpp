@@ -86,14 +86,17 @@ Server::Server::addPeer(Socket *s) {
   static size_t id = 1;
   Player *p = new Player(id, s);
   std::string welcome;
+  std::string s_id;
 
   _peers.push_back(p);
-  CVRT_SIZET_TO_STRING(welcome, id);
-  welcome += " 0 0 WELCOME";
+  CVRT_SIZET_TO_STRING(s_id, id);
+  welcome += s_id + " 0 0 WELCOME";
+  // welcome += ;
   if (_game) {
     welcome += "\n";
-    CVRT_SIZET_TO_STRING(welcome, id);
-    welcome += " 0 0 MAP " += _game->getMapName();
+    welcome += s_id;
+    welcome += " 0 0 MAP ";
+    welcome += _game->getMapName();
   }
   _messenger.addMessage(s, welcome);
   this->sendMessage(s);
@@ -148,8 +151,8 @@ Server::Server::trampoline_performResult(void *p, Socket *s, bool b[3]) {
 bool Server::Game::_isInit = false;
 std::map<std::string, Server::Game::Type> Server::Game::_types;
 
-bool		Server::Server::funcWelcome(const t_cmd *_cmd)
-{
+bool
+Server::Server::funcWelcome(const t_cmd *_cmd) {
   if (Game::_isInit == false)
     {
       Game::_isInit = true;
@@ -181,8 +184,8 @@ bool		Server::Server::funcWelcome(const t_cmd *_cmd)
   return (true);
 }
 
-bool	Server::Server::funcPause(__attribute__((unused))const t_cmd *_cmd)
-{
+bool
+Server::Server::funcPause(__attribute__((unused))const t_cmd *_cmd) {
   if (this->_game->isPaused() == true)
     this->_game->start();
   else
@@ -190,8 +193,8 @@ bool	Server::Server::funcPause(__attribute__((unused))const t_cmd *_cmd)
   return (true);
 }
 
-bool	Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd)
-{
+bool
+Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd) {
   this->_run = false;
   return (true);
 }
@@ -200,8 +203,7 @@ bool Server::Server::_isInit = false;
 std::map<std::string, bool (Server::Server::*)(const Server::t_cmd *)> Server::Server::_func;
 
 bool
-Server::Server::manageAdminCommand()
-{
+Server::Server::manageAdminCommand() {
   if (Server::_isInit == false)
     {
       Server::_isInit = true;
@@ -217,24 +219,22 @@ Server::Server::manageAdminCommand()
   return ret;
 }
 
-void	Server::Server::watchEvent(int e)
-{
+void
+Server::Server::watchEvent(int e) {
   std::list<Player *>::iterator	it;
 
-  for (it = _peers.begin(); it != _peers.end(); ++it)
-    {
-      this->_co->watchEventOnSocket((*it)->getSocket(), e);
-    }
+  for (it = _peers.begin(); it != _peers.end(); ++it) {
+    this->_co->watchEventOnSocket((*it)->getSocket(), e);
+  }
 }
 
-void	Server::Server::unwatchEvent(int e)
-{
+void
+Server::Server::unwatchEvent(int e) {
   std::list<Player *>::iterator	it;
 
-  for (it = _peers.begin(); it != _peers.end(); ++it)
-    {
-      this->_co->unwatchEventOnSocket((*it)->getSocket(), e);
-    }
+  for (it = _peers.begin(); it != _peers.end(); ++it) {
+    this->_co->unwatchEventOnSocket((*it)->getSocket(), e);
+  }
 }
 
 void
@@ -242,7 +242,6 @@ Server::Server::run() {
   DEBUG("Server::server::run()", 1);
   int	timeLoop = 0;
   int   ret;
-  // bool	watchOut = true;
 
   while (_run && (ret = _co->update(timeLoop)) >= 0) {
     sleep(1);
@@ -252,8 +251,6 @@ Server::Server::run() {
       DEBUG("je dois lire qqc", 0);
       _co->perform(&trampoline_performResult, this);
       this->filterMsg();
-
-      std::cout << "ext size: " << _ext.size()  << std::endl;
 
       if (!_ext.empty()) {
 	DEBUG("j'ai une commande admin a regarder", 0);

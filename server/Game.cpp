@@ -384,7 +384,7 @@ Server::Game::process(t_cmd *c, Player *p)
     }
   else if (c->action == "BOMB EXPLOSE")
     {
-      this->bombExplose(p, c);
+      // this->bombExplose(p, c);
       // send directly to messenger
     }
 
