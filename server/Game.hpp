@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Wed May 28 17:23:30 2014 buret_j
-** Last update Tue Jun 10 17:29:04 2014 lafitt_g
+** Last update Tue Jun 10 17:53:10 2014 lafitt_g
 */
 
 #ifndef SERVER__GAME_HPP_
@@ -74,7 +74,7 @@ namespace	Server {
     inline Map const *	getMap() const { return _map; }
     inline Play const &	getParams() const { return _params; }
     size_t		timeLeft() const;
-    inline bool		hasSomethingToDo() const { return !_events.empty(); }
+    inline bool		hasSomethingToDo() const { return !(_events.empty() || _bombs.empty()); }
 
     void		start();
     inline bool		isStarted() const { return _started; }

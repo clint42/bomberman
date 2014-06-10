@@ -1,13 +1,3 @@
-/*
-// Server.cpp for  in /home/buret_j/rendu/bomberman
-//
-// Made by buret_j
-// Login   <buret_j@epitech.net>
-//
-// Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Tue Jun 10 14:35:05 2014 julie franel
-*/
-
 #include "Server.hpp"
 
 Server::Server::Server(ConnexionHandler *c) : _run(true), _co(c) {
@@ -43,6 +33,9 @@ Server::Server::filterMsg() {
   if (this->_messages.size() > 0)
     {
       std::string *msg = this->_messages.front();
+
+      std::cout << "je recois '" << *msg << "'" << std::endl;
+
       if (_game)
 	cmd->date = _game->timeLeft();
       cur_1 = msg->find(" ", cur_1);
@@ -68,6 +61,7 @@ Server::Server::filterMsg() {
 void
 Server::Server::putCmdInQueue(t_cmd *cmd)
 {
+  std::cout << cmd->action << ", " << cmd->params[0] << ", " << cmd->params[1] << std::endl;
   if (this->_game && cmd->params.size() == 1 &&
       (cmd->action.compare("BOMB") || (cmd->action.compare("MOVE") == 0 &&
        (cmd->params[0].compare("UP") == 0 ||
@@ -75,9 +69,9 @@ Server::Server::putCmdInQueue(t_cmd *cmd)
 	cmd->params[0].compare("LEFT") == 0 ||
 	cmd->params[0].compare("RIGHT") == 0))))
     this->_game->addEvent(cmd);
-  else if (((cmd->action.compare("PAUSE") ||
-	     cmd->action.compare("KILL")) && cmd->params.size() == 0) ||
-	   (cmd->action.compare("CONFIG") && cmd->params.size() == 3))
+  else if (((!cmd->action.compare("PAUSE") ||
+	     !cmd->action.compare("KILL")) && cmd->params.size() == 0) ||
+	   (!cmd->action.compare("CONFIG") && cmd->params.size() == 5))
     this->_ext.push_back(cmd);
   else
     delete cmd;
@@ -97,6 +91,7 @@ Server::Server::addPeer(Socket *s) {
   CVRT_SIZET_TO_STRING(welcome, id);
   welcome += " 0 0 WELCOME";
   _messenger.addMessage(s, welcome);
+  this->sendMessage(s);
   ++id;
 }
 
@@ -109,9 +104,11 @@ Server::Server::addMessage(Socket *s) {
 
 void
 Server::Server::sendMessage(Socket *s) {
-  std::string m;
-  _messenger.retrieveMessage(s, m);
-  s->write(m);
+  if (_messenger.hasSomethingToSay(s)) {
+    std::string m;
+    _messenger.retrieveMessage(s, m);
+    s->write(m);
+  }
 }
 
 void
@@ -139,12 +136,12 @@ trampoline(void *p, Socket *s, bool b[3]) {
   else {
     if (b[0]) {
       // DEBUG("trampoline() => socket autorise a lire dessus", 0);
-      reinterpret_cast<Server::Server *>(p)->addMessage(s);
+      reinterpret_cast<Server::Server *>(p)->addMessage(s); // on est censé ajouter ce msg
     }
-    if (b[1]) {
+    // if (b[1]) {
       // DEBUG("trampoline() => socket autorise a ecrire dessus", 0);
       reinterpret_cast<Server::Server *>(p)->sendMessage(s);
-    }
+    // }
   }
 }
 
@@ -239,20 +236,43 @@ void	Server::Server::unwatchEvent(int e)
 
 void
 Server::Server::run() {
-  // DEBUG("Server::server::run()", 1);
-  size_t timeLoop = 0;
-  while (_run && _co->update(timeLoop) >= 0) {
-    _co->perform(&trampoline, this);
-    filterMsg();
-    if (!(_ext.size() && manageAdminCommand()) && _game && !_game->isPaused())
-      {
-      _game->update();
-      std::cout << "UPDATE" << std::endl;
+  DEBUG("Server::server::run()", 1);
+  int	timeLoop = 0;
+  int   ret;
+  // bool	watchOut = true;
+
+  while (_run && (ret = _co->update(timeLoop)) >= 0) {
+    sleep(1);
+    DEBUG("Server::server::run() => loop", 0);
+
+    if (ret) {
+      DEBUG("je dois lire qqc", 0);
+      _co->perform(&trampoline, this);
+      this->filterMsg();
+
+      std::cout << "ext size: " << _ext.size()  << std::endl;
+
+      if (!_ext.empty()) {
+	DEBUG("j'ai une commande admin a regarder", 0);
+	ret = (int)this->manageAdminCommand();
       }
-    else if (!_game || !_game->hasSomethingToDo())
-      timeLoop = 7000;
-    else
+
       timeLoop = 0;
-  }
-  // DEBUG("! Server::server::run()", -1);
+    }
+
+    if (!ret) {
+      DEBUG("je regarde si j'update le game", 0);
+      if (!_game || _game->isPaused() || !_game->hasSomethingToDo()) {
+	timeLoop = -1; // set it back to 1000msec
+	DEBUG("j'ai rien a faire en fait", 0);
+      }
+      else {
+	DEBUG("j'update le game", 0);
+	_game->update();
+	timeLoop = 0;
+      }
+    }
+
+    DEBUG("Server::server::run() => ! loop", 0);
+  } // ! while
 }

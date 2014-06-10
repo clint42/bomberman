@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Mon Jun  9 15:28:31 2014 buret_j
+## Last update Tue Jun 10 16:19:42 2014 buret_j
 ##
 
 CXX		=	clang++
@@ -20,7 +20,6 @@ SRC		=	main.cpp			\
 			common/ConnexionHandler.cpp	\
 			common/Map.cpp			\
 			common/Exception.cpp		\
-			common/Select.cpp		\
 			common/Mutex.cpp		\
 			common/ScopedLock.cpp		\
 \

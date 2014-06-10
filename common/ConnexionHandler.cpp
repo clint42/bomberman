@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Mon Jun  9 19:27:33 2014 buret_j
+// Last update Tue Jun 10 14:53:17 2014 buret_j
 */
 
 #include "ConnexionHandler.hpp"
@@ -114,7 +114,7 @@ ConnexionHandler::Serveur::acceptPeer(Poll *poll, Server::Server *srv) {
     std::copy(tmp.begin(), tmp.end(), _sockets.begin());
   }
   _sockets[fd] = new Socket(fd);
-  poll->watchEvent(fd, POLLIN | POLLOUT);
+  poll->watchEvent(fd, POLLIN);
   srv->addPeer(_sockets[fd]);
 }
 
