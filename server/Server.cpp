@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Tue May  6 11:29:52 2014 buret_j
-// Last update Tue Jun 10 12:18:12 2014 julie franel
+// Last update Tue Jun 10 14:35:05 2014 julie franel
 */
 
 #include "Server.hpp"
@@ -196,13 +196,19 @@ bool	Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd)
   return (true);
 }
 
+bool Server::Server::_isInit = false;
+std::map<std::string, bool (Server::Server::*)(const Server::t_cmd *)> Server::Server::_func;
+
 bool
 Server::Server::manageAdminCommand()
 {
-  std::map<std::string, bool (Server::Server::*)(const t_cmd *)> _func;
-  _func["CONFIG"] = &Server::Server::funcWelcome;
-  _func["PAUSE"] = &Server::Server::funcPause;
-  _func["KILL"] = &Server::Server::funcKill;
+  if (Server::_isInit == false)
+    {
+      Server::_isInit = true;
+      Server::_func["CONFIG"] = &Server::Server::funcWelcome;
+      Server::_func["PAUSE"] = &Server::Server::funcPause;
+      Server::_func["KILL"] = &Server::Server::funcKill;
+    }
   bool ret = false;
 
   if (this->_ext.front()->id == 1)
@@ -239,7 +245,10 @@ Server::Server::run() {
     _co->perform(&trampoline, this);
     filterMsg();
     if (!(_ext.size() && manageAdminCommand()) && _game && !_game->isPaused())
+      {
       _game->update();
+      std::cout << "UPDATE" << std::endl;
+      }
     else if (!_game || !_game->hasSomethingToDo())
       timeLoop = 7000;
     else

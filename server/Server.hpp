@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May  5 16:51:35 2014 buret_j
-// Last update Tue Jun 10 12:18:31 2014 julie franel
+// Last update Tue Jun 10 14:29:46 2014 julie franel
 */
 
 #ifndef SERVER_HPP_
@@ -65,6 +65,10 @@ namespace Server {
     void	addMessage(Socket *);
     void	sendMessage(Socket *);
     bool	manageAdminCommand();
+
+    static std::map<std::string, bool (Server::Server::*)(const t_cmd *)>	_func;
+    static bool									_isInit;
+
   };
 
 }
