@@ -63,6 +63,7 @@ namespace	Server {
 
     inline Map const *	getMap() const { return _map; }
     inline Play const &	getParams() const { return _params; }
+    inline std::string const &getMapName() const { return _map->getFilename(); }
     size_t		timeLeft() const;
     inline bool		hasSomethingToDo() const { return !(_events.empty() || _bombs.empty()); }
 
@@ -82,6 +83,7 @@ namespace	Server {
     static bool		_isGame;
     static std::map<std::pair<Player::Action, Player::Dir>,
 		    bool(Game::*)(Player *, t_cmd *)> func;
+    static void *       trampoline_bombsProcessing(void *);
 
     bool		moveUp(Player *, t_cmd *);
     bool		moveRight(Player *, t_cmd *);
