@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:00:09 2014 aurelien prieur
-// Last update Mon Jun  9 10:45:40 2014 aurelien prieur
+// Last update Tue Jun 10 12:10:14 2014 aurelien prieur
 //
 
 #ifndef GRAPHICENGINE_HPP_
@@ -29,10 +29,11 @@
 # include "SafeQueue.hpp"
 # include "GraphicalText.hpp"
 # include "Chrono.hpp"
+# include "FpsDisplay.hpp"
 
 # define W_WIDTH 1920
 # define W_HEIGHT 1080
-
+# define SHOW_FPS 1
 class			GraphicEngine: public gdl::Game
 {
   std::vector<int>	watchedEvents;
@@ -49,6 +50,7 @@ class			GraphicEngine: public gdl::Game
   Chrono		chrono;
   gdl::Geometry		background;
   gdl::Texture		bgTex;
+  FpsDisplay		*fps;
   void			getPlayerProjection(glm::mat4 &projection) const;
   void			viewPortPlayer(int nPlayer = 0) const;
   void			drawPlayer(int nPlayer);

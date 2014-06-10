@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Mon Jun  9 10:45:30 2014 aurelien prieur
+// Last update Tue Jun 10 12:46:05 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -24,6 +24,8 @@ GraphicEngine::GraphicEngine(EventsHandler &eventsHandler,
 
 GraphicEngine::~GraphicEngine()
 {
+  if (fps != NULL)
+    delete fps;
 }
 
 bool	GraphicEngine::mkBackground(void)
@@ -72,6 +74,14 @@ bool	GraphicEngine::initialize()
   score2 = new GraphicalText("100", std::pair<size_t, size_t>(W_WIDTH / 2 + 400, 0), glm::vec4(1, 1, 1, 1), 50, "airstrikeBold");
   this->chrono.initialize();
   this->chrono.setTime(60.f);
+  //TODO: testing purpose only. Find a better solution to load Player model before game start
+  Player * test = new Player(0);
+  test->initialize();
+  if (SHOW_FPS)
+    fps = new FpsDisplay;
+  else
+    fps = NULL;
+  this->sdlContext.updateClock(this->clock);
   return (true);
 }
 
@@ -79,6 +89,8 @@ bool	GraphicEngine::update()
 {
   std::pair<std::pair<size_t, size_t>, int>	instruct;
 
+  if (fps != NULL)
+    fps->updateTimer(clock.getElapsed());
   this->eventsHandler.interpret();
   this->sdlContext.updateClock(this->clock);
   this->sdlContext.updateInputs(this->input);
@@ -94,12 +106,12 @@ bool	GraphicEngine::update()
       createInstructs.tryPop(&instruct);
       objects.addEntity(instruct);
     }
-  this->chrono.update(this->clock, this->eventsHandler);
   this->objects.lock();
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
        it != this->objects.getEntities().end(); ++it)
     it->second->update(this->clock, this->eventsHandler);
   this->objects.unlock();
+  this->chrono.update(this->clock, this->eventsHandler);
   return (true);
 }
 
@@ -114,7 +126,7 @@ void		GraphicEngine::drawPlayer(int nPlayer)
   AObject const *player = this->objects.getPlayer(true, nPlayer);
   if (player != NULL)
     {
-         transformation = glm::lookAt(glm::vec3(0, 17, 10) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
+      transformation = glm::lookAt(glm::vec3(0, 17, 10) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
       this->shader.setUniform("view", transformation);
     }
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
@@ -131,6 +143,9 @@ void		GraphicEngine::drawScore(int nPlayer)
 
   i = 1;
   glViewport(0, 0, 1920, 1080);
+  //TODO: testing purpose only
+  if (fps != NULL)
+    fps->draw(this->shader);
   playerScore = objects.getPlayerScore(true, nPlayer);
   while ((playerScore /= 10) > 0)
     ++i;
