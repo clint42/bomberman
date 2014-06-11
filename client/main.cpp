@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Wed Jun 11 15:09:14 2014 aurelien prieur
+// Last update Wed Jun 11 19:10:15 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -43,7 +43,10 @@ int	main()
   ClientCore	core(gameEntities, eventsHandler, createInstructs, connexionHandler);
   
   if (!core.initialize(options))
-    return (EXIT_FAILURE);
+    {
+      std::cerr << "Initialization failure" << std::endl;
+      return (EXIT_FAILURE);
+    }
 
   ThreadUI	threadUI(eventsHandler, gameEntities, createInstructs);
   core.run();

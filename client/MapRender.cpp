@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sun Jun  8 16:08:57 2014 aurelien prieur
-// Last update Sun Jun  8 17:57:23 2014 aurelien prieur
+// Last update Wed Jun 11 18:45:18 2014 aurelien prieur
 //
 
 #include "MapRender.hpp"
@@ -48,4 +48,9 @@ size_t	MapRender::getWidth(void) const
 size_t	MapRender::getHeight(void) const
 {
   return (_logicMap.getHeight());
+}
+
+std::string const	&MapRender::getMd5() const
+{
+  return (_logicMap.getKey());
 }
