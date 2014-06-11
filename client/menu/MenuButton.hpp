@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:24:33 2014 aurelien prieur
-// Last update Tue Jun 10 21:20:54 2014 virol_g
+// Last update Wed Jun 11 13:51:48 2014 aurelien prieur
 //
 
 #ifndef MENUBUTTON_HPP_
@@ -13,7 +13,7 @@
 
 # include <string>
 # include "IMenuElem.hpp"
-# include "GraphicalText.hpp"
+# include "../GraphicalText.hpp"
 
 class	MenuButton: public IMenuElem
 {

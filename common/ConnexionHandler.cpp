@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Tue Jun 10 14:53:17 2014 buret_j
+// Last update Wed Jun 11 13:31:48 2014 aurelien prieur
 */
 
 #include "ConnexionHandler.hpp"
@@ -166,7 +166,8 @@ ConnexionHandler::Client::Client(int port, std::string const &ip) {
   sin.sin_family = AF_INET;
   sin.sin_port = htons(port);
   sin.sin_addr.s_addr = inet_addr(ip.c_str());
-  if (!pe || fd == -1 || connect(fd, (sockaddr *)&sin, sizeof sin) == -1) throw ConnexionException("Can't create Client properly");
+  if (!pe || fd == -1 || connect(fd, (sockaddr *)&sin, sizeof sin) == -1)
+    throw ConnexionException(std::string(strerror(errno)));
   _socket = new Socket(fd);
 }
 

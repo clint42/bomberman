@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Wed Jun 11 11:57:32 2014 aurelien prieur
+// Last update Wed Jun 11 12:35:31 2014 aurelien prieur
 //
 
 #include "MenuHandler.hpp"
@@ -61,7 +61,10 @@ bool	MenuHandler::createGame(t_game *options)
       if (pid == 0)
 	{
 	  //TODO: launch server here
-	  //CHILD. Launch server
+	  ConnexionHandler	connexionHandler;
+
+	  Server::Server server(&connexionHandler);
+	  server.run();
 	}
       _signal.catchSignal(SIGCHLD, true);
       _forked = true;

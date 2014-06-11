@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:35 2014 virol_g
-// Last update Tue Jun 10 21:11:47 2014 virol_g
+// Last update Wed Jun 11 13:56:12 2014 aurelien prieur
 //
 
 #include	"MenuInput.hpp"
@@ -18,7 +18,7 @@ MenuInput::MenuInput(std::pair<size_t, size_t> const &pos,
 					      _size(size),
 					      _hover(false)
 {  
-  this->initialize("./ressources/gradationGreyTex.tga");
+  this->initialize("./client/menu/ressources/gradationGreyTex.tga");
 }
 
 MenuInput::~MenuInput()
@@ -29,7 +29,7 @@ bool	MenuInput::initialize(const std::string &textureName)
 {
   if (_texture.load(textureName) == false)
     {
-      std::cerr << "Couldn't load texture." << std::endl;
+      std::cerr << "Couldn't load MenuInput texture." << std::endl;
       return (false);
     }
   _geometry.setColor(_color);

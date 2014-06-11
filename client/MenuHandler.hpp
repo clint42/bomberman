@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:21:25 2014 aurelien prieur
-// Last update Wed Jun 11 11:52:50 2014 aurelien prieur
+// Last update Wed Jun 11 12:35:51 2014 aurelien prieur
 //
 
 #ifndef MENUHANDLER_HPP_
@@ -17,6 +17,8 @@
 #include "MainMenu.hpp"
 #include "CreateMenu.hpp"
 #include "Signal.hpp"
+#include "ConnexionHandler.hpp"
+#include "../server/Server.hpp"
 
 class	MenuHandler
 {

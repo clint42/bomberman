@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu Jun  5 14:24:09 2014 aurelien prieur
-// Last update Sat Jun  7 19:40:25 2014 aurelien prieur
+// Last update Wed Jun 11 13:54:09 2014 aurelien prieur
 //
 
 #include "Bomb.hpp"
@@ -20,7 +20,7 @@ Bomb::~Bomb()
 
 bool	Bomb::initialize(std::pair<size_t, size_t> const &pos)
 {
-  if (_model.load("./assets/bomb.fbx") == false)
+  if (_model.load("./client/assets/bomb.fbx") == false)
     {
       std::cerr << "Couldn't load bomb model" << std::endl;
       return (false);

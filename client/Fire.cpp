@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri Jun  6 18:25:18 2014 aurelien prieur
-// Last update Sat Jun  7 19:40:18 2014 aurelien prieur
+// Last update Wed Jun 11 13:54:20 2014 aurelien prieur
 //
 
 #include "Fire.hpp"
@@ -20,7 +20,7 @@ Fire::~Fire()
 
 bool	Fire::initialize(std::pair<size_t, size_t> const &pos)
 {
-  if (_model.load("./assets/fire.fbx") == false)
+  if (_model.load("./client/assets/fire.fbx") == false)
     {
       std::cerr << "Couldn't load fire model" << std::endl;
       return (false);

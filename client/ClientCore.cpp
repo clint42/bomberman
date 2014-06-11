@@ -5,11 +5,12 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Wed Jun 11 12:10:25 2014 aurelien prieur
+// Last update Wed Jun 11 13:31:10 2014 aurelien prieur
 //
 
 #include <iostream>
 #include <glm/glm.hpp>
+#include <unistd.h>
 #include "AObject.hpp"
 #include "ClientCore.hpp"
 #include "EventsHandler.hpp"
@@ -31,8 +32,36 @@ ClientCore::~ClientCore()
 {
 }
 
+bool		ClientCore::connect(t_game *options)
+{
+  bool		continu = true;
+  int		tentatives = 0;
+
+  while (continu)
+    {
+      try {
+	_connexion.client(4242, options->ipAddr);
+	//TODO: testing purpose only (remove)
+	_connexion.getMasterSocket()->write("CONFIG test.map 1 1 0");
+	continu = false;
+      }
+      catch (ConnexionException e) {
+	std::cerr << "Connexion refused: " << e.what() << std::endl;
+	tentatives += 1;
+	if (tentatives == 6)
+	  {
+	    std::cerr << "Too many connection tentative. Exit." << std::endl;
+	    return (false);
+	  }
+	sleep(1);
+      }
+    }
+  return (true);
+}
+
 bool		ClientCore::initialize(t_game *options)
 {
+  (void)(options);
   try {
     MapRender	map("../test.map");
     map.render(_createInstructs);
@@ -41,15 +70,7 @@ bool		ClientCore::initialize(t_game *options)
   catch (MapException e) {
     std::cerr << "Invalid map: " << e.what() << std::endl;
   }
-  try {
-  _connexion.client(4242, options->ipAddr);
-  //TODO: testing purpose only (remove)
-  _connexion.getMasterSocket()->write("CONFIG test.map 1 1 0");
-  }
-  catch (ConnexionException e) {
-    std::cerr << "Connexion refused: " << e.what() << std::endl;
-    return (false);
-  }
+
   _socket = _connexion.getMasterSocket();
   _connexion.watchEventOnSocket(_socket, POLLIN);
   _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(8, 15), PLAYER + 1));
