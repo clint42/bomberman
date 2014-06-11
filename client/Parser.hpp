@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Sun Jun  8 15:49:48 2014 julie franel
-// Last update Sun Jun  8 18:00:59 2014 julie franel
+// Last update Wed Jun 11 16:37:20 2014 julie franel
 //
 
 #ifndef		PARSER_HPP_
@@ -36,15 +36,18 @@ class		Parser
   std::map<std::string, AObject::EventIn>			_dir;
   std::map<std::string, ObjectType>				_types;
   std::map<std::string, void (Parser::*)(const t_parser &)>	_fct;
+  std::map<std::string, bool (Parser::*)(std::list<t_parser *> &)>	_tabFct;
 
   t_parser              *parser(std::string cmd);
 
   void                  parseMove(const t_parser &_parser);
   void                  parseRotate(const t_parser &_parser);
   void                  parseCreate(const t_parser &_parser);
-  void                  parseCreate(const std::list<t_parser *> &_tabParser);
   void                  parseDestroy(const t_parser &_parser);
   void			parseChrono(const t_parser &_parser);
+
+  bool                  parseCreate(std::list<t_parser *> &_tabParser);
+  bool                  parseDestroy(std::list<t_parser *> &_tabParser);
 
   void                  displayParserStruct(const t_parser &parser);
   void                  handleActions(const t_parser &parser);

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun  8 18:07:17 2014 julie franel
+// Last update Wed Jun 11 17:59:13 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -36,6 +36,9 @@ Parser::Parser(GameEntities &gameEntities,
   this->_fct["ROTATE"] = &Parser::parseRotate;
   this->_fct["DESTROY"] = &Parser::parseDestroy;
   this->_fct["CHRONO"] = &Parser::parseChrono;
+
+  this->_tabFct["CREATE"] = &Parser::parseDestroy;
+  this->_tabFct["DESTROY"] = &Parser::parseDestroy;
 }
 
 Parser::~Parser()
@@ -73,26 +76,52 @@ void		Parser::parseCreate(const t_parser &_parser)
 								  this->_types[_parser.params.front()]));
 }
 
-void		Parser::parseCreate(const std::list<t_parser *> &_tabParser)
+bool		Parser::parseCreate(std::list<t_parser *> &_tabParser)
 {
   std::list<std::pair<std::pair<size_t, size_t>, int> >		_list;
+  bool ret = false;
 
-  for (std::list<t_parser *>::const_iterator it = _tabParser.begin(); it != _tabParser.end(); ++it)
+  for (std::list<t_parser *>::iterator it = _tabParser.begin(); it != _tabParser.end(); ++it)
     {
-      size_t posx;
-      size_t posy;
+      if ((*it)->action.compare("CREATE") == 0)
+	{
+	  size_t posx;
+	  size_t posy;
 
-      CVRT_STRING_TO_SIZET((*it)->params[1], posx);
-      CVRT_STRING_TO_SIZET((*it)->params[2], posy);
-      _list.push_back(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(posx, posy),
-								this->_types[(*it)->params[0]]));
+	  CVRT_STRING_TO_SIZET((*it)->params[1], posx);
+	  CVRT_STRING_TO_SIZET((*it)->params[2], posy);
+	  _list.push_back(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(posx, posy),
+								    this->_types[(*it)->params[0]]));
+	  _tabParser.erase(it);
+	  it = _tabParser.begin();
+	  ret = true;
+	}
     }
   this->_createInstructs.push(_list);
+  return (ret);
 }
 
 void		Parser::parseDestroy(const t_parser &_parser)
 {
   this->_gameEntities.deleteEntity(_parser.pos);
+}
+
+bool		Parser::parseDestroy(std::list<t_parser *> &_tabParser)
+{
+  std::list<t_parser *>::iterator it;
+  bool	ret = false;
+
+  for (it = _tabParser.begin(); it != _tabParser.end(); ++it)
+    {
+      if ((*it)->action.compare("DESTROY") == 0)
+	{
+	  this->_gameEntities.deleteEntity((*it)->pos);
+	  _tabParser.erase(it);
+	  it = _tabParser.begin();
+	  ret = true;
+	}
+    }
+  return (ret);
 }
 
 void		Parser::parseRotate(const t_parser &_parser)
@@ -157,14 +186,19 @@ void		Parser::handleActions(const t_parser &_parser)
     }
 }
 
-void		Parser::handleActions(std::list<t_parser *> &_parser)
+void		Parser::handleActions(std::list<t_parser *> &_tabParser)
 {
-  if (_parser.front()->action == "DESTROY")
+  std::list<t_parser *>::iterator itTab;
+  bool ret = false;
+
+  for (itTab = _tabParser.begin(); itTab != _tabParser.end(); ++itTab)
     {
-      this->parseDestroy(*_parser.front());
-      _parser.pop_front();
-      if (_parser.front()->action == "CREATE")
-	this->parseCreate(_parser);
+      ret = (this->*_tabFct[(*itTab)->action])(_tabParser);
+      if (ret == true)
+	{
+	  itTab = _tabParser.begin();
+	  ret = false;
+	}
     }
 }
 
