@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat Jun  7 14:24:13 2014 aurelien prieur
-// Last update Tue Jun 10 17:50:25 2014 aurelien prieur
+// Last update Wed Jun 11 13:55:05 2014 aurelien prieur
 //
 
 #include "GraphicEngine.hpp"
@@ -28,7 +28,7 @@ bool	Chrono::initialize(std::pair<size_t, size_t> const &pos)
   (void)(pos);
   origX = (float)(W_WIDTH) / 2.f - 150.f;
   origY = 0;
-  if (_texture.load("./assets/chronoBg.tga") == false)
+  if (_texture.load("./client/assets/chronoBg.tga") == false)
     {
       std::cerr << "Couldn't load chrono background texture" << std::endl;
       return (false);

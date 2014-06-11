@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Tue Jun 10 19:07:47 2014 aurelien prieur
+// Last update Wed Jun 11 15:15:16 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -31,7 +31,7 @@ GraphicEngine::~GraphicEngine()
 
 bool	GraphicEngine::mkBackground(void)
 {
-  if (bgTex.load("./assets/background.tga") == false)
+  if (bgTex.load("./client/assets/background.tga") == false)
     {
       std::cerr << "Load background error" << std::endl;
       return (false);
@@ -58,8 +58,10 @@ bool	GraphicEngine::initialize()
   std::cout << "Initialize Graphic engine" << std::endl;
   this->sdlContext.start(W_WIDTH, W_HEIGHT, "Test LibGDL", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
   glEnable(GL_DEPTH_TEST);
-  if (!this->shader.load("./shaders/basic.fp", GL_FRAGMENT_SHADER)
-      || !this->shader.load("./shaders/basic.vp", GL_VERTEX_SHADER)
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  sdlContext.flush();
+  if (!this->shader.load("./client/shaders/basic.fp", GL_FRAGMENT_SHADER)
+      || !this->shader.load("./client/shaders/basic.vp", GL_VERTEX_SHADER)
       || !this->shader.build())
     {
       std::cerr << "Shader loading error" << std::endl;
@@ -118,8 +120,9 @@ bool	GraphicEngine::update()
   this->scores[0]->update(this->objects.getPlayerScore(true, 0));
   if (this->objects.isDouble(true))
     this->scores[1]->update(this->objects.getPlayerScore(true, 1));
+  if (this->objects.isStarted(true))
+    this->chrono.update(this->clock, this->eventsHandler);
   this->objects.unlock();
-  this->chrono.update(this->clock, this->eventsHandler);
   return (true);
 }
 

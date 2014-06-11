@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Wed Jun 11 11:32:32 2014 aurelien prieur
+// Last update Wed Jun 11 14:51:48 2014 virol_g
 //
 
 #include	<sstream>
@@ -30,7 +30,7 @@ CreateMenu::~CreateMenu()
 
 bool	CreateMenu::build()
 {
-  std::ifstream	file("maps");
+  std::ifstream	file("./client/maps");
   std::string	name;
 
   if (!file)
@@ -57,7 +57,7 @@ bool	CreateMenu::build()
 					    glm::vec4(0.93, 0.9, 0.32, 1.f)));
 	}
     }
-  _menuBackground = new MenuBackground("./menu/ressources/backgroundSubMenu.tga");
+  _menuBackground = new MenuBackground("./client/menu/ressources/backgroundSubMenu.tga");
   _titles.push_back(new GraphicalText("How many players ?", std::pair<size_t, size_t>(400, 60),
 				      glm::vec4(0.f, 0.f, 1.f, 1.f), P_FONT_SIZE, "airstrike"));
   _nbPlayers = new MenuInput(std::pair<size_t, size_t>(400, 80),

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Mon Jun  9 17:28:32 2014 buret_j
+// Last update Wed Jun 11 12:41:11 2014 aurelien prieur
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -14,6 +14,8 @@
 # include <netdb.h>
 # include <netinet/in.h>
 # include <sys/types.h>
+# include <string.h>
+# include <errno.h>
 # include <sys/socket.h>
 # include <arpa/inet.h>
 

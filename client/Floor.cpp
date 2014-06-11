@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 30 17:39:31 2014 aurelien prieur
-// Last update Sun Jun  8 18:11:15 2014 aurelien prieur
+// Last update Wed Jun 11 14:55:43 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -24,8 +24,11 @@ Floor::~Floor()
 bool	Floor::initialize(std::pair<size_t, size_t> const &pos)
 {
   (void)(pos);
-  if (_texture.load("./assets/floor.tga") == false)
-    return (false);
+  if (_texture.load("./client/assets/floor.tga") == false)
+    {
+      std::cerr << "Unable to load floor texture" << std::endl;
+      return (false);
+    }
   _texture.bind();
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

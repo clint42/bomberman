@@ -5,14 +5,14 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:29 2014 virol_g
-// Last update Tue Jun 10 15:42:38 2014 virol_g
+// Last update Wed Jun 11 13:52:01 2014 aurelien prieur
 //
 
 #ifndef		MENUINPUT_HPP_
 # define	MENUINPUT_HPP_
 
 # include	<iostream>
-# include	"GraphicalText.hpp"
+# include	"../GraphicalText.hpp"
 # include	"IMenuElem.hpp"
 
 class		MenuInput : public IMenuElem

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:16:41 2014 aurelien prieur
-// Last update Wed Jun 11 10:34:42 2014 aurelien prieur
+// Last update Wed Jun 11 13:53:12 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -25,10 +25,10 @@ GraphicalText::GraphicalText(std::string const &text, std::pair<size_t, size_t> 
   letterPadding = (_fontSize / 2) - 10; 
   if (letterPadding < 0)
    letterPadding = 0;
-  if (_abcTex.load("./menu/ressources/fonts/" + fontName + ".tga") == false)
+  if (_abcTex.load("./client/menu/ressources/fonts/" + fontName + ".tga") == false)
     {
       std::cerr << "Couldn't load requested font. " << std::endl;
-      if (_abcTex.load("./menu/ressources/fonts/airstrike.tga") == false)
+      if (_abcTex.load("./client/menu/ressources/fonts/airstrike.tga") == false)
 	{
 	  throw std::runtime_error("Unable to load default font");
 	}

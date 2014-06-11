@@ -8,6 +8,7 @@
 # include <sys/time.h>
 
 # include "Map.hpp"
+# include "Team.hpp"
 # include "Player.hpp"
 # include "Thread.hpp"
 # include "SafeQueue.hpp"

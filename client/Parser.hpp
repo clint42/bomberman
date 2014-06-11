@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Sun Jun  8 15:49:48 2014 julie franel
-// Last update Sun Jun  8 18:00:59 2014 julie franel
+// Last update Wed Jun 11 18:22:00 2014 julie franel
 //
 
 #ifndef		PARSER_HPP_
@@ -30,21 +30,37 @@ class		Parser
     std::vector<std::string>    params;
   };
 
+  struct			t_config
+  {
+    size_t			idPlayer1;
+    size_t			idPlayer2;
+    std::string			mapName;
+    bool			welcomeReceived;
+  };
+
   GameEntities							&_gameEntities;
   SafeQueue<std::pair<std::pair<size_t, size_t>, int> >		&_createInstructs;
+  t_config							_config;
 
   std::map<std::string, AObject::EventIn>			_dir;
   std::map<std::string, ObjectType>				_types;
   std::map<std::string, void (Parser::*)(const t_parser &)>	_fct;
+  std::map<std::string, bool (Parser::*)(std::list<t_parser *> &)>	_tabFct;
 
   t_parser              *parser(std::string cmd);
+
+  void                  parseWelcome(const t_parser &_parser);
+  void                  parseMap(const t_parser &_parser);
+  void                  parseStartGame(const t_parser &_parser);
 
   void                  parseMove(const t_parser &_parser);
   void                  parseRotate(const t_parser &_parser);
   void                  parseCreate(const t_parser &_parser);
-  void                  parseCreate(const std::list<t_parser *> &_tabParser);
   void                  parseDestroy(const t_parser &_parser);
   void			parseChrono(const t_parser &_parser);
+
+  bool                  parseCreate(std::list<t_parser *> &_tabParser);
+  bool                  parseDestroy(std::list<t_parser *> &_tabParser);
 
   void                  displayParserStruct(const t_parser &parser);
   void                  handleActions(const t_parser &parser);
@@ -55,6 +71,8 @@ public:
   ~Parser();
 
   void			run(std::string &string);
+
+  const t_config	&getConfig() const;
 };
 
 #endif		/* !PARSER_HPP */

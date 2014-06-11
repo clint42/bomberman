@@ -5,14 +5,15 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Wed Jun 11 11:57:32 2014 aurelien prieur
+// Last update Wed Jun 11 16:06:51 2014 aurelien prieur
 //
 
 #include "MenuHandler.hpp"
 
 MenuHandler::MenuHandler(Signal &signal): _signal(signal), _forked(false)
 {
-  _sdlContext.start(800, 600, "Menu", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
+  _sdlContext = new gdl::SdlContext;
+  _sdlContext->start(800, 600, "Menu", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
 }
 
 MenuHandler::~MenuHandler()
@@ -26,7 +27,7 @@ pid_t	MenuHandler::forker() const
 
 int		MenuHandler::mainMenu()
 {
-  MainMenu	menu = MainMenu(_sdlContext);
+  MainMenu	menu = MainMenu(*_sdlContext);
   t_game	*options;
   int		retVal;
 
@@ -49,20 +50,23 @@ int		MenuHandler::mainMenu()
 bool	MenuHandler::createGame(t_game *options)
 {
   pid_t	pid;
-
+ 
   if (!_forked)
     {
       pid = forker();
       if (pid == -1)
-	{
-	  std::cerr << "Failed to fork to create the server" << std::endl;
-	  return (false);
-	}
+      	{
+      	  std::cerr << "Failed to fork to create the server" << std::endl;
+      	  return (false);
+      	}
       if (pid == 0)
-	{
-	  //TODO: launch server here
-	  //CHILD. Launch server
-	}
+      	{
+      	  ConnexionHandler	connexionHandler;
+
+      	  Server::Server server(&connexionHandler);
+      	  server.run();
+	  exit(0);
+      	}
       _signal.catchSignal(SIGCHLD, true);
       _forked = true;
     }
@@ -86,9 +90,9 @@ t_game	*MenuHandler::launchMenus()
   mode = mainMenu();
   //TODO: in mode == 1, instanciate a SubMenu not a CreateMenu
   if (mode == 0)
-    menu = new CreateMenu(_sdlContext);
+    menu = new CreateMenu(*_sdlContext);
   else if (mode == 1)
-    menu = new CreateMenu(_sdlContext);
+    menu = new JoinMenu(*_sdlContext);
   else
     return (NULL);
   if (!menu->initialize() || !menu->build())
@@ -98,7 +102,8 @@ t_game	*MenuHandler::launchMenus()
       menu->draw();
       menu->timer();
     }
-  _sdlContext.stop();
+  _sdlContext->stop();
+  delete _sdlContext;
   choice = menu->getChoice();
   std::cout << "Choice received" << std::endl;
   if (mode == 0)

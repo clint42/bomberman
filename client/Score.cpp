@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Tue Jun 10 18:22:24 2014 aurelien prieur
-// Last update Tue Jun 10 19:08:35 2014 aurelien prieur
+// Last update Wed Jun 11 13:55:16 2014 aurelien prieur
 //
 
 #include "GraphicEngine.hpp"
@@ -27,7 +27,7 @@ bool		Score::loadTexture(void)
     textureName = "player2ScoreBg.tga";
   else
     textureName = "playerScoreBg.tga";
-  if (_texture.load("./assets/" + textureName) == false)
+  if (_texture.load("./client/assets/" + textureName) == false)
     {
       std::cerr << "Coudln't load score background" << std::endl;
       return (false);

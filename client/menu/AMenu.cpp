@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 11:12:45 2014 aurelien prieur
-// Last update Wed Jun 11 10:50:01 2014 aurelien prieur
+// Last update Wed Jun 11 13:50:12 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -30,8 +30,8 @@ bool    AMenu::initialize()
   //   this->_sdlContext.start(800, 600, "Menu", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  if (!_shader.load("./shaders/basic.fp", GL_FRAGMENT_SHADER)
-      || !_shader.load("./shaders/basic.vp", GL_VERTEX_SHADER)
+  if (!_shader.load("./client/shaders/basic.fp", GL_FRAGMENT_SHADER)
+      || !_shader.load("./client/shaders/basic.vp", GL_VERTEX_SHADER)
       || !_shader.build())
     {
       std::cerr << "Shader loading error" << std::endl;
