@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:29:16 2014 aurelien prieur
-// Last update Wed Jun 11 13:55:47 2014 aurelien prieur
+// Last update Wed Jun 11 17:46:30 2014 virol_g
 //
 
 #include <iostream>
@@ -25,6 +25,7 @@ MenuButton::MenuButton(std::pair<size_t, size_t> const &pos,
 							glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20,
 							font)
 {
+  _isHover = false;
   this->initialize("./client/menu/ressources/gradationGreyTex.tga");
 }
 

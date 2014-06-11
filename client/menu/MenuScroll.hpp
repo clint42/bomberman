@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Sat Jun  7 17:54:57 2014 virol_g
-// Last update Tue Jun 10 21:21:29 2014 virol_g
+// Last update Wed Jun 11 16:24:51 2014 virol_g
 //
 
 #ifndef		MENUSCROLL_HPP_
@@ -27,6 +27,8 @@ class		MenuScroll : public IMenuElem
   gdl::Texture		_texture;
   gdl::Geometry		_geometry;
   gdl::Geometry		_geometryHover;
+  bool			_clickPrev;
+  bool			_clickNext;
 
 public:
   MenuScroll(const std::pair<size_t, size_t> &posPrev,

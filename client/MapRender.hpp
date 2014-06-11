@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sun Jun  8 16:00:59 2014 aurelien prieur
-// Last update Sun Jun  8 18:26:07 2014 aurelien prieur
+// Last update Wed Jun 11 18:09:14 2014 aurelien prieur
 //
 
 #ifndef MAPRENDER_HPP_
@@ -25,8 +25,9 @@ public:
   MapRender(std::string const &mapName);
   ~MapRender();
   bool	render(SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &instructQueue);
-  size_t	getWidth(void) const;
-  size_t	getHeight(void) const;
+  size_t		getWidth(void) const;
+  size_t		getHeight(void) const;
+  std::string const	&getMd5(void) const;
 };
 
 #endif // !MAPRENDER_HPP_

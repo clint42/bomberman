@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Wed Jun 11 16:07:30 2014 aurelien prieur
+// Last update Wed Jun 11 19:11:21 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -20,10 +20,12 @@
 ClientCore::ClientCore(GameEntities &gameEntities, EventsHandler &eventsHandler,
 		       SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs,
 		       ConnexionHandler &connexionHandler):
+  _configurator(NULL),
   _gameEntities(gameEntities),
   _eventsHandler(eventsHandler),
   _connexion(connexionHandler),
-  _createInstructs(createInstructs)
+  _createInstructs(createInstructs),
+  _map(NULL)
 {
   this->_parser = new Parser(this->_gameEntities, this->_createInstructs);
 }
@@ -41,8 +43,6 @@ bool		ClientCore::connectServer(t_game *options)
     {
       try {
 	_connexion.client(4242, options->ipAddr);
-	//TODO: testing purpose only (remove)
-	_connexion.getMasterSocket()->write("CONFIG test.map 1 1 0");
 	continu = false;
       }
       catch (ConnexionException e) {
@@ -62,33 +62,126 @@ bool		ClientCore::connectServer(t_game *options)
 bool		ClientCore::loadMap(t_game *options)
 {
   (void)(options);
-  try {
-    MapRender	map("test.map");
-    map.render(_createInstructs);
-    _gameEntities.setMapSize(std::pair<size_t, size_t>(map.getWidth(), map.getHeight()));
-  }
-  catch (MapException e) {
-    std::cerr << "Invalid map: " << e.what() << std::endl;
-    return (false);
-  }
+  _map->render(_createInstructs);
+  _gameEntities.setMapSize(std::pair<size_t, size_t>(_map->getWidth(), _map->getHeight()));
+  delete _map;
   return (true);
 }
 
-bool		ClientCore::initialize(t_game *options)
+bool			ClientCore::isConfigured(void) const
 {
+  if (!(_parser->getConfig().idPlayer1 != 0 &&
+       (_parser->getConfig().idPlayer2 != 0 || !_gameEntities.isDouble())))
+    return (false);
+  if (_parser->getConfig().mapName == "")
+    return (false);
+  if (_configurator->sizeCmd() > 0)
+    return (false);
+  return (true);
+}
+
+bool			ClientCore::initialize(t_game *options)
+{
+  std::string		string;
+
   if (connectServer(options) == false)
     return (false);
   _socket = _connexion.getMasterSocket();
-  _connexion.watchEventOnSocket(_socket, POLLIN);
-  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(8, 15), PLAYER + 1));
-  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(15, 20), PLAYER + 2));
-  //_gameEntities.setDouble();
-  // _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(4, 1), BOMB));
-  // _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(1, 1), BLOCK));
+  _connexion.watchEventOnSocket(_socket, POLLIN | POLLOUT);
+  _configurator = new Configurator(options);
+  if (options->isDouble)
+    {
+      _gameEntities.setDouble();
+      _configurator->pushCmd("WITHFRIEND YES\n");
+    }
+  else
+    _configurator->pushCmd("WITHFRIEND NO\n");
+  try {
+    while (_connexion.update(-1) >= 0 && !isConfigured() && !_configurator->hasErrorOccured())
+      {
+	if (_map != NULL && _parser->getConfig().idPlayer1 != 0 &&
+	    (_parser->getConfig().idPlayer2 != 0 || options->isDouble))
+	  {
+	    buildMapMd5(string, _parser->getConfig().idPlayer1);
+	    _configurator->pushCmd(string);
+	    if (options->isDouble)
+	      {
+		buildMapMd5(string, _parser->getConfig().idPlayer2);
+		_configurator->pushCmd(string);
+	      }
+	  }
+	_connexion.perform(&trampolineConfig, this);
+      }
+    if (_configurator->hasErrorOccured())
+      return (false);
+  }
+  catch (MapException e) {
+    std::cerr << "Invalid map: " << e.what() << std::endl;
+    delete _configurator;
+    return (false);
+  }
+  delete _configurator;
   return (true);
 }
 
-void	trampoline(void *param, Socket *socket, bool b[3])
+void			ClientCore::buildConfigCmd(std::string &string) const
+{
+  std::ostringstream	oss;
+
+  oss << _parser->getConfig().idPlayer1 << " 0 0 ";
+  oss << "CONFIG " << _configurator->getOptions()->mapName << " ";
+  oss << _configurator->getOptions()->nbPlayers << " ";
+  oss << _configurator->getOptions()->nbBots << " ";
+  oss << _configurator->getOptions()->timeGame << " ";
+  oss << "0" << std::endl;
+  string = oss.str();
+}
+
+void			ClientCore::buildMapMd5(std::string &string, int idPlayer) const
+{
+  std::ostringstream	oss;
+  
+  oss << idPlayer << " 0 0 ";
+  oss << _map->getMd5() << std::endl;
+  string = oss.str();
+}
+
+void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
+{
+  std::string	string;
+  
+  if (b[2])
+    {
+      std::cerr << "Connexion reset by host during configuration process" << std::endl;
+      _configurator->errorOccured();
+    }
+  if (b[0])
+    {
+      _socket->getLine(string);
+      _parser->run(string);
+      if (_parser->getConfig().welcomeReceived)
+	{
+	  buildConfigCmd(string);
+	  _configurator->pushCmd(string);
+	}
+      if (_parser->getConfig().mapName != "")
+	_map = new MapRender(_parser->getConfig().mapName);
+    }
+  if (b[1])
+    {
+      _configurator->popCmd(string);
+      _socket->write(string);
+      if (_configurator->sizeCmd() == 0)
+	_connexion.unwatchEventOnSocket(_socket, POLLOUT);
+    }
+}
+
+void	ClientCore::trampolineConfig(void *param, Socket *socket, bool b[3])
+{
+  reinterpret_cast<ClientCore *>(param)->config(socket, b);
+}
+
+void	ClientCore::trampoline(void *param, Socket *socket, bool b[3])
 {
   reinterpret_cast<ClientCore *>(param)->io(socket, b);
 }
@@ -135,3 +228,44 @@ bool		ClientCore::write(void)
 {
   return (false);
 }
+
+ ClientCore::Configurator::Configurator(t_game *options): _error(false), _options(options)
+{
+}
+
+ClientCore::Configurator::~Configurator()
+{
+  _cmds.clear();
+}
+
+void	ClientCore::Configurator::pushCmd(std::string const &cmd)
+{
+  _cmds.push_back(cmd);
+}
+
+void	ClientCore::Configurator::popCmd(std::string &cmd)
+{
+  cmd = _cmds[0];
+  _cmds.erase(_cmds.begin());
+}
+
+bool	ClientCore::Configurator::hasErrorOccured(void) const
+{
+  return (_error);
+}
+
+void	ClientCore::Configurator::errorOccured(void)
+{
+  _error = true;
+}
+
+int	ClientCore::Configurator::sizeCmd(void) const
+{
+  return (_cmds.size());
+}
+
+t_game const	*ClientCore::Configurator::getOptions(void) const
+{
+  return (_options);
+}
+

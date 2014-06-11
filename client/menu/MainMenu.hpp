@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:54:59 2014 aurelien prieur
-// Last update Wed Jun 11 11:18:39 2014 aurelien prieur
+// Last update Wed Jun 11 17:15:15 2014 virol_g
 //
 
 #ifndef MAINMENU_HPP_
@@ -15,10 +15,12 @@
 
 class	MainMenu: public AMenu
 {
+  int	   	_nbPlayers;
 public:
   MainMenu(gdl::SdlContext &sdlContext);
   ~MainMenu();
   virtual bool	build();
+  virtual bool	update();
   virtual t_game	*getChoice() const;
 };
 
