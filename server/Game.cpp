@@ -370,8 +370,8 @@ Server::Game::bombLeft(Player *p, t_cmd *c)
   return false;
 }
 
-std::string
-Server::Game::exploseCase(std::pair<size_t, size_t> pos)
+bool
+Server::Game::exploseCase(std::pair<size_t, size_t> pos, std::string &msg)
 {
   std::stringstream convert;
   int		ret;
@@ -382,17 +382,20 @@ Server::Game::exploseCase(std::pair<size_t, size_t> pos)
       if (ret == Map::DWALL)
 	{
 	  convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
+	  convert << ";0 " << pos.first << " " << pos.second << " FIRE";
 	  this->_map->setElemAtPos(pos, Map::GROUND);
+	  msg += convert.str();
 	}
       if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB)
-	return ("");
+	return (false);
     }
   else if ((it = this->_players.find(pos)) != this->_players.end())
     {
       convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
       convert << ";0 " << pos.first << " " << pos.second << " FIRE";
+      msg += convert.str();
     }
-  return (convert.str());
+  return (true);
 }
 
 bool
@@ -400,105 +403,49 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
 {
   int		val = 1;
   std::stringstream convert;
+  std::string	msg;
   std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY());
 
   this->_map->setElemAtPos(pos, Map::GROUND);
   convert << "0 " << pos.first << " " << pos.second << " DESTROY";
   convert << ";0 " << pos.first << " " << pos.second << " FIRE";
+  msg = convert.str();
   // RIGHT
   while (p->getPosX() + val < this->_map->getWidth() - 1 && val <= p->getBombRange())
     {
-      // std::pair<size_t, size_t> pos(p->getPosX() + val, p->getPosY());
       pos.first = p->getPosX() + val;
-      if (this->exploseCase(pos) == "")
-	
-      if ((ret = this->_map->getElemAtPos(pos)))
-	{
-	  if (ret == Map::DWALL)
-	    {
-	      convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
-	      this->_map->setElemAtPos(pos, Map::GROUND);
-	    }
-	  if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB)
-	    break ;
-	}
-      else if ((it = this->_players.find(pos)) != this->_players.end())
-	{
-	  convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
-	  convert << ";0 " << pos.first << " " << pos.second << " FIRE";
-	}
+      if (this->exploseCase(pos, &msg) == false)
+	break ;
       ++val;
     }
   // LEFT
   val = -1;
   while (p->getPosX() + val > 0 && val * -1 <= p->getBombRange())
     {
-      //      std::pair<size_t, size_t> pos(p->getPosX() + val, p->getPosY());
       pos.first = p->getPosX() + val;
-      if ((ret = this->_map->getElemAtPos(pos)))
-	{
-	  if (ret == Map::DWALL)
-	    {
-	      convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
-	      this->_map->setElemAtPos(pos, Map::GROUND);
-	    }
-	  if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB)
-	    break ;
-	}
-      else if ((it = this->_players.find(pos)) != this->_players.end())
-	{
-	  convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
-	  convert << ";0 " << pos.first << " " << pos.second << " FIRE";
-	}
+      if (this->exploseCase(pos, &msg) == false)
+	break ;
       --val;
     }
   // UP
   val = -1;
   while (p->getPosY() + val > 0 && val * -1 <= p->getBombRange())
     {
-      //      std::pair<size_t, size_t> pos(p->getPosX() + val, p->getPosY());
+      pos.first = p->getPosX();
       pos.first = p->getPosY() + val;
-      if ((ret = this->_map->getElemAtPos(pos)))
-	{
-	  if (ret == Map::DWALL)
-	    {
-	      convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
-	      this->_map->setElemAtPos(pos, Map::GROUND);
-	    }
-	  if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB)
-	    break ;
-	}
-      else if ((it = this->_players.find(pos)) != this->_players.end())
-	{
-	  convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
-	  convert << ";0 " << pos.first << " " << pos.second << " FIRE";
-	}
+      if (this->exploseCase(pos, &msg) == false)
+	break ;
       --val;
     }
   // DOWN
   val = 1;
   while (p->getPosY() + val < this->_map->getWidth() - 1 && val <= p->getBombRange())
     {
-      //      std::pair<size_t, size_t> pos(p->getPosX() + val, p->getPosY());
-      pos.first = p->getPosX() + val;
-      if ((ret = this->_map->getElemAtPos(pos)))
-	{
-	  if (ret == Map::DWALL)
-	    {
-	      convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
-	      this->_map->setElemAtPos(pos, Map::GROUND);
-	    }
-	  if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB)
-	    break ;
-	}
-      else if ((it = this->_players.find(pos)) != this->_players.end())
-	{
-	  convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
-	  convert << ";0 " << pos.first << " " << pos.second << " FIRE";
-	}
+      pos.second = p->getPosY() + val;
+      if (this->exploseCase(pos, &msg) == false)
+	break ;
       ++val;
     }
-
   return (false);
 }
 
@@ -550,7 +497,8 @@ Server::Game::process(t_cmd *c, Player *p)
     }
   else if (c->action == "BOMB EXPLOSE")
     {
-      // this->bombExplose(p, c);
+      this->bombExplose(p, c);
+	  this->_messenger->addMessage(p->getSocket(), msg);
       // send directly to messenger
     }
 

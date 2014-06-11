@@ -104,8 +104,6 @@ namespace	Server {
     bool		bombDown(Player *, t_cmd *);
     bool		bombLeft(Player *, t_cmd *);
 
-    bool		bombExplose(Player *, t_cmd *);
-
     void		update();
     void		bombsProcessing();
     void		killPlayer(Player *);
@@ -119,6 +117,8 @@ namespace	Server {
     void		filterCmd(t_cmd const *, std::string &) const;
     bool		process(t_cmd *, Player *);
     void		bombSwitchQueue(t_cmd *, const std::pair<size_t, size_t>);
+    bool		bombExplose(Player *, t_cmd *);
+    bool		exploseCase(std::pair<size_t, size_t> pos, std::string &);
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
       return (p->getDateNextCommand() < this->timeLeft()) ? true : false;
