@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Sat Jun  7 17:58:22 2014 virol_g
-// Last update Wed Jun 11 13:56:00 2014 aurelien prieur
+// Last update Wed Jun 11 17:45:43 2014 virol_g
 //
 
 #include	<iostream>
@@ -15,8 +15,9 @@ MenuScroll::MenuScroll(const std::pair<size_t, size_t> &posPrev,
 		       const std::pair<size_t, size_t> &posNext,
 		       const std::pair<size_t, size_t> &size, const glm::vec4 &color,
 		       const glm::vec4 &colorHover) :
-  _scroll(posNext, size, "->", color, colorHover),   _scrollPrev(posPrev, size, "<-", color, colorHover),
-  _display(0)
+  _scroll(posNext, size, "->", color, colorHover),
+  _scrollPrev(posPrev, size, "<-", color, colorHover),
+  _display(0), _clickPrev(false), _clickNext(false)
 {
   this->initialize("./client/menu/ressources/gradationGreyTex.tga");
 }
@@ -44,15 +45,26 @@ bool		MenuScroll::update(const gdl::Clock &clock, gdl::Input &input)
 	  if ((static_cast<size_t>(mouse.x) > _scroll.getPos().first &&
 	       static_cast<size_t>(mouse.x) < _scroll.getPos().first + _scroll.getSize().first) &&
 	      (static_cast<size_t>(mouse.y) > _scroll.getPos().second &&
-	       static_cast<size_t>(mouse.y) < _scroll.getPos().second + _scroll.getSize().second))
-	(_display == _list.size() - 1) ? (_display = 0) : _display += 1;
+	       static_cast<size_t>(mouse.y) < _scroll.getPos().second + _scroll.getSize().second) &&
+	      _clickNext == false)
+	    {
+	      (_display == _list.size() - 1) ? (_display = 0) : _display += 1;
+	      _clickNext = true;
+	    }
 	  else if ((static_cast<size_t>(mouse.x) > _scrollPrev.getPos().first &&
 		    static_cast<size_t>(mouse.x) < _scrollPrev.getPos().first + _scrollPrev.getSize().first) &&
 		   (static_cast<size_t>(mouse.y) > _scrollPrev.getPos().second &&
-		    static_cast<size_t>(mouse.y) < _scrollPrev.getPos().second + _scrollPrev.getSize().second))
-	    (_display == 0) ? (_display = _list.size() - 1) : _display -= 1;
-	  if (_display >= _list.size())
-	    _display = 0;
+		    static_cast<size_t>(mouse.y) < _scrollPrev.getPos().second + _scrollPrev.getSize().second) &&
+		   _clickPrev == false)
+	    {
+	      (_display == 0) ? (_display = _list.size() - 1) : _display -= 1;
+	      _clickPrev = true;
+	    }
+	  else
+	    {
+	      _clickPrev = false;
+	      _clickNext = false;
+	    }
 	}
     }
   return (true);

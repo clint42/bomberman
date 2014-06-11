@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 11:12:45 2014 aurelien prieur
-// Last update Wed Jun 11 13:50:12 2014 aurelien prieur
+// Last update Wed Jun 11 17:09:59 2014 virol_g
 //
 
 #include <unistd.h>
@@ -44,42 +44,6 @@ bool    AMenu::initialize()
   return (true);
 }
 
-bool    AMenu::update()
-{
-  glm::ivec2	mouse;
-
-  this->_sdlContext.updateClock(this->_clock); 
-  this->_sdlContext.updateInputs(this->_input);
-  if (this->_input.getKey(SDLK_ESCAPE) || this->_input.getInput(SDL_QUIT, false))
-    {
-      _selected = -1;
-      return (false);
-    }
-  if (this->_input.getKey(SDLK_RETURN))
-    return (false);
-  if (this->_input.getKey(SDL_BUTTON_LEFT))
-    {
-      mouse = this->_input.getMousePosition();
-      for (size_t i = 0; i < _menuElems.size(); ++i)
-	{
-	  if (static_cast<size_t>(mouse.x) > _menuElems[i]->getPos().first &&
-	      static_cast<size_t>(mouse.x) < _menuElems[i]->getPos().first + _menuElems[i]->getSize().first &&
-	      static_cast<size_t>(mouse.y) > _menuElems[i]->getPos().second &&
-	      static_cast<size_t>(mouse.y) < _menuElems[i]->getPos().second + _menuElems[i]->getSize().second)
-	    {
-	      if (i != static_cast<size_t>(_selected))
-		_menuElems[_selected]->hover(false);
-	      _selected = i;
-	      _menuElems[i]->hover(true);
-	      // return (false);
-	    }
-	}
-    }
-  for (size_t i = 0; i < _menuElems.size(); ++i)
-    _menuElems[i]->update(_clock, _input);
-  return (true);
-}
-
 void    AMenu::draw()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -94,10 +58,10 @@ void    AMenu::draw()
 
 void	AMenu::timer()
 {
-  if (_clock.getElapsed() < (1.f / 60.f))
-    {
-      usleep((1.f / 60.f - _clock.getElapsed()) * 1000000);
-    }
+  // if (_clock.getElapsed() < (1.f / 60.f))
+  //   {
+  //     usleep((1.f / 60.f - _clock.getElapsed()) * 1000000);
+  //   }
 }
 
 gdl::SdlContext	AMenu::getContext() const

@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Wed Jun 11 14:51:48 2014 virol_g
+// Last update Wed Jun 11 18:34:22 2014 virol_g
 //
 
 #include	<sstream>
@@ -49,11 +49,12 @@ bool	CreateMenu::build()
     {
       while (getline(file, name))
 	{
-	  if (name.size() > 8)
-	    name.resize(8);
+	  // if (name.size() > 8)
+	  //   name.resize(8);
 	  _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 380),
 					    std::pair<size_t, size_t>(210, 60),
-					    name, glm::vec4(0.f, 0.f, 1.f, 1.f),
+					     (name.size() >= 8) ? name.substr(0, 6) : name,
+					     glm::vec4(0.f, 0.f, 1.f, 1.f),
 					    glm::vec4(0.93, 0.9, 0.32, 1.f)));
 	}
     }
@@ -68,7 +69,7 @@ bool	CreateMenu::build()
   _nbBots = new MenuInput(std::pair<size_t, size_t>(400, 180),
 			     std::pair<size_t, size_t>(250, 60),
 			     glm::vec4(1.f, 1.f, 1.f, 1.f));
-  _titles.push_back(new GraphicalText("How long the game will be ?",
+  _titles.push_back(new GraphicalText("Game duration",
 				      std::pair<size_t, size_t>(400, 260),
 				      glm::vec4(0.f, 0.f, 1.f, 1.f), P_FONT_SIZE, "airstrike"));
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 280),
