@@ -1,15 +1,5 @@
-/*
-// Player.hpp for  in /home/buret_j/rendu/bomberman
-// 
-// Made by buret_j
-// Login   <buret_j@epitech.net>
-// 
-// Started on  Mon May  5 17:14:40 2014 buret_j
-** Last update Tue Jun 10 19:26:37 2014 lafitt_g
-*/
-
-#ifndef PLAYER_HPP_
-# define PLAYER_HPP_
+#ifndef SERVER__PLAYER_HPP_
+# define SERVER__PLAYER_HPP_
 
 # include <sys/time.h>
 # include <cstdlib>
@@ -62,7 +52,7 @@ namespace Server {
     inline bool   isBot() const { return this->_bot; }
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
-    inline Player::Dir getOrientation() const { return this->_orientation; }
+    inline Dir	  getOrientation() const { return this->_orientation; }
     inline size_t getBombsOnFloor() const { return this->_bombsOnFloor; }
     inline size_t getBombsLimit() const { return this->_bombsLimit; }
     std::pair<size_t, size_t> getPos() const { std::pair<size_t, size_t> ret(_posX, _posY); return ret; }
