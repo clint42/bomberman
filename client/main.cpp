@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Mon Jun  9 11:15:41 2014 aurelien prieur
+// Last update Wed Jun 11 12:10:00 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -17,6 +17,8 @@
 #include "ClientCore.hpp"
 #include "SafeQueue.hpp"
 #include "AObject.hpp"
+#include "Signal.hpp"
+#include "MenuHandler.hpp"
 
 //TODO: testing purpose only. Remove it.
 extern int debug_align;
@@ -25,22 +27,28 @@ int debug_align = 0;
 int	main()
 {
   srand(time(0));
-  //Launch graphic thread
+
+  Signal		signal;
+  //TODO: Move to the right place. Testing purpose only.
+  MenuHandler menuHandler(signal);
+  t_game	*options;
+
+  options = (menuHandler.launchMenus());
   ConnexionHandler	connexionHandler;
   EventsHandler		eventsHandler(connexionHandler);
   GameEntities		gameEntities;
   SafeQueue<std::pair<std::pair<size_t, size_t>, int> >	createInstructs;
 
-  //1: LAUNCH MAIN MENU
-  //2: LAUNCH SUB MENU (DEPENDING OF MAIN MENU RESULT)
-  
   //3: LAUNCH CORE AND GRAPHICENGINE
-  ThreadUI	threadUI(eventsHandler, gameEntities, createInstructs);
-  ClientCore	core(gameEntities, eventsHandler, createInstructs, connexionHandler);
 
-  core.initialize();
+  ClientCore	core(gameEntities, eventsHandler, createInstructs, connexionHandler);
+  core.initialize(options);
+  
+  ThreadUI	threadUI(eventsHandler, gameEntities, createInstructs);
   core.run();
+
   //TODO: add failure condition to return correct value
-  threadUI.join();
+
+  //threadUI.join();
   return (EXIT_SUCCESS);
 }

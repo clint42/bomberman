@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Tue Jun 10 19:09:55 2014 aurelien prieur
+// Last update Wed Jun 11 12:10:25 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -31,7 +31,7 @@ ClientCore::~ClientCore()
 {
 }
 
-bool		ClientCore::initialize()
+bool		ClientCore::initialize(t_game *options)
 {
   try {
     MapRender	map("../test.map");
@@ -42,7 +42,7 @@ bool		ClientCore::initialize()
     std::cerr << "Invalid map: " << e.what() << std::endl;
   }
   try {
-  _connexion.client(4242, "127.0.0.1");
+  _connexion.client(4242, options->ipAddr);
   //TODO: testing purpose only (remove)
   _connexion.getMasterSocket()->write("CONFIG test.map 1 1 0");
   }

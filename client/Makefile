@@ -5,18 +5,26 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Tue Jun 10 19:03:18 2014 aurelien prieur
+## Last update Wed Jun 11 10:26:07 2014 aurelien prieur
 ##
 
 CXX =	clang++
 
-CXXFLAGS += -I/home/prieur_b/LibBomberman_linux_x64/includes -I../common -Werror -Wall -Wextra
+CXXFLAGS += -I/home/prieur_b/LibBomberman_linux_x64/includes -I../common -Imenu -Werror -Wall -Wextra
 
 LXXFLAGS =  -L/home/prieur_b/LibBomberman_linux_x64/libs -lgdl_gl -lGL -lGLEW -ldl -lrt -lfbxsdk -lSDL2 -lpthread -lssl -lcrypto
 
 NAME =	client
 
 SRC =   main.cpp \
+	MenuHandler.cpp \
+	menu/AMenu.cpp \
+	menu/MainMenu.cpp \
+	menu/CreateMenu.cpp \
+	menu/MenuInput.cpp \
+	menu/MenuButton.cpp \
+	menu/MenuScroll.cpp \
+	menu/MenuBackground.cpp \
 	MapRender.cpp \
 	AObject.cpp \
 	GameEntities.cpp \
@@ -40,6 +48,7 @@ SRC =   main.cpp \
 	../common/Poll.cpp \
 	../common/ConnexionHandler.cpp \
 	../common/Exception.cpp \
+	../common/Signal.cpp \
 	ThreadUI.cpp \
 	UI.cpp \
 	../server/Server.cpp \

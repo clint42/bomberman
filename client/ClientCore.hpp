@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:42:09 2014 aurelien prieur
-// Last update Sun Jun  8 16:22:14 2014 julie franel
+// Last update Wed Jun 11 12:11:32 2014 aurelien prieur
 //
 
 #ifndef CLIENTCORE_HPP_
@@ -17,6 +17,8 @@
 # include "EventsHandler.hpp"
 # include "SafeQueue.hpp"
 # include "macros.hpp"
+
+typedef t_game;
 
 class		Parser;
 
@@ -37,7 +39,7 @@ public:
 	     SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs,
 	     ConnexionHandler &connexionHandler);
   ~ClientCore();
-  bool		initialize();
+  bool		initialize(t_game *options);
   bool		run();
   void		io(Socket *socket, bool b[3]);
 };

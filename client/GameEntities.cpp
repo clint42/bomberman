@@ -5,13 +5,13 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Tue Jun 10 19:03:05 2014 aurelien prieur
+// Last update Tue Jun 10 20:38:51 2014 aurelien prieur
 //
 
 #include <iostream>
 #include "GameEntities.hpp"
 
-GameEntities::GameEntities(): _isDouble(false),
+GameEntities::GameEntities(): _isDouble(false), _isStarted(false),
 			      _player(NULL), _player2(NULL),
 			      _playerScore(0), _player2Score(0),
 			      _timeLeft(0)
@@ -246,4 +246,23 @@ void	GameEntities::setDouble(void)
   _locker.lock();
   _isDouble = true;
   _locker.unlock();
+}
+
+void	GameEntities::startGame(void)
+{
+  _locker.lock();
+  _isStarted = true;
+  _locker.unlock();
+}
+
+bool	GameEntities::isStarted(bool withoutLock)
+{
+  bool	retVal;
+
+  if (!withoutLock)
+    _locker.lock();
+  retVal = _isStarted;
+  if (!withoutLock)
+    _locker.unlock();
+  return (retVal);
 }

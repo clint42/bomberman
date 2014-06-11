@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:08:08 2014 aurelien prieur
-// Last update Fri Jun  6 17:26:00 2014 aurelien prieur
+// Last update Wed Jun 11 10:29:59 2014 aurelien prieur
 //
 
 #ifndef GRAPHICALTEXT_HPP_
@@ -21,6 +21,7 @@ class	GraphicalText
   std::pair<size_t, size_t>		_pos;
   float					_fontSize;
   glm::vec4				_color;
+  std::string				_string;
 
 public:
   GraphicalText(std::string const &text, std::pair<size_t, size_t> const &pos,
@@ -30,6 +31,9 @@ public:
   void	draw(gdl::AShader &shader);
   void	updateColor(glm::vec4 const &color);
   void	updateText(std::string const &text);
+  void		addLetter(char c);
+  void		delLetter();
+  std::string	getString() const;
 };
 
 #endif // !GRAPHICALTEXT_HPP_

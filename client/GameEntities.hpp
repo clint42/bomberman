@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Tue Jun 10 19:02:47 2014 aurelien prieur
+// Last update Tue Jun 10 20:36:30 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -21,6 +21,7 @@
 class	GameEntities
 {
   bool							_isDouble;
+  bool							_isStarted;
   AObject						*_player;
   AObject						*_player2;
   int							_playerScore;
@@ -55,6 +56,8 @@ public:
   void					setMapSize(std::pair<size_t, size_t> const &mapSize);
   bool					isDouble(bool withoutLock = false);
   void					setDouble(void);
+  void					startGame(void);
+  bool					isStarted(bool withoutLock = false);
 };
 
 #endif // !GAMEENTITIES_HPP_

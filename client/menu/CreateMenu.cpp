@@ -5,17 +5,17 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Wed Jun 11 01:48:30 2014 virol_g
+// Last update Wed Jun 11 11:32:32 2014 aurelien prieur
 //
 
 #include	<sstream>
 #include	<fstream>
 #include	"CreateMenu.hpp"
 
-CreateMenu::CreateMenu(gdl::SdlContext sdlContext)
+CreateMenu::CreateMenu(gdl::SdlContext &sdlContext): AMenu(sdlContext)
 {
-  _sdlContext = sdlContext;
-  _sdlStarted = true;
+  //_sdlContext = sdlContext;
+  // _sdlStarted = true;
 }
 
 CreateMenu::~CreateMenu()
@@ -33,8 +33,13 @@ bool	CreateMenu::build()
   std::ifstream	file("maps");
   std::string	name;
 
+  if (!file)
+    {
+      std::cerr << "Unable to open maps list file" << std::endl;
+      return (false);
+    }
   _titles.push_back(new GraphicalText("Select a map", std::pair<size_t, size_t>(400, 360),
-				      glm::vec4(0.f, 0.f, 1.f, 1.f), 10, "airstrike"));
+				      glm::vec4(0.f, 0.f, 1.f, 1.f), P_FONT_SIZE, "airstrike"));
   _selectMap = new MenuScroll(std::pair<size_t, size_t>(400, 380),
   			      std::pair<size_t, size_t>(680, 380),
   			      std::pair<size_t, size_t>(80, 60),
@@ -52,30 +57,30 @@ bool	CreateMenu::build()
 					    glm::vec4(0.93, 0.9, 0.32, 1.f)));
 	}
     }
-  _menuBackground = new MenuBackground("./ressources/backgroundSubMenu.tga");
+  _menuBackground = new MenuBackground("./menu/ressources/backgroundSubMenu.tga");
   _titles.push_back(new GraphicalText("How many players ?", std::pair<size_t, size_t>(400, 60),
-				      glm::vec4(0.f, 0.f, 1.f, 1.f), 10, "airstrike"));
+				      glm::vec4(0.f, 0.f, 1.f, 1.f), P_FONT_SIZE, "airstrike"));
   _nbPlayers = new MenuInput(std::pair<size_t, size_t>(400, 80),
 			     std::pair<size_t, size_t>(250, 60),
 			     glm::vec4(1.f, 1.f, 1.f, 1.f));
   _titles.push_back(new GraphicalText("How many bots ?", std::pair<size_t, size_t>(400, 160),
-				      glm::vec4(0.f, 0.f, 1.f, 1.f), 10, "airstrike"));
+				      glm::vec4(0.f, 0.f, 1.f, 1.f), P_FONT_SIZE, "airstrike"));
   _nbBots = new MenuInput(std::pair<size_t, size_t>(400, 180),
 			     std::pair<size_t, size_t>(250, 60),
 			     glm::vec4(1.f, 1.f, 1.f, 1.f));
   _titles.push_back(new GraphicalText("How long the game will be ?",
-				      std::pair<size_t, size_t>(400, 360),
-				      glm::vec4(0.f, 0.f, 1.f, 1.f), 10, "airstrike"));
+				      std::pair<size_t, size_t>(400, 260),
+				      glm::vec4(0.f, 0.f, 1.f, 1.f), P_FONT_SIZE, "airstrike"));
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 280),
-				      std::pair<size_t, size_t>(150, 40),
+				      std::pair<size_t, size_t>(150, 50),
 				      "Short", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(550, 280),
-				      std::pair<size_t, size_t>(150, 60),
+				      std::pair<size_t, size_t>(150, 50),
 				      "Medium", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(700, 280),
-				      std::pair<size_t, size_t>(150, 60),
+				      std::pair<size_t, size_t>(150, 50),
 				      "Long", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
   return (true);
@@ -99,22 +104,28 @@ bool	CreateMenu::update()
       mouse = this->_input.getMousePosition();
       for (size_t i = 0; i < _menuElems.size(); ++i)
 	{
-	  if (mouse.x > _menuElems[i]->getPos().first && mouse.x < _menuElems[i]->getPos().first + _menuElems[i]->getSize().first &&
-	      mouse.y > _menuElems[i]->getPos().second && mouse.y < _menuElems[i]->getPos().second + _menuElems[i]->getSize().second)
+	  if (static_cast<size_t>(mouse.x) > _menuElems[i]->getPos().first &&
+	      static_cast<size_t>(mouse.x) < _menuElems[i]->getPos().first + _menuElems[i]->getSize().first &&
+	      static_cast<size_t>(mouse.y) > _menuElems[i]->getPos().second &&
+	      static_cast<size_t>(mouse.y) < _menuElems[i]->getPos().second + _menuElems[i]->getSize().second)
 	    {
-	      if (i != _selected)
+	      if (i != static_cast<size_t>(_selected))
 		_menuElems[_selected]->hover(false);
 	      _selected = i;
 	      _menuElems[i]->hover(true);
 	    }
-	  if (mouse.x > _nbBots->getPos().first && mouse.x < _nbBots->getPos().first + _nbBots->getSize().first &&
-	      mouse.y > _nbBots->getPos().second && mouse.y < _nbBots->getPos().second + _nbBots->getSize().second)
+	  if (static_cast<size_t>(mouse.x) > _nbBots->getPos().first &&
+	      static_cast<size_t>(mouse.x) < _nbBots->getPos().first + _nbBots->getSize().first &&
+	      static_cast<size_t>(mouse.y) > _nbBots->getPos().second &&
+	      static_cast<size_t>(mouse.y) < _nbBots->getPos().second + _nbBots->getSize().second)
 	    {
 	      _nbBots->hover(true);
 	      _nbPlayers->hover(false);
 	    }
-	  if (mouse.x > _nbPlayers->getPos().first && mouse.x < _nbPlayers->getPos().first + _nbPlayers->getSize().first &&
-	      mouse.y > _nbPlayers->getPos().second && mouse.y < _nbPlayers->getPos().second + _nbPlayers->getSize().second)
+	  if (static_cast<size_t>(mouse.x) > _nbPlayers->getPos().first &&
+	      static_cast<size_t>(mouse.x) < _nbPlayers->getPos().first + _nbPlayers->getSize().first &&
+	      static_cast<size_t>(mouse.y) > _nbPlayers->getPos().second &&
+	      static_cast<size_t>(mouse.y) < _nbPlayers->getPos().second + _nbPlayers->getSize().second)
 	    {
 	      _nbBots->hover(false);
 	      _nbPlayers->hover(true);
@@ -150,7 +161,9 @@ t_game		*CreateMenu::getChoice() const
   std::stringstream	ss2;
   t_game	*choice = new t_game;
 
+  std::cout << "Create menu getChoice !" << std::endl;
   choice->mapName = _selectMap->getChoice();
+  std::cout << "AFter select map getChoice." << std::endl;
   choice->timeGame = (_selected == -1) ? 1 : _selected;
   ss << _nbBots->getInput();
   ss >> choice->nbBots;
