@@ -5,14 +5,14 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 11:12:45 2014 aurelien prieur
-// Last update Tue Jun 10 18:21:39 2014 virol_g
+// Last update Wed Jun 11 13:50:12 2014 aurelien prieur
 //
 
 #include <unistd.h>
 #include <iostream>
 #include "AMenu.hpp"
 
-AMenu::AMenu(): _selected(0)
+AMenu::AMenu(gdl::SdlContext &sdlContext): _sdlContext(sdlContext), _selected(0)
 {
   _key[0] = false;
   _key[1] = false;
@@ -26,12 +26,12 @@ bool    AMenu::initialize()
 {
   glm::mat4     projection;
 
-  if (this->_sdlStarted == false)
-    this->_sdlContext.start(800, 600, "Menu", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
+  // if (this->_sdlStarted == false)
+  //   this->_sdlContext.start(800, 600, "Menu", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  if (!_shader.load("../shaders/basic.fp", GL_FRAGMENT_SHADER)
-      || !_shader.load("../shaders/basic.vp", GL_VERTEX_SHADER)
+  if (!_shader.load("./client/shaders/basic.fp", GL_FRAGMENT_SHADER)
+      || !_shader.load("./client/shaders/basic.vp", GL_VERTEX_SHADER)
       || !_shader.build())
     {
       std::cerr << "Shader loading error" << std::endl;
@@ -62,10 +62,12 @@ bool    AMenu::update()
       mouse = this->_input.getMousePosition();
       for (size_t i = 0; i < _menuElems.size(); ++i)
 	{
-	  if (mouse.x > _menuElems[i]->getPos().first && mouse.x < _menuElems[i]->getPos().first + _menuElems[i]->getSize().first &&
-	      mouse.y > _menuElems[i]->getPos().second && mouse.y < _menuElems[i]->getPos().second + _menuElems[i]->getSize().second)
+	  if (static_cast<size_t>(mouse.x) > _menuElems[i]->getPos().first &&
+	      static_cast<size_t>(mouse.x) < _menuElems[i]->getPos().first + _menuElems[i]->getSize().first &&
+	      static_cast<size_t>(mouse.y) > _menuElems[i]->getPos().second &&
+	      static_cast<size_t>(mouse.y) < _menuElems[i]->getPos().second + _menuElems[i]->getSize().second)
 	    {
-	      if (i != _selected)
+	      if (i != static_cast<size_t>(_selected))
 		_menuElems[_selected]->hover(false);
 	      _selected = i;
 	      _menuElems[i]->hover(true);
@@ -84,7 +86,9 @@ void    AMenu::draw()
   _shader.bind();
   _menuBackground->draw(_shader, _clock);
   for (size_t i = 0; i < _menuElems.size(); ++i)
-    _menuElems[i]->draw(_shader, _clock);
+    {
+      _menuElems[i]->draw(_shader, _clock);
+    }
   this->_sdlContext.flush();
 }
 

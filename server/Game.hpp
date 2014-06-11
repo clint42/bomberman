@@ -8,6 +8,7 @@
 # include <sys/time.h>
 
 # include "Map.hpp"
+# include "Team.hpp"
 # include "Player.hpp"
 # include "Thread.hpp"
 # include "SafeQueue.hpp"
@@ -48,6 +49,7 @@ namespace	Server {
     size_t	_maxBots;
     size_t	_round;
 
+    std::list<Player *> const &	_peers;
     std::map<std::pair<size_t, size_t>, Player *> _players;
     std::list<Team *>		_teams;
 

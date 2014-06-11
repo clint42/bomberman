@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:16:41 2014 aurelien prieur
-// Last update Tue Jun 10 17:21:58 2014 aurelien prieur
+// Last update Wed Jun 11 13:53:12 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -16,7 +16,8 @@ GraphicalText::GraphicalText(std::string const &text, std::pair<size_t, size_t> 
 			     glm::vec4 const &color, float const &fontSize,
 			     std::string const &fontName): _pos(pos),
 							   _fontSize(fontSize),
-							   _color(color)
+							   _color(color),
+							   _string(text)
 {
   GraphicalLetter	*letter;
   int			letterPadding;
@@ -24,10 +25,10 @@ GraphicalText::GraphicalText(std::string const &text, std::pair<size_t, size_t> 
   letterPadding = (_fontSize / 2) - 10; 
   if (letterPadding < 0)
    letterPadding = 0;
-  if (_abcTex.load("./menu/ressources/fonts/" + fontName + ".tga") == false)
+  if (_abcTex.load("./client/menu/ressources/fonts/" + fontName + ".tga") == false)
     {
       std::cerr << "Couldn't load requested font. " << std::endl;
-      if (_abcTex.load("./menu/ressources/fonts/airstrike.tga") == false)
+      if (_abcTex.load("./client/menu/ressources/fonts/airstrike.tga") == false)
 	{
 	  throw std::runtime_error("Unable to load default font");
 	}
@@ -83,4 +84,35 @@ void	GraphicalText::updateText(std::string const &text)
 				   _color, _fontSize, _abcTex);
       _text.push_back(letter);
     }
+}
+
+void    GraphicalText::addLetter(char c)
+{
+  GraphicalLetter       *letter = new GraphicalLetter(c,
+                                                      std::pair<size_t, size_t>((_pos.first +
+										 _string.length() *
+										 (_fontSize - 16)),
+										_pos.second),
+						      _color, _fontSize, _abcTex);
+  int			letterPadding;
+
+  letterPadding = (_fontSize / 2) - 10;
+  if (letterPadding < 0)
+     letterPadding = 0;
+  _text.push_back(letter);
+  _string.push_back(c);
+}
+
+void    GraphicalText::delLetter()
+{
+  if (_string.length() > 0)
+    {
+      _text.pop_back();
+      _string.resize(_string.length() - 1);
+    }
+}
+
+std::string     GraphicalText::getString() const
+{
+  return (this->_string);
 }

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:29:16 2014 aurelien prieur
-// Last update Tue Jun 10 21:20:43 2014 virol_g
+// Last update Wed Jun 11 13:55:47 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -25,7 +25,7 @@ MenuButton::MenuButton(std::pair<size_t, size_t> const &pos,
 							glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20,
 							font)
 {
-  this->initialize("./ressources/gradationGreyTex.tga");
+  this->initialize("./client/menu/ressources/gradationGreyTex.tga");
 }
 
 MenuButton::~MenuButton()
@@ -36,7 +36,7 @@ bool	MenuButton::initialize(std::string const &textureName)
 {
   if (_texture.load(textureName) == false)
     {
-      std::cerr << "Couldn't load texture." << std::endl;
+      std::cerr << "Couldn't load button texture." << std::endl;
       return (false);
     }
   _geometry.setColor(_color);

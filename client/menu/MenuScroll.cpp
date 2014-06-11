@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Sat Jun  7 17:58:22 2014 virol_g
-// Last update Tue Jun 10 21:23:31 2014 virol_g
+// Last update Wed Jun 11 13:56:00 2014 aurelien prieur
 //
 
 #include	<iostream>
@@ -15,17 +15,17 @@ MenuScroll::MenuScroll(const std::pair<size_t, size_t> &posPrev,
 		       const std::pair<size_t, size_t> &posNext,
 		       const std::pair<size_t, size_t> &size, const glm::vec4 &color,
 		       const glm::vec4 &colorHover) :
-  _scrollPrev(posPrev, size, "<-", color, colorHover),
-  _scroll(posNext, size, "->", color, colorHover), _display(0)
+  _scroll(posNext, size, "->", color, colorHover),   _scrollPrev(posPrev, size, "<-", color, colorHover),
+  _display(0)
 {
-  this->initialize("./ressources/gradationGreyTex.tga");
+  this->initialize("./client/menu/ressources/gradationGreyTex.tga");
 }
 
 MenuScroll::~MenuScroll()
 {
 }
 
-bool		MenuScroll::initialize(const std::string &textureName)
+bool		MenuScroll::initialize(__attribute__((unused))const std::string &textureName)
 {
   return (true);
 }
@@ -41,11 +41,15 @@ bool		MenuScroll::update(const gdl::Clock &clock, gdl::Input &input)
       if (input.getKey(SDL_BUTTON_LEFT))
 	{
 	  mouse = input.getMousePosition();
-	  if ((mouse.x > _scroll.getPos().first && mouse.x < _scroll.getPos().first + _scroll.getSize().first) &&
-	      (mouse.y > _scroll.getPos().second && mouse.y < _scroll.getPos().second + _scroll.getSize().second))
+	  if ((static_cast<size_t>(mouse.x) > _scroll.getPos().first &&
+	       static_cast<size_t>(mouse.x) < _scroll.getPos().first + _scroll.getSize().first) &&
+	      (static_cast<size_t>(mouse.y) > _scroll.getPos().second &&
+	       static_cast<size_t>(mouse.y) < _scroll.getPos().second + _scroll.getSize().second))
 	(_display == _list.size() - 1) ? (_display = 0) : _display += 1;
-	  else if ((mouse.x > _scrollPrev.getPos().first && mouse.x < _scrollPrev.getPos().first + _scrollPrev.getSize().first) &&
-		   (mouse.y > _scrollPrev.getPos().second && mouse.y < _scrollPrev.getPos().second + _scrollPrev.getSize().second))
+	  else if ((static_cast<size_t>(mouse.x) > _scrollPrev.getPos().first &&
+		    static_cast<size_t>(mouse.x) < _scrollPrev.getPos().first + _scrollPrev.getSize().first) &&
+		   (static_cast<size_t>(mouse.y) > _scrollPrev.getPos().second &&
+		    static_cast<size_t>(mouse.y) < _scrollPrev.getPos().second + _scrollPrev.getSize().second))
 	    (_display == 0) ? (_display = _list.size() - 1) : _display -= 1;
 	  if (_display >= _list.size())
 	    _display = 0;

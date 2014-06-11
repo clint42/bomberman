@@ -1,15 +1,5 @@
-/*
-// Player.hpp for  in /home/buret_j/rendu/bomberman
-// 
-// Made by buret_j
-// Login   <buret_j@epitech.net>
-// 
-// Started on  Mon May  5 17:14:40 2014 buret_j
-** Last update Tue Jun 10 19:26:37 2014 lafitt_g
-*/
-
-#ifndef PLAYER_HPP_
-# define PLAYER_HPP_
+#ifndef SERVER__PLAYER_HPP_
+# define SERVER__PLAYER_HPP_
 
 # include <sys/time.h>
 # include <cstdlib>
@@ -52,6 +42,7 @@ namespace Server {
     double	_commandTimeMultiplier;// used by bonus, '1' by default. ex: 0.5 = speed increased by 2.
 
     Socket *	_socket;
+    bool	_certifiedMd5;
 
   public:
     Player(size_t, Socket *);
@@ -62,15 +53,17 @@ namespace Server {
     inline bool   isBot() const { return this->_bot; }
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
-    inline Player::Dir getOrientation() const { return this->_orientation; }
+    inline Dir	  getOrientation() const { return this->_orientation; }
     inline size_t getBombsOnFloor() const { return this->_bombsOnFloor; }
     inline size_t getBombsLimit() const { return this->_bombsLimit; }
     std::pair<size_t, size_t> getPos() const { std::pair<size_t, size_t> ret(_posX, _posY); return ret; }
+    inline bool	  hasCertifiedMd5() const { return _certifiedMd5; }
 
     void	  getAction(Action &, std::string const &);
 
     inline void	  setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
     inline void	  setTeam(Team *t) { this->_team = t; }
+    inline void	  hasCertifiedMd5(bool b) { _certifiedMd5 = b; }
 
     inline void	  poseBomb() { if (_bombsLimit > _bombsOnFloor) _bombsOnFloor += 1; }
     inline void   destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }

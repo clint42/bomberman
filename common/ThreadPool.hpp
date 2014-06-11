@@ -1,9 +1,9 @@
 //
 // ThreadPool.hpp for  in /home/buret_j/rendu/cpp_plazza
-// 
+//
 // Made by buret_j
 // Login   <buret_j@epitech.net>
-// 
+//
 // Started on  Wed Apr 23 11:05:56 2014 buret_j
 // Last update Sun Jun  8 16:12:59 2014 buret_j
 //
@@ -14,8 +14,6 @@
 # include <list>
 # include <queue>
 # include <pthread.h>
-
-# include "writeStdCOut.hpp"
 
 # include "CondVar.hpp"
 # include "Mutex.hpp"

@@ -5,17 +5,18 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Tue Jun 10 20:27:00 2014 virol_g
+// Last update Wed Jun 11 13:50:24 2014 aurelien prieur
 //
 
+#include <iostream>
 #include <algorithm>
 #include "MainMenu.hpp"
 #include "MenuBackground.hpp"
 #include "MenuButton.hpp"
 
-MainMenu::MainMenu()
+MainMenu::MainMenu(gdl::SdlContext &sdlContext): AMenu(sdlContext)
 {
-  this->_sdlStarted = false;
+  // this->_sdlStarted = false;
 }
 
 MainMenu::~MainMenu()
@@ -27,7 +28,7 @@ MainMenu::~MainMenu()
 
 bool	MainMenu::build()
 {
-  _menuBackground = new MenuBackground("./ressources/mainMenuBg.tga");
+  _menuBackground = new MenuBackground("./client/menu/ressources/mainMenuBg.tga");
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(30, 205),
 				      std::pair<size_t, size_t>(250, 60),
 				     "New game",
@@ -42,7 +43,11 @@ bool	MainMenu::build()
   return (true);
 }
 
-int	MainMenu::getChoice() const
+t_game		*MainMenu::getChoice() const
 {
-  return (_selected);
+  t_game	*options;
+
+  options = new t_game;
+  options->isHost = (_selected == 0);
+  return (options);
 }
