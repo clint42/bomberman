@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Wed Jun 11 17:59:13 2014 julie franel
+// Last update Wed Jun 11 18:24:09 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -36,9 +36,18 @@ Parser::Parser(GameEntities &gameEntities,
   this->_fct["ROTATE"] = &Parser::parseRotate;
   this->_fct["DESTROY"] = &Parser::parseDestroy;
   this->_fct["CHRONO"] = &Parser::parseChrono;
+  this->_fct["STARTGAME"] = &Parser::parseStartGame;
+
+  this->_fct["WELCOME"] = &Parser::parseWelcome;
+  this->_fct["MAP"] = &Parser::parseMap;
 
   this->_tabFct["CREATE"] = &Parser::parseDestroy;
   this->_tabFct["DESTROY"] = &Parser::parseDestroy;
+
+  this->_config.idPlayer1 = 0;
+  this->_config.idPlayer2 = 0;
+  this->_config.mapName = "";
+  this->_config.welcomeReceived = false;
 }
 
 Parser::~Parser()
@@ -46,6 +55,16 @@ Parser::~Parser()
 
 }
 
+
+
+/*
+** GETTER
+*/
+
+const Parser::t_config	&Parser::getConfig() const
+{
+  return (this->_config);
+}
 
 /*
 ** MEMBER FUNCTIONS - GAME ENTITIES
@@ -61,7 +80,6 @@ void		Parser::parseChrono(const t_parser &_parser)
   size_t	_chrono;
 
   CVRT_STRING_TO_SIZET(_parser.params[0], _chrono);
-  std::cout << "CHRONO: " << _chrono << std::endl;
   this->_gameEntities.setTimeLeft(static_cast<float>(_chrono));
 }
 
@@ -127,6 +145,30 @@ bool		Parser::parseDestroy(std::list<t_parser *> &_tabParser)
 void		Parser::parseRotate(const t_parser &_parser)
 {
   this->_gameEntities.rotateEntity(_parser.pos, this->_dir[_parser.params.front()]);
+}
+
+
+void		Parser::parseWelcome(const t_parser &_parser)
+{
+  if (this->_config.idPlayer1 == 0)
+    this->_config.idPlayer1 = _parser.id;
+  else if (this->_config.idPlayer2 == 0)
+    this->_config.idPlayer2 = _parser.id;
+  this->_config.welcomeReceived = true;
+}
+
+void		Parser::parseMap(const t_parser &_parser)
+{
+  this->_config.mapName = _parser.params.front();
+}
+
+void		Parser::parseStartGame(const t_parser &_parser)
+{
+  size_t        _chrono;
+
+  this->_gameEntities.startGame();
+  CVRT_STRING_TO_SIZET(_parser.params[0], _chrono);
+  this->_gameEntities.setTimeLeft(static_cast<float>(_chrono));
 }
 
 

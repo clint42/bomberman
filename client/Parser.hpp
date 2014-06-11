@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Sun Jun  8 15:49:48 2014 julie franel
-// Last update Wed Jun 11 16:37:20 2014 julie franel
+// Last update Wed Jun 11 18:22:00 2014 julie franel
 //
 
 #ifndef		PARSER_HPP_
@@ -30,8 +30,17 @@ class		Parser
     std::vector<std::string>    params;
   };
 
+  struct			t_config
+  {
+    size_t			idPlayer1;
+    size_t			idPlayer2;
+    std::string			mapName;
+    bool			welcomeReceived;
+  };
+
   GameEntities							&_gameEntities;
   SafeQueue<std::pair<std::pair<size_t, size_t>, int> >		&_createInstructs;
+  t_config							_config;
 
   std::map<std::string, AObject::EventIn>			_dir;
   std::map<std::string, ObjectType>				_types;
@@ -39,6 +48,10 @@ class		Parser
   std::map<std::string, bool (Parser::*)(std::list<t_parser *> &)>	_tabFct;
 
   t_parser              *parser(std::string cmd);
+
+  void                  parseWelcome(const t_parser &_parser);
+  void                  parseMap(const t_parser &_parser);
+  void                  parseStartGame(const t_parser &_parser);
 
   void                  parseMove(const t_parser &_parser);
   void                  parseRotate(const t_parser &_parser);
@@ -58,6 +71,8 @@ public:
   ~Parser();
 
   void			run(std::string &string);
+
+  const t_config	&getConfig() const;
 };
 
 #endif		/* !PARSER_HPP */
