@@ -5,7 +5,11 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:21:25 2014 aurelien prieur
+<<<<<<< HEAD
 // Last update Wed Jun 11 14:50:41 2014 aurelien prieur
+=======
+// Last update Wed Jun 11 14:43:11 2014 virol_g
+>>>>>>> 4a4d1b107bc333c1a183b04812117cae2bd9c6ac
 //
 
 #ifndef MENUHANDLER_HPP_
@@ -16,6 +20,7 @@
 #include "AMenu.hpp"
 #include "MainMenu.hpp"
 #include "CreateMenu.hpp"
+#include "JoinMenu.hpp"
 #include "Signal.hpp"
 #include "ConnexionHandler.hpp"
 #include "../server/Server.hpp"
