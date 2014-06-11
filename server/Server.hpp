@@ -36,18 +36,20 @@ namespace Server {
     void	putCmdInQueue(t_cmd *);
 
     inline size_t countPeers() const { return _peers.size(); }
-
+    Player *	  findPeerByID(const size_t);
 
     bool	funcWelcome(const t_cmd *);
     bool	funcPause(const t_cmd *);
     bool	funcKill(const t_cmd *);
     bool	funcMd5(const t_cmd *);
+    bool	funcWithFriend(const t_cmd *);
 
     void	watchEvent(int e);
     void	unwatchEvent(int e);
 
   public:
     Server(ConnexionHandler *);
+    Server(ConnexionHandler *, int);
     ~Server();
 
     void	run();
@@ -55,6 +57,7 @@ namespace Server {
     void	peerDisconnected(Socket *);
     void        readMessage(Socket *);
     void	sendMessage(Socket *);
+    void	sendBroadcast();
     bool	manageAdminCommand();
 
     static std::map<std::string, bool (Server::Server::*)(const t_cmd *)>	_func;

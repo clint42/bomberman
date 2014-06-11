@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun  8 18:07:17 2014 julie franel
+// Last update Wed Jun 11 18:24:09 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -36,6 +36,18 @@ Parser::Parser(GameEntities &gameEntities,
   this->_fct["ROTATE"] = &Parser::parseRotate;
   this->_fct["DESTROY"] = &Parser::parseDestroy;
   this->_fct["CHRONO"] = &Parser::parseChrono;
+  this->_fct["STARTGAME"] = &Parser::parseStartGame;
+
+  this->_fct["WELCOME"] = &Parser::parseWelcome;
+  this->_fct["MAP"] = &Parser::parseMap;
+
+  this->_tabFct["CREATE"] = &Parser::parseDestroy;
+  this->_tabFct["DESTROY"] = &Parser::parseDestroy;
+
+  this->_config.idPlayer1 = 0;
+  this->_config.idPlayer2 = 0;
+  this->_config.mapName = "";
+  this->_config.welcomeReceived = false;
 }
 
 Parser::~Parser()
@@ -43,6 +55,16 @@ Parser::~Parser()
 
 }
 
+
+
+/*
+** GETTER
+*/
+
+const Parser::t_config	&Parser::getConfig() const
+{
+  return (this->_config);
+}
 
 /*
 ** MEMBER FUNCTIONS - GAME ENTITIES
@@ -58,7 +80,6 @@ void		Parser::parseChrono(const t_parser &_parser)
   size_t	_chrono;
 
   CVRT_STRING_TO_SIZET(_parser.params[0], _chrono);
-  std::cout << "CHRONO: " << _chrono << std::endl;
   this->_gameEntities.setTimeLeft(static_cast<float>(_chrono));
 }
 
@@ -73,21 +94,29 @@ void		Parser::parseCreate(const t_parser &_parser)
 								  this->_types[_parser.params.front()]));
 }
 
-void		Parser::parseCreate(const std::list<t_parser *> &_tabParser)
+bool		Parser::parseCreate(std::list<t_parser *> &_tabParser)
 {
   std::list<std::pair<std::pair<size_t, size_t>, int> >		_list;
+  bool ret = false;
 
-  for (std::list<t_parser *>::const_iterator it = _tabParser.begin(); it != _tabParser.end(); ++it)
+  for (std::list<t_parser *>::iterator it = _tabParser.begin(); it != _tabParser.end(); ++it)
     {
-      size_t posx;
-      size_t posy;
+      if ((*it)->action.compare("CREATE") == 0)
+	{
+	  size_t posx;
+	  size_t posy;
 
-      CVRT_STRING_TO_SIZET((*it)->params[1], posx);
-      CVRT_STRING_TO_SIZET((*it)->params[2], posy);
-      _list.push_back(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(posx, posy),
-								this->_types[(*it)->params[0]]));
+	  CVRT_STRING_TO_SIZET((*it)->params[1], posx);
+	  CVRT_STRING_TO_SIZET((*it)->params[2], posy);
+	  _list.push_back(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(posx, posy),
+								    this->_types[(*it)->params[0]]));
+	  _tabParser.erase(it);
+	  it = _tabParser.begin();
+	  ret = true;
+	}
     }
   this->_createInstructs.push(_list);
+  return (ret);
 }
 
 void		Parser::parseDestroy(const t_parser &_parser)
@@ -95,9 +124,51 @@ void		Parser::parseDestroy(const t_parser &_parser)
   this->_gameEntities.deleteEntity(_parser.pos);
 }
 
+bool		Parser::parseDestroy(std::list<t_parser *> &_tabParser)
+{
+  std::list<t_parser *>::iterator it;
+  bool	ret = false;
+
+  for (it = _tabParser.begin(); it != _tabParser.end(); ++it)
+    {
+      if ((*it)->action.compare("DESTROY") == 0)
+	{
+	  this->_gameEntities.deleteEntity((*it)->pos);
+	  _tabParser.erase(it);
+	  it = _tabParser.begin();
+	  ret = true;
+	}
+    }
+  return (ret);
+}
+
 void		Parser::parseRotate(const t_parser &_parser)
 {
   this->_gameEntities.rotateEntity(_parser.pos, this->_dir[_parser.params.front()]);
+}
+
+
+void		Parser::parseWelcome(const t_parser &_parser)
+{
+  if (this->_config.idPlayer1 == 0)
+    this->_config.idPlayer1 = _parser.id;
+  else if (this->_config.idPlayer2 == 0)
+    this->_config.idPlayer2 = _parser.id;
+  this->_config.welcomeReceived = true;
+}
+
+void		Parser::parseMap(const t_parser &_parser)
+{
+  this->_config.mapName = _parser.params.front();
+}
+
+void		Parser::parseStartGame(const t_parser &_parser)
+{
+  size_t        _chrono;
+
+  this->_gameEntities.startGame();
+  CVRT_STRING_TO_SIZET(_parser.params[0], _chrono);
+  this->_gameEntities.setTimeLeft(static_cast<float>(_chrono));
 }
 
 
@@ -157,14 +228,19 @@ void		Parser::handleActions(const t_parser &_parser)
     }
 }
 
-void		Parser::handleActions(std::list<t_parser *> &_parser)
+void		Parser::handleActions(std::list<t_parser *> &_tabParser)
 {
-  if (_parser.front()->action == "DESTROY")
+  std::list<t_parser *>::iterator itTab;
+  bool ret = false;
+
+  for (itTab = _tabParser.begin(); itTab != _tabParser.end(); ++itTab)
     {
-      this->parseDestroy(*_parser.front());
-      _parser.pop_front();
-      if (_parser.front()->action == "CREATE")
-	this->parseCreate(_parser);
+      ret = (this->*_tabFct[(*itTab)->action])(_tabParser);
+      if (ret == true)
+	{
+	  itTab = _tabParser.begin();
+	  ret = false;
+	}
     }
 }
 

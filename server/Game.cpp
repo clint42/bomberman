@@ -12,8 +12,11 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
 		   std::list<Player *> const &peers, Messenger *mes)
   : _map(0), _params(g_Plays[type]), _time(static_cast<Time>(t)), _messenger(mes),
     _started(false), _paused(false),
-    _maxPlayers(p), _maxBots(b), _round(0) {
+    _maxPlayers(p), _maxBots(b), _round(0),
+    _peers(peers) {
   (void)_round;
+  DEBUG("Server::Game::Game()", 1);
+
   try {
     _map = new Map(m);
   } catch (MapException) {
@@ -26,9 +29,13 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
     }
     if (_maxBots + _maxPlayers > _map->getNbrSlot())
       _maxBots = _map->getNbrSlot() - _maxPlayers;
-    for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
-      _players[(*it)->getPos()] = *it;
-    }
+
+    _messenger->broadcastMessage(std::string("0 0 0 MAP ") + m);
+
+    // for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
+    //   _players[(*it)->getPos()] = *it;
+    // } // we have to retrieve players at end of countdown, not here
+  DEBUG("! Server::Game::Game()", -1);
 }
 
 Server::Game::~Game() {
@@ -75,6 +82,7 @@ Server::Game::start() {
     _endAt.tv_sec = _endAt.tv_usec / 1000000;
     Thread(&Server::Game::trampoline_bombsProcessing, this); // create bombs' thread
     _started = true;
+    (void)_peers;
   } else if (_paused) {
     timeval tmp;
     gettimeofday(&tmp, NULL);
@@ -118,21 +126,28 @@ Server::Game::findPlayerByID(const size_t id)
 
 void
 Server::Game::update() {
+  DEBUG("Server::Game::update()", 1);
+
   t_cmd *c;
   if (!_events.tryPop(&c))
     return ;
 
   Player *p = _players[c->pos];
-  if (!p || p->getID() != c->id)
+  if ((!p || p->getID() != c->id) && c->action == "BOMB EXPLOSE")
     p = this->findPlayerByID(c->id);
-  if (!p || p->getID() != c->id)
+  if (!p || p->getID() != c->id) {
+    DEBUG("! Server::Game::update() => player not found", 0);
+    delete c;
     return ;
+  }
 
   if (this->process(c, p)) {
     std::string m;
     this->filterCmd(c, m);
     _messenger->broadcastMessage(m);
-  }
+  } else
+    delete c;
+  DEBUG("! Server::Game::update()", 0);
 }
 
 void

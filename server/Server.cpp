@@ -5,6 +5,11 @@ Server::Server::Server(ConnexionHandler *c) : _run(true), _co(c) {
   _co->server(4242);
 }
 
+Server::Server::Server(ConnexionHandler *c, int p) : _run(true), _co(c) {
+  _game = NULL;
+  _co->server(p);
+}
+
 Server::Server::~Server() {
 }
 
@@ -33,9 +38,6 @@ Server::Server::filterMsg() {
   if (this->_messages.size() > 0)
     {
       std::string *msg = this->_messages.front();
-
-      std::cout << "je recois '" << *msg << "'" << std::endl;
-
       if (_game)
 	cmd->date = _game->timeLeft();
       cur_1 = msg->find(" ", cur_1);
@@ -59,23 +61,29 @@ Server::Server::filterMsg() {
 }
 
 void
-Server::Server::putCmdInQueue(t_cmd *cmd)
-{
-  std::cout << cmd->action << ", " << cmd->params[0] << ", " << cmd->params[1] << std::endl;
+Server::Server::putCmdInQueue(t_cmd *cmd) {
+  DEBUG("Server::Server::putCmdInQueue()", 1);
   if (this->_game && cmd->params.size() == 1 &&
       (cmd->action.compare("BOMB") || (cmd->action.compare("MOVE") == 0 &&
-       (cmd->params[0].compare("UP") == 0 ||
-	cmd->params[0].compare("DOWN") == 0 ||
-	cmd->params[0].compare("LEFT") == 0 ||
-	cmd->params[0].compare("RIGHT") == 0))))
+				       (cmd->params[0].compare("UP") == 0 ||
+					cmd->params[0].compare("DOWN") == 0 ||
+					cmd->params[0].compare("LEFT") == 0 ||
+					cmd->params[0].compare("RIGHT") == 0)))) {
+    DEBUG("Server::Server::putCmdInQueue() => c'est une commande de deplacement", 0);
     this->_game->addEvent(cmd);
+  }
   else if (((!cmd->action.compare("PAUSE") ||
 	     !cmd->action.compare("KILL")) && cmd->params.size() == 0) ||
 	   (!cmd->action.compare("CONFIG") && cmd->params.size() == 5) ||
-	   (!cmd->action.compare("MD5") && cmd->params.size() == 1))
+	   (!cmd->action.compare("MD5") && cmd->params.size() == 1)) {
     this->_ext.push_back(cmd);
-  else
+    DEBUG("Server::Server::putCmdInQueue() => la commande est bonne", 0);
+  }
+  else {
+    DEBUG("Server::Server::putCmdInQueue() => la commande pue", 0);
     delete cmd;
+  }
+  DEBUG("! Server::Server::putCmdInQueue()", -1);
 }
 
 /*
@@ -92,7 +100,6 @@ Server::Server::addPeer(Socket *s) {
   _peers.push_back(p);
   CVRT_SIZET_TO_STRING(s_id, id);
   welcome += s_id + " 0 0 WELCOME";
-  // welcome += ;
   if (_game) {
     welcome += "\n";
     welcome += s_id;
@@ -109,6 +116,7 @@ Server::Server::readMessage(Socket *s) {
   std::string *m = new std::string;
   s->getLine(*m);
   _messages.push_back(m);
+  std::cout << ">> " << *m << std::endl;
 }
 
 void
@@ -117,7 +125,18 @@ Server::Server::sendMessage(Socket *s) {
     std::string m;
     _messenger.retrieveMessage(s, m);
     s->write(m);
+    std::cout << "<< " << m << std::endl;
   }
+}
+
+void
+Server::Server::sendBroadcast() {
+  DEBUG("Server::Server::sendBroadcast()", 1);
+  for (std::list<Player *>::iterator it = _peers.begin();
+       it != _peers.end(); ++it) {
+    this->sendMessage((*it)->getSocket());
+  }
+  DEBUG("! Server::Server::sendBroadcast()", -1);
 }
 
 void
@@ -126,6 +145,8 @@ Server::Server::peerDisconnected(Socket *s) {
   for (std::list<Player *>::iterator it = _peers.begin();
        occurences != 2 && it != _peers.end(); ++it) {
     if ((*it)->getSocket() == s) {
+      if (it == _peers.begin())
+	_run = false;
       if (_game)
 	_game->killPlayer(*it);
       it = _peers.erase(it);
@@ -174,7 +195,9 @@ Server::Server::funcWelcome(const t_cmd *_cmd) {
       CVRT_STRING_TO_SIZET(_cmd->params[1], p);
       CVRT_STRING_TO_SIZET(_cmd->params[2], b);
       CVRT_STRING_TO_SIZET(_cmd->params[3], t);
-      this->_game = new Game(_cmd->params[0], p, b, t, Game::_types[_cmd->params[4]], this->_peers, &this->_messenger);
+      this->_game = new Game(_cmd->params[0], p, b, t, Game::_types[_cmd->params[4]],
+			     this->_peers, &this->_messenger);
+      this->sendBroadcast();
     }
   catch (GameException e)
     {
@@ -194,18 +217,53 @@ Server::Server::funcPause(__attribute__((unused))const t_cmd *_cmd) {
   return (true);
 }
 
+Server::Player *
+Server::Server::findPeerByID(const size_t id)
+{
+  (void)id;
+  for (std::list<Player *>::iterator it = this->_peers.begin();
+       it != this->_peers.end(); ++it) {
+    if ((*it)->getID() == id) {
+      return *it;
+    }
+  }
+  return 0;
+}
+
 bool
 Server::Server::funcMd5(t_cmd const *cmd) {
-  (void)cmd;
-  // je dois checker params[0] avec _game->getMapKey()
-  // si c'est == alors je garde le joueur
-  // si c'est != alors je dois degager le client
+  DEBUG("Server::Server::funcMd5()", 1);
+
+  Player *p;
+  p = this->findPeerByID(cmd->id);
+
+  if (!_game || !p || p->hasCertifiedMd5()) {
+    DEBUG("! Server::Server::funcMd5() => player not found", -1);
+    return false;
+  }
+  if (_game->getMapMd5() == cmd->params[0]) {
+    DEBUG("Server::Server::funcMd5() => la key match", 0);
+    p->hasCertifiedMd5(true);
+  }
+  else {
+    DEBUG("Server::Server::funcMd5() => wrong key. On degage le peer", 0);
+    _messenger.addMessage(p->getSocket(), "0 0 0 MAPCORRUPTED");
+    this->sendMessage(p->getSocket());
+    this->peerDisconnected(p->getSocket());
+  }
+  DEBUG("! Server::Server::funcMd5()", -1);
   return (true);
 }
 
 bool
 Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd) {
   this->_run = false;
+  return (true);
+}
+
+bool
+Server::Server::funcWithFriend(t_cmd const *cmd) {
+  (void)cmd;
   return (true);
 }
 
@@ -218,11 +276,12 @@ Server::Server::manageAdminCommand() {
     {
       Server::_isInit = true;
       Server::_func["CONFIG"] = &Server::Server::funcWelcome;
-      Server::_func["PAUSE"] = &Server::Server::funcPause;
-      Server::_func["KILL"] = &Server::Server::funcKill;
+	Server::_func["PAUSE"] = &Server::Server::funcPause;
+	Server::_func["KILL"] = &Server::Server::funcKill;
+	Server::_func["MD5"] = &Server::Server::funcMd5;
     }
   bool ret = false;
-
+  
   if (this->_ext.front()->id == 1)
     ret = (this->*_func[this->_ext.front()->action])(this->_ext.front());
   this->_ext.pop_front();
@@ -232,16 +291,16 @@ Server::Server::manageAdminCommand() {
 void
 Server::Server::watchEvent(int e) {
   std::list<Player *>::iterator	it;
-
+  
   for (it = _peers.begin(); it != _peers.end(); ++it) {
     this->_co->watchEventOnSocket((*it)->getSocket(), e);
   }
 }
 
 void
-Server::Server::unwatchEvent(int e) {
+    Server::Server::unwatchEvent(int e) {
   std::list<Player *>::iterator	it;
-
+  
   for (it = _peers.begin(); it != _peers.end(); ++it) {
     this->_co->unwatchEventOnSocket((*it)->getSocket(), e);
   }
@@ -252,37 +311,38 @@ Server::Server::run() {
   DEBUG("Server::server::run()", 1);
   int	timeLoop = 0;
   int   ret;
-
+  
   while (_run && (ret = _co->update(timeLoop)) >= 0) {
     sleep(1);
     DEBUG("Server::server::run() => loop", 0);
-
+    
     if (ret) {
-      DEBUG("je dois lire qqc", 0);
+      DEBUG("Server::server::run() => loop => je dois lire qqc", 0);
       _co->perform(&trampoline_performResult, this);
       this->filterMsg();
-
+      
       if (!_ext.empty()) {
-	DEBUG("j'ai une commande admin a regarder", 0);
+	DEBUG("Server::server::run() => loop => j'ai une commande admin a regarder", 0);
 	ret = (int)this->manageAdminCommand();
       }
 
       timeLoop = 0;
     }
-
+    
     if (!ret) {
-      DEBUG("je regarde si j'update le game", 0);
+      DEBUG("Server::server::run() => loop => je regarde si j'update le game", 0);
       if (!_game || _game->isPaused() || !_game->hasSomethingToDo()) {
 	timeLoop = -1; // set it back to 1000msec
-	DEBUG("j'ai rien a faire en fait", 0);
+	DEBUG("Server::server::run() => loop => j'ai rien a faire en fait", 0);
       }
       else {
-	DEBUG("j'update le game", 0);
-	_game->update();
-	timeLoop = 0;
+	  DEBUG("Server::server::run() => loop => j'update le game", 0);
+	  _game->update();
+	  timeLoop = 0;
       }
     }
-
-    DEBUG("Server::server::run() => ! loop", 0);
+    
+    DEBUG("Server::server::run() => ! loop\n", 0);
   } // ! while
+  DEBUG("! Server::server::run()", -1);
 }

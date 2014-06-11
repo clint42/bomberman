@@ -42,6 +42,7 @@ namespace Server {
     double	_commandTimeMultiplier;// used by bonus, '1' by default. ex: 0.5 = speed increased by 2.
 
     Socket *	_socket;
+    bool	_certifiedMd5;
 
   public:
     Player(size_t, Socket *);
@@ -56,11 +57,13 @@ namespace Server {
     inline size_t getBombsOnFloor() const { return this->_bombsOnFloor; }
     inline size_t getBombsLimit() const { return this->_bombsLimit; }
     std::pair<size_t, size_t> getPos() const { std::pair<size_t, size_t> ret(_posX, _posY); return ret; }
+    inline bool	  hasCertifiedMd5() const { return _certifiedMd5; }
 
     void	  getAction(Action &, std::string const &);
 
     inline void	  setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
     inline void	  setTeam(Team *t) { this->_team = t; }
+    inline void	  hasCertifiedMd5(bool b) { _certifiedMd5 = b; }
 
     inline void	  poseBomb() { if (_bombsLimit > _bombsOnFloor) _bombsOnFloor += 1; }
     inline void   destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }
