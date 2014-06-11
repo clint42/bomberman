@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Wed Jun 11 13:31:10 2014 aurelien prieur
+// Last update Wed Jun 11 15:31:42 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -32,7 +32,7 @@ ClientCore::~ClientCore()
 {
 }
 
-bool		ClientCore::connect(t_game *options)
+bool		ClientCore::connectServer(t_game *options)
 {
   bool		continu = true;
   int		tentatives = 0;
@@ -59,18 +59,22 @@ bool		ClientCore::connect(t_game *options)
   return (true);
 }
 
-bool		ClientCore::initialize(t_game *options)
+bool		ClientCore::loadMap(t_game *options)
 {
-  (void)(options);
   try {
-    MapRender	map("../test.map");
+    MapRender	map("test.map");
     map.render(_createInstructs);
     _gameEntities.setMapSize(std::pair<size_t, size_t>(map.getWidth(), map.getHeight()));
   }
   catch (MapException e) {
     std::cerr << "Invalid map: " << e.what() << std::endl;
   }
+}
 
+bool		ClientCore::initialize(t_game *options)
+{
+  if (connectServer(options) == false)
+    return (false);
   _socket = _connexion.getMasterSocket();
   _connexion.watchEventOnSocket(_socket, POLLIN);
   _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(8, 15), PLAYER + 1));
@@ -88,6 +92,7 @@ void	trampoline(void *param, Socket *socket, bool b[3])
 
 bool		ClientCore::run()
 {
+  //TODO: don't forget to load map
   while (_connexion.update(500) >= 0 && !_eventsHandler.isFinished())
     {
       if (_gameEntities.getPlayer(false, 0) == NULL)

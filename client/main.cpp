@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Wed Jun 11 12:10:00 2014 aurelien prieur
+// Last update Wed Jun 11 15:09:14 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -40,10 +40,11 @@ int	main()
   SafeQueue<std::pair<std::pair<size_t, size_t>, int> >	createInstructs;
 
   //3: LAUNCH CORE AND GRAPHICENGINE
-
   ClientCore	core(gameEntities, eventsHandler, createInstructs, connexionHandler);
-  core.initialize(options);
   
+  if (!core.initialize(options))
+    return (EXIT_FAILURE);
+
   ThreadUI	threadUI(eventsHandler, gameEntities, createInstructs);
   core.run();
 

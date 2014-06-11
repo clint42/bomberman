@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:21:25 2014 aurelien prieur
-// Last update Wed Jun 11 12:35:51 2014 aurelien prieur
+// Last update Wed Jun 11 14:50:41 2014 aurelien prieur
 //
 
 #ifndef MENUHANDLER_HPP_
@@ -23,7 +23,7 @@
 class	MenuHandler
 {
 private:
-  gdl::SdlContext	_sdlContext;
+  gdl::SdlContext	*_sdlContext;
   Signal		&_signal;
   int			mainMenu();
   bool			createGame(t_game *options);
