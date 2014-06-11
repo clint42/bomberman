@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Wed Jun 11 16:04:55 2014 aurelien prieur
+// Last update Wed Jun 11 16:06:51 2014 aurelien prieur
 //
 
 #include "MenuHandler.hpp"
@@ -92,7 +92,7 @@ t_game	*MenuHandler::launchMenus()
   if (mode == 0)
     menu = new CreateMenu(*_sdlContext);
   else if (mode == 1)
-    menu = new JoinMenu(_sdlContext);
+    menu = new JoinMenu(*_sdlContext);
   else
     return (NULL);
   if (!menu->initialize() || !menu->build())

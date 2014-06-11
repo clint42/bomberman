@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Wed Jun 11 15:31:42 2014 aurelien prieur
+// Last update Wed Jun 11 16:07:30 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -61,6 +61,7 @@ bool		ClientCore::connectServer(t_game *options)
 
 bool		ClientCore::loadMap(t_game *options)
 {
+  (void)(options);
   try {
     MapRender	map("test.map");
     map.render(_createInstructs);
@@ -68,7 +69,9 @@ bool		ClientCore::loadMap(t_game *options)
   }
   catch (MapException e) {
     std::cerr << "Invalid map: " << e.what() << std::endl;
+    return (false);
   }
+  return (true);
 }
 
 bool		ClientCore::initialize(t_game *options)

@@ -5,11 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:21:25 2014 aurelien prieur
-<<<<<<< HEAD
-// Last update Wed Jun 11 14:50:41 2014 aurelien prieur
-=======
-// Last update Wed Jun 11 14:43:11 2014 virol_g
->>>>>>> 4a4d1b107bc333c1a183b04812117cae2bd9c6ac
+// Last update Wed Jun 11 16:06:29 2014 aurelien prieur
 //
 
 #ifndef MENUHANDLER_HPP_
