@@ -5,11 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-<<<<<<< HEAD
-## Last update Wed Jun 11 15:00:51 2014 aurelien prieur
-=======
-## Last update Wed Jun 11 14:34:11 2014 virol_g
->>>>>>> 4a4d1b107bc333c1a183b04812117cae2bd9c6ac
+## Last update Wed Jun 11 16:05:52 2014 aurelien prieur
 ##
 
 CXX =	clang++
