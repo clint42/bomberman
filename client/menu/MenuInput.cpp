@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:35 2014 virol_g
-// Last update Wed Jun 11 13:56:12 2014 aurelien prieur
+// Last update Wed Jun 11 14:55:35 2014 virol_g
 //
 
 #include	"MenuInput.hpp"
@@ -54,6 +54,7 @@ bool	MenuInput::initialize(const std::string &textureName)
   _keys.insert(std::pair<int, std::pair<char, bool> >(SDLK_KP_7, std::pair<char, bool>('7', false)));
   _keys.insert(std::pair<int, std::pair<char, bool> >(SDLK_KP_8, std::pair<char, bool>('8', false)));
   _keys.insert(std::pair<int, std::pair<char, bool> >(SDLK_KP_9, std::pair<char, bool>('9', false)));
+  _keys.insert(std::pair<int, std::pair<char, bool> >(SDLK_KP_PERIOD, std::pair<char, bool>('.', false)));
   _keys.insert(std::pair<int, std::pair<char, bool> >(SDLK_BACKSPACE, std::pair<char, bool>('!', false)));
   return (true);
 }

@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Wed Jun 11 14:11:43 2014 virol_g
+## Last update Wed Jun 11 14:34:11 2014 virol_g
 ##
 
 CXX =	clang++
@@ -21,6 +21,7 @@ SRC =   client/main.cpp \
 	client/menu/AMenu.cpp \
 	client/menu/MainMenu.cpp \
 	client/menu/CreateMenu.cpp \
+	client/menu/JoinMenu.cpp \
 	client/menu/MenuInput.cpp \
 	client/menu/MenuButton.cpp \
 	client/menu/MenuScroll.cpp \
