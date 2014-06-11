@@ -24,7 +24,8 @@ Map::Map(std::string const &filename) {
     throw MapException("Map size be must equal to 4*4 or higher.");
 
   this->getMap(_width, _height, file);
-  this->md5It();
+  // this->md5It();
+  _key = "key"; // THIS IS DEBUG
   file.close();
 
   if (this->_nbPlayers > ((_width * _height) - (_map.size() - 1)))

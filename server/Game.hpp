@@ -48,6 +48,7 @@ namespace	Server {
     size_t	_maxBots;
     size_t	_round;
 
+    std::list<Player *> const &	_peers;
     std::map<std::pair<size_t, size_t>, Player *> _players;
     std::list<Team *>		_teams;
 
