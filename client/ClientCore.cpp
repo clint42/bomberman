@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Thu Jun 12 14:27:16 2014 aurelien prieur
+// Last update Thu Jun 12 15:38:21 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -165,7 +165,8 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
     }
   if (b[0])
     {
-      _socket->getLine(string);
+      std::cout << "[client] Before getline" << std::endl;
+      _socket->read(string);
       std::cout << "[CLIENT] received " << string << std::endl; 
       _parser->run(string);
       if (_parser->getConfig().welcomeReceived)
