@@ -93,7 +93,7 @@ Server::Player::earnBomb()
 void
 Server::Player::earnRange()
 {
-  this->_bombsRange += 1;
+  this->_bombRange += 1;
 }
 
 void
