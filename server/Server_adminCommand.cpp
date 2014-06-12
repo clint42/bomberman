@@ -67,7 +67,7 @@ Server::Server::funcMd5(t_cmd const *cmd) {
   Player *p;
   p = this->findPeerByID(cmd->id);
 
-  if (!_game || !p || p->hasCertifiedMd5()) {
+  if (!_game || !p || p->hasCertified()) {
     DEBUG("! Server::Server::funcMd5() => player not found", -1);
     return false;
   }

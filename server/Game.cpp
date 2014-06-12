@@ -12,31 +12,36 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
 		   std::list<Player *> const &peers, Messenger *mes)
   : _map(0), _params(g_Plays[type]), _time(static_cast<Time>(t)), _messenger(mes),
     _started(false), _paused(false),
-    _maxPlayers(p), _maxBots(b), _round(0),
+    _nbPlayers(p), _nbBots(b), _round(0),
     _peers(peers) {
   (void)_round;
   DEBUG("Server::Game::Game()", 1);
 
+  if (!p || !t || !mes)
+    throw GameException("Invalid parameters");
+
   try {
     _map = new Map(m);
-  } catch (MapException) {
-      _map = 0;
-      throw GameException("Map not found");
-    }
-    if (_maxPlayers > _map->getNbrSlot()) {
-      _maxPlayers = _map->getNbrSlot();
-      p = _maxPlayers;
-    }
-    if (_maxBots + _maxPlayers > _map->getNbrSlot())
-      _maxBots = _map->getNbrSlot() - _maxPlayers;
+  }
+  catch (MapException) {
+    _map = 0;
+    throw GameException("Map not found");
+  }
+  if (_nbPlayers > _map->getNbrSlot()) {
+    _nbPlayers = _map->getNbrSlot();
+    p = _nbPlayers;
+  }
+  if (_nbBots + _nbPlayers > _map->getNbrSlot())
+    _nbBots = _map->getNbrSlot() - _nbPlayers;
+  
+  _messenger->broadcastMessage(std::string("0 0 0 MAP ") + m);
+  
+  // for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
+  //   _players[(*it)->getPos()] = *it;
+  // } // we have to retrieve players at end of countdown, not here
 
-    _messenger->broadcastMessage(std::string("0 0 0 MAP ") + m);
-
-    // for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
-    //   _players[(*it)->getPos()] = *it;
-    // } // we have to retrieve players at end of countdown, not here
   DEBUG("! Server::Game::Game()", -1);
-}
+    }
 
 Server::Game::~Game() {
   delete _map;
@@ -76,20 +81,31 @@ Server::Game::bombsProcessing() {
 
 void
 Server::Game::start() {
+  DEBUG("Server::Game::start()", 1);
   if (!_started) {
+    DEBUG("Server::Game::start() => le jeu n'etait pas demarre", 0);
     gettimeofday(&_startedAt, NULL);
     _endAt.tv_usec = _startedAt.tv_usec + (GAME_TIME * _time * 60 * 1000000);
     _endAt.tv_sec = _endAt.tv_usec / 1000000;
-    Thread(&Server::Game::trampoline_bombsProcessing, this); // create bombs' thread
+    DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 1", 0);
+    // Thread(&Server::Game::trampoline_bombsProcessing, this); // create bombs' thread
+    DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 2", 0);
     _started = true;
-    (void)_peers;
-  } else if (_paused) {
+    std::stringstream ss;
+    ss << "0 0 0 STARTGAME " << this->timeLeft() / 1000000 << "\n";
+    std::cout << "<< " << ss.str() << std::endl;
+    _messenger->broadcastMessage(ss.str());
+    DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 2", 0);
+  }
+  else if (_paused) {
+    DEBUG("Server::Game::start() => on redemarre apres une pause", 0);
     timeval tmp;
     gettimeofday(&tmp, NULL);
     _endAt.tv_usec += tmp.tv_usec - _pausedAt.tv_usec;
     _paused = false;
     _bombs.signal(); // unpause bomb thread (var cond)
   }
+  DEBUG("! Server::Game::start()", -1);
 }
 
 size_t
@@ -124,29 +140,59 @@ Server::Game::findPlayerByID(const size_t id)
   return 0;
 }
 
+size_t
+Server::Game::countPeersThatCertified() const {
+  size_t n = 0;
+  for (std::list<Player *>::const_iterator it = _peers.begin();
+       it != _peers.end(); ++it) {
+    if ((*it)->hasCertified())
+      ++n;
+  }
+  return n;
+}
+
 void
 Server::Game::update() {
   DEBUG("Server::Game::update()", 1);
 
-  t_cmd *c;
-  if (!_events.tryPop(&c))
-    return ;
+  if (!_started) {
+    if (this->countPeersThatCertified() < _nbPlayers) {
+      DEBUG("! Server::Game::update() => on a voulu lancer, mais pas assez de joueurs OK", -1);
+      return ;
+    }
+    else {
+      this->pickPlayers(_nbPlayers);
+      sleep(1);
+      this->start();
+    }
+  }
+  else {
+    t_cmd *c;
+    if (!_events.tryPop(&c)) {
+      DEBUG("! Server::Game::update()", -1);
+      return ;
+    }
 
-  Player *p = _players[c->pos];
-  if ((!p || p->getID() != c->id) && c->action == "BOMB EXPLOSE")
-    p = this->findPlayerByID(c->id);
-  if (!p || p->getID() != c->id) {
-    DEBUG("! Server::Game::update() => player not found", 0);
+    Player *p = _players[c->pos];
+    if ((!p || p->getID() != c->id) && c->action == "BOMB EXPLOSE")
+      p = this->findPlayerByID(c->id);
+    if (!p || p->getID() != c->id) {
+      DEBUG("Server::Game::update() => player not found", 0);
+      delete c;
+      DEBUG("! Server::Game::update()", -1);
+      return ;
+    }
+
+    if (this->process(c, p)) {
+      DEBUG("Server::Game::update() => process returned true", 0);
+      this->filterCmd(c);
+      _messenger->broadcastMessage(c->msg);
+    }
+    else
+      DEBUG("! Server::Game::update() => process return false", 0);
     delete c;
-    return ;
+    DEBUG("! Server::Game::update()", -1);
   }
-
-  if (this->process(c, p)) {
-    this->filterCmd(c);
-    _messenger->broadcastMessage(c->msg);
-  }
-  delete c;
-  DEBUG("! Server::Game::update()", 0);
 }
 
 void
@@ -170,8 +216,8 @@ Server::Game::filterCmd(t_cmd *cmd) const {
 ** PROCESS
 */
 
-std::pair<size_t, size_t>       Server::Game::generatePos(const size_t posx, const size_t posy)
-{
+std::pair<size_t, size_t>
+Server::Game::generatePos(const size_t posx, const size_t posy) {
   size_t                        _posx;
   size_t                        _posy;
 
@@ -185,20 +231,25 @@ std::pair<size_t, size_t>       Server::Game::generatePos(const size_t posx, con
   return (pos);
 }
 
-void		Server::Game::createPlayers()
-{
-  size_t	count = 0;
+void
+Server::Game::pickPlayers(size_t nb) {
+  DEBUG("Server::Game::pickPlayers()", 1);
+  std::stringstream msg;
+  for (std::list<Player *>::const_iterator it = this->_peers.begin();
+       it != this->_peers.end() && nb; ++it, --nb) {
 
-  for (std::list<Player *>::const_iterator it = this->_peers.begin(); it != this->_peers.end(); ++it)
-    {
-      if (count < this->_maxPlayers)
-	{
-	  std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
-	  (*it)->setPos(pos.first, pos.second);
-	  this->_players[pos] = (*it);
-	  ++count;
-	}
+    if ((*it)->hasCertified()) {
+      std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
+      (*it)->setPos(pos.first, pos.second);
+      this->_players[pos] = (*it);
+      DEBUG("Server::Game::pickPlayers() => un peer est devenu un player", -1);
+      msg << "0 0 0 CREATE PLAYER " << (*it)->getID() << " " << (*it)->getPosX() << " " << (*it)->getPosY() << "\n";
+      _messenger->broadcastMessage(msg.str());
+      std::cout << "<< " << msg.str() << std::endl;
+      msg.clear();
     }
+  } // !for
+  DEBUG("! Server::Game::pickPlayers()", -1);
 }
 
 void

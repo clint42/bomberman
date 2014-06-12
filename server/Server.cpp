@@ -33,7 +33,6 @@ Server::Server::sendMessage(Socket *s) {
     std::string m;
     _messenger.retrieveMessage(s, m);
     s->write(m);
-    std::cout << "<< " << m << std::endl;
   }
 }
 
@@ -89,14 +88,19 @@ Server::Server::run() {
     
     if (!ret) {
       DEBUG("Server::server::run() => loop => je regarde si j'update le game", 0);
+
+      if (_game && !_game->isStarted()) {
+	DEBUG("Server::server::run() => loop => faut que je demare le jeu un jour", 0);
+	_game->update();
+      }
       if (!_game || _game->isPaused() || !_game->hasSomethingToDo()) {
 	timeLoop = _messenger.hasSomethingToSay() ? 0 : -1; // set it back to 1000msec
 	DEBUG("Server::server::run() => loop => j'ai rien a faire en fait", 0);
       }
       else {
-	  DEBUG("Server::server::run() => loop => j'update le game", 0);
-	  _game->update();
-	  timeLoop = 0;
+	DEBUG("Server::server::run() => loop => j'update le game", 0);
+	_game->update();
+	timeLoop = 0;
       }
     }
     this->sendBroadcast();

@@ -60,7 +60,7 @@ namespace Server {
     inline size_t getBombRange() const { return _bombRange; }
 
     std::pair<size_t, size_t> getPos() const { std::pair<size_t, size_t> ret(_posX, _posY); return ret; }
-    inline bool	  hasCertifiedMd5() const { return _certifiedMd5; }
+    inline bool	  hasCertified() const { return _certifiedMd5; }
 
     void	  getAction(Action &, std::string const &);
 

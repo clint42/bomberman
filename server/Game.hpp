@@ -45,8 +45,8 @@ namespace	Server {
     timeval	_pausedAt;
     timeval	_endAt;
 
-    size_t	_maxPlayers;
-    size_t	_maxBots;
+    size_t	_nbPlayers;
+    size_t	_nbBots;
     size_t	_round;
 
     std::list<Player *> const &	_peers;
@@ -90,7 +90,8 @@ namespace	Server {
     static void *       trampoline_bombsProcessing(void *);
 
     std::pair<size_t, size_t>       generatePos(const size_t posx, const size_t posy);
-    void                            createPlayers();
+    size_t		countPeersThatCertified() const;
+    void                pickPlayers(size_t);
 
     bool		moveUp(Player *, t_cmd *);
     bool		moveRight(Player *, t_cmd *);
