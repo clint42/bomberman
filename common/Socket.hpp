@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu May 22 14:42:09 2014 buret_j
-// Last update Thu Jun 12 13:55:30 2014 buret_j
+// Last update Thu Jun 12 17:25:27 2014 buret_j
 //
 
 #ifndef SOCKET_HPP_
@@ -14,6 +14,9 @@
 # include <unistd.h>
 # include <iostream>
 # include <ext/stdio_filebuf.h>
+# include <vector>
+# include <string>
+# include "macros.hpp"
 
 class Socket {
 
@@ -36,9 +39,24 @@ public:
 
   inline int  getFd() const { return _fd; }
   inline void write(std::string const &toWrite) { *_out << toWrite << std::endl; }
-  inline bool getLine(std::string &toFill) {
-    return !(getline(*_in, toFill).rdstate() & std::ifstream::eofbit);
+  inline void getLine(std::string &toFill) { std::getline(*_in, toFill); }
+  void	      getLine(std::vector<std::string *> &toFill) {
+    DEBUG("Socket::getLine()", 1);
+    do {
+      DEBUG("Socket::getLine() => loop", 1);
+      if (_in->peek() == '\n')
+	_in->get();
+      std::string *m = new std::string;
+      std::getline(*_in, *m);
+      toFill.push_back(m);
+      DEBUG("Socket::getLine() => ! loop", -1);
+      if (_in->peek() == '\n')
+	_in->get();
+    }
+    while (_in->peek() != '\n' && !(_in->rdstate() & (std::istream::eofbit | std::istream::failbit))   );
+    DEBUG("! Socket::getLine()", -1);
   }
+
 };
 
 #endif /* !SOCKET_HPP_ */

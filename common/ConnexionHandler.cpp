@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Wed Jun 11 13:31:48 2014 aurelien prieur
+// Last update Thu Jun 12 17:21:25 2014 buret_j
 */
 
 #include "ConnexionHandler.hpp"
@@ -107,7 +107,7 @@ ConnexionHandler::Serveur::acceptPeer(Poll *poll, Server::Server *srv) {
   socklen_t     sin_len;
   int		fd;
 
-  fd = accept(_masterSocket->getFd(), (sockaddr *)&sin, &sin_len); // have to throw except° & catch it
+  fd = accept4(_masterSocket->getFd(), (sockaddr *)&sin, &sin_len, SOCK_NONBLOCK); // have to throw except° & catch it
   if (_sockets.capacity() < (size_t)fd + 1) {
     std::vector<Socket *> tmp = _sockets;
     _sockets = std::vector<Socket *>(fd + 5);
@@ -168,6 +168,7 @@ ConnexionHandler::Client::Client(int port, std::string const &ip) {
   sin.sin_addr.s_addr = inet_addr(ip.c_str());
   if (!pe || fd == -1 || connect(fd, (sockaddr *)&sin, sizeof sin) == -1)
     throw ConnexionException(std::string(strerror(errno)));
+  fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
   _socket = new Socket(fd);
 }
 
