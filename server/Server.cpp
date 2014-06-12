@@ -23,14 +23,14 @@ Server::Server::readMessage(Socket *s) {
 
   do {
     std::string *m = new std::string;
-    if ((run = s->getLine(*m))) {
+    run = s->getLine(*m);
+    if (run && *m != "") {
       _messages.push_back(m);
       std::cout << ">> " << *m << std::endl;
     }
     else
       delete m;
-  }
-  while (run);
+  } while (run);
 }
 
 void

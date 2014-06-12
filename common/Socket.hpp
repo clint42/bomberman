@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu May 22 14:42:09 2014 buret_j
-// Last update Thu Jun 12 13:43:33 2014 buret_j
+// Last update Thu Jun 12 13:55:30 2014 buret_j
 //
 
 #ifndef SOCKET_HPP_
@@ -37,7 +37,7 @@ public:
   inline int  getFd() const { return _fd; }
   inline void write(std::string const &toWrite) { *_out << toWrite << std::endl; }
   inline bool getLine(std::string &toFill) {
-    return !(getline(*_in, toFill).rdstate() & std::ifstream::failbit);
+    return !(getline(*_in, toFill).rdstate() & std::ifstream::eofbit);
   }
 };
 
