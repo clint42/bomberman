@@ -183,11 +183,20 @@ std::pair<size_t, size_t>       Server::Game::generatePos(const size_t posx, con
   return (pos);
 }
 
-void				Server::Game::createPlayer(size_t id, Socket *s)
+void		Server::Game::createPlayers()
 {
-  std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
-  Player        *_p = new Player(id, s);
-  this->_players[pos] = _p;
+  size_t	count = 0;
+
+  for (std::list<Player *>::const_iterator it = this->_peers.begin(); it != this->_peers.end(); ++it)
+    {
+      if (count < this->_maxPlayers)
+	{
+	  std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
+	  (*it)->setPos(pos.first, pos.second);
+	  this->_players[pos] = (*it);
+	  ++count;
+	}
+    }
 }
 
 

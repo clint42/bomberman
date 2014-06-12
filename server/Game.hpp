@@ -90,7 +90,7 @@ namespace	Server {
     static void *       trampoline_bombsProcessing(void *);
 
     std::pair<size_t, size_t>       generatePos(const size_t posx, const size_t posy);
-    void                            createPlayer(size_t id, Socket *s);
+    void                            createPlayers();
 
     bool		moveUp(Player *, t_cmd *);
     bool		moveRight(Player *, t_cmd *);
