@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Wed Jun 11 17:28:44 2014 virol_g
+// Last update Wed Jun 11 19:07:14 2014 virol_g
 //
 
 #include <iostream>
@@ -40,11 +40,11 @@ bool	MainMenu::build()
 				      "Join game",
 				      glm::vec4(0.f, 0.f, 1.f, 1.f), glm::vec4(0.93, 0.90, 0.32, 1.f),
 				      "airstrike"));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(30, 500), 
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(150, 500), 
 				      std::pair<size_t, size_t>(250, 60),
 				      "1 Player", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(530, 500),
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 500),
 				      std::pair<size_t, size_t>(250, 60),
 				      "2 Players", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
@@ -79,7 +79,10 @@ bool    MainMenu::update()
 	      if (i != static_cast<size_t>(_nbPlayers) && i >= 2)
 		_menuElems[_nbPlayers]->hover(false);
 	      if (i < 2)
-		_selected = i;
+		{
+		  _selected = i;
+		  return (false);
+		}
 	      else if (i >= 2)
 		_nbPlayers = i;
 	      _menuElems[i]->hover(true);
