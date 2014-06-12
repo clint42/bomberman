@@ -170,6 +170,28 @@ Server::Game::filterCmd(t_cmd *cmd) const {
 ** PROCESS
 */
 
+std::pair<size_t, size_t>       Server::Game::generatePos(const size_t posx, const size_t posy)
+{
+  size_t                        _posx;
+  size_t                        _posy;
+
+  _posx = rand() % this->_map->getWidth();
+  _posy = rand() % this->_map->getHeight();
+  if ((_posx == posx && _posy == posy) || (this->_map->getElemAtPos(_posx, _posy) != 0))
+    return (this->generatePos(_posx, _posy));
+  std::pair<size_t, size_t> pos(_posx, _posy);
+  return (pos);
+}
+
+void				Server::Game::createPlayer(size_t id, Socket *s)
+{
+  std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
+  Player        *_p = new Player(id, s);
+  this->_players[pos] = _p;
+}
+
+
+
 bool
 Server::Game::moveUp(Player *p, t_cmd *c)
 {
