@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Sat Jun  7 17:58:22 2014 virol_g
-// Last update Thu Jun 12 13:43:35 2014 virol_g
+// Last update Thu Jun 12 15:00:28 2014 virol_g
 //
 
 #include	<iostream>
@@ -19,7 +19,7 @@ MenuScroll::MenuScroll(const std::pair<size_t, size_t> &posPrev,
   _scrollPrev(posPrev, size, "<-", color, colorHover),
   _display(0), _clickPrev(false), _clickNext(false)
 {
-  this->initialize("./client/menu/ressources/gradationGreyTex.tga");
+  this->initialize("./client/menu/ressources/whiteTex.tga");
 }
 
 MenuScroll::~MenuScroll()

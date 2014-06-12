@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:35 2014 virol_g
-// Last update Thu Jun 12 13:44:01 2014 virol_g
+// Last update Thu Jun 12 15:44:10 2014 virol_g
 //
 
 #include	"MenuInput.hpp"
@@ -13,12 +13,13 @@
 MenuInput::MenuInput(std::pair<size_t, size_t> const &pos,
 		     std::pair<size_t, size_t> const &size,
 		     glm::vec4 const &color): _color(color),
-					      _output("", std::pair<size_t, size_t>(pos.first + 10, pos.second + 10), color, size.second - 20),
+					      _output("", std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
+						      glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20),
 					      _pos(pos),
 					      _size(size),
 					      _hover(false)
 {  
-  this->initialize("./client/menu/ressources/gradationGreyTex.tga");
+  this->initialize("./client/menu/ressources/whiteTex.tga");
 }
 
 MenuInput::~MenuInput()

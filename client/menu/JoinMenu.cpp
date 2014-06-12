@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun 11 14:19:39 2014 virol_g
-// Last update Thu Jun 12 14:41:16 2014 virol_g
+// Last update Thu Jun 12 15:56:13 2014 virol_g
 //
 
 #include	"JoinMenu.hpp"
@@ -25,14 +25,14 @@ bool	JoinMenu::build()
   _menuBackground = new MenuBackground("./client/menu/ressources/backgroundSubMenu.tga");
   _join = new MenuButton(std::pair<size_t, size_t>(500, 500),
 			 std::pair<size_t, size_t>(150, 60),
-			 "Join !", glm::vec4(0.f, 0.f, 1.f, 1.f),
+			 "Join", glm::vec4(0.23, 0.18, 0.52, 1.f),
 			 glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike");
   _readIP = new MenuInput(std::pair<size_t, size_t>(400, 300),
 			 std::pair<size_t, size_t>(380, 60),
-			 glm::vec4(1.f, 1.f, 1.f, 1.f));
+			 glm::vec4(0.23, 0.18, 0.52, 1.f));
   _title = new GraphicalText("Enter IP adress",
 			     std::pair<size_t, size_t>(400, 280),
-			     glm::vec4(0.f, 0.f, 1.f, 1.f), 20, "airstrike");
+			     glm::vec4(0.23, 0.18, 0.52, 1.f), 20, "airstrike");
   return (true);
 }
 
