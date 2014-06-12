@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Thu Jun 12 15:51:11 2014 virol_g
+// Last update Thu Jun 12 18:25:32 2014 virol_g
 //
 
 #include <iostream>
@@ -32,7 +32,7 @@ bool	MainMenu::build()
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(30, 205),
 				      std::pair<size_t, size_t>(250, 60),
 				      "New game", glm::vec4(0.23, 0.18, 0.52, 1.f),
-				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
+				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike", true));
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(530, 205),
 				      std::pair<size_t, size_t>(270, 60),
 				      "Join game", glm::vec4(0.23, 0.18, 0.52, 1.f),
@@ -40,7 +40,7 @@ bool	MainMenu::build()
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(100, 500), 
 				      std::pair<size_t, size_t>(100, 60),
 				      "No", glm::vec4(0.23, 0.18, 0.52, 1.f),
-				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
+				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike", true));
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(200, 500),
 				      std::pair<size_t, size_t>(100, 60),
 				      "Yes", glm::vec4(0.23, 0.18, 0.52, 1.f),
@@ -54,7 +54,7 @@ bool	MainMenu::build()
   return (true);
 }
 
-bool    MainMenu::update()
+bool	   MainMenu::update()
 {
   glm::ivec2	mouse;
 
@@ -65,8 +65,6 @@ bool    MainMenu::update()
       _selected = -1;
       return (false);
     }
-  if (this->_input.getKey(SDLK_RETURN))
-    return (false);
   if (this->_input.getKey(SDL_BUTTON_LEFT))
     {
       mouse = this->_input.getMousePosition();
@@ -113,6 +111,8 @@ t_game		*MainMenu::getChoice() const
 {
   t_game	*options;
 
+  if (_selected == -1)
+    return (NULL);
   options = new t_game;
   options->isHost = (_selected == 0);
   options->isDouble = (_nbPlayers == 2) ? false : true;

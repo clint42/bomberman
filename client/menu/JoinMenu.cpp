@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun 11 14:19:39 2014 virol_g
-// Last update Thu Jun 12 15:56:13 2014 virol_g
+// Last update Thu Jun 12 18:38:43 2014 virol_g
 //
 
 #include	"JoinMenu.hpp"
@@ -26,10 +26,10 @@ bool	JoinMenu::build()
   _join = new MenuButton(std::pair<size_t, size_t>(500, 500),
 			 std::pair<size_t, size_t>(150, 60),
 			 "Join", glm::vec4(0.23, 0.18, 0.52, 1.f),
-			 glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike");
+			 glm::vec4(0.23, 0.18, 0.52, 1.f), "airstrike");
   _readIP = new MenuInput(std::pair<size_t, size_t>(400, 300),
 			 std::pair<size_t, size_t>(380, 60),
-			 glm::vec4(0.23, 0.18, 0.52, 1.f));
+			  glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f));
   _title = new GraphicalText("Enter IP adress",
 			     std::pair<size_t, size_t>(400, 280),
 			     glm::vec4(0.23, 0.18, 0.52, 1.f), 20, "airstrike");
@@ -47,8 +47,6 @@ bool	JoinMenu::update()
       _selected = -1;
       return (false);
     }
-  if (this->_input.getKey(SDLK_RETURN))
-    return (false);
   if (this->_input.getKey(SDL_BUTTON_LEFT))
     {
       mouse = this->_input.getMousePosition();
@@ -62,7 +60,8 @@ bool	JoinMenu::update()
       if (static_cast<size_t>(mouse.x) > _join->getPos().first &&
 	  static_cast<size_t>(mouse.x) < _join->getPos().first + _join->getSize().first &&
 	  static_cast<size_t>(mouse.y) > _join->getPos().second &&
-	  static_cast<size_t>(mouse.y) < _join->getPos().second + _join->getSize().second)
+	  static_cast<size_t>(mouse.y) < _join->getPos().second + _join->getSize().second &&
+	  _readIP->getString() != "")
 	return (false);
     }
   _readIP->update(_clock, _input);
@@ -84,6 +83,8 @@ t_game	*JoinMenu::getChoice() const
 {
   t_game	*choice = new t_game;
 
+  if (_selected == -1)
+    return (NULL);
   choice->ipAddr = _readIP->getString();
   return (choice);
 }
