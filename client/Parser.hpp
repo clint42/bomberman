@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Sun Jun  8 15:49:48 2014 julie franel
-// Last update Thu Jun 12 11:42:07 2014 julie franel
+// Last update Thu Jun 12 15:48:00 2014 julie franel
 //
 
 #ifndef		PARSER_HPP_
@@ -66,6 +66,8 @@ class		Parser
   void                  displayParserStruct(const t_parser &parser);
   void                  handleActions(const t_parser &parser);
   void                  handleActions(std::list<t_parser *> &_parser);
+
+  void			runSplit(std::string string);
 
 public:
   Parser(GameEntities &gameEntities, SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs);

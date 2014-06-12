@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Thu Jun 12 11:45:29 2014 julie franel
+// Last update Thu Jun 12 15:47:37 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -253,12 +253,14 @@ void		Parser::handleActions(std::list<t_parser *> &_tabParser)
     }
 }
 
-void		Parser::run(std::string &string)
+void		Parser::runSplit(std::string string)
 {
   size_t	pos1 = 0;
   size_t	pos2 = -1;
   t_parser	*_parser;
 
+  if (string.size() <= 3)
+    return ;
   if ((pos1 = string.find(";", pos2 + 1)) != std::string::npos)
     {
       std::list<t_parser *>	_tabParser;
@@ -281,4 +283,23 @@ void		Parser::run(std::string &string)
       _parser = this->parser(string);
       this->handleActions(*_parser);
     }
+}
+
+void		Parser::run(std::string &string)
+{
+  size_t	pos1 = 0;
+  size_t	pos2 = -1;
+
+  if (string.find("\n") != std::string::npos)
+    {
+      while ((pos1 = string.find("\n", pos2 + 1)) != std::string::npos)
+	{
+	  this->runSplit(string.substr(pos2 + 1, pos1 - (pos2 + 1)));
+	  pos2 = pos1;
+	  if ((pos1 = string.find("\n", pos2 + 1)) == std::string::npos)
+	    this->runSplit(string.substr(pos2 + 1, pos1 - (pos2 + 1)));
+	}
+    }
+  else
+    this->runSplit(string);
 }
