@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 26 16:09:25 2014 aurelien prieur
-// Last update Tue Jun 10 20:25:45 2014 virol_g
+// Last update Thu Jun 12 13:46:43 2014 virol_g
 //
 
 #include <iostream>
@@ -67,4 +67,9 @@ std::pair<size_t, size_t>	MenuBackground::getPos() const
 std::pair<size_t, size_t>	MenuBackground::getSize() const
 {
   return (std::pair<size_t, size_t>(0, 0));
+}
+
+std::string			MenuBackground::getString() const
+{
+  return ("Background");
 }

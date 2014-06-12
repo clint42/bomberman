@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:42:09 2014 aurelien prieur
-// Last update Wed Jun 11 19:00:56 2014 aurelien prieur
+// Last update Thu Jun 12 14:25:35 2014 aurelien prieur
 //
 
 #ifndef CLIENTCORE_HPP_
@@ -53,6 +53,7 @@ class		ClientCore
   bool			connectServer(t_game *options);
   bool			loadMap(t_game *options);
   void			buildConfigCmd(std::string &string) const;
+  void			buildWithFriendCmd(std::string &string) const;
   void			buildMapMd5(std::string &string, int playerId) const;
   bool			isConfigured(void) const;
   static void		trampoline(void *param, Socket *socket, bool b[3]);

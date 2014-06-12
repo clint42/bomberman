@@ -142,30 +142,28 @@ Server::Game::update() {
   }
 
   if (this->process(c, p)) {
-    std::string m;
-    this->filterCmd(c, m);
-    _messenger->broadcastMessage(m);
-  } else
-    delete c;
+    this->filterCmd(c);
+    _messenger->broadcastMessage(c->msg);
+  }
+  delete c;
   DEBUG("! Server::Game::update()", 0);
 }
 
 void
-Server::Game::filterCmd(t_cmd const *cmd, std::string &msg) const {
+Server::Game::filterCmd(t_cmd *cmd) const {
   std::stringstream convert;
 
   convert << cmd->id << " " << cmd->pos.first << " " <<
     cmd->pos.second << " " << cmd->action;
-  msg = convert.str();
+  cmd->msg = convert.str();
   for (std::vector<std::string>::const_iterator it = cmd->params.begin();
        it != cmd->params.end(); ++it) {
     convert.str(std::string());
     convert.clear();
     convert << " " << *it;
-    msg += convert.str();
+    cmd->msg += convert.str();
   }
-  msg += "\n";
-  delete cmd;
+  cmd->msg += "\n";
 }
 
 /*
@@ -371,7 +369,7 @@ Server::Game::bombLeft(Player *p, t_cmd *c)
 }
 
 bool
-Server::Game::exploseCase(std::pair<size_t, size_t> pos, std::string &msg)
+Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
 {
   std::stringstream convert;
   int		ret;
@@ -384,7 +382,7 @@ Server::Game::exploseCase(std::pair<size_t, size_t> pos, std::string &msg)
 	  convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
 	  convert << ";0 " << pos.first << " " << pos.second << " FIRE";
 	  this->_map->setElemAtPos(pos, Map::GROUND);
-	  msg += convert.str();
+	  c->msg += convert.str();
 	}
       if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB)
 	return (false);
@@ -393,29 +391,27 @@ Server::Game::exploseCase(std::pair<size_t, size_t> pos, std::string &msg)
     {
       convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
       convert << ";0 " << pos.first << " " << pos.second << " FIRE";
-      msg += convert.str();
+      c->msg += convert.str();
     }
   return (true);
 }
 
-bool
+void
 Server::Game::bombExplose(Player *p, t_cmd *c)
 {
   int		val = 1;
   std::stringstream convert;
-  std::string	msg;
   std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY());
-  (void)c;
 
   this->_map->setElemAtPos(pos, Map::GROUND);
   convert << "0 " << pos.first << " " << pos.second << " DESTROY";
   convert << ";0 " << pos.first << " " << pos.second << " FIRE";
-  msg = convert.str();
+  c->msg = convert.str();
   // RIGHT
   while (p->getPosX() + val < this->_map->getWidth() - 1 && (size_t)val <= p->getBombRange())
     {
       pos.first = p->getPosX() + val;
-      if (this->exploseCase(pos, msg) == false)
+      if (this->exploseCase(pos, c) == false)
 	break ;
       ++val;
     }
@@ -424,7 +420,7 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   while (p->getPosX() + val > 0 && (size_t)(val * -1) <= p->getBombRange())
     {
       pos.first = p->getPosX() + val;
-      if (this->exploseCase(pos, msg) == false)
+      if (this->exploseCase(pos, c) == false)
 	break ;
       --val;
     }
@@ -434,7 +430,7 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
     {
       pos.first = p->getPosX();
       pos.first = p->getPosY() + val;
-      if (this->exploseCase(pos, msg) == false)
+      if (this->exploseCase(pos, c) == false)
 	break ;
       --val;
     }
@@ -443,11 +439,11 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   while (p->getPosY() + val < this->_map->getWidth() - 1 && (size_t)val <= p->getBombRange())
     {
       pos.second = p->getPosY() + val;
-      if (this->exploseCase(pos, msg) == false)
+      if (this->exploseCase(pos, c) == false)
 	break ;
       ++val;
     }
-  return (false);
+  c->msg += "\n";
 }
 
 bool Server::Game::_isGame = false;
@@ -478,32 +474,21 @@ Server::Game::process(t_cmd *c, Player *p)
   if (c->action == "MOVE")
     {
       p->getAction(&a, &d, c->params[0]);
-      if ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c))
-	{
-	  std::string msg;
-	  this->filterCmd(c, msg);
-	  this->_messenger->addMessage(p->getSocket(), msg);
-	}
+      return ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c));
     }
   else if (c->action == "BOMB")
     {
       a = Server::Player::BOMB;
       d = p->getOrientation();
-      if ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c))
-  	{
-	  std::string msg;
-	  this->filterCmd(c, msg);
-	  this->_messenger->addMessage(p->getSocket(), msg);
-  	}
+      return ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c));
     }
   else if (c->action == "BOMB EXPLOSE")
     {
-      // this->bombExplose(p, c);
-      // 	  this->_messenger->addMessage(p->getSocket(), msg);
+      this->bombExplose(p, c);
+      this->_messenger->broadcastMessage(c->msg);
       // send directly to messenger
     }
-
-  return (true);
+  return (false);
 }
 
 void

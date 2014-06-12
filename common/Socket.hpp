@@ -1,13 +1,3 @@
-//
-// Socket.hpp for  in /home/buret_j/rendu/bomberman
-// 
-// Made by buret_j
-// Login   <buret_j@epitech.net>
-// 
-// Started on  Thu May 22 14:42:09 2014 buret_j
-// Last update Thu Jun 12 17:25:27 2014 buret_j
-//
-
 #ifndef SOCKET_HPP_
 # define SOCKET_HPP_
 
@@ -39,6 +29,7 @@ public:
 
   inline int  getFd() const { return _fd; }
   inline void write(std::string const &toWrite) { *_out << toWrite << std::endl; }
+
   inline void getLine(std::string &toFill) { std::getline(*_in, toFill); }
   void	      getLine(std::vector<std::string *> &toFill) {
     DEBUG("Socket::getLine()", 1);
@@ -55,6 +46,18 @@ public:
     }
     while (_in->peek() != '\n' && !(_in->rdstate() & (std::istream::eofbit | std::istream::failbit))   );
     DEBUG("! Socket::getLine()", -1);
+  }
+  
+  inline bool read(std::string &toFill) {
+    std::string	tmp;
+    
+    while (_in->peek() != '\n')
+      {
+	std::getline(*_in, tmp);
+	toFill += tmp + "\n";
+      }
+    _in->get();
+    return (true);
   }
 
 };

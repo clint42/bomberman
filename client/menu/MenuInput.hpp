@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:29 2014 virol_g
-// Last update Wed Jun 11 13:52:01 2014 aurelien prieur
+// Last update Thu Jun 12 13:43:52 2014 virol_g
 //
 
 #ifndef		MENUINPUT_HPP_
@@ -34,7 +34,7 @@ public:
   virtual bool	update(gdl::Clock const &clock, gdl::Input &input);
   virtual void	draw(gdl::AShader &shader, gdl::Clock const &clock);
   virtual void	hover(bool isHover);
-  std::string	getInput() const;
+  virtual std::string	getString() const;
 
   std::pair<size_t, size_t>	getPos() const;
   std::pair<size_t, size_t>	getSize() const;

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:29:16 2014 aurelien prieur
-// Last update Thu Jun 12 11:58:47 2014 virol_g
+// Last update Thu Jun 12 14:59:24 2014 virol_g
 //
 
 #include <iostream>
@@ -25,14 +25,14 @@ MenuButton::MenuButton(std::pair<size_t, size_t> const &pos,
 
   _title = label;
   tmp = label;
-  if (tmp.size() > (size.first / (size.second - 20)))
-    tmp.resize(size.first / (size.second - 20));
+  if (tmp.size() > (size.first / (size.second - 30)))
+    tmp.resize(size.first / (size.second - 30));
   _label = new GraphicalText(tmp,
 	 std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
-	 glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20,
+	 glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 30,
 	 font);
   _isHover = false;
-  this->initialize("./client/menu/ressources/gradationGreyTex.tga");
+  this->initialize("./client/menu/ressources/whiteTex.tga");
 }
 
 MenuButton::~MenuButton()

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Thu Jun 12 11:06:05 2014 aurelien prieur
+// Last update Thu Jun 12 16:24:16 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -87,15 +87,10 @@ bool			ClientCore::initialize(t_game *options)
   if (connectServer(options) == false)
     return (false);
   _socket = _connexion.getMasterSocket();
-  _connexion.watchEventOnSocket(_socket, POLLIN | POLLOUT);
+  _connexion.watchEventOnSocket(_socket, POLLIN);
   _configurator = new Configurator(options);
   if (options->isDouble)
-    {
-      _gameEntities.setDouble();
-      _configurator->pushCmd("WITHFRIEND YES\n");
-    }
-  else
-    _configurator->pushCmd("WITHFRIEND NO\n");
+    _gameEntities.setDouble();
   try {
     while (_connexion.update(-1) >= 0 && !isConfigured() && !_configurator->hasErrorOccured())
       {
@@ -137,6 +132,19 @@ void			ClientCore::buildConfigCmd(std::string &string) const
   string = oss.str();
 }
 
+void			ClientCore::buildWithFriendCmd(std::string &string) const
+{
+  std::ostringstream	oss;
+
+  oss << _parser->getConfig().idPlayer1 << " 0 0 WITHFRIEND ";
+  if (_gameEntities.isDouble())
+    oss << "YES";
+  else
+    oss << "NO";
+  oss << std::endl;
+  string = oss.str();
+}
+
 void			ClientCore::buildMapMd5(std::string &string, int idPlayer) const
 {
   std::ostringstream	oss;
@@ -157,12 +165,15 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
     }
   if (b[0])
     {
-      _socket->getLine(string);
+      std::cout << "[client] Before getline" << std::endl;
+      _socket->read(string);
       std::cout << "[CLIENT] received " << string << std::endl; 
       _parser->run(string);
       if (_parser->getConfig().welcomeReceived)
 	{
 	  std::cout << "CONFIG push in cmds" << std::endl;
+	  buildWithFriendCmd(string);
+	  _configurator->pushCmd(string);
 	  buildConfigCmd(string);
 	  _configurator->pushCmd(string);
 	  _connexion.watchEventOnSocket(_socket, POLLOUT);
@@ -214,7 +225,7 @@ void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
     }
   if (b[0])
     {
-      this->_socket->getLine(string);
+      this->_socket->read(string);
       std::cout << string << std::endl;
       this->_parser->run(string);
     }

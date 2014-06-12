@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Wed Jun 11 16:06:51 2014 aurelien prieur
+// Last update Thu Jun 12 14:10:26 2014 virol_g
 //
 
 #include "MenuHandler.hpp"
@@ -34,10 +34,7 @@ int		MenuHandler::mainMenu()
   if (!(menu.initialize()) || !(menu.build()))
     return (-1);
   while (menu.update())
-    {
-      menu.draw();
-      menu.timer();
-    }
+    menu.draw();
   if ((options = menu.getChoice()) != NULL)
     {
       retVal = static_cast<int>(!options->isHost);
@@ -98,10 +95,7 @@ t_game	*MenuHandler::launchMenus()
   if (!menu->initialize() || !menu->build())
     return (NULL);
   while (menu->update())
-    {
-      menu->draw();
-      menu->timer();
-    }
+    menu->draw();
   _sdlContext->stop();
   delete _sdlContext;
   choice = menu->getChoice();

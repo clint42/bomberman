@@ -114,11 +114,11 @@ namespace	Server {
   private:
 
     Player *		findPlayerByID(const size_t);
-    void		filterCmd(t_cmd const *, std::string &) const;
+    void		filterCmd(t_cmd *) const;
     bool		process(t_cmd *, Player *);
     void		bombSwitchQueue(t_cmd *, const std::pair<size_t, size_t>);
-    bool		bombExplose(Player *, t_cmd *);
-    bool		exploseCase(std::pair<size_t, size_t> pos, std::string &);
+    void		bombExplose(Player *, t_cmd *);
+    bool		exploseCase(const std::pair<size_t, size_t>, t_cmd *);
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
       return (p->getDateNextCommand() < this->timeLeft()) ? true : false;

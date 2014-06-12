@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun 11 14:18:25 2014 virol_g
-// Last update Wed Jun 11 14:53:44 2014 virol_g
+// Last update Thu Jun 12 14:40:25 2014 virol_g
 //
 
 #ifndef		JOINMENU_HPP_
@@ -13,10 +13,12 @@
 
 # include	"AMenu.hpp"
 # include	"MenuInput.hpp"
+# include	"MenuButton.hpp"
 # include	"MenuBackground.hpp"
 
 class		JoinMenu : public AMenu
 {
+  MenuButton	*_join;
   MenuInput	*_readIP;
   GraphicalText	*_title;
 public:
