@@ -443,6 +443,7 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
 	break ;
       ++val;
     }
+  c->msg += "\n";
 }
 
 bool Server::Game::_isGame = false;
