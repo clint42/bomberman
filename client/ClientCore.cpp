@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Thu Jun 12 15:38:21 2014 aurelien prieur
+// Last update Thu Jun 12 16:24:16 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -225,7 +225,7 @@ void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
     }
   if (b[0])
     {
-      this->_socket->getLine(string);
+      this->_socket->read(string);
       std::cout << string << std::endl;
       this->_parser->run(string);
     }
