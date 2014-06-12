@@ -405,44 +405,45 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   std::stringstream convert;
   std::string	msg;
   std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY());
+  (void)c;
 
   this->_map->setElemAtPos(pos, Map::GROUND);
   convert << "0 " << pos.first << " " << pos.second << " DESTROY";
   convert << ";0 " << pos.first << " " << pos.second << " FIRE";
   msg = convert.str();
   // RIGHT
-  while (p->getPosX() + val < this->_map->getWidth() - 1 && val <= p->getBombRange())
+  while (p->getPosX() + val < this->_map->getWidth() - 1 && (size_t)val <= p->getBombRange())
     {
       pos.first = p->getPosX() + val;
-      if (this->exploseCase(pos, &msg) == false)
+      if (this->exploseCase(pos, msg) == false)
 	break ;
       ++val;
     }
   // LEFT
   val = -1;
-  while (p->getPosX() + val > 0 && val * -1 <= p->getBombRange())
+  while (p->getPosX() + val > 0 && (size_t)(val * -1) <= p->getBombRange())
     {
       pos.first = p->getPosX() + val;
-      if (this->exploseCase(pos, &msg) == false)
+      if (this->exploseCase(pos, msg) == false)
 	break ;
       --val;
     }
   // UP
   val = -1;
-  while (p->getPosY() + val > 0 && val * -1 <= p->getBombRange())
+  while (p->getPosY() + val > 0 && (size_t)(val * -1) <= p->getBombRange())
     {
       pos.first = p->getPosX();
       pos.first = p->getPosY() + val;
-      if (this->exploseCase(pos, &msg) == false)
+      if (this->exploseCase(pos, msg) == false)
 	break ;
       --val;
     }
   // DOWN
   val = 1;
-  while (p->getPosY() + val < this->_map->getWidth() - 1 && val <= p->getBombRange())
+  while (p->getPosY() + val < this->_map->getWidth() - 1 && (size_t)val <= p->getBombRange())
     {
       pos.second = p->getPosY() + val;
-      if (this->exploseCase(pos, &msg) == false)
+      if (this->exploseCase(pos, msg) == false)
 	break ;
       ++val;
     }
@@ -497,8 +498,8 @@ Server::Game::process(t_cmd *c, Player *p)
     }
   else if (c->action == "BOMB EXPLOSE")
     {
-      this->bombExplose(p, c);
-	  this->_messenger->addMessage(p->getSocket(), msg);
+      // this->bombExplose(p, c);
+      // 	  this->_messenger->addMessage(p->getSocket(), msg);
       // send directly to messenger
     }
 

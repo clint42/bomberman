@@ -54,8 +54,11 @@ namespace Server {
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
     inline Dir	  getOrientation() const { return this->_orientation; }
+
     inline size_t getBombsOnFloor() const { return this->_bombsOnFloor; }
     inline size_t getBombsLimit() const { return this->_bombsLimit; }
+    inline size_t getBombRange() const { return _bombRange; }
+
     std::pair<size_t, size_t> getPos() const { std::pair<size_t, size_t> ret(_posX, _posY); return ret; }
     inline bool	  hasCertifiedMd5() const { return _certifiedMd5; }
 
