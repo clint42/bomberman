@@ -5,22 +5,26 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:54:59 2014 aurelien prieur
-// Last update Wed Jun 11 17:15:15 2014 virol_g
+// Last update Thu Jun 12 14:09:53 2014 virol_g
 //
 
 #ifndef MAINMENU_HPP_
 # define MAINMENU_HPP_
 
-# include "AMenu.hpp"
+# include	"../GraphicalText.hpp"
+# include	"AMenu.hpp"
 
 class	MainMenu: public AMenu
 {
   int	   	_nbPlayers;
+  GraphicalText	*_title;
+
 public:
   MainMenu(gdl::SdlContext &sdlContext);
   ~MainMenu();
   virtual bool	build();
   virtual bool	update();
+  virtual void	draw();
   virtual t_game	*getChoice() const;
 };
 

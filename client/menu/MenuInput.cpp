@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:35 2014 virol_g
-// Last update Wed Jun 11 14:55:35 2014 virol_g
+// Last update Thu Jun 12 13:44:01 2014 virol_g
 //
 
 #include	"MenuInput.hpp"
@@ -94,7 +94,7 @@ void	MenuInput::hover(bool isHover)
   _hover = isHover;
 }
 
-std::string	MenuInput::getInput() const
+std::string	MenuInput::getString() const
 {
   return (this->_output.getString());
 }

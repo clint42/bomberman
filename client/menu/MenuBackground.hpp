@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 26 16:04:21 2014 aurelien prieur
-// Last update Tue Jun 10 20:26:00 2014 virol_g
+// Last update Thu Jun 12 13:46:15 2014 virol_g
 //
 
 #ifndef MENUBACKGROUND_HPP_
@@ -26,6 +26,7 @@ public:
   virtual void	hover(bool isHover);
   virtual std::pair<size_t, size_t>	getPos() const;
   virtual std::pair<size_t, size_t>	getSize() const;
+  virtual std::string			getString() const;
 };
 
 #endif // !MENUBACKGROUND_HPP_

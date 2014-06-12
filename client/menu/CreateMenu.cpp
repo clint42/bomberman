@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Thu Jun 12 11:33:51 2014 virol_g
+// Last update Thu Jun 12 14:43:35 2014 virol_g
 //
 
 #include	<sstream>
@@ -70,16 +70,20 @@ bool	CreateMenu::build()
   _titles.push_back(new GraphicalText("Game duration",
 				      std::pair<size_t, size_t>(400, 260),
 				      glm::vec4(0.f, 0.f, 1.f, 1.f), P_FONT_SIZE, "airstrike"));
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(570, 500),
+				      std::pair<size_t, size_t>(200, 60),
+				      "Finish", glm::vec4(0.f, 0.f, 1.f, 1.f),
+				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 280),
-				      std::pair<size_t, size_t>(150, 50),
+				      std::pair<size_t, size_t>(135, 50),
 				      "Short", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(550, 280),
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(535, 280),
 				      std::pair<size_t, size_t>(150, 50),
 				      "Medium", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(700, 280),
-				      std::pair<size_t, size_t>(150, 50),
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(685, 280),
+				      std::pair<size_t, size_t>(135, 50),
 				      "Long", glm::vec4(0.f, 0.f, 1.f, 1.f),
 				      glm::vec4(0.93, 0.9, 0.32, 1.f), "airstrike"));
   return (true);
@@ -108,8 +112,12 @@ bool	CreateMenu::update()
 	      static_cast<size_t>(mouse.y) > _menuElems[i]->getPos().second &&
 	      static_cast<size_t>(mouse.y) < _menuElems[i]->getPos().second + _menuElems[i]->getSize().second)
 	    {
+	      if (_menuElems[i]->getString() == "Finish")
+		return (false);
 	      if (i != static_cast<size_t>(_selected))
-		_menuElems[_selected]->hover(false);
+		{
+		  _menuElems[_selected]->hover(false);
+		}
 	      _selected = i;
 	      _menuElems[i]->hover(true);
 	    }
@@ -161,12 +169,12 @@ t_game		*CreateMenu::getChoice() const
   t_game	*choice = new t_game;
 
   std::cout << "Create menu getChoice !" << std::endl;
-  choice->mapName = _selectMap->getChoice();
+  choice->mapName = _selectMap->getString();
   std::cout << "AFter select map getChoice." << std::endl;
-  choice->timeGame = (_selected == -1) ? 2 : _selected + 1;
-  ss << _nbBots->getInput();
+  choice->timeGame = (_selected == -1) ? 2 : _selected;
+  ss << _nbBots->getString();
   ss >> choice->nbBots;
-  ss2 << _nbPlayers->getInput();
+  ss2 << _nbPlayers->getString();
   ss2 >> choice->nbPlayers;
   return (choice);
 }

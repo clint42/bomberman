@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 10:57:53 2014 aurelien prieur
-// Last update Wed Jun 11 17:28:14 2014 virol_g
+// Last update Thu Jun 12 14:08:14 2014 virol_g
 //
 
 #ifndef AMENU_HPP_
@@ -54,8 +54,7 @@ public:
   virtual bool	initialize();
   virtual bool	build() = 0;
   virtual bool	update() = 0;
-  virtual void	draw();
-  virtual void	timer();
+  virtual void	draw() = 0;
   virtual gdl::SdlContext	getContext() const;
   virtual t_game		*getChoice() const = 0;
 };

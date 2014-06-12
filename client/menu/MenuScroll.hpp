@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Sat Jun  7 17:54:57 2014 virol_g
-// Last update Wed Jun 11 16:24:51 2014 virol_g
+// Last update Thu Jun 12 13:44:13 2014 virol_g
 //
 
 #ifndef		MENUSCROLL_HPP_
@@ -47,7 +47,7 @@ public:
   virtual std::pair<size_t, size_t>	getPos() const;
   virtual std::pair<size_t, size_t>	getSize() const;
 
-  std::string	getChoice() const;
+  virtual std::string	getString() const;
 };
 
 # endif		// !MENUSCROLL_HPP_

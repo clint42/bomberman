@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 11:12:45 2014 aurelien prieur
-// Last update Wed Jun 11 17:09:59 2014 virol_g
+// Last update Thu Jun 12 14:08:03 2014 virol_g
 //
 
 #include <unistd.h>
@@ -42,26 +42,6 @@ bool    AMenu::initialize()
   _shader.setUniform("projection", projection);
   _shader.setUniform("view", glm::mat4(1));
   return (true);
-}
-
-void    AMenu::draw()
-{
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  _shader.bind();
-  _menuBackground->draw(_shader, _clock);
-  for (size_t i = 0; i < _menuElems.size(); ++i)
-    {
-      _menuElems[i]->draw(_shader, _clock);
-    }
-  this->_sdlContext.flush();
-}
-
-void	AMenu::timer()
-{
-  // if (_clock.getElapsed() < (1.f / 60.f))
-  //   {
-  //     usleep((1.f / 60.f - _clock.getElapsed()) * 1000000);
-  //   }
 }
 
 gdl::SdlContext	AMenu::getContext() const
