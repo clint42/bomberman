@@ -19,18 +19,12 @@ Server::Server::~Server() {
 
 void
 Server::Server::readMessage(Socket *s) {
-  bool run = true;
-
-  do {
-    std::string *m = new std::string;
-    run = s->getLine(*m);
-    if (run && *m != "") {
-      _messages.push_back(m);
-      std::cout << ">> " << *m << std::endl;
-    }
-    else
-      delete m;
-  } while (run);
+  std::vector<std::string *> v;
+  s->getLine(v);
+  for (std::vector<std::string *>::iterator it = v.begin(); it != v.end(); ++it) {
+    _messages.push_back(*it);
+    std::cout << ">> " << **it << std::endl;
+  }
 }
 
 void
@@ -66,7 +60,7 @@ Server::Server::trampoline_performResult(void *p, Socket *s, bool b[3]) {
     if (b[0]) {
       reinterpret_cast<Server::Server *>(p)->readMessage(s); // on est censé ajouter ce msg
     }
-    reinterpret_cast<Server::Server *>(p)->sendMessage(s);
+    // reinterpret_cast<Server::Server *>(p)->sendMessage(s);
   }
 }
 
@@ -77,13 +71,13 @@ Server::Server::run() {
   int   ret;
   
   while (_run && (ret = _co->update(timeLoop)) >= 0) {
-    sleep(1);
     DEBUG("Server::server::run() => loop", 0);
     
     if (ret) {
       DEBUG("Server::server::run() => loop => je dois lire qqc", 0);
       _co->perform(&trampoline_performResult, this);
-      this->filterMsg();
+      while (!_messages.empty())
+	this->filterMsg();
       
       if (!_ext.empty()) {
 	DEBUG("Server::server::run() => loop => j'ai une commande admin a regarder", 0);
@@ -96,7 +90,7 @@ Server::Server::run() {
     if (!ret) {
       DEBUG("Server::server::run() => loop => je regarde si j'update le game", 0);
       if (!_game || _game->isPaused() || !_game->hasSomethingToDo()) {
-	timeLoop = -1; // set it back to 1000msec
+	timeLoop = _messenger.hasSomethingToSay() ? 0 : -1; // set it back to 1000msec
 	DEBUG("Server::server::run() => loop => j'ai rien a faire en fait", 0);
       }
       else {
@@ -105,7 +99,7 @@ Server::Server::run() {
 	  timeLoop = 0;
       }
     }
-    
+    this->sendBroadcast();
     DEBUG("Server::server::run() => ! loop\n", 0);
   } // ! while
   DEBUG("! Server::server::run()", -1);
