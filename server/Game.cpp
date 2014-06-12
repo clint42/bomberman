@@ -177,9 +177,11 @@ std::pair<size_t, size_t>       Server::Game::generatePos(const size_t posx, con
 
   _posx = rand() % this->_map->getWidth();
   _posy = rand() % this->_map->getHeight();
-  if ((_posx == posx && _posy == posy) || (this->_map->getElemAtPos(_posx, _posy) != 0))
-    return (this->generatePos(_posx, _posy));
   std::pair<size_t, size_t> pos(_posx, _posy);
+  if ((_posx == posx && _posy == posy) ||
+      (this->_map->getElemAtPos(_posx, _posy) != 0) ||
+      (this->_players.find(pos) != this->_players.end()))
+    return (this->generatePos(_posx, _posy));
   return (pos);
 }
 
