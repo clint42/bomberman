@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:24:33 2014 aurelien prieur
-// Last update Wed Jun 11 13:51:48 2014 aurelien prieur
+// Last update Thu Jun 12 11:58:55 2014 virol_g
 //
 
 #ifndef MENUBUTTON_HPP_
@@ -25,12 +25,13 @@ class	MenuButton: public IMenuElem
   std::pair<size_t, size_t>     _pos;
   std::pair<size_t, size_t>	_size;
   bool                          _isHover;
-  GraphicalText			_label;
+  std::string			_title;
+  GraphicalText			*_label;
 
 public:
   MenuButton(std::pair<size_t, size_t> const &pos,
 	     std::pair<size_t, size_t> const &size,
-	     std::string const &_label,
+	     const std::string &_label,
 	     glm::vec4 const &color, glm::vec4 const &colorHover,
 	     std::string const &font = "impact");
   ~MenuButton();

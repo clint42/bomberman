@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Wed Jun 11 19:07:14 2014 virol_g
+// Last update Thu Jun 12 11:56:14 2014 virol_g
 //
 
 #include <iostream>
@@ -31,7 +31,7 @@ bool	MainMenu::build()
   _menuBackground = new MenuBackground("./client/menu/ressources/mainMenuBg.tga");
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(30, 205),
 				      std::pair<size_t, size_t>(250, 60),
-				     "New game",
+				      "New game",
 				      glm::vec4(0.f, 0.f, 1.f, 1.f), glm::vec4(0.93, 0.90, 0.32, 1.f),
 				      "airstrike"));
 

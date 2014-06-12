@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Wed Jun 11 18:34:22 2014 virol_g
+// Last update Thu Jun 12 11:33:51 2014 virol_g
 //
 
 #include	<sstream>
@@ -49,11 +49,9 @@ bool	CreateMenu::build()
     {
       while (getline(file, name))
 	{
-	  // if (name.size() > 8)
-	  //   name.resize(8);
 	  _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 380),
 					    std::pair<size_t, size_t>(210, 60),
-					     (name.size() >= 8) ? name.substr(0, 6) : name,
+					     name,
 					     glm::vec4(0.f, 0.f, 1.f, 1.f),
 					    glm::vec4(0.93, 0.9, 0.32, 1.f)));
 	}
@@ -165,7 +163,7 @@ t_game		*CreateMenu::getChoice() const
   std::cout << "Create menu getChoice !" << std::endl;
   choice->mapName = _selectMap->getChoice();
   std::cout << "AFter select map getChoice." << std::endl;
-  choice->timeGame = (_selected == -1) ? 1 : _selected;
+  choice->timeGame = (_selected == -1) ? 2 : _selected + 1;
   ss << _nbBots->getInput();
   ss >> choice->nbBots;
   ss2 << _nbPlayers->getInput();
