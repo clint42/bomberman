@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:29:16 2014 aurelien prieur
-// Last update Wed Jun 11 17:46:30 2014 virol_g
+// Last update Thu Jun 12 11:58:47 2014 virol_g
 //
 
 #include <iostream>
@@ -13,18 +13,24 @@
 
 MenuButton::MenuButton(std::pair<size_t, size_t> const &pos,
 		       std::pair<size_t, size_t> const &size,
-		       std::string const &label,
+		       const std::string &label,
 		       glm::vec4 const &color,
 		       glm::vec4 const &colorHover,
 		       std::string const &font): _color(color),
 						 _colorHover(colorHover),
 						 _pos(pos),
-						 _size(size),
-						 _label(label,
-							std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
-							glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20,
-							font)
+						 _size(size)
 {
+  std::string	tmp;
+
+  _title = label;
+  tmp = label;
+  if (tmp.size() > (size.first / (size.second - 20)))
+    tmp.resize(size.first / (size.second - 20));
+  _label = new GraphicalText(tmp,
+	 std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
+	 glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20,
+	 font);
   _isHover = false;
   this->initialize("./client/menu/ressources/gradationGreyTex.tga");
 }
@@ -82,7 +88,7 @@ void	MenuButton::draw(gdl::AShader &shader, gdl::Clock const &clock)
     _geometryHover.draw(shader, glm::mat4(1), GL_QUADS);
   else
     _geometry.draw(shader, glm::mat4(1), GL_QUADS);
-  _label.draw(shader);
+  _label->draw(shader);
 }
 
 void	MenuButton::hover(bool isHover)
@@ -102,5 +108,5 @@ std::pair<size_t, size_t>	MenuButton::getSize() const
 
 std::string		MenuButton::getString() const
 {
-  return (_label.getString());
+  return (_title);
 }
