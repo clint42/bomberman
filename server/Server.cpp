@@ -71,13 +71,13 @@ Server::Server::run() {
   int   ret;
   
   while (_run && (ret = _co->update(timeLoop)) >= 0) {
-    sleep(1);
     DEBUG("Server::server::run() => loop", 0);
     
     if (ret) {
       DEBUG("Server::server::run() => loop => je dois lire qqc", 0);
       _co->perform(&trampoline_performResult, this);
-      this->filterMsg();
+      while (!_messages.empty())
+	this->filterMsg();
       
       if (!_ext.empty()) {
 	DEBUG("Server::server::run() => loop => j'ai une commande admin a regarder", 0);
