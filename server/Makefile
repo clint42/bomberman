@@ -5,7 +5,7 @@
 ## Login   <franel_j@epitech.net>
 ## 
 ## Started on  Mon May  5 17:04:35 2014 julie franel
-## Last update Thu Jun 12 10:41:53 2014 buret_j
+## Last update Thu Jun 12 12:08:03 2014 buret_j
 ##
 
 CXX		=	clang++
@@ -24,6 +24,9 @@ SRC		=	main.cpp			\
 			../common/ScopedLock.cpp	\
 \
 			Server.cpp		\
+			Server_adminCommand.cpp	\
+			Server_filter.cpp	\
+			Server_peerConnexion.cpp \
 			Game.cpp		\
 			Player.cpp		\
 			Team.cpp		\

@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Wed Jun 11 16:05:52 2014 aurelien prieur
+## Last update Thu Jun 12 12:08:50 2014 buret_j
 ##
 
 CXX =	clang++
@@ -43,6 +43,7 @@ SRC =   client/main.cpp \
 	client/FpsDisplay.cpp \
 	client/GraphicalText.cpp \
 	client/GraphicalLetter.cpp \
+\
 	common/Map.cpp \
 	common/Mutex.cpp \
 	common/ScopedLock.cpp \
@@ -52,7 +53,11 @@ SRC =   client/main.cpp \
 	common/Signal.cpp \
 	client/ThreadUI.cpp \
 	client/UI.cpp \
+\
 	server/Server.cpp \
+	server/Server_adminCommand.cpp	\
+	server/Server_filter.cpp	\
+	server/Server_peerConnexion.cpp \
 	server/Game.cpp \
 	server/Player.cpp
 
