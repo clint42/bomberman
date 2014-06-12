@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Thu Jun 12 22:13:47 2014 aurelien prieur
+// Last update Thu Jun 12 22:57:06 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -137,7 +137,7 @@ void			ClientCore::buildMapMd5(std::string &string, int idPlayer) const
 {
   std::ostringstream	oss;
   
-  oss << idPlayer << " 0 0 ";
+  oss << idPlayer << " 0 0 MAP ";
   oss << _map->getMd5() << std::endl;
   string = oss.str();
 }
