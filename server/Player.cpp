@@ -83,3 +83,21 @@ Server::Player::dropBomb()
   this->_bombsOnFloor += 1;
   return (true);
 }
+
+void
+Server::Player::earnBomb()
+{
+  this->_bombsLimit += 1;
+}
+
+void
+Server::Player::earnRange()
+{
+  this->_bombsRange += 1;
+}
+
+void
+Server::Player::earnSpeed()
+{
+  this->_commandTimeMultiplier = _commandTimeMultiplier > 0.2 ? _commandTimeMultiplier - 0.1 : _commandTimeMultiplier / 2;
+}

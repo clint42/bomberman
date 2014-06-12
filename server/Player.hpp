@@ -87,6 +87,10 @@ namespace Server {
     bool	  moveDown();
     bool	  moveLeft();
 
+    void	  earnBomb();
+    void	  earnRange();
+    void	  earnSpeed();
+
     bool	  orient(Dir);
     bool	  dropBomb();
 

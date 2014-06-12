@@ -170,6 +170,20 @@ Server::Game::filterCmd(t_cmd *cmd) const {
 ** PROCESS
 */
 
+void
+Server::Game::earnBonus(Player *p, int bonus, const std::pair<size_t, size_t> pos)
+{
+  std::stringstream convert;
+  if (bonus == Map::B_BOMB)
+    p->earnBomb();
+  else if (bonus == Map::B_RANGE)
+    p->earnRange();
+  else
+    p->earnSpeed();
+  convert << "0 " << pos.first << " " << pos.second << " DESTROY";
+  this->_messenger->broadcastMessage(convert.str());
+}
+
 bool
 Server::Game::moveUp(Player *p, t_cmd *c)
 {
@@ -178,7 +192,11 @@ Server::Game::moveUp(Player *p, t_cmd *c)
     {
       std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() - 1);
       std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
-      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end())
+      int			elem = this->_map->getElemAtPos(pos);
+
+      if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
+	this->earnBonus(p, elem, pos);
+      if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
 	{
 	  this->_players[pos] = this->_players[oldPos];
 	  this->_players.erase(oldPos);
@@ -380,16 +398,20 @@ Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
       if (ret == Map::DWALL)
 	{
 	  convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
-	  convert << ";0 " << pos.first << " " << pos.second << " FIRE";
-	  this->_map->setElemAtPos(pos, Map::GROUND);
+	  
+	  this->_map->setElemAtPos(pos, Map::GROUND); // Mettre un rand pour bonus et Create entity bonus
 	  c->msg += convert.str();
 	}
       if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB)
 	return (false);
     }
-  else if ((it = this->_players.find(pos)) != this->_players.end())
+  else
     {
-      convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
+      if ((it = this->_players.find(pos)) != this->_players.end())
+	{
+	  convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
+	  this->killPlayer(pos);
+	}
       convert << ";0 " << pos.first << " " << pos.second << " FIRE";
       c->msg += convert.str();
     }
@@ -404,7 +426,7 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY());
 
   this->_map->setElemAtPos(pos, Map::GROUND);
-  convert << "0 " << pos.first << " " << pos.second << " DESTROY";
+<  convert << "0 " << pos.first << " " << pos.second << " DESTROY";
   convert << ";0 " << pos.first << " " << pos.second << " FIRE";
   c->msg = convert.str();
   // RIGHT
@@ -489,6 +511,12 @@ Server::Game::process(t_cmd *c, Player *p)
       // send directly to messenger
     }
   return (false);
+}
+
+void
+Server::Game::killPlayer(const std::pair<size_t, size_t> pos)
+{
+  this->_players.erase(pos);
 }
 
 void

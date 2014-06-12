@@ -107,6 +107,7 @@ namespace	Server {
     void		update();
     void		bombsProcessing();
     void		killPlayer(Player *);
+    void		killPlayer(const std::pair<size_t, size_t>);
 
     static std::map<std::string, Game::Type>    _types;
     static bool                         _isInit;
@@ -119,6 +120,7 @@ namespace	Server {
     void		bombSwitchQueue(t_cmd *, const std::pair<size_t, size_t>);
     void		bombExplose(Player *, t_cmd *);
     bool		exploseCase(const std::pair<size_t, size_t>, t_cmd *);
+    void		earnBonus(Player *, int, const std::pair<size_t, size_t>);
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
       return (p->getDateNextCommand() < this->timeLeft()) ? true : false;
