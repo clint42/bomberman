@@ -36,7 +36,7 @@ namespace Server {
 
     size_t	_bombsLimit;
     size_t	_bombsOnFloor;
-    size_t	_bombsRange;
+    size_t	_bombRange;
 
     size_t	_dateNextCommand;
     double	_commandTimeMultiplier;// used by bonus, '1' by default. ex: 0.5 = speed increased by 2.
