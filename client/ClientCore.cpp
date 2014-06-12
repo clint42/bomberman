@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Wed Jun 11 19:11:21 2014 aurelien prieur
+// Last update Thu Jun 12 11:06:05 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -158,11 +158,14 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
   if (b[0])
     {
       _socket->getLine(string);
+      std::cout << "[CLIENT] received " << string << std::endl; 
       _parser->run(string);
       if (_parser->getConfig().welcomeReceived)
 	{
+	  std::cout << "CONFIG push in cmds" << std::endl;
 	  buildConfigCmd(string);
 	  _configurator->pushCmd(string);
+	  _connexion.watchEventOnSocket(_socket, POLLOUT);
 	}
       if (_parser->getConfig().mapName != "")
 	_map = new MapRender(_parser->getConfig().mapName);
@@ -170,6 +173,7 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
   if (b[1])
     {
       _configurator->popCmd(string);
+      std::cout << "[CLIENT] send " << string << std::endl;
       _socket->write(string);
       if (_configurator->sizeCmd() == 0)
 	_connexion.unwatchEventOnSocket(_socket, POLLOUT);

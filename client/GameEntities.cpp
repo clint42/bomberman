@@ -5,14 +5,14 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Tue Jun 10 20:38:51 2014 aurelien prieur
+// Last update Thu Jun 12 11:41:13 2014 aurelien prieur
 //
 
 #include <iostream>
 #include "GameEntities.hpp"
 
 GameEntities::GameEntities(): _isDouble(false), _isStarted(false),
-			      _player(NULL), _player2(NULL),
+			      _player(NULL), _player2(NULL), _playersId(2),
 			      _playerScore(0), _player2Score(0),
 			      _timeLeft(0)
 {
@@ -138,9 +138,15 @@ void		GameEntities::setPlayer(int id, int nPlayer)
       if (it->second->getId() == id)
 	{
 	  if (nPlayer == 0)
-	    _player = it->second;
+	    {
+	      _playersId[0] = id;
+	      _player = it->second;
+	    }
 	  else
-	    _player2 = it->second;
+	    {
+	      _playersId[1] = id;
+	      _player2 = it->second;
+	    }
 	}
     }
   _locker.unlock();
@@ -161,12 +167,12 @@ AObject const	*GameEntities::getPlayer(bool withoutLock, int nPlayer)
   return (retVal);
 }
 
-void		GameEntities::addPoints(int points, int nPlayer)
+void		GameEntities::addPoints(int points, int playerId)
 {
   _locker.lock();
-  if (nPlayer == 0)
+  if (_playersId[0] == playerId)
     _playerScore += points;
-  else
+  else if (_playersId[1] == playerId)
     _player2Score += points;
   _locker.unlock();
 }
