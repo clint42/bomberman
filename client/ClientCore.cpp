@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Thu Jun 12 18:13:48 2014 aurelien prieur
+// Last update Thu Jun 12 22:13:47 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -59,9 +59,8 @@ bool		ClientCore::connectServer(t_game *options)
   return (true);
 }
 
-bool		ClientCore::loadMap(t_game *options)
+bool		ClientCore::loadMap(void)
 {
-  (void)(options);
   _map->render(_createInstructs);
   _gameEntities.setMapSize(std::pair<size_t, size_t>(_map->getWidth(), _map->getHeight()));
   delete _map;
@@ -92,19 +91,8 @@ bool			ClientCore::initialize(t_game *options)
   if (options->isDouble)
     _gameEntities.setDouble();
   try {
-    while (_connexion.update(-1) >= 0 && !isConfigured() && !_configurator->hasErrorOccured())
+    while (!isConfigured() && !_configurator->hasErrorOccured() && _connexion.update(-1) >= 0)
       {
-	if (_map != NULL && _parser->getConfig().idPlayer1 != 0 &&
-	    (_parser->getConfig().idPlayer2 != 0 || options->isDouble))
-	  {
-	    buildMapMd5(string, _parser->getConfig().idPlayer1);
-	    _configurator->pushCmd(string);
-	    if (options->isDouble)
-	      {
-		buildMapMd5(string, _parser->getConfig().idPlayer2);
-		_configurator->pushCmd(string);
-	      }
-	  }
 	_connexion.perform(&trampolineConfig, this);
       }
     if (_configurator->hasErrorOccured())
@@ -169,7 +157,7 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
     {
       std::cout << "[client] Before getline" << std::endl;
       _socket->read(string);
-      std::cout << "[CLIENT] received " << string << std::endl; 
+      std::cout << "[CLIENT] received  [" << string << "]" << std::endl; 
       _parser->run(string);
       if (_parser->getConfig().welcomeReceived && !configSend)
 	{
@@ -185,7 +173,17 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
 	  configSend = true;
 	}
       if (_parser->getConfig().mapName != "")
-	_map = new MapRender(_parser->getConfig().mapName);
+	{
+	  _map = new MapRender(_parser->getConfig().mapName);
+	  buildMapMd5(string, _parser->getConfig().idPlayer1);
+	  _configurator->pushCmd(string);
+	  if (_configurator->getOptions()->isDouble)
+	    {
+	      buildMapMd5(string, _parser->getConfig().idPlayer2);
+	      _configurator->pushCmd(string);
+	    }
+	  _connexion.watchEventOnSocket(_socket, POLLOUT);
+	}
     }
   if (b[1])
     {
@@ -193,7 +191,10 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
       std::cout << "[CLIENT] send " << string << std::endl;
       _socket->write(string);
       if (_configurator->sizeCmd() == 0)
-	_connexion.unwatchEventOnSocket(_socket, POLLOUT);
+	{
+	  std::cout << "UnwatchSocket" << std::endl;
+	  _connexion.unwatchEventOnSocket(_socket, POLLOUT);
+	}
     }
 }
 
@@ -209,7 +210,8 @@ void	ClientCore::trampoline(void *param, Socket *socket, bool b[3])
 
 bool		ClientCore::run()
 {
-  //TODO: don't forget to load map
+  std::cout << "[CLIENT]: RUN !!!" << std::endl;
+  loadMap();
   while (_connexion.update(500) >= 0 && !_eventsHandler.isFinished())
     {
       if (_gameEntities.getPlayer(false, 0) == NULL)

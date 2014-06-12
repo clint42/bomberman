@@ -28,7 +28,7 @@ public:
   ~Socket() { delete _in; delete _out; delete __in; delete __out; close(_fd); }
 
   inline int  getFd() const { return _fd; }
-  inline void write(std::string const &toWrite) { *_out << toWrite << std::flush; }
+  inline void write(std::string const &toWrite) { *_out << toWrite << std::flush; std::cout << "WRITED: " << toWrite << std::endl;}
 
   inline void getLine(std::string &toFill) { std::getline(*_in, toFill); }
   void	      getLine(std::vector<std::string *> &toFill) {
@@ -40,8 +40,9 @@ public:
       toFill.push_back(m);
       DEBUG("Socket::getLine() => ! loop", -1);
       if (_in->peek() == '\n')
-	_in->get();
+      	_in->get();
     }
+    _in->clear();
     DEBUG("! Socket::getLine()", -1);
   }
   
@@ -50,13 +51,12 @@ public:
 
     while (_in->peek() != -1)
       {
-	std::getline(*_in, tmp);
-	toFill += tmp + "\n";
+    	std::getline(*_in, tmp);
+    	toFill += tmp + "\n";
       }
-    _in->get();
+    _in->clear();
     return (true);
   }
-
 };
 
 #endif /* !SOCKET_HPP_ */

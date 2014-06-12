@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sun Jun  8 16:08:57 2014 aurelien prieur
-// Last update Wed Jun 11 18:45:18 2014 aurelien prieur
+// Last update Thu Jun 12 22:21:29 2014 aurelien prieur
 //
 
 #include "MapRender.hpp"
@@ -15,9 +15,9 @@ MapRender::MapRender(std::string const &mapName): _logicMap(mapName)
   _graphEquivalent[Map::GROUND] = VOID;
   _graphEquivalent[Map::WALL] = BLOCK;
   _graphEquivalent[Map::DWALL] = BOX;
-  _graphEquivalent[Map::BOMB] = VOID;
-  _graphEquivalent[Map::FLAME] = VOID;
-  _graphEquivalent[Map::SPEED] = VOID;
+  // _graphEquivalent[Map::BOMB] = VOID;
+  // _graphEquivalent[Map::FIRE] = VOID;
+  // _graphEquivalent[Map::SPEED] = VOID;
 }
 
 MapRender::~MapRender()

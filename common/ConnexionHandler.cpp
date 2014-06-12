@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Thu Jun 12 17:21:25 2014 buret_j
+// Last update Thu Jun 12 19:34:23 2014 aurelien prieur
 */
 
 #include "ConnexionHandler.hpp"
