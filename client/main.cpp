@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Wed Jun 11 19:10:15 2014 aurelien prieur
+// Last update Thu Jun 12 18:09:31 2014 virol_g
 //
 
 #include <cstdlib>
@@ -33,7 +33,8 @@ int	main()
   MenuHandler menuHandler(signal);
   t_game	*options;
 
-  options = (menuHandler.launchMenus());
+  if ((options = (menuHandler.launchMenus())) == NULL)
+    return (EXIT_FAILURE);
   ConnexionHandler	connexionHandler;
   EventsHandler		eventsHandler(connexionHandler);
   GameEntities		gameEntities;

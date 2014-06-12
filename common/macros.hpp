@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Mon Jun  2 13:23:08 2014 buret_j
-// Last update Sun Jun  8 21:33:24 2014 buret_j
+// Last update Thu Jun 12 15:54:38 2014 buret_j
 //
 
 #ifndef MACROS_HPP_
@@ -21,10 +21,11 @@
 
 extern int debug_align;
 # define DEBUG(str, n) {					\
+  std::cout << "[SERVER] ";					\
     for (int i = n < 0; i < debug_align; ++i)			\
       std::cout << " ";						\
     std::cout << str << std::endl;				\
-    debug_align += n;							\
+    debug_align += n;						\
   }
 
 #endif /* !MACROS_HPP_ */

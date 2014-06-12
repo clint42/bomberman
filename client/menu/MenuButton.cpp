@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 12:29:16 2014 aurelien prieur
-// Last update Thu Jun 12 14:59:24 2014 virol_g
+// Last update Thu Jun 12 18:23:34 2014 virol_g
 //
 
 #include <iostream>
@@ -16,10 +16,11 @@ MenuButton::MenuButton(std::pair<size_t, size_t> const &pos,
 		       const std::string &label,
 		       glm::vec4 const &color,
 		       glm::vec4 const &colorHover,
-		       std::string const &font): _color(color),
-						 _colorHover(colorHover),
-						 _pos(pos),
-						 _size(size)
+		       std::string const &font, bool isHover): _color(color),
+							       _colorHover(colorHover),
+							       _pos(pos),
+							       _size(size),
+							       _isHover(isHover)
 {
   std::string	tmp;
 
@@ -31,7 +32,6 @@ MenuButton::MenuButton(std::pair<size_t, size_t> const &pos,
 	 std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
 	 glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 30,
 	 font);
-  _isHover = false;
   this->initialize("./client/menu/ressources/whiteTex.tga");
 }
 

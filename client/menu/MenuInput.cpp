@@ -5,19 +5,21 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:35 2014 virol_g
-// Last update Thu Jun 12 15:44:10 2014 virol_g
+// Last update Thu Jun 12 18:18:11 2014 virol_g
 //
 
 #include	"MenuInput.hpp"
 
 MenuInput::MenuInput(std::pair<size_t, size_t> const &pos,
 		     std::pair<size_t, size_t> const &size,
-		     glm::vec4 const &color): _color(color),
-					      _output("", std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
-						      glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20),
-					      _pos(pos),
-					      _size(size),
-					      _hover(false)
+		     glm::vec4 const &color, const glm::vec4 &colorHover):
+  _color(color),
+  _colorHover(colorHover),
+  _output("", std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
+	  glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20),
+  _pos(pos),
+  _size(size),
+  _hover(false)
 {  
   this->initialize("./client/menu/ressources/whiteTex.tga");
 }
@@ -38,13 +40,21 @@ bool	MenuInput::initialize(const std::string &textureName)
   _geometry.pushVertex(glm::vec3(_pos.first, _pos.second + _size.second, -1));
   _geometry.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second + _size.second, -1));
   _geometry.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second, -1));
-  
   _geometry.pushUv(glm::vec2(0, 1));  
   _geometry.pushUv(glm::vec2(0, 0));
   _geometry.pushUv(glm::vec2(1, 0));
   _geometry.pushUv(glm::vec2(1, 1));
-
   _geometry.build();
+  _geometryHover.setColor(_colorHover);
+  _geometryHover.pushVertex(glm::vec3(_pos.first, _pos.second, -1));
+  _geometryHover.pushVertex(glm::vec3(_pos.first, _pos.second + _size.second, -1));
+  _geometryHover.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second + _size.second, -1));
+  _geometryHover.pushVertex(glm::vec3(_pos.first + _size.first, _pos.second, -1));
+  _geometryHover.pushUv(glm::vec2(0, 1));
+  _geometryHover.pushUv(glm::vec2(0, 0));
+  _geometryHover.pushUv(glm::vec2(1, 0));
+  _geometryHover.pushUv(glm::vec2(1, 1));
+  _geometryHover.build();
   _keys.insert(std::pair<int, std::pair<char, bool> >(SDLK_KP_0, std::pair<char, bool>('0', false)));
   _keys.insert(std::pair<int, std::pair<char, bool> >(SDLK_KP_1, std::pair<char, bool>('1', false)));
   _keys.insert(std::pair<int, std::pair<char, bool> >(SDLK_KP_2, std::pair<char, bool>('2', false)));
@@ -86,7 +96,10 @@ void	MenuInput::draw(gdl::AShader &shader, const gdl::Clock &clock)
 {
   (void)clock;
   _texture.bind();
-  _geometry.draw(shader, glm::mat4(1), GL_QUADS);
+  if (_hover)
+    _geometryHover.draw(shader, glm::mat4(1), GL_QUADS);
+  else
+    _geometry.draw(shader, glm::mat4(1), GL_QUADS);
   _output.draw(shader);
 }
 

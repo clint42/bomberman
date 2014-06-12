@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 10:57:53 2014 aurelien prieur
-// Last update Thu Jun 12 14:08:14 2014 virol_g
+// Last update Thu Jun 12 18:02:28 2014 virol_g
 //
 
 #ifndef AMENU_HPP_

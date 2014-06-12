@@ -1,19 +1,12 @@
-//
-// Socket.hpp for  in /home/buret_j/rendu/bomberman
-// 
-// Made by buret_j
-// Login   <buret_j@epitech.net>
-// 
-// Started on  Thu May 22 14:42:09 2014 buret_j
-// Last update Thu Jun 12 16:21:49 2014 aurelien prieur
-//
-
 #ifndef SOCKET_HPP_
 # define SOCKET_HPP_
 
 # include <unistd.h>
 # include <iostream>
 # include <ext/stdio_filebuf.h>
+# include <vector>
+# include <string>
+# include "macros.hpp"
 
 class Socket {
 
@@ -35,11 +28,27 @@ public:
   ~Socket() { delete _in; delete _out; delete __in; delete __out; close(_fd); }
 
   inline int  getFd() const { return _fd; }
-  inline void write(std::string const &toWrite) { *_out << toWrite << std::endl; }
+  inline void write(std::string const &toWrite) { *_out << toWrite << std::flush; }
+
+  inline void getLine(std::string &toFill) { std::getline(*_in, toFill); }
+  void	      getLine(std::vector<std::string *> &toFill) {
+    DEBUG("Socket::getLine()", 1);
+    while (_in->peek() != -1) {
+      DEBUG("Socket::getLine() => loop", 1);
+      std::string *m = new std::string;
+      std::getline(*_in, *m);
+      toFill.push_back(m);
+      DEBUG("Socket::getLine() => ! loop", -1);
+      if (_in->peek() == '\n')
+	_in->get();
+    }
+    DEBUG("! Socket::getLine()", -1);
+  }
+  
   inline bool read(std::string &toFill) {
     std::string	tmp;
 
-    while (_in->peek() != '\n')
+    while (_in->peek() != -1)
       {
 	std::getline(*_in, tmp);
 	toFill += tmp + "\n";
@@ -47,11 +56,7 @@ public:
     _in->get();
     return (true);
   }
-  inline bool getLine(std::string &toFill) {
-    if (_in->peek() != EOF)
-      return !(getline(*_in, toFill).rdstate() & (std::ifstream::eofbit | std::ifstream::failbit));
-    return (false);
-  }
+
 };
 
 #endif /* !SOCKET_HPP_ */

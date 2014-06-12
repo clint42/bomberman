@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Wed Jun 11 12:41:11 2014 aurelien prieur
+// Last update Thu Jun 12 17:20:51 2014 buret_j
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -18,7 +18,7 @@
 # include <errno.h>
 # include <sys/socket.h>
 # include <arpa/inet.h>
-
+# include <fcntl.h>
 # include <vector>
 
 # include "Exception.hpp"

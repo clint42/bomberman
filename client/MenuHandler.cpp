@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Thu Jun 12 14:10:26 2014 virol_g
+// Last update Thu Jun 12 18:21:19 2014 virol_g
 //
 
 #include "MenuHandler.hpp"
@@ -85,7 +85,6 @@ t_game	*MenuHandler::launchMenus()
   int		mode;
 
   mode = mainMenu();
-  //TODO: in mode == 1, instanciate a SubMenu not a CreateMenu
   if (mode == 0)
     menu = new CreateMenu(*_sdlContext);
   else if (mode == 1)
@@ -98,11 +97,13 @@ t_game	*MenuHandler::launchMenus()
     menu->draw();
   _sdlContext->stop();
   delete _sdlContext;
-  choice = menu->getChoice();
-  std::cout << "Choice received" << std::endl;
-  if (mode == 0)
-    createGame(choice);
-  else if (mode == 1)
-    joinGame(choice);
+  if ((choice = menu->getChoice()) != NULL)
+    {
+      std::cout << "Choice received" << std::endl;
+      if (mode == 0)
+	createGame(choice);
+      else if (mode == 1)
+	joinGame(choice);
+    }
   return (choice);
 }

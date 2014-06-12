@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Thu Jun 12 15:55:01 2014 virol_g
+// Last update Thu Jun 12 18:32:31 2014 virol_g
 //
 
 #include	<sstream>
@@ -45,28 +45,22 @@ bool	CreateMenu::build()
   			      std::pair<size_t, size_t>(80, 60),
   			      glm::vec4(0.23, 0.18, 0.52, 1.f),
   			      glm::vec4(0.93, 0.9, 0.32, 1.f));
-  if (file)
+  while (getline(file, name))
     {
-      while (getline(file, name))
-	{
-	  _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 380),
-					    std::pair<size_t, size_t>(210, 60),
-					     name,
-					     glm::vec4(0.23, 0.18, 0.52, 1.f),
-					    glm::vec4(0.93, 0.9, 0.32, 1.f)));
-	}
+      _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 380),
+					 std::pair<size_t, size_t>(210, 60), name,
+					 glm::vec4(0.23, 0.18, 0.52, 1.f),
+					 glm::vec4(0.93, 0.9, 0.32, 1.f)));
     }
   _menuBackground = new MenuBackground("./client/menu/ressources/backgroundSubMenu.tga");
   _titles.push_back(new GraphicalText("How many players ?", std::pair<size_t, size_t>(400, 60),
 				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
-  _nbPlayers = new MenuInput(std::pair<size_t, size_t>(400, 80),
-			     std::pair<size_t, size_t>(250, 60),
-			     glm::vec4(0.23, 0.18, 0.52, 1.f));
+  _nbPlayers = new MenuInput(std::pair<size_t, size_t>(400, 80), std::pair<size_t, size_t>(250, 60),
+			     glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f));
   _titles.push_back(new GraphicalText("How many bots ?", std::pair<size_t, size_t>(400, 160),
 				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
-  _nbBots = new MenuInput(std::pair<size_t, size_t>(400, 180),
-			     std::pair<size_t, size_t>(250, 60),
-			     glm::vec4(0.23, 0.18, 0.52, 1.f));
+  _nbBots = new MenuInput(std::pair<size_t, size_t>(400, 180), std::pair<size_t, size_t>(250, 60),
+			  glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f));
   _titles.push_back(new GraphicalText("Game duration",
 				      std::pair<size_t, size_t>(400, 260),
 				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
@@ -81,7 +75,7 @@ bool	CreateMenu::build()
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(535, 280),
 				      std::pair<size_t, size_t>(150, 50),
 				      "Medium", glm::vec4(0.23, 0.18, 0.52, 1.f),
-				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
+				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike", true));
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(685, 280),
 				      std::pair<size_t, size_t>(135, 50),
 				      "Long", glm::vec4(0.23, 0.18, 0.52, 1.f),
@@ -100,8 +94,6 @@ bool	CreateMenu::update()
       _selected = -1;
       return (false);
     }
-  if (this->_input.getKey(SDLK_RETURN))
-    return (false);
   if (this->_input.getKey(SDL_BUTTON_LEFT))
     {
       mouse = this->_input.getMousePosition();
@@ -112,7 +104,7 @@ bool	CreateMenu::update()
 	      static_cast<size_t>(mouse.y) > _menuElems[i]->getPos().second &&
 	      static_cast<size_t>(mouse.y) < _menuElems[i]->getPos().second + _menuElems[i]->getSize().second)
 	    {
-	      if (_menuElems[i]->getString() == "Finish")
+	      if (_menuElems[i]->getString() == "Finish" && _nbBots->getString() != "" && _nbPlayers->getString() != "")
 		return (false);
 	      if (i != static_cast<size_t>(_selected))
 		{
@@ -168,6 +160,8 @@ t_game		*CreateMenu::getChoice() const
   std::stringstream	ss2;
   t_game	*choice = new t_game;
 
+  if (_selected == -1)
+    return (NULL);
   std::cout << "Create menu getChoice !" << std::endl;
   choice->mapName = _selectMap->getString();
   std::cout << "AFter select map getChoice." << std::endl;

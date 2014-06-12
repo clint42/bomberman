@@ -170,6 +170,37 @@ Server::Game::filterCmd(t_cmd *cmd) const {
 ** PROCESS
 */
 
+std::pair<size_t, size_t>       Server::Game::generatePos(const size_t posx, const size_t posy)
+{
+  size_t                        _posx;
+  size_t                        _posy;
+
+  _posx = rand() % this->_map->getWidth();
+  _posy = rand() % this->_map->getHeight();
+  std::pair<size_t, size_t> pos(_posx, _posy);
+  if ((_posx == posx && _posy == posy) ||
+      (this->_map->getElemAtPos(_posx, _posy) != 0) ||
+      (this->_players.find(pos) != this->_players.end()))
+    return (this->generatePos(_posx, _posy));
+  return (pos);
+}
+
+void		Server::Game::createPlayers()
+{
+  size_t	count = 0;
+
+  for (std::list<Player *>::const_iterator it = this->_peers.begin(); it != this->_peers.end(); ++it)
+    {
+      if (count < this->_maxPlayers)
+	{
+	  std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
+	  (*it)->setPos(pos.first, pos.second);
+	  this->_players[pos] = (*it);
+	  ++count;
+	}
+    }
+}
+
 void
 Server::Game::earnBonus(Player *p, int bonus, const std::pair<size_t, size_t> pos)
 {
