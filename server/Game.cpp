@@ -457,7 +457,7 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY());
 
   this->_map->setElemAtPos(pos, Map::GROUND);
-<  convert << "0 " << pos.first << " " << pos.second << " DESTROY";
+  convert << "0 " << pos.first << " " << pos.second << " DESTROY";
   convert << ";0 " << pos.first << " " << pos.second << " FIRE";
   c->msg = convert.str();
   // RIGHT
