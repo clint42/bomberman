@@ -17,9 +17,10 @@ public:
       GROUND,
       WALL,
       DWALL, // Destructible WALL
-      BOMB, // bonus
-      FLAME, // bonus
-      SPEED // bonus
+      BOMB,
+      B_BOMB, // bonus
+      B_RANGE, // bonus
+      B_SPEED // bonus
     };
 
 private:
