@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Wed Jun 11 18:24:09 2014 julie franel
+// Last update Thu Jun 12 11:45:29 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -36,6 +36,7 @@ Parser::Parser(GameEntities &gameEntities,
   this->_fct["ROTATE"] = &Parser::parseRotate;
   this->_fct["DESTROY"] = &Parser::parseDestroy;
   this->_fct["CHRONO"] = &Parser::parseChrono;
+  this->_fct["POINT"] = &Parser::parsePoint;
   this->_fct["STARTGAME"] = &Parser::parseStartGame;
 
   this->_fct["WELCOME"] = &Parser::parseWelcome;
@@ -171,6 +172,14 @@ void		Parser::parseStartGame(const t_parser &_parser)
   this->_gameEntities.setTimeLeft(static_cast<float>(_chrono));
 }
 
+
+void		Parser::parsePoint(const t_parser &_parser)
+{
+  size_t	points;
+
+  CVRT_STRING_TO_SIZET(_parser.params.front(), points);
+  this->_gameEntities.addPoints(points, _parser.id);
+}
 
 
 /*

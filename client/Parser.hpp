@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Sun Jun  8 15:49:48 2014 julie franel
-// Last update Wed Jun 11 18:22:00 2014 julie franel
+// Last update Thu Jun 12 11:42:07 2014 julie franel
 //
 
 #ifndef		PARSER_HPP_
@@ -58,6 +58,7 @@ class		Parser
   void                  parseCreate(const t_parser &_parser);
   void                  parseDestroy(const t_parser &_parser);
   void			parseChrono(const t_parser &_parser);
+  void			parsePoint(const t_parser &_parser);
 
   bool                  parseCreate(std::list<t_parser *> &_tabParser);
   bool                  parseDestroy(std::list<t_parser *> &_tabParser);
