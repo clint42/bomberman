@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu May 22 14:42:09 2014 buret_j
-// Last update Mon Jun  9 14:38:57 2014 aurelien prieur
+// Last update Thu Jun 12 13:23:43 2014 buret_j
 //
 
 #ifndef SOCKET_HPP_
@@ -35,8 +35,10 @@ public:
   ~Socket() { delete _in; delete _out; delete __in; delete __out; close(_fd); }
 
   inline int  getFd() const { return _fd; }
-  inline void getLine(std::string &toFill) { getline(*_in, toFill); }
   inline void write(std::string const &toWrite) { *_out << toWrite << std::endl; }
+  inline bool getLine(std::string &toFill) {
+    return (getline(*_in, toFill).rdstate() & std::ifstream::failbit);
+  }
 };
 
 #endif /* !SOCKET_HPP_ */

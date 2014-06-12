@@ -19,10 +19,18 @@ Server::Server::~Server() {
 
 void
 Server::Server::readMessage(Socket *s) {
-  std::string *m = new std::string;
-  s->getLine(*m);
-  _messages.push_back(m);
-  std::cout << ">> " << *m << std::endl;
+  bool run = true;
+
+  do {
+    std::string *m = new std::string;
+    if ((run = s->getLine(*m))) {
+      _messages.push_back(m);
+      std::cout << ">> " << *m << std::endl;
+    }
+    else
+      delete m;
+  }
+  while (run);
 }
 
 void
