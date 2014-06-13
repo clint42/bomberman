@@ -58,7 +58,7 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
   while (file.get(_c))
     {
       _c -= '0';
-      if (!(_c >= 0 || _c <= 2 || _c == ('\n' - '0')))
+      if (!((_c >= 0 && _c <= 2) || _c == ('\n' - '0')))
 	throw MapException("Invalid block identifier");
       if (_c == ('\n' - '0'))
 	{
