@@ -153,6 +153,7 @@ Server::Game::countPeersThatCertified() const {
 void
 Server::Game::update() {
   DEBUG("Server::Game::update()", 1);
+  Player *p = NULL;
 
   if (!_started) {
     if (this->countPeersThatCertified() < _nbPlayers) {
@@ -166,7 +167,6 @@ Server::Game::update() {
     }
   }
   else if (this->isEnded()) {
-    
   }
   else {
     t_cmd *c;
@@ -174,8 +174,8 @@ Server::Game::update() {
       DEBUG("! Server::Game::update()", -1);
       return ;
     }
-
-    Player *p = _players[c->pos];
+    if (_players.find(c->pos) != _players.end())
+      p = _players[c->pos];
     if ((!p || p->getID() != c->id) && c->action == "BOMB EXPLOSE")
       {
       p = this->findPlayerByID(c->id);
@@ -184,12 +184,6 @@ Server::Game::update() {
     if (!p || p->getID() != c->id)
       {
 	DEBUG("Server::Game::update() => player not found", 0);
-	// for (std::map<std::pair<size_t, size_t>, Player *>::iterator it = _players.begin(); it != _players.end(); ++it)
-	//   {
-	//     DEBUG("Server::Game::update() Player information", 0);
-	//     std::cout << "Dans Map X = " << it->first.first << " Y = " << it->first.second << std::endl;
-	//     std::cout << "Dans Player X = " << it->second->getPosX() << " Y = " << it->second->getPosY() << std::endl;
-	//   }
 	if (!p)
 	  {
 	    DEBUG("Server::Game::update() => P faux", 0);
@@ -315,27 +309,18 @@ Server::Game::moveRight(Player *p, t_cmd *c)
   (void)c;
   if (p->getPosX() != this->_map->getWidth() - 1)
     {
-      std::cout << "J'ai le droit de move a droite" << std::endl;
       std::pair<size_t, size_t> pos(p->getPosX() + 1, p->getPosY());
       std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
       int			elem = this->_map->getElemAtPos(pos);
 
       if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
 	this->earnBonus(p, elem, pos);
-      else
-	std::cout << "Il n'y a pas de bonus a droite" << std::endl;
-      std::cout << "Player posX = " << p->getPosX() << " | posY = " << p->getPosY() << std::endl;
-      // std::cout << "Position ou je dois aller X = " << pos.first << " | Y = " << pos.second << std::endl;
-      // for (std::map<std::pair<size_t, size_t>,>)
-      // std::cout << "Dans la map Player posX = " << _players.begin()->second->getPosX() << " | posY = " << _players.begin()->second->getPosY() << std::endl;
       if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
 	{
 	  this->_players[pos] = this->_players[oldPos];
 	  this->_players.erase(oldPos);
 	  return (p->moveRight());
 	}
-      else
-	std::cout << "Il y a un player a droite" << std::endl;
     }
   return false;
 }
@@ -646,6 +631,7 @@ Server::Game::process(t_cmd *c, Player *p)
     }
   if (c->action == "MOVE")
     {
+      std::cout << "PROCESS Players size = " << _players.size() << std::endl;
       p->getAction(&a, &d, c->params[0]);
       DEBUG("!Server::Game::process() ==> verifier les actions de process", -1);
       return ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c));
