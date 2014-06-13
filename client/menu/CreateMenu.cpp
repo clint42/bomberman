@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Fri Jun 13 14:31:33 2014 virol_g
+// Last update Fri Jun 13 15:31:38 2014 virol_g
 //
 
 #include	<sstream>
@@ -65,7 +65,7 @@ bool	CreateMenu::build()
   _titles.push_back(new GraphicalText("Server port", std::pair<size_t, size_t>(400, 20),
 				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
   _inputs.push_back(new MenuInput(std::pair<size_t, size_t>(400, 40), std::pair<size_t, size_t>(250, 60),
-				  glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f)));
+				  glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f), "4242"));
 
   _titles.push_back(new GraphicalText("Game duration",
 				      std::pair<size_t, size_t>(400, 340),

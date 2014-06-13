@@ -5,17 +5,18 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:35 2014 virol_g
-// Last update Fri Jun 13 01:43:56 2014 virol_g
+// Last update Fri Jun 13 15:30:48 2014 virol_g
 //
 
 #include	"MenuInput.hpp"
 
 MenuInput::MenuInput(std::pair<size_t, size_t> const &pos,
 		     std::pair<size_t, size_t> const &size,
-		     glm::vec4 const &color, const glm::vec4 &colorHover):
+		     glm::vec4 const &color, const glm::vec4 &colorHover,
+		     std::string defaultValue):
   _color(color),
   _colorHover(colorHover),
-  _output("", std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
+  _output(defaultValue, std::pair<size_t, size_t>(pos.first + 10, pos.second + 10),
 	  glm::vec4(1.f, 1.f, 1.f, 1.f), size.second - 20),
   _pos(pos),
   _size(size),
