@@ -21,7 +21,7 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
     throw GameException("Invalid parameters");
 
   try {
-    _map = new Map(m);
+    _map = new Map(std::string("./maps/") + m);
   }
   catch (MapException) {
     _map = 0;

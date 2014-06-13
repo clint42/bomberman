@@ -32,6 +32,7 @@ Server::Server::funcWelcome(const t_cmd *_cmd) {
   catch (GameException e)
     {
       std::cerr << e.what() << std::endl;
+      _run = false;
       return (false);
     }
   DEBUG("! Server::Server::funcConfig()", -1);
