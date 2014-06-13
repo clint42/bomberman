@@ -165,6 +165,9 @@ Server::Game::update() {
       this->start();
     }
   }
+  else if (this->isEnded()) {
+    
+  }
   else {
     t_cmd *c;
     if (!_events.tryPop(&c)) {
@@ -181,6 +184,12 @@ Server::Game::update() {
     if (!p || p->getID() != c->id)
       {
 	DEBUG("Server::Game::update() => player not found", 0);
+	// for (std::map<std::pair<size_t, size_t>, Player *>::iterator it = _players.begin(); it != _players.end(); ++it)
+	//   {
+	//     DEBUG("Server::Game::update() Player information", 0);
+	//     std::cout << "Dans Map X = " << it->first.first << " Y = " << it->first.second << std::endl;
+	//     std::cout << "Dans Player X = " << it->second->getPosX() << " Y = " << it->second->getPosY() << std::endl;
+	//   }
 	if (!p)
 	  {
 	    DEBUG("Server::Game::update() => P faux", 0);
@@ -246,15 +255,13 @@ void
 Server::Game::pickPlayers(size_t nb) {
   DEBUG("Server::Game::pickPlayers()", 1);
   std::stringstream msg;
-  Time now;
-  now.now();
   for (std::list<Player *>::const_iterator it = this->_peers.begin();
        it != this->_peers.end() && nb; ++it, --nb) {
 
     if ((*it)->hasCertified()) {
       std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
       (*it)->setPos(pos.first, pos.second);
-      (*it)->updateDateNextCommand(Server::Player::ORIENT, now);
+      (*it)->updateDateNextCommand(Server::Player::ORIENT, this->timeLeft());
       this->_players[pos] = (*it);
       DEBUG("Server::Game::pickPlayers() => un peer est devenu un player", -1);
       msg << "0 0 0 CREATE PLAYER " << (*it)->getID() << " " << (*it)->getPosX() << " " << (*it)->getPosY() << "\n";
@@ -308,18 +315,27 @@ Server::Game::moveRight(Player *p, t_cmd *c)
   (void)c;
   if (p->getPosX() != this->_map->getWidth() - 1)
     {
+      std::cout << "J'ai le droit de move a droite" << std::endl;
       std::pair<size_t, size_t> pos(p->getPosX() + 1, p->getPosY());
       std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
       int			elem = this->_map->getElemAtPos(pos);
 
       if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
 	this->earnBonus(p, elem, pos);
+      else
+	std::cout << "Il n'y a pas de bonus a droite" << std::endl;
+      std::cout << "Player posX = " << p->getPosX() << " | posY = " << p->getPosY() << std::endl;
+      // std::cout << "Position ou je dois aller X = " << pos.first << " | Y = " << pos.second << std::endl;
+      // for (std::map<std::pair<size_t, size_t>,>)
+      // std::cout << "Dans la map Player posX = " << _players.begin()->second->getPosX() << " | posY = " << _players.begin()->second->getPosY() << std::endl;
       if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
 	{
 	  this->_players[pos] = this->_players[oldPos];
 	  this->_players.erase(oldPos);
 	  return (p->moveRight());
 	}
+      else
+	std::cout << "Il y a un player a droite" << std::endl;
     }
   return false;
 }
@@ -600,12 +616,15 @@ std::map<int, std::string> Server::Game::_bonus;
 bool
 Server::Game::process(t_cmd *c, Player *p)
 {
+  DEBUG("Server::Game::process()", 1);
   if (!this->hasDateNextCommandExpired(p))
-    return false;
+    {
+      DEBUG("!Server::Game::process() ==> pas le droit de faire une action", -1);
+      return false;
+    }
 
   Server::Player::Action a;
   Server::Player::Dir	 d;
-
   if (_isGame == false)
     {
       _isGame = true;
@@ -628,20 +647,24 @@ Server::Game::process(t_cmd *c, Player *p)
   if (c->action == "MOVE")
     {
       p->getAction(&a, &d, c->params[0]);
+      DEBUG("!Server::Game::process() ==> verifier les actions de process", -1);
       return ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c));
     }
   else if (c->action == "BOMB")
     {
       a = Server::Player::BOMB;
       d = p->getOrientation();
+      DEBUG("!Server::Game::process() ==> verifier les actions de process", -1);
       return ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c));
     }
   else if (c->action == "BOMB EXPLOSE")
     {
       this->bombExplose(p, c);
       this->_messenger->broadcastMessage(c->msg);
+      std::cout << "Return false mais c'est normal" << std::endl;
       // send directly to messenger
     }
+  DEBUG("!Server::Game::process()", -1);
   return (false);
 }
 

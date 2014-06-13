@@ -10,7 +10,7 @@
 # include "Team.hpp"
 # include "Socket.hpp"
 
-# define DELAY		   350 // (in msec) default time of all actions.
+# define DELAY		   200 // (in msec) default time of all actions.
 # define DELAY_MULT_ORIENT 1.0 // multiplier of orientation action time.
 # define DELAY_MULT_MOVE   2.0
 # define DELAY_MULT_BOMB   1.0

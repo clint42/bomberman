@@ -55,7 +55,7 @@ Time::operator<(Time const &t) const {
 
 
 std::ostream &	operator<<(std::ostream &s, Time const &t) {
-  // s << "Time(h: " << t.hour() << ", m: " << t.min() - (t.hour() * 60) << ", s: " << t.sec() - (t.min() * 60) << " , ms: " << t.msec() - (t.sec() * 1000) << " , us: " << t.usec() - (t.msec() * 1000) << ")";
+  s << "Time(h: " << t.hour() << ", m: " << t.min() - (t.hour() * 60) << ", s: " << t.sec() - (t.min() * 60) << " , ms: " << t.msec() - (t.sec() * 1000) << " , us: " << t.usec() - (t.msec() * 1000) << ")";
   (void)t;
   return s;
 }
