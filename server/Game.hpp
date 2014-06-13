@@ -115,6 +115,7 @@ namespace	Server {
 
     static std::map<std::string, Game::Type>    _types;
     static bool                         _isInit;
+    static std::map<int, std::string>		_bonus;
 
   private:
 
@@ -122,9 +123,12 @@ namespace	Server {
     void		filterCmd(t_cmd *) const;
     bool		process(t_cmd *, Player *);
     void		bombSwitchQueue(t_cmd *, const std::pair<size_t, size_t>);
+
     void		bombExplose(Player *, t_cmd *);
     bool		exploseCase(const std::pair<size_t, size_t>, t_cmd *);
+    void		createBonus(const std::pair<size_t, size_t>, t_cmd *);
     void		earnBonus(Player *, int, const std::pair<size_t, size_t>);
+
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
       return (p->getDateNextCommand() < this->timeLeft()) ? true : false;

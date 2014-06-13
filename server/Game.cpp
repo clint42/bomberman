@@ -296,7 +296,11 @@ Server::Game::moveRight(Player *p, t_cmd *c)
     {
       std::pair<size_t, size_t> pos(p->getPosX() + 1, p->getPosY());
       std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
-      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end())
+      int			elem = this->_map->getElemAtPos(pos);
+
+      if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
+	this->earnBonus(p, elem, pos);
+      if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
 	{
 	  this->_players[pos] = this->_players[oldPos];
 	  this->_players.erase(oldPos);
@@ -314,7 +318,11 @@ Server::Game::moveDown(Player *p, t_cmd *c)
     {
       std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() + 1);
       std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
-      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end())
+      int			elem = this->_map->getElemAtPos(pos);
+
+      if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
+	this->earnBonus(p, elem, pos);
+      if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
 	{
 	  this->_players[pos] = this->_players[oldPos];
 	  this->_players.erase(oldPos);
@@ -332,7 +340,11 @@ Server::Game::moveLeft(Player *p, t_cmd *c)
     {
       std::pair<size_t, size_t> pos(p->getPosX() - 1, p->getPosY());
       std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
-      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end())
+      int			elem = this->_map->getElemAtPos(pos);
+
+      if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
+	this->earnBonus(p, elem, pos);
+      if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
 	{
 	  this->_players[pos] = this->_players[oldPos];
 	  this->_players.erase(oldPos);
@@ -468,6 +480,22 @@ Server::Game::bombLeft(Player *p, t_cmd *c)
   return false;
 }
 
+void
+Server::Game::createBonus(const std::pair<size_t, size_t> pos, t_cmd *c)
+{
+  int		val = rand() % 7;
+
+  if (val == Map::B_BOMB || val == Map::B_RANGE || val == Map::B_SPEED)
+    {
+      std::stringstream convert;
+      this->_map->setElemAtPos(pos, val);
+      convert << ";0 0 0 CREATE " << _bonus[val] << " 0 " << pos.first << " " << pos.second;
+      c->msg += convert.str();
+    }
+  else
+    this->_map->deleteElem(pos);
+}
+
 bool
 Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
 {
@@ -480,9 +508,9 @@ Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
       if (ret == Map::DWALL)
 	{
 	  convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
-	  
-	  this->_map->setElemAtPos(pos, Map::GROUND); // Mettre un rand pour bonus et Create entity bonus
 	  c->msg += convert.str();
+	  this->createBonus(pos, c);
+	  this->_map->setElemAtPos(pos, Map::GROUND); // Mettre un rand pour bonus et Create entity bonus
 	}
       if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB)
 	return (false);
@@ -494,7 +522,7 @@ Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
 	  convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
 	  this->killPlayer(pos);
 	}
-      convert << ";0 " << pos.first << " " << pos.second << " FIRE";
+      convert << ";0 0 0 CREATE FIRE 0 " << pos.first << " " << pos.second;
       c->msg += convert.str();
     }
   return (true);
@@ -507,9 +535,10 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   std::stringstream convert;
   std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY());
 
-  this->_map->setElemAtPos(pos, Map::GROUND);
+  // this->_map->setElemAtPos(pos, Map::GROUND);
+  this->_map->deleteElem(pos);
   convert << "0 " << pos.first << " " << pos.second << " DESTROY";
-  convert << ";0 " << pos.first << " " << pos.second << " FIRE";
+  convert << ";0 0 0 CREATE FIRE 0 " << pos.first << " " << pos.second;
   c->msg = convert.str();
   // RIGHT
   while (p->getPosX() + val < this->_map->getWidth() - 1 && (size_t)val <= p->getBombRange())
@@ -553,6 +582,7 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
 bool Server::Game::_isGame = false;
 std::map<std::pair<Server::Player::Action, Server::Player::Dir>,
 	 bool (Server::Game::*)(Server::Player *, Server::t_cmd *)> Server::Game::func;
+std::map<int, std::string> Server::Game::_bonus;
 
 bool
 Server::Game::process(t_cmd *c, Player *p)
@@ -563,18 +593,25 @@ Server::Game::process(t_cmd *c, Player *p)
   Server::Player::Action a;
   Server::Player::Dir	 d;
 
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::UP)] = &Server::Game::moveUp;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::RIGHT)] = &Server::Game::moveRight;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::DOWN)] = &Server::Game::moveDown;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::LEFT)] = &Server::Game::moveLeft;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::UP)] = &Server::Game::orientUp;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::RIGHT)] = &Server::Game::orientRight;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::DOWN)] = &Server::Game::orientDown;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::LEFT)] = &Server::Game::orientLeft;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::UP)] = &Server::Game::bombUp;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::RIGHT)] = &Server::Game::bombRight;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::DOWN)] = &Server::Game::bombDown;
-  func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::LEFT)] = &Server::Game::bombLeft;
+  if (_isGame == false)
+    {
+      _isGame = true;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::UP)] = &Server::Game::moveUp;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::RIGHT)] = &Server::Game::moveRight;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::DOWN)] = &Server::Game::moveDown;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::LEFT)] = &Server::Game::moveLeft;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::UP)] = &Server::Game::orientUp;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::RIGHT)] = &Server::Game::orientRight;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::DOWN)] = &Server::Game::orientDown;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::LEFT)] = &Server::Game::orientLeft;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::UP)] = &Server::Game::bombUp;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::RIGHT)] = &Server::Game::bombRight;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::DOWN)] = &Server::Game::bombDown;
+      func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::LEFT)] = &Server::Game::bombLeft;
+      _bonus[Map::B_BOMB] = "B_BOMB";
+      _bonus[Map::B_RANGE] = "B_RANGE";
+      _bonus[Map::B_SPEED] = "B_SPEED";
+    }
   if (c->action == "MOVE")
     {
       p->getAction(&a, &d, c->params[0]);

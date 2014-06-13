@@ -110,37 +110,42 @@ Map::generateMap() {
 */
 
 
-void	Map::setElemAtPos(const std::pair<size_t, size_t> &pos, const int &val)
+void
+Map::setElemAtPos(const std::pair<size_t, size_t> &pos, const int &val)
 {
   this->_map[pos] = val;
 }
 
 int
-Map::getElemAtPos(size_t x, size_t y) {
+Map::getElemAtPos(const size_t x, const size_t y) {
   std::pair<size_t, size_t> p(x, y);
-  if (_map[p])
-    return _map[p];
+  if (this->_map.find(p) != this->_map.end())
+    return (this->_map[p]);
   return (0);
 }
 
 int
 Map::getElemAtPos(const std::pair<size_t, size_t> &p) {
-  if (_map[p])
-    return _map[p];
+  if (this->_map.find(p) != this->_map.end())
+    return (this->_map[p]);
   return (0);
 }
 
-void	Map::deleteElem(const size_t posX, const size_t posY)
+void
+Map::deleteElem(const size_t posX, const size_t posY)
 {
-  std::pair<size_t, size_t>	_pos(posX, posY);
-  std::map<std::pair<size_t, size_t>, int>::iterator	it;
+  std::pair<size_t, size_t>	pos(posX, posY);
+  std::map<std::pair<size_t, size_t>, int>::iterator it = this->_map.find(pos);
 
-  for (it = this->_map.begin(); it != this->_map.end(); ++it)
-    {
-      if (it->first == _pos)
-	{
-	  this->_map.erase(it);
-	  return ;
-	}
-    }
+  if (it != this->_map.end())
+    this->_map.erase(it);
+}
+
+void
+Map::deleteElem(const std::pair<size_t, size_t> pos)
+{
+  std::map<std::pair<size_t, size_t>, int>::iterator it = this->_map.find(pos);
+
+  if (it != this->_map.end())
+    this->_map.erase(it);
 }
