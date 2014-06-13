@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 09:33:50 2014 aurelien prieur
-// Last update Wed Jun 11 10:27:20 2014 aurelien prieur
+// Last update Fri Jun 13 10:23:34 2014 aurelien prieur
 //
 
 #ifndef SIGNAL_HPP_
@@ -14,12 +14,15 @@
 # include <signal.h>
 # include <iostream>
 # include <map>
+# include "ConnexionHandler.hpp"
+
 class		Signal
 {
+  static ConnexionHandler	*_connexion;
   static void		        sighandler(int signum);
   static std::map<int, bool>	signalsStatus;	
 public:
-  Signal();
+  Signal(ConnexionHandler *connexion);
   ~Signal();
   bool	catchSignal(int signum, bool ignore = false);
   bool	isCatched(int signum) const;
