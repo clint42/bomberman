@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Fri Jun 13 13:30:12 2014 aurelien prieur
+// Last update Fri Jun 13 16:39:42 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -16,6 +16,8 @@ GameEntities::GameEntities(): _isDouble(false), _isStarted(false),
 			      _playerScore(0), _player2Score(0),
 			      _timeLeft(0)
 {
+  _playersId[0] = -1;
+  _playersId[1] = -1;
 }
 
 GameEntities::~GameEntities()
@@ -278,4 +280,31 @@ bool	GameEntities::isStarted(bool withoutLock)
   if (!withoutLock)
     _locker.unlock();
   return (retVal);
+}
+
+int	GameEntities::getPlayerId(int nPlayer)
+{
+  int	retVal;
+
+  _locker.lock();
+  retVal = _playersId[nPlayer];
+  _locker.unlock();
+  return (retVal);
+}
+
+std::pair<size_t, size_t> const *GameEntities::getPlayerPos(int nPlayer)
+{
+  _locker.lock();
+  for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = _entities.begin();
+       it != _entities.end();
+       ++it)
+    {
+      if (it->second == getPlayer(nPlayer))
+	{
+	  _locker.unlock();
+	  return (&(it->first));
+	}
+    }
+  _locker.unlock();
+  return (NULL);
 }

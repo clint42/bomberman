@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 16:01:34 2014 aurelien prieur
-// Last update Fri Jun 13 15:50:35 2014 aurelien prieur
+// Last update Fri Jun 13 16:39:00 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -154,7 +154,7 @@ bool	EventsHandler::cmdToString(std::string &str,
 	  oss << idPlayer1;
 	  oss << " " << coord1.first << " " << coord1.second;
 	}
-      else
+      else if (idPlayer1 > 0)
 	{
 	  oss << idPlayer2;
 	  oss << " " << coord2.first << " " << coord2.second;
