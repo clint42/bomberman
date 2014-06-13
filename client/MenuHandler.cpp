@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Thu Jun 12 18:21:19 2014 virol_g
+// Last update Fri Jun 13 11:59:07 2014 aurelien prieur
 //
 
 #include "MenuHandler.hpp"
@@ -62,9 +62,10 @@ bool	MenuHandler::createGame(t_game *options)
 
       	  Server::Server server(&connexionHandler);
       	  server.run();
-	  exit(0);
+	  _exit(0);
       	}
-      _signal.catchSignal(SIGCHLD, true);
+      if (!_signal.catchSignal(SIGCHLD, true))
+	return (false);
       _forked = true;
     }
   options->ipAddr = "127.0.0.1";
@@ -83,6 +84,7 @@ t_game	*MenuHandler::launchMenus()
   AMenu		*menu;
   t_game	*choice = NULL;
   int		mode;
+  bool		ret = true;
 
   mode = mainMenu();
   if (mode == 0)
@@ -101,9 +103,11 @@ t_game	*MenuHandler::launchMenus()
     {
       std::cout << "Choice received" << std::endl;
       if (mode == 0)
-	createGame(choice);
+	ret = createGame(choice);
       else if (mode == 1)
-	joinGame(choice);
+	ret = joinGame(choice);
     }
+  if (!ret)
+    return (NULL);
   return (choice);
 }

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Thu Jun 12 15:47:37 2014 julie franel
+// Last update Fri Jun 13 10:58:52 2014 aurelien prieur
 //
 
 #include "Parser.hpp"
@@ -86,13 +86,15 @@ void		Parser::parseChrono(const t_parser &_parser)
 
 void		Parser::parseCreate(const t_parser &_parser)
 {
-  size_t posx;
-  size_t posy;
+  size_t	posx;
+  size_t	posy;
+  size_t	id;
 
-  CVRT_STRING_TO_SIZET(_parser.params[1], posx);
-  CVRT_STRING_TO_SIZET(_parser.params[2], posy);
+  CVRT_STRING_TO_SIZET(_parser.params[1], id);
+  CVRT_STRING_TO_SIZET(_parser.params[2], posx);
+  CVRT_STRING_TO_SIZET(_parser.params[3], posy);
   this->_createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(posx, posy),
-								  this->_types[_parser.params.front()]));
+								  this->_types[_parser.params[0]] + id));
 }
 
 bool		Parser::parseCreate(std::list<t_parser *> &_tabParser)
