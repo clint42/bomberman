@@ -133,4 +133,11 @@ namespace	Server {
 
 }
 
+class           GameException: public ABombermanException
+{
+public:
+  GameException(const std::string &msg) throw();
+  virtual ~GameException(void) throw();
+};
+
 #endif /* !SERVER__GAME_HPP_ */

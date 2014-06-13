@@ -67,4 +67,12 @@ namespace Server {
 
 }
 
+class           ServerException: public ABombermanException
+{
+public:
+  ServerException(const std::string &msg) throw();
+  virtual ~ServerException(void) throw();
+};
+
+
 #endif /* !SERVER_HPP_ */
