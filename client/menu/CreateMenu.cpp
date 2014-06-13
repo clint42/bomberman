@@ -5,12 +5,13 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Fri Jun 13 02:03:33 2014 virol_g
+// Last update Fri Jun 13 11:57:15 2014 virol_g
 //
 
 #include	<sstream>
 #include	<fstream>
 #include	"CreateMenu.hpp"
+#include	"ReadDir.hpp"
 
 CreateMenu::CreateMenu(gdl::SdlContext &sdlContext): AMenu(sdlContext)
 {
@@ -28,10 +29,10 @@ CreateMenu::~CreateMenu()
 
 bool	CreateMenu::build()
 {
-  std::ifstream	file("./client/maps");
+  ReadDir	files("./client/maps");
   std::string	name;
 
-  if (!file)
+  if (files.initialize() == false)
     {
       std::cerr << "Unable to open maps list file" << std::endl;
       return (false);
@@ -43,11 +44,12 @@ bool	CreateMenu::build()
   			      std::pair<size_t, size_t>(80, 60),
   			      glm::vec4(0.23, 0.18, 0.52, 1.f),
   			      glm::vec4(0.93, 0.9, 0.32, 1.f));
-  while (getline(file, name))
-    _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 380),
-				       std::pair<size_t, size_t>(210, 60), name,
-				       glm::vec4(0.23, 0.18, 0.52, 1.f),
-				       glm::vec4(0.93, 0.9, 0.32, 1.f)));
+  while ((name = files.readFileName()) != "")
+    if (name != "." && name != "..")
+      _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 380),
+					 std::pair<size_t, size_t>(210, 60), name,
+					 glm::vec4(0.23, 0.18, 0.52, 1.f),
+					 glm::vec4(0.93, 0.9, 0.32, 1.f)));
   _menuBackground = new MenuBackground("./client/menu/ressources/backgroundSubMenu.tga");
   _titles.push_back(new GraphicalText("How many players ?", std::pair<size_t, size_t>(400, 60),
 				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
@@ -103,10 +105,12 @@ bool	CreateMenu::update()
 	    {
 	      if (i != static_cast<size_t>(_selected))
 		_menuElems[_selected]->hover(false);
-	      if (_menuElems[i]->getString() == "Finish" && _nbBots->getString() != "" && _nbPlayers->getString() != "")
+	      if (_menuElems[i]->getString() == "Finish")
 		{
-		  _menuElems[_selected]->hover(true);
-		  return (false);
+		  //		  _menuElems[_selected]->hover(true);
+		  i = _selected;
+		  if (_nbBots->getString() != "" && _nbPlayers->getString() != "")
+		    return (false);
 		}
 	      _selected = i;
 	      _menuElems[i]->hover(true);

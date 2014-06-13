@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Thu Jun 12 17:31:30 2014 buret_j
+## Last update Fri Jun 13 11:44:15 2014 virol_g
 ##
 
 CXX =	clang++
@@ -26,6 +26,7 @@ SRC =   client/main.cpp \
 	client/menu/MenuButton.cpp \
 	client/menu/MenuScroll.cpp \
 	client/menu/MenuBackground.cpp \
+	client/menu/ReadDir.cpp \
 	client/MapRender.cpp \
 	client/AObject.cpp \
 	client/GameEntities.cpp \
