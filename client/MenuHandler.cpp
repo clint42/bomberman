@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Fri Jun 13 15:02:38 2014 virol_g
+// Last update Fri Jun 13 15:45:58 2014 aurelien prieur
 //
 
 #include "MenuHandler.hpp"
@@ -61,7 +61,7 @@ bool	MenuHandler::createGame(t_game *options)
       	  ConnexionHandler	connexionHandler;
 	  
 	  try {
-	    Server::Server server(&connexionHandler);
+	    Server::Server server(&connexionHandler, options->serverPort);
 	    server.run();
 	  }
 	  catch (ConnexionException e) {

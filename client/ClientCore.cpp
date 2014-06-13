@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Fri Jun 13 14:01:56 2014 aurelien prieur
+// Last update Fri Jun 13 15:43:24 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -42,7 +42,7 @@ bool		ClientCore::connectServer(t_game *options)
   while (continu)
     {
       try {
-	_connexion.client(4242, options->ipAddr);
+	_connexion.client(options->serverPort, options->ipAddr);
 	std::cout << "Connexion success" << std::endl;
 	continu = false;
       }
