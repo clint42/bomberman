@@ -38,6 +38,7 @@ namespace	Server {
     Play	_params;
     Time_t	_time;
     Messenger *	_messenger;
+    Thread *	_bombThread;
 
     bool	_started;
     Time	_startedAt;
@@ -69,7 +70,8 @@ namespace	Server {
     inline std::string const &getMapMd5() const { return _map->getKey(); }
 
     Time		timeLeft() const;
-    inline bool		hasSomethingToDo() const { return !(_events.empty() || _bombs.empty()); }
+    // inline bool		hasSomethingToDo() const { return !(_events.empty() || _bombs.empty()); }
+    inline bool		hasSomethingToDo() const { return !_events.empty() || !_bombs.empty(); }
 
     void		start();
     inline bool		isStarted() const { return _started; }
@@ -81,7 +83,7 @@ namespace	Server {
       return (_started && !_paused && t > _endAt) ? true : false;
     }
 
-    inline void		addEvent(t_cmd *c) { _events.push(c); }
+    inline void		addEvent(t_cmd *c) { _events.push(c); std::cout << "SIZE ========" <<  _events.size() << std::endl;}
     inline void		addBomb(t_cmd *c) { _bombs.push(c); }
 
     static bool		_isGame;
