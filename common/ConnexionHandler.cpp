@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Thu Jun 12 19:34:23 2014 aurelien prieur
+// Last update Fri Jun 13 15:16:04 2014 julie franel
 */
 
 #include "ConnexionHandler.hpp"
@@ -188,3 +188,11 @@ ConnexionHandler::Client::perform(void (*fct)(void *, Socket *, bool b[3]),
   if (event[0] || event[1] || event[2])
     fct(param, _socket, event);
 }
+
+
+/*
+** EXCEPTION
+*/
+
+ConnexionException::ConnexionException(const std::string &m) throw() : ABombermanException(m) {}
+ConnexionException::~ConnexionException() throw() {}

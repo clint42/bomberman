@@ -6,7 +6,7 @@
 # include <map>
 # include <utility>
 # include <cstdlib>
-
+# include "Exception.hpp"
 # include "macros.hpp"
 
 class			Map
@@ -56,5 +56,20 @@ public:
   static void		generateMap();
 
 };
+
+class           MapException: public ABombermanException
+{
+public:
+  MapException(const std::string &msg) throw();
+  virtual ~MapException(void) throw();
+};
+
+class           Md5Exception: public ABombermanException
+{
+public:
+  Md5Exception(void) throw();
+  virtual ~Md5Exception(void) throw();
+};
+
 
 #endif			/* !MAP_HPP */

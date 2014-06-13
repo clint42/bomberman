@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Thu Jun 12 11:40:37 2014 aurelien prieur
+// Last update Fri Jun 13 13:27:06 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -51,7 +51,7 @@ public:
   void		addPoints(int points, int playerId);
   int		getPlayerScore(bool withoutLock = false, int nPlayer = 0);
   void		decreaseTimeLeft(float const &val);
-  float		getTimeLeft(void);
+  float		getTimeLeft(bool withoutLock = false);
   void		setTimeLeft(float const &timeLeft);
   std::pair<size_t, size_t> const	&getMapSize(void);
   void					setMapSize(std::pair<size_t, size_t> const &mapSize);

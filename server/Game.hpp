@@ -126,7 +126,7 @@ namespace	Server {
 
     void		bombExplose(Player *, t_cmd *);
     bool		exploseCase(const std::pair<size_t, size_t>, t_cmd *);
-    void		createBonus(const std::pair<size_t, size_t>, t_cmd *);
+    void		createBonus(const std::pair<size_t, size_t>, t_cmd *, int);
     void		earnBonus(Player *, int, const std::pair<size_t, size_t>);
 
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
@@ -136,5 +136,12 @@ namespace	Server {
   };
 
 }
+
+class           GameException: public ABombermanException
+{
+public:
+  GameException(const std::string &msg) throw();
+  virtual ~GameException(void) throw();
+};
 
 #endif /* !SERVER__GAME_HPP_ */

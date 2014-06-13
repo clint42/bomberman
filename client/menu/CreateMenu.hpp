@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:51:47 2014 virol_g
-// Last update Thu Jun 12 18:00:26 2014 virol_g
+// Last update Fri Jun 13 13:42:56 2014 virol_g
 //
 
 #ifndef		CREATEMENU_HPP_
@@ -21,11 +21,11 @@
 # define	P_FONT_SIZE 20
 class		CreateMenu : public AMenu
 {
-  MenuInput	*_nbPlayers;
-  MenuInput	*_nbBots;
   MenuScroll	*_selectMap;
+  std::vector<MenuInput *>	_inputs;
   std::vector<GraphicalText *>	_titles;
 
+  bool		canFinish() const;
 public:
   CreateMenu(gdl::SdlContext &sdlContext);
   ~CreateMenu();

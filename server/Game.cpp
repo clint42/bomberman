@@ -33,9 +33,9 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
   }
   if (_nbBots + _nbPlayers > _map->getNbrSlot())
     _nbBots = _map->getNbrSlot() - _nbPlayers;
-  
+
   _messenger->broadcastMessage(std::string("0 0 0 MAP ") + m);
-  
+
   // for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
   //   _players[(*it)->getPos()] = *it;
   // } // we have to retrieve players at end of countdown, not here
@@ -481,11 +481,11 @@ Server::Game::bombLeft(Player *p, t_cmd *c)
 }
 
 void
-Server::Game::createBonus(const std::pair<size_t, size_t> pos, t_cmd *c)
+Server::Game::createBonus(const std::pair<size_t, size_t> pos, t_cmd *c, int ret)
 {
   int		val = rand() % 7;
 
-  if (val == Map::B_BOMB || val == Map::B_RANGE || val == Map::B_SPEED)
+  if (ret == Map::DWALL && (val == Map::B_BOMB || val == Map::B_RANGE || val == Map::B_SPEED))
     {
       std::stringstream convert;
       this->_map->setElemAtPos(pos, val);
@@ -505,14 +505,13 @@ Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
 
   if ((ret = this->_map->getElemAtPos(pos)))
     {
-      if (ret == Map::DWALL)
+      if (ret == Map::DWALL || ret == Map::B_BOMB || ret == Map::B_RANGE || ret == Map::B_SPEED)
 	{
 	  convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
 	  c->msg += convert.str();
-	  this->createBonus(pos, c);
-	  this->_map->setElemAtPos(pos, Map::GROUND); // Mettre un rand pour bonus et Create entity bonus
+	  this->createBonus(pos, c, ret);
 	}
-      if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB)
+      if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB || ret == Map::B_BOMB || ret == Map::B_RANGE || ret == Map::B_SPEED)
 	return (false);
     }
   else
@@ -642,3 +641,12 @@ void
 Server::Game::killPlayer(Player *p) {
   (void)p;
 }
+
+
+
+/*
+** EXCEPTION
+*/
+
+GameException::GameException(const std::string &msg) throw(): ABombermanException(msg) {}
+GameException::~GameException(void) throw() {}

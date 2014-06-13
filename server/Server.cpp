@@ -14,7 +14,7 @@ Server::Server::~Server() {
 }
 
 /*
-** 
+**
 */
 
 void
@@ -68,16 +68,16 @@ Server::Server::run() {
   DEBUG("Server::server::run()", 1);
   int	timeLoop = 0;
   int   ret;
-  
+
   while (_run && (ret = _co->update(timeLoop)) >= 0) {
     DEBUG("Server::server::run() => loop", 0);
-    
+
     if (ret) {
       DEBUG("Server::server::run() => loop => je dois lire qqc", 0);
       _co->perform(&trampoline_performResult, this);
       while (!_messages.empty())
 	this->filterMsg();
-      
+
       if (!_ext.empty()) {
 	DEBUG("Server::server::run() => loop => j'ai une commande admin a regarder", 0);
 	ret = (int)this->manageAdminCommand();
@@ -85,7 +85,7 @@ Server::Server::run() {
 
       timeLoop = 0;
     }
-    
+
     if (!ret) {
       DEBUG("Server::server::run() => loop => je regarde si j'update le game", 0);
 
@@ -108,3 +108,11 @@ Server::Server::run() {
   } // ! while
   DEBUG("! Server::server::run()", -1);
 }
+
+
+/*
+** EXCEPTION
+*/
+
+ServerException::ServerException(const std::string &msg) throw(): ABombermanException(msg) {}
+ServerException::~ServerException(void) throw() {}
