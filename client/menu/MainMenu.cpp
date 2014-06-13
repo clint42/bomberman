@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Fri Jun 13 14:31:09 2014 virol_g
+// Last update Fri Jun 13 14:37:36 2014 virol_g
 //
 
 #include <iostream>
@@ -114,6 +114,6 @@ t_game		*MainMenu::getChoice() const
     return (NULL);
   options = new t_game;
   options->isHost = (_selected == 0);
-  options->isDouble = (_nbPlayers == 2) ? true : false;
+  options->isDouble = (_nbPlayers == 2) ? false : true;
   return (options);
 }
