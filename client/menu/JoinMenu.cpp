@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun 11 14:19:39 2014 virol_g
-// Last update Fri Jun 13 14:18:25 2014 virol_g
+// Last update Fri Jun 13 15:32:01 2014 virol_g
 //
 
 #include	<fstream>
@@ -37,8 +37,8 @@ bool	JoinMenu::build()
 			 std::pair<size_t, size_t>(380, 60),
 			  glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f));
   _readPort = new MenuInput(std::pair<size_t, size_t>(400, 150),
-			 std::pair<size_t, size_t>(380, 60),
-			  glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f));
+			    std::pair<size_t, size_t>(380, 60),
+			    glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f), "4242");
   _titleIP = new GraphicalText("Enter IP adress",
 			     std::pair<size_t, size_t>(400, 280),
 			     glm::vec4(0.23, 0.18, 0.52, 1.f), 20, "airstrike");

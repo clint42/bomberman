@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:29 2014 virol_g
-// Last update Fri Jun 13 01:43:33 2014 virol_g
+// Last update Fri Jun 13 15:31:07 2014 virol_g
 //
 
 #ifndef		MENUINPUT_HPP_
@@ -30,7 +30,8 @@ class		MenuInput : public IMenuElem
 public:
   MenuInput(std::pair<size_t, size_t> const &pos,
 	    std::pair<size_t, size_t> const &size,
-	    glm::vec4 const &color, const glm::vec4 &colorHover);
+	    glm::vec4 const &color, const glm::vec4 &colorHover,
+	    std::string defaultValue = "");
   ~MenuInput();
   virtual bool	initialize(std::string const &textureName);
   virtual bool	update(gdl::Clock const &clock, gdl::Input &input);
