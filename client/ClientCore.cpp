@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Fri Jun 13 16:37:45 2014 aurelien prieur
+// Last update Fri Jun 13 17:29:55 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -104,6 +104,9 @@ bool			ClientCore::initialize(t_game *options)
     delete _configurator;
     return (false);
   }
+  _gameEntities.setPlayerId(_parser->getConfig().idPlayer1, 0);
+  if (_parser->getConfig().idPlayer2 != 0)
+    _gameEntities.setPlayerId(_parser->getConfig().idPlayer2, 1);
   delete _configurator;
   return (true);
 }
@@ -215,10 +218,6 @@ bool		ClientCore::run()
   loadMap();
   while (_connexion.update(500) >= 0 && !_eventsHandler.isFinished())
     {
-      if (_gameEntities.getPlayer(false, 0) == NULL)
-	_gameEntities.setPlayer(1, 0);
-      if (_gameEntities.getPlayer(false, 1) == NULL)
-	_gameEntities.setPlayer(2, 1);
       _connexion.perform(&trampoline, this);
     }
   return (true);

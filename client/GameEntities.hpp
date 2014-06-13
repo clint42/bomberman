@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Fri Jun 13 16:32:42 2014 aurelien prieur
+// Last update Fri Jun 13 17:30:11 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -50,6 +50,7 @@ public:
   AObject const	*getPlayer(bool withoutLock = false, int nPlayer = 0);
   std::pair<size_t, size_t> const *getPlayerPos(int nPlayer = 0);
   int		getPlayerId(int nPlayer = 0);
+  void		setPlayerId(int id, int nPlayer = 0);
   void		addPoints(int points, int playerId);
   int		getPlayerScore(bool withoutLock = false, int nPlayer = 0);
   void		decreaseTimeLeft(float const &val);

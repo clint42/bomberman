@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Fri Jun 13 16:39:42 2014 aurelien prieur
+// Last update Fri Jun 13 17:39:41 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -295,16 +295,27 @@ int	GameEntities::getPlayerId(int nPlayer)
 std::pair<size_t, size_t> const *GameEntities::getPlayerPos(int nPlayer)
 {
   _locker.lock();
-  for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = _entities.begin();
-       it != _entities.end();
-       ++it)
+  const AObject *player = getPlayer(true, nPlayer);
+  if (player != NULL)
     {
-      if (it->second == getPlayer(nPlayer))
+      for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = _entities.begin();
+	   it != _entities.end();
+	   ++it)
 	{
-	  _locker.unlock();
-	  return (&(it->first));
+	  if (it->second == player)
+	    {
+	      _locker.unlock();
+	      return (&(it->first));
+	    }
 	}
     }
   _locker.unlock();
   return (NULL);
+}
+
+void	GameEntities::setPlayerId(int id, int nPlayer)
+{
+  _locker.lock();
+  _playersId[nPlayer] = id;
+  _locker.unlock();
 }
