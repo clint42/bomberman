@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Thu Jun 12 11:41:13 2014 aurelien prieur
+// Last update Fri Jun 13 11:27:47 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -47,9 +47,14 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
 	  return (false);
 	}
       _entities.insert(std::pair<std::pair<size_t, size_t>, AObject *>(desc.first, entity));
+      if (desc.second > PLAYER && desc.second - PLAYER == _playersId[0])
+	_player = entity;
+      else if (desc.second > PLAYER && _isDouble && desc.second - PLAYER == _playersId[1])
+	_player2 = entity;
     }
   else
     {
+      std::cout << "[CLIENT][GAMEENTITIES->addEntity]: AObject::create return NULL" << std::endl;
       _locker.unlock();
       return (false);
     }

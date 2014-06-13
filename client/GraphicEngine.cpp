@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Wed Jun 11 15:15:16 2014 aurelien prieur
+// Last update Fri Jun 13 10:15:24 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -56,7 +56,8 @@ bool	GraphicEngine::initialize()
   glm::mat4	transformation;
 
   std::cout << "Initialize Graphic engine" << std::endl;
-  this->sdlContext.start(W_WIDTH, W_HEIGHT, "Test LibGDL", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
+  this->sdlContext.start(W_WIDTH, W_HEIGHT, "Test LibGDL", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL //| SDL_WINDOW_FULLSCREEN
+		 );
   glEnable(GL_DEPTH_TEST);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   sdlContext.flush();

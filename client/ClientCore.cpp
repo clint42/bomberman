@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Thu Jun 12 23:00:06 2014 aurelien prieur
+// Last update Fri Jun 13 12:02:31 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -43,6 +43,7 @@ bool		ClientCore::connectServer(t_game *options)
     {
       try {
 	_connexion.client(4242, options->ipAddr);
+	std::cout << "Connexion success" << std::endl;
 	continu = false;
       }
       catch (ConnexionException e) {
@@ -174,7 +175,7 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
 	}
       if (_parser->getConfig().mapName != "")
 	{
-	  _map = new MapRender(_parser->getConfig().mapName);
+	  _map = new MapRender("./maps/" + _parser->getConfig().mapName);
 	  buildMapMd5(string, _parser->getConfig().idPlayer1);
 	  _configurator->pushCmd(string);
 	  if (_configurator->getOptions()->isDouble)

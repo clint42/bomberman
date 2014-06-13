@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Thu Jun 12 18:09:31 2014 virol_g
+// Last update Fri Jun 13 11:55:06 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -28,14 +28,17 @@ int	main()
 {
   srand(time(0));
 
-  Signal		signal;
+  ConnexionHandler	connexionHandler;
+  Signal		signal(&connexionHandler);
+  signal.catchSignal(SIGINT, false);
+  
   //TODO: Move to the right place. Testing purpose only.
   MenuHandler menuHandler(signal);
   t_game	*options;
 
   if ((options = (menuHandler.launchMenus())) == NULL)
     return (EXIT_FAILURE);
-  ConnexionHandler	connexionHandler;
+
   EventsHandler		eventsHandler(connexionHandler);
   GameEntities		gameEntities;
   SafeQueue<std::pair<std::pair<size_t, size_t>, int> >	createInstructs;

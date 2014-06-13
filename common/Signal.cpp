@@ -5,15 +5,19 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 09:38:46 2014 aurelien prieur
-// Last update Wed Jun 11 10:27:11 2014 aurelien prieur
+// Last update Fri Jun 13 11:46:55 2014 aurelien prieur
 //
 
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "Signal.hpp"
 
 std::map<int, bool>	Signal::signalsStatus;
+ConnexionHandler	*Signal::_connexion = NULL;
 
-Signal::Signal()
+Signal::Signal(ConnexionHandler *connexion)
 {
+  _connexion = connexion;
 }
 
 Signal::~Signal()
@@ -23,6 +27,11 @@ Signal::~Signal()
 void	Signal::sighandler(int signum)
 {
   Signal::signalsStatus[signum] = true;
+  if (signum == SIGINT)
+    {
+      if (_connexion != NULL)
+	_connexion->reset();
+    }
 }
 
 bool	Signal::catchSignal(int signum, bool ignore)
