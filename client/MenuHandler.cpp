@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Fri Jun 13 11:59:07 2014 aurelien prieur
+// Last update Fri Jun 13 13:54:58 2014 aurelien prieur
 //
 
 #include "MenuHandler.hpp"
@@ -59,9 +59,14 @@ bool	MenuHandler::createGame(t_game *options)
       if (pid == 0)
       	{
       	  ConnexionHandler	connexionHandler;
-
-      	  Server::Server server(&connexionHandler);
-      	  server.run();
+	  
+	  try {
+	    Server::Server server(&connexionHandler);
+	    server.run();
+	  }
+	  catch (ConnexionException e) {
+	    std::cerr << "Couldn't launch server: " << e.what() << std::endl;
+	  }
 	  _exit(0);
       	}
       if (!_signal.catchSignal(SIGCHLD, true))

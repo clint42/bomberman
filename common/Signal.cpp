@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 09:38:46 2014 aurelien prieur
-// Last update Fri Jun 13 11:46:55 2014 aurelien prieur
+// Last update Fri Jun 13 14:00:52 2014 aurelien prieur
 //
 
 #include <sys/types.h>
@@ -31,6 +31,7 @@ void	Signal::sighandler(int signum)
     {
       if (_connexion != NULL)
 	_connexion->reset();
+      _exit(-1);
     }
 }
 

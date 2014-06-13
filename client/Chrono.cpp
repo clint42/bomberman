@@ -5,13 +5,13 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat Jun  7 14:24:13 2014 aurelien prieur
-// Last update Wed Jun 11 13:55:05 2014 aurelien prieur
+// Last update Fri Jun 13 13:34:39 2014 aurelien prieur
 //
 
 #include "GraphicEngine.hpp"
 #include "Chrono.hpp"
 
-Chrono::Chrono()
+Chrono::Chrono(): _time(-1.f)
 {
 }
 
@@ -45,7 +45,6 @@ bool	Chrono::initialize(std::pair<size_t, size_t> const &pos)
   _geometry.pushUv(glm::vec2(1, 0));
   _geometry.build();
   _text = new GraphicalText("0", std::pair<size_t, size_t>((W_WIDTH / 2) - 100, 0), glm::vec4(1, 1, 1, 1), 50, "airstrikeBold");
-  _time = 0;
   return (true);
 }
 

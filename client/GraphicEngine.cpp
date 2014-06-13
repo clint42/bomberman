@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Fri Jun 13 10:15:24 2014 aurelien prieur
+// Last update Fri Jun 13 13:33:33 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -74,7 +74,6 @@ bool	GraphicEngine::initialize()
   this->floor.setSize(this->objects.getMapSize());
   this->floor.initialize();
   this->chrono.initialize();
-  this->chrono.setTime(60.f);
   this->scores[0] = new Score(false);
   this->scores[0]->initialize();
   if (this->objects.isDouble())
@@ -121,6 +120,8 @@ bool	GraphicEngine::update()
   this->scores[0]->update(this->objects.getPlayerScore(true, 0));
   if (this->objects.isDouble(true))
     this->scores[1]->update(this->objects.getPlayerScore(true, 1));
+  if (this->chrono.getTime() == -1.f)
+    this->chrono.setTime(this->objects.getTimeLeft(true));
   if (this->objects.isStarted(true))
     this->chrono.update(this->clock, this->eventsHandler);
   this->objects.unlock();
