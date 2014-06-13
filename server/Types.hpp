@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu Jun  5 15:57:23 2014 buret_j
-** Last update Thu Jun 12 14:22:54 2014 lafitt_g
+// Last update Fri Jun 13 15:17:12 2014 buret_j
 */
 
 #ifndef TYPES_HPP_
@@ -17,7 +17,7 @@
 namespace Server {
   struct			t_cmd{
     size_t			id;
-    size_t			date;
+    Time			date;
     std::pair<size_t, size_t>	pos;
     std::string			action;
     std::vector<std::string>	params;

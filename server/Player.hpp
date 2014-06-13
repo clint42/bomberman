@@ -6,6 +6,7 @@
 # include <iostream>
 # include <map>
 
+# include "Time.hpp"
 # include "Team.hpp"
 # include "Socket.hpp"
 
@@ -38,7 +39,7 @@ namespace Server {
     size_t	_bombsOnFloor;
     size_t	_bombRange;
 
-    size_t	_dateNextCommand;
+    Time	_dateNextCommand;
     double	_commandTimeMultiplier;// used by bonus, '1' by default. ex: 0.5 = speed increased by 2.
 
     Socket *	_socket;
@@ -71,8 +72,8 @@ namespace Server {
     inline void	  poseBomb() { if (_bombsLimit > _bombsOnFloor) _bombsOnFloor += 1; }
     inline void   destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }
 
-    inline size_t getDateNextCommand() const { return _dateNextCommand; }
-    void	  updateDateNextCommand(Action, size_t);
+    inline Time const & getDateNextCommand() const { return _dateNextCommand; }
+    void	  updateDateNextCommand(Player::Action, Time const &);
 
     inline double getCommandTimeMultiplier() const { return _commandTimeMultiplier; }
     inline void   setCommandTimeMultiplier(double m) { _commandTimeMultiplier = m;  }
