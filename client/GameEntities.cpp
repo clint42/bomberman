@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Fri Jun 13 11:27:47 2014 aurelien prieur
+// Last update Fri Jun 13 13:30:12 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -214,13 +214,15 @@ void		GameEntities::decreaseTimeLeft(float const &val)
   _locker.unlock();
 }
 
-float		GameEntities::getTimeLeft(void)
+float		GameEntities::getTimeLeft(bool withoutLock)
 {
   float		retVal;
 
-  _locker.lock();
+  if (!withoutLock)
+    _locker.lock();
   retVal = _timeLeft;
-  _locker.unlock();
+  if (!withoutLock)
+    _locker.unlock();
   return (retVal);
 }
 

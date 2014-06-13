@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Thu May 22 15:28:06 2014 buret_j
-// Last update Thu Jun 12 17:20:51 2014 buret_j
+// Last update Fri Jun 13 15:15:35 2014 julie franel
 //
 
 #ifndef CONNEXIONHANDLER_HPP_
@@ -95,9 +95,15 @@ public: // nested classes definition
 
     void		perform(void (*fct)(void *, Socket *, bool b[3]), void *param, Poll *poll);
     inline Socket *	getMasterSocket() { return _socket; }
-    
+
   }; // !Client
 
 };
+
+class           ConnexionException: public ABombermanException {
+public:
+  ConnexionException(std::string const &) throw ();
+    virtual ~ConnexionException() throw ();
+ };
 
 #endif

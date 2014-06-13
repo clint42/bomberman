@@ -34,7 +34,7 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
   }
   if (_nbBots + _nbPlayers > _map->getNbrSlot())
     _nbBots = _map->getNbrSlot() - _nbPlayers;
-  
+
   _messenger->broadcastMessage(std::string("0 0 0 MAP ") + m);
   DEBUG("! Server::Game::Game()", -1);
 }
@@ -480,7 +480,7 @@ Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
       if (ret == Map::DWALL)
 	{
 	  convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
-	  
+
 	  this->_map->setElemAtPos(pos, Map::GROUND); // Mettre un rand pour bonus et Create entity bonus
 	  c->msg += convert.str();
 	}
@@ -605,3 +605,12 @@ void
 Server::Game::killPlayer(Player *p) {
   (void)p;
 }
+
+
+
+/*
+** EXCEPTION
+*/
+
+GameException::GameException(const std::string &msg) throw(): ABombermanException(msg) {}
+GameException::~GameException(void) throw() {}

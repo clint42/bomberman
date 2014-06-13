@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun 11 14:18:25 2014 virol_g
-// Last update Thu Jun 12 18:01:31 2014 virol_g
+// Last update Fri Jun 13 14:09:23 2014 virol_g
 //
 
 #ifndef		JOINMENU_HPP_
@@ -20,7 +20,10 @@ class		JoinMenu : public AMenu
 {
   MenuButton	*_join;
   MenuInput	*_readIP;
-  GraphicalText	*_title;
+  MenuInput	*_readPort;
+  
+  GraphicalText	*_titleIP;
+  GraphicalText	*_titlePort;
 public:
   JoinMenu(gdl::SdlContext &);
   ~JoinMenu();
