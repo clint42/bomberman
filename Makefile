@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Fri Jun 13 11:44:15 2014 virol_g
+## Last update Fri Jun 13 18:23:52 2014 buret_j
 ##
 
 CXX =	clang++
@@ -52,6 +52,7 @@ SRC =   client/main.cpp \
 	common/ConnexionHandler.cpp \
 	common/Exception.cpp \
 	common/Signal.cpp \
+	common/Time.cpp	\
 	client/ThreadUI.cpp \
 	client/UI.cpp \
 \

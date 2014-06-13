@@ -11,12 +11,15 @@ Server::Player::~Player() {
 
 void
 Server::Player::updateDateNextCommand(Server::Player::Action a, Time const &date) {
+  DEBUG("Server::Player::updateDateNextCommand()", 1);
   double mult;
   if (a == MOVE)	 mult = DELAY_MULT_MOVE;
   else if (a == ORIENT)  mult = DELAY_MULT_ORIENT;
   else			 mult = DELAY_MULT_BOMB;
 
   _dateNextCommand = date - Time(0, 0, 0, (DELAY * mult / _commandTimeMultiplier));
+  std::cout << "Server::Player::updateDateNextCommand() => date is '" << _dateNextCommand << "'" << std::endl;
+  DEBUG("! Server::Player::updateDateNextCommand()", -1);
 }
 
 bool Server::Player::_isInit = false;
