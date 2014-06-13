@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Fri Jun 13 11:57:15 2014 virol_g
+// Last update Fri Jun 13 12:10:27 2014 virol_g
 //
 
 #include	<sstream>
@@ -29,7 +29,7 @@ CreateMenu::~CreateMenu()
 
 bool	CreateMenu::build()
 {
-  ReadDir	files("./client/maps");
+  ReadDir	files("./maps");
   std::string	name;
 
   if (files.initialize() == false)
