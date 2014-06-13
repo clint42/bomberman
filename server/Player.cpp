@@ -10,15 +10,13 @@ Server::Player::~Player() {
 }
 
 void
-Server::Player::updateDateNextCommand(Server::Player::Action a, size_t date) {
+Server::Player::updateDateNextCommand(Server::Player::Action a, Time const &date) {
   double mult;
   if (a == MOVE)	 mult = DELAY_MULT_MOVE;
   else if (a == ORIENT)  mult = DELAY_MULT_ORIENT;
   else			 mult = DELAY_MULT_BOMB;
 
-  _dateNextCommand = (date - (DELAY * mult / _commandTimeMultiplier) < 0)
-    ? 0
-    : (date - (DELAY * mult / _commandTimeMultiplier));
+  _dateNextCommand = date - Time(0, 0, 0, (DELAY * mult / _commandTimeMultiplier));
 }
 
 bool Server::Player::_isInit = false;

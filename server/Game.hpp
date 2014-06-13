@@ -5,8 +5,8 @@
 # define RESPAWN_DELAY 5 // (in sec)
 
 # include <sstream>
-# include <sys/time.h>
 
+# include "Time.hpp"
 # include "Map.hpp"
 # include "Team.hpp"
 # include "Player.hpp"
@@ -25,7 +25,7 @@ namespace	Server {
   public:
 
     typedef enum { LAST_MAN_STANDING = 0, FREE_FOR_ALL, TEAM_DEATH_MATCH, TEAM_SURVIVOR } Type;
-    typedef enum { SHORT = 1, MEDIUM, LONG } Time;
+    typedef enum { SHORT = 1, MEDIUM, LONG } Time_t;
     typedef struct {
       size_t numberOfTeams;  size_t numberOfPlayersPerTeam;
       size_t numberOfRounds; size_t timeOfARound;
@@ -36,14 +36,14 @@ namespace	Server {
 
     Map *	_map;
     Play	_params;
-    Time	_time;
+    Time_t	_time;
     Messenger *	_messenger;
 
     bool	_started;
-    timeval	_startedAt;
+    Time	_startedAt;
     bool	_paused;
-    timeval	_pausedAt;
-    timeval	_endAt;
+    Time	_pausedAt;
+    Time	_endAt;
 
     size_t	_nbPlayers;
     size_t	_nbBots;
@@ -68,7 +68,7 @@ namespace	Server {
     inline std::string const &getMapName() const { return _map->getFilename(); }
     inline std::string const &getMapMd5() const { return _map->getKey(); }
 
-    size_t		timeLeft() const;
+    Time		timeLeft() const;
     inline bool		hasSomethingToDo() const { return !(_events.empty() || _bombs.empty()); }
 
     void		start();
@@ -76,9 +76,9 @@ namespace	Server {
     void		pause();
     inline bool		isPaused() const { return _paused; }
     bool		isEnded() const {
-      timeval t;
-      gettimeofday(&t, NULL);
-      return (_started && !_paused && t.tv_usec > _endAt.tv_usec) ? true : false;
+      Time t(0);
+      t.now();
+      return (_started && !_paused && t > _endAt) ? true : false;
     }
 
     inline void		addEvent(t_cmd *c) { _events.push(c); }
@@ -132,5 +132,12 @@ namespace	Server {
   };
 
 }
+
+class           GameException: public ABombermanException
+{
+public:
+  GameException(const std::string &msg) throw();
+  virtual ~GameException(void) throw();
+};
 
 #endif /* !SERVER__GAME_HPP_ */

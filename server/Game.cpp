@@ -10,10 +10,11 @@ static Server::Game::Play g_Plays[] = {
 
 Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type,
 		   std::list<Player *> const &peers, Messenger *mes)
-  : _map(0), _params(g_Plays[type]), _time(static_cast<Time>(t)), _messenger(mes),
+  : _map(0), _params(g_Plays[type]), _time(static_cast<Time_t>(t)), _messenger(mes),
     _started(false), _paused(false),
     _nbPlayers(p), _nbBots(b), _round(0),
-    _peers(peers) {
+    _peers(peers)
+{
   (void)_round;
   DEBUG("Server::Game::Game()", 1);
 
@@ -33,15 +34,10 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
   }
   if (_nbBots + _nbPlayers > _map->getNbrSlot())
     _nbBots = _map->getNbrSlot() - _nbPlayers;
-  
-  _messenger->broadcastMessage(std::string("0 0 0 MAP ") + m);
-  
-  // for (std::list<Player *>::const_iterator it = peers.begin(); p && it != peers.end(); ++it, --p) {
-  //   _players[(*it)->getPos()] = *it;
-  // } // we have to retrieve players at end of countdown, not here
 
+  _messenger->broadcastMessage(std::string("0 0 0 MAP ") + m);
   DEBUG("! Server::Game::Game()", -1);
-    }
+}
 
 Server::Game::~Game() {
   delete _map;
@@ -64,12 +60,13 @@ Server::Game::bombsProcessing() {
       if (!_bombs.empty())
 	_bombs.signal();
       { // code
-	if (this->timeLeft() - c->date > 0)
-	  usleep(this->timeLeft() - c->date);
+	if (this->timeLeft() > c->date)
+	  usleep(this->timeLeft().usec() - c->date.usec());
 	if (_paused) {
 	  _bombs.push_front(c);
 	} else {
-	  if (c->action == "BOMB") c->action += " EXPLOSE";
+	  if (c->action == "BOMB")
+	    c->action += " EXPLOSE";
 	  _events.push_front(c);
 	}
       } // !code
@@ -84,44 +81,44 @@ Server::Game::start() {
   DEBUG("Server::Game::start()", 1);
   if (!_started) {
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre", 0);
-    gettimeofday(&_startedAt, NULL);
-    _endAt.tv_usec = _startedAt.tv_usec + (GAME_TIME * _time * 60 * 1000000);
-    _endAt.tv_sec = _endAt.tv_usec / 1000000;
+    _startedAt.now();
+    _endAt = _startedAt + Time(0, GAME_TIME * _time);
+
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 1", 0);
     // Thread(&Server::Game::trampoline_bombsProcessing, this); // create bombs' thread
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 2", 0);
     _started = true;
     std::stringstream ss;
-    ss << "0 0 0 STARTGAME " << this->timeLeft() / 1000000 << "\n";
+    ss << "0 0 0 STARTGAME " << this->timeLeft().sec() << "\n";
     std::cout << "<< " << ss.str() << std::endl;
     _messenger->broadcastMessage(ss.str());
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 2", 0);
   }
   else if (_paused) {
     DEBUG("Server::Game::start() => on redemarre apres une pause", 0);
-    timeval tmp;
-    gettimeofday(&tmp, NULL);
-    _endAt.tv_usec += tmp.tv_usec - _pausedAt.tv_usec;
+    Time t;
+    t.now();
+    _endAt += t - _pausedAt;
     _paused = false;
     _bombs.signal(); // unpause bomb thread (var cond)
   }
   DEBUG("! Server::Game::start()", -1);
 }
 
-size_t
+Time
 Server::Game::timeLeft() const {
   if (!_paused) {
-    timeval tmp;
-    gettimeofday(&tmp, NULL);
-    return _endAt.tv_sec - tmp.tv_sec;
+    Time tmp;
+    tmp.now();
+    return (_endAt - tmp);
   }
-  return _endAt.tv_sec - _pausedAt.tv_sec;
+  return (_endAt - _pausedAt);
 }
 
 void
 Server::Game::pause() {
   if (_started && !_paused) {
-    gettimeofday(&_pausedAt, NULL);
+    _pausedAt.now();
     _paused = true;
   }
 }
@@ -235,12 +232,15 @@ void
 Server::Game::pickPlayers(size_t nb) {
   DEBUG("Server::Game::pickPlayers()", 1);
   std::stringstream msg;
+  Time now;
+  now.now();
   for (std::list<Player *>::const_iterator it = this->_peers.begin();
        it != this->_peers.end() && nb; ++it, --nb) {
 
     if ((*it)->hasCertified()) {
       std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
       (*it)->setPos(pos.first, pos.second);
+      (*it)->updateDateNextCommand(Server::Player::ORIENT, now);
       this->_players[pos] = (*it);
       DEBUG("Server::Game::pickPlayers() => un peer est devenu un player", -1);
       msg << "0 0 0 CREATE PLAYER " << (*it)->getID() << " " << (*it)->getPosX() << " " << (*it)->getPosY() << "\n";
@@ -480,7 +480,7 @@ Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
       if (ret == Map::DWALL)
 	{
 	  convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
-	  
+
 	  this->_map->setElemAtPos(pos, Map::GROUND); // Mettre un rand pour bonus et Create entity bonus
 	  c->msg += convert.str();
 	}
@@ -605,3 +605,12 @@ void
 Server::Game::killPlayer(Player *p) {
   (void)p;
 }
+
+
+
+/*
+** EXCEPTION
+*/
+
+GameException::GameException(const std::string &msg) throw(): ABombermanException(msg) {}
+GameException::~GameException(void) throw() {}

@@ -144,3 +144,16 @@ void	Map::deleteElem(const size_t posX, const size_t posY)
 	}
     }
 }
+
+
+
+/*
+** EXCEPTION
+*/
+
+
+MapException::MapException(const std::string &msg) throw(): ABombermanException(msg) {}
+MapException::~MapException(void) throw() {}
+
+Md5Exception::Md5Exception(void) throw() : ABombermanException("Couldn't open the map") {}
+Md5Exception::~Md5Exception(void) throw() {}
