@@ -62,6 +62,8 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
 	throw MapException("Invalid block identifier");
       if (_c == ('\n' - '0'))
 	{
+	  if (_w < (width - 1))
+	    throw MapException("Map size wrong.");
 	  _w = 0;
 	  _h += 1;
 	}
