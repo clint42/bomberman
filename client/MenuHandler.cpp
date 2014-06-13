@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Fri Jun 13 13:54:58 2014 aurelien prieur
+// Last update Fri Jun 13 15:02:38 2014 virol_g
 //
 
 #include "MenuHandler.hpp"
@@ -25,23 +25,23 @@ pid_t	MenuHandler::forker() const
   return (fork());
 }
 
-int		MenuHandler::mainMenu()
+std::pair<int, bool>	MenuHandler::mainMenu()
 {
   MainMenu	menu = MainMenu(*_sdlContext);
   t_game	*options;
   int		retVal;
 
   if (!(menu.initialize()) || !(menu.build()))
-    return (-1);
+    return (std::pair<int, bool>(-1, false));
   while (menu.update())
     menu.draw();
   if ((options = menu.getChoice()) != NULL)
     {
       retVal = static_cast<int>(!options->isHost);
       delete options;
-      return (retVal);
+      return (std::pair<int, bool>(retVal, options->isDouble));
     }
-  return (-1);
+  return (std::pair<int, bool>(-1, false));
 }
 
 bool	MenuHandler::createGame(t_game *options)
@@ -90,8 +90,10 @@ t_game	*MenuHandler::launchMenus()
   t_game	*choice = NULL;
   int		mode;
   bool		ret = true;
+  std::pair<int, bool>	tmp;
 
-  mode = mainMenu();
+  tmp = mainMenu();
+  mode = tmp.first;
   if (mode == 0)
     menu = new CreateMenu(*_sdlContext);
   else if (mode == 1)
@@ -106,6 +108,7 @@ t_game	*MenuHandler::launchMenus()
   delete _sdlContext;
   if ((choice = menu->getChoice()) != NULL)
     {
+      choice->isDouble = tmp.second;
       std::cout << "Choice received" << std::endl;
       if (mode == 0)
 	ret = createGame(choice);
