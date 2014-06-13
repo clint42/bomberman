@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Thu Jun 12 18:32:31 2014 virol_g
+// Last update Fri Jun 13 02:03:33 2014 virol_g
 //
 
 #include	<sstream>
@@ -14,8 +14,6 @@
 
 CreateMenu::CreateMenu(gdl::SdlContext &sdlContext): AMenu(sdlContext)
 {
-  //_sdlContext = sdlContext;
-  // _sdlStarted = true;
 }
 
 CreateMenu::~CreateMenu()
@@ -46,12 +44,10 @@ bool	CreateMenu::build()
   			      glm::vec4(0.23, 0.18, 0.52, 1.f),
   			      glm::vec4(0.93, 0.9, 0.32, 1.f));
   while (getline(file, name))
-    {
-      _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 380),
-					 std::pair<size_t, size_t>(210, 60), name,
-					 glm::vec4(0.23, 0.18, 0.52, 1.f),
-					 glm::vec4(0.93, 0.9, 0.32, 1.f)));
-    }
+    _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 380),
+				       std::pair<size_t, size_t>(210, 60), name,
+				       glm::vec4(0.23, 0.18, 0.52, 1.f),
+				       glm::vec4(0.93, 0.9, 0.32, 1.f)));
   _menuBackground = new MenuBackground("./client/menu/ressources/backgroundSubMenu.tga");
   _titles.push_back(new GraphicalText("How many players ?", std::pair<size_t, size_t>(400, 60),
 				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
@@ -80,6 +76,7 @@ bool	CreateMenu::build()
 				      std::pair<size_t, size_t>(135, 50),
 				      "Long", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
+  _selected = 2;
   return (true);
 }
 
@@ -104,14 +101,20 @@ bool	CreateMenu::update()
 	      static_cast<size_t>(mouse.y) > _menuElems[i]->getPos().second &&
 	      static_cast<size_t>(mouse.y) < _menuElems[i]->getPos().second + _menuElems[i]->getSize().second)
 	    {
-	      if (_menuElems[i]->getString() == "Finish" && _nbBots->getString() != "" && _nbPlayers->getString() != "")
-		return (false);
 	      if (i != static_cast<size_t>(_selected))
+		_menuElems[_selected]->hover(false);
+	      if (_menuElems[i]->getString() == "Finish" && _nbBots->getString() != "" && _nbPlayers->getString() != "")
 		{
-		  _menuElems[_selected]->hover(false);
+		  _menuElems[_selected]->hover(true);
+		  return (false);
 		}
 	      _selected = i;
 	      _menuElems[i]->hover(true);
+	    }
+	  if (_nbBots->isHover() == true || _nbPlayers->isHover() == true)
+	    {
+	      _nbBots->hover(false);
+	      _nbPlayers->hover(false);
 	    }
 	  if (static_cast<size_t>(mouse.x) > _nbBots->getPos().first &&
 	      static_cast<size_t>(mouse.x) < _nbBots->getPos().first + _nbBots->getSize().first &&

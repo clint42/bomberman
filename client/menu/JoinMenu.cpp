@@ -5,15 +5,13 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun 11 14:19:39 2014 virol_g
-// Last update Thu Jun 12 18:38:43 2014 virol_g
+// Last update Thu Jun 12 19:00:44 2014 virol_g
 //
 
 #include	"JoinMenu.hpp"
 
 JoinMenu::JoinMenu(gdl::SdlContext &sdlContext): AMenu(sdlContext)
 {
-  // this->_sdlContext = sdlContext;
-  // this->_sdlStarted = true;
 }
 
 JoinMenu::~JoinMenu()

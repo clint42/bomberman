@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:35 2014 virol_g
-// Last update Thu Jun 12 18:18:11 2014 virol_g
+// Last update Fri Jun 13 01:43:56 2014 virol_g
 //
 
 #include	"MenuInput.hpp"
@@ -121,4 +121,9 @@ std::pair<size_t, size_t>	MenuInput::getPos() const
 std::pair<size_t, size_t>	MenuInput::getSize() const
 {
   return (_size);
+}
+
+bool				MenuInput::isHover() const
+{
+  return (_hover);
 }

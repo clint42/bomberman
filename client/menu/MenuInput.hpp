@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun  4 18:35:29 2014 virol_g
-// Last update Thu Jun 12 18:15:09 2014 virol_g
+// Last update Fri Jun 13 01:43:33 2014 virol_g
 //
 
 #ifndef		MENUINPUT_HPP_
@@ -40,6 +40,7 @@ public:
 
   std::pair<size_t, size_t>	getPos() const;
   std::pair<size_t, size_t>	getSize() const;
+  bool				isHover() const;
 };
 
 #endif		// MENUINPUT_HPP_

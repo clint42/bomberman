@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 10:57:53 2014 aurelien prieur
-// Last update Thu Jun 12 18:02:28 2014 virol_g
+// Last update Thu Jun 12 18:59:52 2014 virol_g
 //
 
 #ifndef AMENU_HPP_
@@ -30,7 +30,7 @@ struct		t_game
   std::string   mapName;
   size_t        nbPlayers;
   size_t        nbBots;
-  size_t        timeGame; // 0 : short; 1 : medium; 2 : long
+  size_t        timeGame;
   std::string	ipAddr;
   bool		isHost;
   bool		isDouble;

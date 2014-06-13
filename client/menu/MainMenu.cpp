@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Thu Jun 12 18:25:32 2014 virol_g
+// Last update Fri Jun 13 01:56:13 2014 virol_g
 //
 
 #include <iostream>
@@ -16,7 +16,6 @@
 
 MainMenu::MainMenu(gdl::SdlContext &sdlContext): AMenu(sdlContext), _nbPlayers(2)
 {
-  // this->_sdlStarted = false;
 }
 
 MainMenu::~MainMenu()
@@ -37,11 +36,11 @@ bool	MainMenu::build()
 				      std::pair<size_t, size_t>(270, 60),
 				      "Join game", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(100, 500), 
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(60, 500), 
 				      std::pair<size_t, size_t>(100, 60),
 				      "No", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike", true));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(200, 500),
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(160, 500),
 				      std::pair<size_t, size_t>(100, 60),
 				      "Yes", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
@@ -49,8 +48,8 @@ bool	MainMenu::build()
 				      std::pair<size_t, size_t>(250, 60),
 				      "Next", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
-  _title = new GraphicalText("Multiplayer ?", std::pair<size_t, size_t>(50, 480),
-			     glm::vec4(0.f, 0.f, 1.f, 1.f), 20, "airstrike");
+  _title = new GraphicalText("Multiplayer ?", std::pair<size_t, size_t>(50, 470),
+			     glm::vec4(0.51, 0.53, 0.85, 1.f), 20, "airstrike");
   return (true);
 }
 
