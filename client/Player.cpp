@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:30 2014 aurelien prieur
-// Last update Wed Jun 11 14:36:32 2014 aurelien prieur
+// Last update Fri Jun 13 18:29:49 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -14,15 +14,45 @@
 
 Player::Player(int id): AObject(id)
 {
+  genColor();
 }
 
 Player::~Player()
 {
 }
 
-float	Player::genColorComponent(void) const
+void	Player::genColor(void)
 {
-  return (0.5);
+  // double hue = rand() + 0.618033988749895;
+  // hue -= (size_t)hue;
+
+  // size_t hueRounded = hue * 6;
+  // double saturation = 0.5;
+  // double value = 0.95;
+  // double f, p, q, t;
+
+  // f = hue * 6 - hueRounded;
+  // p = value * (1 - saturation);
+  // q = value * (1 - f * saturation);
+  // t = value * (1 - (1 - f) * saturation);
+
+  _color.r = static_cast<float>(rand() % 255) / 255.f;
+  _color.g = static_cast<float>(rand() % 255) / 255.f;
+  _color.b = static_cast<float>(rand() % 255) / 255.f;
+  _color.a = 1;
+  // _color.r = hueRounded == 0 || hueRounded == 5 ? value
+  //   : hueRounded == 1 ?                         q
+  //   : hueRounded == 2 || hueRounded == 3 ?      p
+  //   :   t;
+  // _color.g = (hueRounded == 0 ?                     t
+  // 	    : hueRounded == 1 || hueRounded == 2 ?        value
+  // 	    : hueRounded == 3 ?                           q
+  // 	    :     p);
+  // _color.b = (hueRounded == 0 || hueRounded == 1 ? p
+  // 	    : hueRounded == 3 || hueRounded == 4 ?        value
+  // 	    : hueRounded == 2 ?                           t
+  // 	    :     q);
+  // _color.a = 1;
 }
 
 bool	Player::initialize(std::pair<size_t, size_t> const &pos)
@@ -94,6 +124,8 @@ bool	Player::update(gdl::Clock const &clock, EventsHandler const &events)
 
 void	Player::draw(gdl::AShader &shader, gdl::Clock const &clock)
 {
+  shader.setUniform("color", _color);
   _model.draw(shader, getTransformation(), clock.getElapsed());
+  shader.setUniform("color", glm::vec4(1, 1, 1, 1));
 }
 
