@@ -10,7 +10,7 @@ static Server::Game::Play g_Plays[] = {
 
 Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type,
 		   std::list<Player *> const &peers, Messenger *mes)
-  : _map(0), _params(g_Plays[type]), _time(static_cast<Time_t>(t)), _messenger(mes),
+  : _map(0), _params(g_Plays[type]), _time(static_cast<Time_t>(t)), _messenger(mes), _bombThread(0),
     _started(false), _paused(false),
     _nbPlayers(p), _nbBots(b), _round(0),
     _peers(peers)
@@ -53,7 +53,9 @@ void
 Server::Game::bombsProcessing() {
   t_cmd *	c;
 
+  DEBUG("Server::Game::bombsProcessing", 1);
   while (!this->isEnded()) {
+    DEBUG("Server::Game:: TEST", 0);
     if (_paused || !_bombs.tryPop(&c)) {
       _bombs.wait();
     } else {
@@ -73,7 +75,7 @@ Server::Game::bombsProcessing() {
       // delete c; // pas delete puisqu'on repush !! sigsegf autrement...
     }
   }
-
+  DEBUG("!Server::Game::bombsProcessing", -1);
 }
 
 void
@@ -85,7 +87,7 @@ Server::Game::start() {
     _endAt = _startedAt + Time(0, GAME_TIME * _time);
 
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 1", 0);
-    // Thread(&Server::Game::trampoline_bombsProcessing, this); // create bombs' thread
+    _bombThread = new Thread(&Server::Game::trampoline_bombsProcessing, this); // create bombs' thread
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 2", 0);
     _started = true;
     std::stringstream ss;
@@ -172,13 +174,25 @@ Server::Game::update() {
 
     Player *p = _players[c->pos];
     if ((!p || p->getID() != c->id) && c->action == "BOMB EXPLOSE")
+      {
       p = this->findPlayerByID(c->id);
-    if (!p || p->getID() != c->id) {
-      DEBUG("Server::Game::update() => player not found", 0);
-      delete c;
-      DEBUG("! Server::Game::update()", -1);
-      return ;
-    }
+      	DEBUG("Server::Game::update() => Find player by ID", 0);
+      }
+    if (!p || p->getID() != c->id)
+      {
+	DEBUG("Server::Game::update() => player not found", 0);
+	if (!p)
+	  {
+	    DEBUG("Server::Game::update() => P faux", 0);
+	  }
+        else if (p->getID() != c->id)
+	  {
+	    DEBUG("Server::Game::update() => ID incorrect", 0);
+	  }
+	delete c;
+	DEBUG("! Server::Game::update()", -1);
+	return ;
+      }
 
     if (this->process(c, p)) {
       DEBUG("Server::Game::update() => process returned true", 0);

@@ -75,8 +75,10 @@ Server::Server::run() {
     if (ret) {
       DEBUG("Server::server::run() => loop => je dois lire qqc", 0);
       _co->perform(&trampoline_performResult, this);
-      while (!_messages.empty())
+      while (!_messages.empty()) {
 	this->filterMsg();
+	ret = 0;
+      }
 
       if (!_ext.empty()) {
 	DEBUG("Server::server::run() => loop => j'ai une commande admin a regarder", 0);
