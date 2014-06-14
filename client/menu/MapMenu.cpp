@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 20:24:40 2014 virol_g
-// Last update Sat Jun 14 19:21:58 2014 virol_g
+// Last update Sat Jun 14 19:53:09 2014 virol_g
 //
 
 #include	"MapMenu.hpp"
@@ -154,7 +154,7 @@ std::string	MapMenu::getMapName() const
   for (size_t i = 0; i < _menuElems.size(); ++i)
     {
       if (_titles[i]->getString() == "Map name")
-	return _menuElems[i]->getString();
+	return (_menuElems[i]->getString() + ".map");
     }
   return ("");
 }
