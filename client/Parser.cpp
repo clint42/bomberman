@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sat Jun 14 18:38:39 2014 julie franel
+// Last update Sat Jun 14 18:50:53 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -80,7 +80,7 @@ void		Parser::parseMove(const t_parser &_parser)
 
   this->_gameEntities.moveEntity(_parser.pos, this->_dir[_parser.params.front()]);
   ++nbMove;
-  std::cout << "[CLIENT]: NBMOVE: " << nbMove << std::endl;
+  // std::cout << "[CLIENT]: NBMOVE: " << nbMove << std::endl;
 }
 
 void		Parser::parseChrono(const t_parser &_parser)
@@ -97,7 +97,7 @@ void		Parser::parseCreate(const t_parser &_parser)
   size_t	posy;
   size_t	id;
 
-  std::cout << "[CLIENT]: Parser::parseCreate"  << std::endl;
+  // std::cout << "[CLIENT]: Parser::parseCreate"  << std::endl;
   CVRT_STRING_TO_SIZET(_parser.params[1], id);
   CVRT_STRING_TO_SIZET(_parser.params[2], posx);
   CVRT_STRING_TO_SIZET(_parser.params[3], posy);
@@ -110,7 +110,7 @@ bool		Parser::parseCreate(std::list<t_parser *> &_tabParser)
   std::list<std::pair<std::pair<size_t, size_t>, int> >		_list;
   bool ret = false;
 
-  std::cout << "[CLIENT]: Parser::parseCreate"  << std::endl;
+  // std::cout << "[CLIENT]: Parser::parseCreate"  << std::endl;
   for (std::list<t_parser *>::iterator it = _tabParser.begin(); it != _tabParser.end(); ++it)
     {
       if ((*it)->action.compare("CREATE") == 0)
@@ -218,8 +218,8 @@ Parser::t_parser	*Parser::parser(std::string cmd)
   size_t	posy;
   t_parser	*_parser = new t_parser;
 
-  std::cout << "======================================> " << std::endl;
-  std::cout << "[" << cmd << "]" << std::endl;
+  // std::cout << "======================================> " << std::endl;
+  // std::cout << "[" << cmd << "]" << std::endl;
   pos1 = cmd.find(" "); // recup id
   CVRT_STRING_TO_SIZET(cmd.substr(0, pos1), _parser->id);
   pos2 = cmd.find(" ", pos1 + 1); // recup posx
@@ -263,7 +263,7 @@ void		Parser::handleActions(std::list<t_parser *> &_tabParser)
 	  itTab = _tabParser.begin();
 	  ret = false;
 	}
-      this->displayParserStruct((**itTab));
+      // this->displayParserStruct((**itTab));
     }
 }
 

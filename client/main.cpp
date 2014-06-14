@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Fri Jun 13 14:46:54 2014 julie franel
+// Last update Sat Jun 14 18:43:52 2014 julie franel
 //
 
 #include <cstdlib>
@@ -47,6 +47,10 @@ int	main()
   std::cout << "SERVERPORT= " << options->serverPort << std::endl;
   std::cout << "ISHOST= " << std::boolalpha << options->isHost << std::endl;
   std::cout << "ISDOUBLE= " << std::boolalpha << options->isDouble << std::endl;
+  std::cout << "GENERATEMAP= " << std::boolalpha << options->createMap << std::endl;
+  std::cout << "WIDTHMAP= " << options->widthMap << std::endl;
+  std::cout << "HEIGHTMAP= " << options->heightMap << std::endl;
+  std::cout << "PLAYERSMAP= " << options->playersMap << std::endl;
 
 
   EventsHandler		eventsHandler(connexionHandler);
