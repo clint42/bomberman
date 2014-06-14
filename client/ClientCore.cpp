@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sat Jun 14 17:13:39 2014 aurelien prieur
+// Last update Sat Jun 14 17:50:02 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -235,7 +235,7 @@ void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
   if (b[0])
     {
       this->_socket->read(string);
-      std::cout << string << std::endl;
+      std::cout << "[CLIENT]receiving data: " << string << std::endl;
       this->_parser->run(string);
     }
   if (b[1])
@@ -247,7 +247,7 @@ void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
 				       (player1Pos != NULL) ? *player1Pos : std::pair<size_t, size_t>(0, 0),
 				       _gameEntities.getPlayerId(1),
 				       (player2Pos != NULL) ? *player2Pos : std::pair<size_t, size_t>(0, 0));
-      std::cout << "Sending data: " << string << std::endl;
+      std::cout << "[CLIENT]Sending data: " << string << std::endl;
       _connexion.getMasterSocket()->write(string);
       _connexion.unwatchEventOnSocket(_connexion.getMasterSocket(), POLLOUT);
     }
