@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sat Jun 14 17:56:53 2014 aurelien prieur
+// Last update Sat Jun 14 18:15:26 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -30,6 +30,9 @@ Parser::Parser(GameEntities &gameEntities,
   this->_types["BOMB"] = BOMB;
   this->_types["FIRE"] = FIRE;
   this->_types["PLAYER"] = PLAYER;
+  this->_types["B_BOMB"] = BONUSBOMB;
+  this->_types["B_SPEED"] = BONUSSPEED;
+  this->_types["B_FIRE"] = BONUSRANGE;
 
   this->_fct["MOVE"] = &Parser::parseMove;
   this->_fct["CREATE"] = &Parser::parseCreate;
@@ -42,7 +45,7 @@ Parser::Parser(GameEntities &gameEntities,
   this->_fct["WELCOME"] = &Parser::parseWelcome;
   this->_fct["MAP"] = &Parser::parseMap;
 
-  this->_tabFct["CREATE"] = &Parser::parseDestroy;
+  this->_tabFct["CREATE"] = &Parser::parseCreate;
   this->_tabFct["DESTROY"] = &Parser::parseDestroy;
 
   this->_config.idPlayer1 = 0;
@@ -107,6 +110,7 @@ bool		Parser::parseCreate(std::list<t_parser *> &_tabParser)
   std::list<std::pair<std::pair<size_t, size_t>, int> >		_list;
   bool ret = false;
 
+  std::cout << "[CLIENT]: Parser::parseCreate"  << std::endl;
   for (std::list<t_parser *>::iterator it = _tabParser.begin(); it != _tabParser.end(); ++it)
     {
       if ((*it)->action.compare("CREATE") == 0)
@@ -214,6 +218,8 @@ Parser::t_parser	*Parser::parser(std::string cmd)
   size_t	posy;
   t_parser	*_parser = new t_parser;
 
+  std::cout << "======================================> " << std::endl;
+  std::cout << "[" << cmd << "]" << std::endl;
   pos1 = cmd.find(" "); // recup id
   CVRT_STRING_TO_SIZET(cmd.substr(0, pos1), _parser->id);
   pos2 = cmd.find(" ", pos1 + 1); // recup posx
@@ -257,6 +263,7 @@ void		Parser::handleActions(std::list<t_parser *> &_tabParser)
 	  itTab = _tabParser.begin();
 	  ret = false;
 	}
+      this->displayParserStruct((**itTab));
     }
 }
 
@@ -266,8 +273,8 @@ void		Parser::runSplit(std::string string)
   size_t	pos2 = -1;
   t_parser	*_parser;
 
-  if (string.size() <= 3)
-    return ;
+  // if (string.size() <= 3)
+  //   return ;
   if ((pos1 = string.find(";", pos2 + 1)) != std::string::npos)
     {
       std::list<t_parser *>	_tabParser;
