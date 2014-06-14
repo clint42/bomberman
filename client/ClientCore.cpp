@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sat Jun 14 19:14:06 2014 julie franel
+// Last update Sun Jun 15 01:07:40 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -27,7 +27,7 @@ ClientCore::ClientCore(GameEntities &gameEntities, EventsHandler &eventsHandler,
   _createInstructs(createInstructs),
   _map(NULL)
 {
-  this->_parser = new Parser(this->_gameEntities, this->_createInstructs);
+  this->_parser = new Parser(this->_gameEntities, this->_createInstructs, this->_eventsHandler);
 }
 
 ClientCore::~ClientCore()

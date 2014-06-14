@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 16:01:34 2014 aurelien prieur
-// Last update Fri Jun 13 18:39:37 2014 aurelien prieur
+// Last update Sun Jun 15 01:17:15 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -36,7 +36,8 @@ bool			EventsHandler::PlayerEvent::hasOccured(keyStatus ks) const
   return (_ks & ks);
 }
 
-EventsHandler::EventsHandler(ConnexionHandler &connexionHandler): _connexion(connexionHandler), _finished(false)
+EventsHandler::EventsHandler(ConnexionHandler &connexionHandler): _connexion(connexionHandler), _finished(false),
+								  _endGame(false)
 {
   _lastEvent.insert(std::pair<int, bool>(SDLK_LEFT, false));
   _lastEvent.insert(std::pair<int, bool>(SDLK_RIGHT, false));
@@ -165,4 +166,14 @@ bool	EventsHandler::cmdToString(std::string &str,
   str = oss.str();
   _mutex.unlock();
   return (true);
+}
+
+void		EventsHandler::endGame(void)
+{
+  _endGame = true;
+}
+
+bool		EventsHandler::isEndGame(void) const
+{
+  return (_endGame);
 }
