@@ -128,16 +128,16 @@ void		Map::generateMap(const size_t width, const size_t height,
   size_t	x = 0;
   size_t	y = 0;
   std::ofstream	file;
-  std::string	name = "maps/" + filename + ".map";
+  std::string	name = "maps/" + filename;
 
   if (Map::_isMapInit == false)
     {
       Map::_isMapInit = true;
-      Map::_mapTypes[0] = Map::GROUND;
-      Map::_mapTypes[1] = Map::DWALL;
-      Map::_mapTypes[2] = Map::GROUND;
-      Map::_mapTypes[3] = Map::DWALL;
-      Map::_mapTypes[4] = Map::GROUND;
+      Map::_mapTypes.push_back(Map::GROUND);
+      Map::_mapTypes.push_back(Map::DWALL);
+      Map::_mapTypes.push_back(Map::GROUND);
+      Map::_mapTypes.push_back(Map::DWALL);
+      Map::_mapTypes.push_back(Map::GROUND);
     }
   file.open(name.c_str(), std::ios::out | std::ios::trunc);
   if (file.is_open())
