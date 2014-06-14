@@ -63,6 +63,8 @@ Server::Server::trampoline_performResult(void *p, Socket *s, bool b[3]) {
   }
 }
 
+#define TIMELOOP -1
+
 void
 Server::Server::run() {
   DEBUG("Server::server::run()", 1);
@@ -71,6 +73,8 @@ Server::Server::run() {
 
   while (_run && (ret = _co->update(timeLoop)) >= 0) {
     DEBUG("Server::server::run() => loop", 0);
+    if (_game)
+      _game->updateTimeLeft();
 
     if (ret) {
       DEBUG("Server::server::run() => loop => je dois lire qqc", 0);
@@ -96,7 +100,7 @@ Server::Server::run() {
 	_game->update();
       }
       if (!_game || _game->isPaused() || !_game->hasSomethingToDo()) {
-	timeLoop = _messenger.hasSomethingToSay() ? 0 : -1; // set it back to 1000msec
+	timeLoop = _messenger.hasSomethingToSay() ? 0 : TIMELOOP;
 	DEBUG("Server::server::run() => loop => j'ai rien a faire en fait", 0);
       }
       else {

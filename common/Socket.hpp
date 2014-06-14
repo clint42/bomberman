@@ -6,6 +6,7 @@
 # include <ext/stdio_filebuf.h>
 # include <vector>
 # include <string>
+# include "Time.hpp"
 # include "macros.hpp"
 
 class Socket {
@@ -28,7 +29,9 @@ public:
   ~Socket() { delete _in; delete _out; delete __in; delete __out; close(_fd); }
 
   inline int  getFd() const { return _fd; }
-  inline void write(std::string const &toWrite) { *_out << toWrite << std::flush; std::cout << "WRITED: " << toWrite << std::endl;}
+  inline void write(std::string const &toWrite) { *_out << toWrite << std::flush;
+    std::cout << Time().now() << std::endl;
+  }
 
   inline void getLine(std::string &toFill) { std::getline(*_in, toFill); }
   void	      getLine(std::vector<std::string *> &toFill) {
