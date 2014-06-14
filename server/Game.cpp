@@ -30,7 +30,6 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
   }
   if (_nbPlayers > _map->getNbrSlot()) {
     _nbPlayers = _map->getNbrSlot();
-    p = _nbPlayers;
   }
   if (_nbBots + _nbPlayers > _map->getNbrSlot())
     _nbBots = _map->getNbrSlot() - _nbPlayers;
@@ -56,19 +55,14 @@ Server::Game::bombsProcessing() {
 
   DEBUG("Server::Game::bombsProcessing", 1);
   while (!_ended) {
-    DEBUG("Server::Game:: TEST0", 0);
     if (_paused || !_bombs.tryPop(&c)) {
-      DEBUG("Server::Game:: TEST1", 0);
       // _bombs.wait();
       usleep(75000);
     } else {
-      DEBUG("Server::Game:: TEST2", 0);
       if (!_bombs.empty()) {
-	DEBUG("Server::Game:: TEST3", 0);
 	// _bombs.signal();
       }
       { // code
-	DEBUG("Server::Game:: TEST4", 0);
 	if (this->timeLeft() > c->date) {
 	  std::cout << "[SERVER] Server::Game::bombsProcessing() => time of usleep " << this->timeLeft().inUsec() - c->date.inUsec() << "." << std::endl;
 	  usleep(this->timeLeft().inUsec() - c->date.inUsec());
@@ -79,7 +73,6 @@ Server::Game::bombsProcessing() {
 	if (_paused) {
 	  _bombs.push_front(c);
 	} else {
-	  DEBUG("Server::Game:: TEST5", 0);
 	  if (c->action == "BOMB")
 	    c->action += " EXPLOSE";
 	  _events.push_front(c);
@@ -165,6 +158,7 @@ Server::Game::update() {
       return ;
     }
     else {
+      std::cout << "============>>>>>> " << this->countPeersThatCertified() << "," << _nbPlayers << std::endl;
       this->pickPlayers(_nbPlayers);
       this->start();
     }
