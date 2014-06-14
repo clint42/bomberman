@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Sat Jun 14 18:43:52 2014 julie franel
+// Last update Sat Jun 14 23:00:13 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -68,9 +68,6 @@ int	main()
 
   ThreadUI	threadUI(eventsHandler, gameEntities, createInstructs);
   core.run();
-
-  //TODO: add failure condition to return correct value
-
-  //threadUI.join();
+  threadUI.join();
   return (EXIT_SUCCESS);
 }

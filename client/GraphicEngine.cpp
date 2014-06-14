@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sat Jun 14 22:55:10 2014 aurelien prieur
+// Last update Sun Jun 15 00:13:29 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -15,6 +15,7 @@
 #include "Bonus.hpp"
 #include "Fire.hpp"
 #include "Bomb.hpp"
+#include "LoadBar.hpp"
 
 GraphicEngine::GraphicEngine(EventsHandler &eventsHandler,
 			     GameEntities &gameEntities,
@@ -73,7 +74,14 @@ bool	GraphicEngine::initialize()
     }
   shader.bind();
   shader.setUniform("color", glm::vec4(1, 1, 1, 1));
-  if (!Fire::load() || !Bomb::load() || !Player::load())
+  LoadBar	loadBar(sdlContext, shader);
+  loadBar.initialize(std::pair<float, float>(660, 525), std::pair<float, float>(600, 30));
+  projection = glm::ortho(0.f, (float)(W_WIDTH), (float)(W_HEIGHT), 0.f, 1.f, -3.f);
+  shader.setUniform("projection", projection);
+  shader.setUniform("view", glm::mat4(1));
+  if ((loadBar.update((5.f / 30.f) * 100) && !Fire::load()) ||
+      (loadBar.update((15.f / 30.f) * 100) && !Bomb::load()) ||
+      (loadBar.update((20.f / 30.f) * 100) && !Player::load()))
     {
       std::cerr << "Error while loading models." << std::endl;
       return (false);
