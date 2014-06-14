@@ -22,7 +22,7 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
     throw GameException("Invalid parameters");
 
   try {
-    _map = new Map(std::string("./maps/") + m);
+    _map = new Map(m);
   }
   catch (MapException) {
     _map = 0;
@@ -295,7 +295,9 @@ Server::Game::bombSwitchQueue(t_cmd *c, const std::pair<size_t, size_t> pos)
 {
   t_cmd * cmd = new t_cmd;
   cmd->id = c->id;
-  cmd->date = c->date + Time(0, 0, BOMBTIME);
+  std::cout << "[SERVER] Server::Game::bomSwitchQueue() => before calcul" << c->date << std::endl;
+  cmd->date = c->date - Time(0, 0, BOMBTIME);
+  std::cout << "[SERVER] Server::Game::bomSwitchQueue() => after calcul" << cmd->date << std::endl;
   cmd->pos = pos;
   cmd->action = c->action;
   std::cout << "Avant push dans _bombs" << std::endl;
