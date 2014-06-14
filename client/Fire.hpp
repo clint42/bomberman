@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri Jun  6 18:22:29 2014 aurelien prieur
-// Last update Sat Jun 14 16:19:44 2014 aurelien prieur
+// Last update Sat Jun 14 18:55:06 2014 aurelien prieur
 //
 
 #ifndef FIRE_HPP_
@@ -17,10 +17,13 @@ class	Fire: public AObject
 {
   static gdl::Model	_preloadedModel;
   gdl::Model		_model;
+  float			_timeElapsed;
+
 public:
   Fire();
   virtual ~Fire();
   virtual bool	initialize(std::pair<size_t, size_t> const &pos = (std::pair<size_t, size_t>(0, 0)));
+  virtual bool	update(gdl::Clock const &clock, EventsHandler const &events);
   virtual void	draw(gdl::AShader &shader, gdl::Clock const &clock);
   static  bool  load(void);
 };
