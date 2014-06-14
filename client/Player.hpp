@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:42 2014 aurelien prieur
-// Last update Sat Jun 14 11:11:29 2014 aurelien prieur
+// Last update Sat Jun 14 19:20:42 2014 aurelien prieur
 //
 
 #ifndef PLAYER_HPP_
@@ -16,6 +16,7 @@
 
 class	Player: public AObject
 {
+  static gdl::Model	_preloadedModel;
   gdl::Model	_model;
   glm::vec4	_color;
   float		_speed;
@@ -31,6 +32,7 @@ public:
   virtual void	updateMovement(void);
   virtual bool	update(gdl::Clock const &clock, EventsHandler const &events);
   virtual void	draw(gdl::AShader &shader, gdl::Clock const &clock);
+  static bool	load(void);
 };
 
 #endif // !PLAYER_HPP_

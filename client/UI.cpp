@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:52:00 2014 aurelien prieur
-// Last update Wed Jun  4 17:45:34 2014 aurelien prieur
+// Last update Sat Jun 14 19:47:26 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -24,8 +24,8 @@ UI::~UI()
 
 bool	UI::run()
 {
-  _graphicEngine.initialize();
-
+  if (!_graphicEngine.initialize())
+    return (false);
   while (_graphicEngine.update())
     {
       _graphicEngine.draw();

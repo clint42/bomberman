@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sat Jun 14 19:15:49 2014 aurelien prieur
+// Last update Sat Jun 14 19:47:06 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -73,10 +73,16 @@ bool	GraphicEngine::initialize()
     }
   shader.bind();
   shader.setUniform("color", glm::vec4(1, 1, 1, 1));
-  Fire::load();
-  Bomb::load();
-  Block::loadTextures();
-  Bonus::loadTextures();
+  if (!Fire::load() || !Bomb::load() || !Player::load())
+    {
+      std::cerr << "Error while loading models." << std::endl;
+      return (false);
+    }
+  if (!Block::loadTextures() || !Bonus::loadTextures())
+    {
+      std::cerr << "Error while loading textures." << std::endl;
+      return (false);
+    }
   if (this->mkBackground() == false)
     return (false);
   this->floor.setSize(this->objects.getMapSize());

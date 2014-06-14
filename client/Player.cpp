@@ -5,12 +5,21 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:30 2014 aurelien prieur
-// Last update Sat Jun 14 15:59:46 2014 aurelien prieur
+// Last update Sat Jun 14 19:22:58 2014 aurelien prieur
 //
 
 #include <cstdlib>
 #include <iostream>
 #include "Player.hpp"
+
+gdl::Model	Player::_preloadedModel;
+
+bool	Player::load(void)
+{
+  if (!_preloadedModel.load("./client/assets/marvin.fbx"))
+    return (false);
+  return (true);
+}
 
 Player::Player(int id): AObject(id)
 {
