@@ -1,4 +1,4 @@
-B1;2802;0c#include "Server.hpp"
+#include "Server.hpp"
 
 bool Server::Game::_isInit = false;
 std::map<std::string, Server::Game::Type> Server::Game::_types;
