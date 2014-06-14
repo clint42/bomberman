@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:30 2014 aurelien prieur
-// Last update Sat Jun 14 11:29:44 2014 aurelien prieur
+// Last update Sat Jun 14 15:50:57 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -57,7 +57,7 @@ void	Player::genColor(void)
 
 bool	Player::initialize(std::pair<size_t, size_t> const &pos)
 {
-  _speed = 2.0f;
+  _speed = 3.0f;
   if (_model.load("./client/assets/marvin.fbx") == false)
     {
       std::cerr << "Couldn't load model." << std::endl;

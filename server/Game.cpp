@@ -303,9 +303,8 @@ void
 Server::Game::buildCmdCreateBomb(t_cmd *c, const std::pair<size_t, size_t> pos)
 {
   c->action = "CREATE";
-  c->params.resize(2);
-  c->params[0] = "BOMB";
-  c->params[1] = "0";
+  c->params.push_back("BOMB");
+  c->params.push_back("0");
   std::stringstream convert;
   convert << pos.first;
   c->params.push_back(convert.str());

@@ -29,11 +29,14 @@ Server::Server::readMessage(Socket *s) {
 
 void
 Server::Server::sendMessage(Socket *s) {
+  DEBUG("Server::Server::sendMessage()", 1);
   if (_messenger.hasSomethingToSay(s)) {
     std::string m;
     _messenger.retrieveMessage(s, m);
+    std::cout << "Server send : [" << m << "]" << std::endl;
     s->write(m);
   }
+  DEBUG("!Server::Server::sendMessage()", -1);
 }
 
 void
@@ -63,7 +66,7 @@ Server::Server::trampoline_performResult(void *p, Socket *s, bool b[3]) {
   }
 }
 
-#define TIMELOOP -1
+#define TIMELOOP 500
 
 void
 Server::Server::run() {
@@ -85,15 +88,15 @@ Server::Server::run() {
 	this->filterMsg();
 	ret = 0;
       }
-
       if (!_ext.empty()) {
 	DEBUG("Server::server::run() => loop => j'ai une commande admin a regarder", 0);
-	ret = (int)this->manageAdminCommand();
+	ret = 0;
+	while (!_ext.empty())
+	  ret += (int)this->manageAdminCommand();
       }
 
       timeLoop = 0;
     }
-
     if (!ret) {
       DEBUG("Server::server::run() => loop => je regarde si j'update le game", 0);
 

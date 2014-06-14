@@ -58,6 +58,7 @@ Server::Server::putCmdInQueue(t_cmd *cmd) {
   else if (((!cmd->action.compare("PAUSE") ||
 	     !cmd->action.compare("KILL")) && cmd->params.size() == 0) ||
 	   (!cmd->action.compare("CONFIG") && cmd->params.size() == 5) ||
+	   (!cmd->action.compare("WITHFRIEND") && cmd->params.size() == 1) ||
 	   (!cmd->action.compare("MD5") && cmd->params.size() == 1)) {
     this->_ext.push_back(cmd);
     DEBUG("Server::Server::putCmdInQueue() => la commande est bonne", 0);
