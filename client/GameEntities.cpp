@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Fri Jun 13 17:39:41 2014 aurelien prieur
+// Last update Sat Jun 14 11:25:04 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -67,7 +67,12 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
 bool		GameEntities::deleteEntity(std::pair<size_t, size_t> const &coord)
 {
   //TODO: Before erase elem from map, delete entity
-  _entities.erase(coord);
+  if (_entities.find(coord) != _entities.end())
+    {
+      if (_entities[coord] != NULL)
+      	delete _entities[coord];
+      _entities.erase(coord);
+    }
   return (true);
 }
 
@@ -93,7 +98,7 @@ bool				GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
   std::pair<size_t, size_t>	newCoord(coord);
   bool				ret;
 
-  _locker.lock();
+  //_locker.lock();
   ret = false;
   entity = getEntity(coord);
   if (entity != NULL)
@@ -111,7 +116,7 @@ bool				GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
       _entities.erase(coord);
       ret = true;
     }
-  _locker.unlock();
+  //_locker.unlock();
   return (ret);
 }
 

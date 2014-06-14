@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:11:27 2014 aurelien prieur
-// Last update Fri Jun 13 10:49:25 2014 aurelien prieur
+// Last update Sat Jun 14 12:35:26 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -14,6 +14,7 @@
 #include "Block.hpp"
 #include "Bomb.hpp"
 #include "Fire.hpp"
+#include "Bonus.hpp"
 
 AObject::AObject(): _id(0), _pos(0, 0, 0), _rotation(0, 0, 0), _scale(1, 1, 1), _target(0, 0, 0),
 		    _direction(DOWN), _moving(false), _moveVectors(4)
@@ -40,6 +41,10 @@ AObject	*AObject::create(int objectType)
   if (objectType == BLOCK || objectType == BOX)
     {
       return (new Block(static_cast<ObjectType>(objectType)));
+    }
+  else if (objectType >= BONUSSPEED && objectType <= BONUSBOMB)
+    {
+      return (new Bonus(static_cast<ObjectType>(objectType)));
     }
   else if (objectType == BOMB)
     {
@@ -148,7 +153,7 @@ glm::vec3 const	&AObject::getPos(void) const
   return (_pos);
 }
 
-int	AObject::getId() const
+int	AObject::getId(void) const
 {
   return (_id);
 }

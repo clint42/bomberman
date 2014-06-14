@@ -33,18 +33,18 @@ public:
 
   inline void getLine(std::string &toFill) { std::getline(*_in, toFill); }
   void	      getLine(std::vector<std::string *> &toFill) {
-    DEBUG("Socket::getLine()", 1);
+    //DEBUG("Socket::getLine()", 1);
     while (_in->peek() != -1) {
-      DEBUG("Socket::getLine() => loop", 1);
+      //DEBUG("Socket::getLine() => loop", 1);
       std::string *m = new std::string;
       std::getline(*_in, *m);
       toFill.push_back(m);
-      DEBUG("Socket::getLine() => ! loop", -1);
+      //DEBUG("Socket::getLine() => ! loop", -1);
       if (_in->peek() == '\n')
       	_in->get();
     }
     _in->clear();
-    DEBUG("! Socket::getLine()", -1);
+    //DEBUG("! Socket::getLine()", -1);
   }
   
   inline bool read(std::string &toFill) {

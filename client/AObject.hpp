@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:05:44 2014 aurelien prieur
-// Last update Sun Jun  8 16:14:15 2014 aurelien prieur
+// Last update Sat Jun 14 12:22:08 2014 aurelien prieur
 //
 
 #ifndef AOBJECT_HPP_
@@ -33,6 +33,9 @@ enum	ObjectType
     BOMB,
     FIRE,
     BOX,
+    BONUSSPEED,
+    BONUSRANGE,
+    BONUSBOMB,
     PLAYER
   };
 
@@ -50,6 +53,8 @@ protected:
   int				_id;
   glm::vec3			_pos;
   glm::vec3			_rotation;
+  glm::vec3			_nextRotation;
+  bool				_hasNextRotation;
   glm::vec3			_scale;
   glm::vec3			_target;
   EventIn			_direction;

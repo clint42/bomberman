@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:42 2014 aurelien prieur
-// Last update Fri Jun 13 18:14:07 2014 aurelien prieur
+// Last update Sat Jun 14 11:11:29 2014 aurelien prieur
 //
 
 #ifndef PLAYER_HPP_

@@ -5,13 +5,14 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Fri Jun 13 18:32:49 2014 aurelien prieur
+// Last update Sat Jun 14 12:24:45 2014 aurelien prieur
 //
 
 #include <unistd.h>
 #include <iostream>
 #include "GraphicEngine.hpp"
 #include "Block.hpp"
+#include "Bonus.hpp"
 
 GraphicEngine::GraphicEngine(EventsHandler &eventsHandler,
 			     GameEntities &gameEntities,
@@ -56,7 +57,7 @@ bool	GraphicEngine::initialize()
   glm::mat4	transformation;
 
   std::cout << "Initialize Graphic engine" << std::endl;
-  this->sdlContext.start(W_WIDTH, W_HEIGHT, "Test LibGDL", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL//| SDL_WINDOW_FULLSCREEN
+  this->sdlContext.start(W_WIDTH, W_HEIGHT, "Bomberman", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL//| SDL_WINDOW_FULLSCREEN
 		 );
   glEnable(GL_DEPTH_TEST);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -71,6 +72,7 @@ bool	GraphicEngine::initialize()
   shader.bind();
   shader.setUniform("color", glm::vec4(1, 1, 1, 1));
   Block::loadTextures();
+  Bonus::loadTextures();
   if (this->mkBackground() == false)
     return (false);
   this->floor.setSize(this->objects.getMapSize());
@@ -115,7 +117,7 @@ bool	GraphicEngine::update()
       createInstructs.tryPop(&instruct);
       objects.addEntity(instruct);
     }
-  this->objects.lock();
+  //this->objects.lock();
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
        it != this->objects.getEntities().end(); ++it)
     it->second->update(this->clock, this->eventsHandler);
@@ -126,7 +128,7 @@ bool	GraphicEngine::update()
     this->chrono.setTime(this->objects.getTimeLeft(true));
   if (this->objects.isStarted(true))
     this->chrono.update(this->clock, this->eventsHandler);
-  this->objects.unlock();
+  //this->objects.unlock();
   return (true);
 }
 
@@ -195,13 +197,13 @@ void		GraphicEngine::draw()
   glm::mat4	projection;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  this->objects.lock();
+  //this->objects.lock();
   shader.bind();
   draw2D();
   drawPlayer(0);
   if (this->objects.isDouble(true))
     drawPlayer(1);
-  this->objects.unlock();
+  //this->objects.unlock();
   this->sdlContext.flush();
 }
 

@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Tue May  6 15:00:59 2014 buret_j
-// Last update Tue May  6 17:59:37 2014 buret_j
+// Last update Fri Jun 13 17:58:19 2014 aurelien prieur
 //
 
 #include "ColorGenerator.hpp"

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Fri Jun 13 14:43:21 2014 virol_g
+// Last update Fri Jun 13 18:35:11 2014 virol_g
 //
 
 #include <iostream>
@@ -115,6 +115,5 @@ t_game		*MainMenu::getChoice() const
   options = new t_game;
   options->isHost = (_selected == 0);
   options->isDouble = (_nbPlayers == 2) ? false : true;
-  std::cout << std::boolalpha << "DEBUG" << options->isDouble << std::endl;
   return (options);
 }
