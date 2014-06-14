@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Fri Jun 13 17:30:11 2014 aurelien prieur
+// Last update Sat Jun 14 18:56:46 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -17,6 +17,7 @@
 # include "AObject.hpp"
 # include "ThreadException.hpp"
 # include "Mutex.hpp"
+# include "Fire.hpp"
 
 class	GameEntities
 {

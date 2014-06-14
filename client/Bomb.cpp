@@ -5,10 +5,19 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu Jun  5 14:24:09 2014 aurelien prieur
-// Last update Wed Jun 11 13:54:09 2014 aurelien prieur
+// Last update Sat Jun 14 19:12:07 2014 aurelien prieur
 //
 
 #include "Bomb.hpp"
+
+gdl::Model	Bomb::_preloadedModel;
+
+bool	Bomb::load(void)
+{
+  if (!_preloadedModel.load("./client/assets/bomb.fbx"))
+    return (false);
+  return (true);
+}
 
 Bomb::Bomb()
 {

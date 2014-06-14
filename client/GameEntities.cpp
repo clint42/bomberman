@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sat Jun 14 17:20:47 2014 aurelien prieur
+// Last update Sat Jun 14 18:57:23 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -51,8 +51,6 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
 	      return (false);
 	    }
 	  _entities.insert(std::pair<std::pair<size_t, size_t>, AObject *>(desc.first, entity));
-	  if (desc.second > PLAYER)
-	    std::cout << "[CLIENT]creation id: " << desc.second - PLAYER << std::endl;
 	  if (desc.second > PLAYER && desc.second - PLAYER == _playersId[0] && _player == NULL)
 	    _player = entity;
 	  if (desc.second > PLAYER && _isDouble && desc.second - PLAYER == _playersId[1] && _player2 == NULL)
@@ -67,7 +65,7 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
     }
   else
     {
-      std::cout << "Couldn't create entity: There is already something at these coords." << std::endl;
+      std::cout << "Couldn't create entity: There is already something at these coords." << std::endl; 
     }
   _locker.unlock();
   return (true);

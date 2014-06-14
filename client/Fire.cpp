@@ -5,14 +5,14 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri Jun  6 18:25:18 2014 aurelien prieur
-// Last update Sat Jun 14 16:33:01 2014 aurelien prieur
+// Last update Sat Jun 14 18:59:53 2014 aurelien prieur
 //
 
 #include "Fire.hpp"
 
 gdl::Model	Fire::_preloadedModel;
 
-Fire::Fire()
+Fire::Fire(): _timeElapsed(0.0)
 {
 }
 
@@ -39,10 +39,19 @@ bool	Fire::initialize(std::pair<size_t, size_t> const &pos)
     }
   _model.setCurrentAnim(0, true);
   this->scale(glm::vec3(0.1, 0.1, 0.1));
-  this->setPos(glm::vec3(pos.first, 1, pos.second));
+  this->setPos(glm::vec3(pos.first + 0.5, 1, pos.second + 0.5));
   return (true);
 }
 
+bool	Fire::update(gdl::Clock const &clock, __attribute__((unused))EventsHandler const &events)
+{
+  (void)(events);
+  _timeElapsed += clock.getElapsed();
+  if (_timeElapsed > 1)
+    return (false);
+  else
+    return (true);
+}
 void	Fire::draw(gdl::AShader &shader, gdl::Clock const &clock)
 {
   _model.draw(shader, getTransformation(), clock.getElapsed());
