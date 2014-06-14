@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Fri Jun 13 15:43:24 2014 aurelien prieur
+// Last update Sat Jun 14 14:01:06 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -104,6 +104,9 @@ bool			ClientCore::initialize(t_game *options)
     delete _configurator;
     return (false);
   }
+  _gameEntities.setPlayerId(_parser->getConfig().idPlayer1, 0);
+  if (_parser->getConfig().idPlayer2 != 0)
+    _gameEntities.setPlayerId(_parser->getConfig().idPlayer2, 1);
   delete _configurator;
   return (true);
 }
@@ -173,13 +176,15 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
 	  _connexion.watchEventOnSocket(_socket, POLLOUT);
 	  configSend = true;
 	}
-      if (_parser->getConfig().mapName != "")
+      if (_parser->getConfig().mapName != "" && _parser->getConfig().idPlayer1 != 0 &&
+	  (_parser->getConfig().idPlayer2 != 0 || !_configurator->getOptions()->isDouble))
 	{
 	  _map = new MapRender("./maps/" + _parser->getConfig().mapName);
 	  buildMapMd5(string, _parser->getConfig().idPlayer1);
 	  _configurator->pushCmd(string);
 	  if (_configurator->getOptions()->isDouble)
 	    {
+	      std::cout << "IDPLAYER 2 while creating md5" <<_parser->getConfig().idPlayer2 <<  std::endl;
 	      buildMapMd5(string, _parser->getConfig().idPlayer2);
 	      _configurator->pushCmd(string);
 	    }
@@ -213,12 +218,11 @@ bool		ClientCore::run()
 {
   std::cout << "[CLIENT]: RUN !!!" << std::endl;
   loadMap();
+  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(20, 20), BONUSSPEED));
+  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(15, 20), BONUSRANGE));
+  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(20, 23), BONUSBOMB));
   while (_connexion.update(500) >= 0 && !_eventsHandler.isFinished())
     {
-      if (_gameEntities.getPlayer(false, 0) == NULL)
-	_gameEntities.setPlayer(1, 0);
-      if (_gameEntities.getPlayer(false, 1) == NULL)
-	_gameEntities.setPlayer(2, 1);
       _connexion.perform(&trampoline, this);
     }
   return (true);
@@ -227,7 +231,7 @@ bool		ClientCore::run()
 void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
 {
   std::string	string;
-
+   
   if (b[2])
     {
       _eventsHandler.finish();
@@ -240,8 +244,12 @@ void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
     }
   if (b[1])
     {
-      this->_eventsHandler.cmdToString(string, 1, std::pair<size_t, size_t>(0, 0),
-				       2, std::pair<size_t, size_t>(0, 0));
+      const std::pair<size_t, size_t> *player1Pos = _gameEntities.getPlayerPos(0);
+      const std::pair<size_t, size_t> *player2Pos = _gameEntities.getPlayerPos(1);
+      this->_eventsHandler.cmdToString(string, _gameEntities.getPlayerId(0),
+				       (player1Pos != NULL) ? *player1Pos : std::pair<size_t, size_t>(0, 0),
+				       _gameEntities.getPlayerId(1),
+				       (player2Pos != NULL) ? *player1Pos : std::pair<size_t, size_t>(0, 0));
       std::cout << "Sending data: " << string << std::endl;
       _connexion.getMasterSocket()->write(string);
       _connexion.unwatchEventOnSocket(_connexion.getMasterSocket(), POLLOUT);

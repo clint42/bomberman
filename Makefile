@@ -5,7 +5,11 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
+<<<<<<< HEAD
 ## Last update Fri Jun 13 22:01:57 2014 virol_g
+=======
+## Last update Sat Jun 14 14:04:38 2014 aurelien prieur
+>>>>>>> 1e13995fdf791b81f8b38adee3045882705086ef
 ##
 
 CXX =	clang++
@@ -40,6 +44,7 @@ SRC =   client/main.cpp \
 	client/Block.cpp \
 	client/Bomb.cpp \
 	client/Fire.cpp \
+	client/Bonus.cpp \
 	client/Chrono.cpp \
 	client/Score.cpp \
 	client/FpsDisplay.cpp \
@@ -53,14 +58,18 @@ SRC =   client/main.cpp \
 	common/ConnexionHandler.cpp \
 	common/Exception.cpp \
 	common/Signal.cpp \
+	common/Time.cpp	\
 	client/ThreadUI.cpp \
 	client/UI.cpp \
 \
-	server/Server.cpp \
+	server/Server.cpp		\
 	server/Server_adminCommand.cpp	\
 	server/Server_filter.cpp	\
 	server/Server_peerConnexion.cpp \
-	server/Game.cpp \
+	server/Game.cpp			\
+	server/Game_bomb.cpp		\
+	server/Game_move.cpp		\
+	server/Game_orient.cpp		\
 	server/Player.cpp
 
 OBJ =	$(SRC:.cpp=.o)

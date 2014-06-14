@@ -28,7 +28,7 @@ Server::Server::filterMsg() {
       cur_2 = msg->find(" ", cur_1 + 1);
       this->getInformation(msg, &cmd->pos.first, cur_1 + 1, cur_2 - (cur_1 + 1));
       cur_1 = msg->find(" ", cur_2 + 1);
-      this->getInformation(msg, &cmd->pos.first, cur_2 + 1, cur_1 - (cur_2 + 1));
+      this->getInformation(msg, &cmd->pos.second, cur_2 + 1, cur_1 - (cur_2 + 1));
       cur_2 = msg->find(" ", cur_1 + 1);
       cmd->action = msg->substr(cur_1 + 1, cur_2 - (cur_1 + 1));
       while (cur_2 != std::string::npos && cur_1 != std::string::npos) {
@@ -46,7 +46,12 @@ Server::Server::filterMsg() {
 void
 Server::Server::putCmdInQueue(t_cmd *cmd) {
   DEBUG("Server::Server::putCmdInQueue()", 1);
-  if (this->_game && ((cmd->params.size() == 0 && cmd->action.compare("BOMB")) || (cmd->params.size() == 1 && (cmd->action.compare("MOVE") == 0 && (cmd->params[0].compare("UP") == 0 || cmd->params[0].compare("DOWN") == 0 || cmd->params[0].compare("LEFT") == 0 || cmd->params[0].compare("RIGHT") == 0))))) {
+  if (this->_game && ((cmd->params.size() == 0 && cmd->action == "BOMB") ||
+		      (cmd->params.size() == 1 && (cmd->action == "MOVE" &&
+						   (cmd->params[0] == "UP" ||
+						    cmd->params[0] == "DOWN" ||
+						    cmd->params[0] == "LEFT" ||
+						    cmd->params[0] == "RIGHT"))))) {
     DEBUG("Server::Server::putCmdInQueue() => c'est une commande de deplacement", 0);
     this->_game->addEvent(cmd);
   }

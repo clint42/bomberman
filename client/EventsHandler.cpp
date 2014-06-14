@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 16:01:34 2014 aurelien prieur
-// Last update Fri Jun 13 15:50:35 2014 aurelien prieur
+// Last update Fri Jun 13 18:39:37 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -65,8 +65,8 @@ EventsHandler::EventsHandler(ConnexionHandler &connexionHandler): _connexion(con
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_z,
 						EventsHandler::PlayerEvent(0, "MOVE UP", DOWN | HOLD | UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_s,
-						EventsHandler::PlayerEvent(1, "MOVE DOWN", DOWN | HOLD | UP)));
-  _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_SPACE, EventsHandler::PlayerEvent(1, "BOMB", UP)));
+						EventsHandler::PlayerEvent(0, "MOVE DOWN", DOWN | HOLD | UP)));
+  _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_SPACE, EventsHandler::PlayerEvent(0, "BOMB", UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_p, EventsHandler::PlayerEvent(-1, "PAUSE", DOWN)));
 }
 
@@ -154,7 +154,7 @@ bool	EventsHandler::cmdToString(std::string &str,
 	  oss << idPlayer1;
 	  oss << " " << coord1.first << " " << coord1.second;
 	}
-      else
+      else if (idPlayer1 > 0)
 	{
 	  oss << idPlayer2;
 	  oss << " " << coord2.first << " " << coord2.second;

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Fri Jun 13 13:30:12 2014 aurelien prieur
+// Last update Sat Jun 14 11:25:04 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -16,6 +16,8 @@ GameEntities::GameEntities(): _isDouble(false), _isStarted(false),
 			      _playerScore(0), _player2Score(0),
 			      _timeLeft(0)
 {
+  _playersId[0] = -1;
+  _playersId[1] = -1;
 }
 
 GameEntities::~GameEntities()
@@ -65,7 +67,12 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
 bool		GameEntities::deleteEntity(std::pair<size_t, size_t> const &coord)
 {
   //TODO: Before erase elem from map, delete entity
-  _entities.erase(coord);
+  if (_entities.find(coord) != _entities.end())
+    {
+      if (_entities[coord] != NULL)
+      	delete _entities[coord];
+      _entities.erase(coord);
+    }
   return (true);
 }
 
@@ -91,7 +98,7 @@ bool				GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
   std::pair<size_t, size_t>	newCoord(coord);
   bool				ret;
 
-  _locker.lock();
+  //_locker.lock();
   ret = false;
   entity = getEntity(coord);
   if (entity != NULL)
@@ -109,7 +116,7 @@ bool				GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
       _entities.erase(coord);
       ret = true;
     }
-  _locker.unlock();
+  //_locker.unlock();
   return (ret);
 }
 
@@ -278,4 +285,42 @@ bool	GameEntities::isStarted(bool withoutLock)
   if (!withoutLock)
     _locker.unlock();
   return (retVal);
+}
+
+int	GameEntities::getPlayerId(int nPlayer)
+{
+  int	retVal;
+
+  _locker.lock();
+  retVal = _playersId[nPlayer];
+  _locker.unlock();
+  return (retVal);
+}
+
+std::pair<size_t, size_t> const *GameEntities::getPlayerPos(int nPlayer)
+{
+  _locker.lock();
+  const AObject *player = getPlayer(true, nPlayer);
+  if (player != NULL)
+    {
+      for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = _entities.begin();
+	   it != _entities.end();
+	   ++it)
+	{
+	  if (it->second == player)
+	    {
+	      _locker.unlock();
+	      return (&(it->first));
+	    }
+	}
+    }
+  _locker.unlock();
+  return (NULL);
+}
+
+void	GameEntities::setPlayerId(int id, int nPlayer)
+{
+  _locker.lock();
+  _playersId[nPlayer] = id;
+  _locker.unlock();
 }

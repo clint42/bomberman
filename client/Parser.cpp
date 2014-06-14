@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Fri Jun 13 10:58:52 2014 aurelien prieur
+// Last update Sat Jun 14 11:03:47 2014 aurelien prieur
 //
 
 #include "Parser.hpp"
@@ -73,7 +73,11 @@ const Parser::t_config	&Parser::getConfig() const
 
 void		Parser::parseMove(const t_parser &_parser)
 {
+  static int	nbMove = 0;
+
   this->_gameEntities.moveEntity(_parser.pos, this->_dir[_parser.params.front()]);
+  ++nbMove;
+  std::cout << "[CLIENT]: NBMOVE: " << nbMove << std::endl;
 }
 
 void		Parser::parseChrono(const t_parser &_parser)

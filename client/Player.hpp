@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:42 2014 aurelien prieur
-// Last update Mon Jun  9 10:45:55 2014 aurelien prieur
+// Last update Sat Jun 14 11:11:29 2014 aurelien prieur
 //
 
 #ifndef PLAYER_HPP_
@@ -17,11 +17,12 @@
 class	Player: public AObject
 {
   gdl::Model	_model;
+  glm::vec4	_color;
   float		_speed;
   bool		_toDraw;
   bool		_mainAnimStarted;
   void		setAnim(EventsHandler const &events);
-  float		genColorComponent(void) const;
+  void		genColor(void);
 
 public:
   Player(int id);
