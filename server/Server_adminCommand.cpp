@@ -97,7 +97,7 @@ Server::Server::funcWithFriend(t_cmd const *cmd) {
   DEBUG("Server::Server::funcWithFriend()", 1);
   Player *p = this->findPeerByID(cmd->id);
 
-  if (p)
+  if (p && cmd->params[0] == "YES")
     {
       addPeer(p->getSocket());
   DEBUG("!Server::Server::funcWithFriend()", -1);
