@@ -286,6 +286,7 @@ Server::Game::earnBonus(Player *p, int bonus, const std::pair<size_t, size_t> po
     p->earnRange();
   else
     p->earnSpeed();
+  this->_map->deleteElem(pos);
   convert << "0 " << pos.first << " " << pos.second << " DESTROY";
   this->_messenger->broadcastMessage(convert.str());
 }
@@ -365,8 +366,6 @@ Server::Game::process(t_cmd *c, Player *p)
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::LEFT)] = &Server::Game::moveLeft;
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::UP)] = &Server::Game::orientUp;
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::RIGHT)] = &Server::Game::orientRight;
-
-
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::DOWN)] = &Server::Game::orientDown;
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::LEFT)] = &Server::Game::orientLeft;
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::UP)] = &Server::Game::bombUp;
