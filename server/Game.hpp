@@ -2,7 +2,7 @@
 # define SERVER__GAME_HPP_
 
 # define GAME_TIME     5 // (in min)	total time of a map. Must be multiplied by e_time.
-# define BOMBTIME      3 // (in sec)
+# define BOMBTIME      2 // (in sec)
 # define RESPAWN_DELAY 5 // (in sec)
 
 # include <sstream>
