@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Sat Jun 14 10:16:39 2014 buret_j
+## Last update Sat Jun 14 14:04:38 2014 aurelien prieur
 ##
 
 CXX =	clang++
@@ -39,6 +39,7 @@ SRC =   client/main.cpp \
 	client/Block.cpp \
 	client/Bomb.cpp \
 	client/Fire.cpp \
+	client/Bonus.cpp \
 	client/Chrono.cpp \
 	client/Score.cpp \
 	client/FpsDisplay.cpp \
