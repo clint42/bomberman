@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Sat Jun  7 17:58:22 2014 virol_g
-// Last update Fri Jun 13 15:18:28 2014 virol_g
+// Last update Fri Jun 13 15:39:10 2014 virol_g
 //
 
 #include	<iostream>
@@ -74,11 +74,8 @@ void		MenuScroll::draw(gdl::AShader &shader, const gdl::Clock &clock)
 {
   if (_list.size() > 0)
     {
-      if (_list.size() > 1)
-	{
-	  _scroll.draw(shader, clock);
-	  _scrollPrev.draw(shader, clock);
-	}
+      _scroll.draw(shader, clock);
+      _scrollPrev.draw(shader, clock);
       _list[_display]->draw(shader, clock);
     }
 }

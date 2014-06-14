@@ -5,28 +5,29 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:21:25 2014 aurelien prieur
-// Last update Fri Jun 13 14:56:41 2014 virol_g
+// Last update Fri Jun 13 21:57:25 2014 virol_g
 //
 
 #ifndef MENUHANDLER_HPP_
 # define MENUHANDLER_HPP_
 
-#include <unistd.h>
-#include <SdlContext.hh>
-#include "AMenu.hpp"
-#include "MainMenu.hpp"
-#include "CreateMenu.hpp"
-#include "JoinMenu.hpp"
-#include "Signal.hpp"
-#include "ConnexionHandler.hpp"
-#include "../server/Server.hpp"
+# include <unistd.h>
+# include <SdlContext.hh>
+# include "AMenu.hpp"
+# include "MainMenu.hpp"
+# include "MapMenu.hpp"
+# include "CreateMenu.hpp"
+# include "JoinMenu.hpp"
+# include "Signal.hpp"
+# include "ConnexionHandler.hpp"
+# include "../server/Server.hpp"
 
 class	MenuHandler
 {
 private:
   gdl::SdlContext	*_sdlContext;
   Signal		&_signal;
-  std::pair<int, bool> 	mainMenu();
+  t_game		*mainMenu();
   bool			createGame(t_game *options);
   bool			joinGame(t_game *options);
   pid_t			forker() const;

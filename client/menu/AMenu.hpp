@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 10:57:53 2014 aurelien prieur
-// Last update Fri Jun 13 14:05:04 2014 virol_g
+// Last update Fri Jun 13 22:04:05 2014 virol_g
 //
 
 #ifndef AMENU_HPP_
@@ -35,6 +35,10 @@ struct		t_game
   int		serverPort;
   bool		isHost;
   bool		isDouble;
+  bool		createMap;
+  size_t	heightMap;
+  size_t	widthMap;
+  size_t	playersMap;
 };
 
 class	AMenu: public gdl::Game

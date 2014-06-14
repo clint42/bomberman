@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Fri Jun 13 15:45:58 2014 aurelien prieur
+// Last update Sat Jun 14 14:14:37 2014 virol_g
 //
 
 #include "MenuHandler.hpp"
@@ -25,23 +25,23 @@ pid_t	MenuHandler::forker() const
   return (fork());
 }
 
-std::pair<int, bool>	MenuHandler::mainMenu()
+t_game		*MenuHandler::mainMenu()
 {
   MainMenu	menu = MainMenu(*_sdlContext);
   t_game	*options;
   int		retVal;
 
   if (!(menu.initialize()) || !(menu.build()))
-    return (std::pair<int, bool>(-1, false));
+    return (NULL);
   while (menu.update())
     menu.draw();
   if ((options = menu.getChoice()) != NULL)
     {
       retVal = static_cast<int>(!options->isHost);
-      delete options;
-      return (std::pair<int, bool>(retVal, options->isDouble));
+      // delete options;
+      // return (std::pair<int, bool>(retVal, options->isDouble));
     }
-  return (std::pair<int, bool>(-1, false));
+  return (options);
 }
 
 bool	MenuHandler::createGame(t_game *options)
@@ -87,13 +87,14 @@ bool	MenuHandler::joinGame(t_game *options)
 t_game	*MenuHandler::launchMenus()
 {
   AMenu		*menu;
+  t_game	*mainChoice;
   t_game	*choice = NULL;
   int		mode;
   bool		ret = true;
-  std::pair<int, bool>	tmp;
 
-  tmp = mainMenu();
-  mode = tmp.first;
+  if ((mainChoice = mainMenu()) == NULL)
+    return (NULL);
+  mode = static_cast<int>(!mainChoice->isHost);
   if (mode == 0)
     menu = new CreateMenu(*_sdlContext);
   else if (mode == 1)
@@ -104,11 +105,25 @@ t_game	*MenuHandler::launchMenus()
     return (NULL);
   while (menu->update())
     menu->draw();
-  _sdlContext->stop();
-  delete _sdlContext;
+  //_sdlContext->stop();
+  //  delete _sdlContext;
   if ((choice = menu->getChoice()) != NULL)
     {
-      choice->isDouble = tmp.second;
+      if (choice->createMap == true)
+	{
+	  MapMenu	*mapMenu = new MapMenu(*_sdlContext);
+
+	  if (!mapMenu->initialize() || !mapMenu->build())
+	    return (NULL);
+	  while (mapMenu->update())
+	    mapMenu->draw();
+	  choice->heightMap = mapMenu->getInfo("Map height");
+	  choice->widthMap = mapMenu->getInfo("Map width");
+	  choice->playersMap = mapMenu->getInfo("Players on the map");
+	}
+
+      choice->isDouble = mainChoice->isDouble;
+      delete mainChoice;
       std::cout << "Choice received" << std::endl;
       if (mode == 0)
 	ret = createGame(choice);
