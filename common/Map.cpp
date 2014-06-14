@@ -98,11 +98,67 @@ Map::md5It() {
     throw Md5Exception();
 }
 
-void
-Map::generateMap() {
+Map::eTypes     Map::generateCase(const size_t x, const size_t y, const size_t width, const size_t height)
+{
+  if ((y == 0 || y == (height - 1)) ||
+      ((y > 0) && (y < (height - 1)) &&
+       ((x == 0 || x == (width - 1))))
+      )
+    return (Map::WALL);
+  else if ((x % 2) == 0 && (y % 2) == 0)
+    return (Map::WALL);
+  else
+    {
+      size_t nb = rand () % ((width < height) ? height : width);
+      return (Map::_mapTypes[nb % 5]);
 
+    }
 }
 
+std::vector<Map::eTypes>	Map::_mapTypes;
+bool				Map::_isMapInit = false;
+
+void		Map::generateMap(const size_t width, const size_t height,
+				 const size_t maxPlayers, const std::string &filename)
+{
+  (void)width;
+  (void)height;
+  (void)maxPlayers;
+  (void)filename;
+  size_t	x = 0;
+  size_t	y = 0;
+  std::ofstream	file;
+  std::string	name = "maps/" + filename + ".map";
+
+  if (Map::_isMapInit == false)
+    {
+      Map::_isMapInit = true;
+      Map::_mapTypes[0] = Map::GROUND;
+      Map::_mapTypes[1] = Map::DWALL;
+      Map::_mapTypes[2] = Map::GROUND;
+      Map::_mapTypes[3] = Map::DWALL;
+      Map::_mapTypes[4] = Map::GROUND;
+    }
+  file.open(name.c_str(), std::ios::out | std::ios::trunc);
+  if (file.is_open())
+    {
+      file << width << std::endl;
+      file << height << std::endl;
+      file << maxPlayers << std::endl;
+      while (y < height)
+  	{
+  	  x = 0;
+  	  while (x < width)
+  	    {
+  	      file << generateCase(x, y, width, height);
+  	      ++x;
+  	    }
+  	  file << std::endl;
+  	  ++y;
+  	}
+      file.close();
+    }
+}
 
 
 /*
