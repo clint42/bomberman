@@ -291,7 +291,7 @@ Server::Game::bombSwitchQueue(t_cmd *c, const std::pair<size_t, size_t> pos)
 {
   t_cmd * cmd = new t_cmd;
   cmd->id = c->id;
-  cmd->date = c->date;
+  cmd->date = c->date + Time(0, 0, BOMBTIME);
   cmd->pos = pos;
   cmd->action = c->action;
   std::cout << "Avant push dans _bombs" << std::endl;
