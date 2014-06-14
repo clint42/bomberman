@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 16:01:34 2014 aurelien prieur
-// Last update Fri Jun 13 18:39:37 2014 aurelien prieur
+// Last update Sun Jun 15 01:10:18 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -13,7 +13,8 @@
 #include "EventsHandler.hpp"
 
 EventsHandler::PlayerEvent::PlayerEvent(int player, std::string const &cmd,
-					int ks): _player(player), _cmd(cmd), _ks(ks)
+					int ks): _player(player), _cmd(cmd), _ks(ks),
+						 _endGame(false)
 {
 }
 

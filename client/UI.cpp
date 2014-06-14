@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:52:00 2014 aurelien prieur
-// Last update Sun Jun 15 00:57:54 2014 aurelien prieur
+// Last update Sun Jun 15 01:10:32 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -32,5 +32,9 @@ bool	UI::run()
       _graphicEngine.draw();
     }
   _graphicEngine.stop();
+  if (_eventsHandler.isEndGame())
+    {
+
+    }
   return (true);
 }
