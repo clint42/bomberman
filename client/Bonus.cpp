@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat Jun 14 11:54:40 2014 aurelien prieur
-// Last update Sat Jun 14 12:54:51 2014 aurelien prieur
+// Last update Sat Jun 14 14:19:38 2014 aurelien prieur
 //
 
 #include "Bonus.hpp"
@@ -37,56 +37,65 @@ Bonus::~Bonus()
 
 bool	Bonus::initialize(std::pair<size_t, size_t> const &pos)
 {
+  float	posX;
+  float	posY;
+  float	posZ;
+  float	size;
+
+  posX = pos.first + 0.25;
+  posY = pos.second + 0.25;
+  posZ = 0.25;
+  size = 0.5;
   _textures[_bonusType]->bind();
   _geometry.setColor(glm::vec4(1, 1, 1, 1));
-  _geometry.pushVertex(glm::vec3(pos.first, 0, pos.second));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 0, pos.second));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 0, pos.second + 1));
-  _geometry.pushVertex(glm::vec3(pos.first, 0, pos.second + 1));
+  _geometry.pushVertex(glm::vec3(posX, posZ, posY));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ, posY));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ, posY + size));
+  _geometry.pushVertex(glm::vec3(posX, posZ, posY + size));
+  _geometry.pushUv(glm::vec2(1, 1));
   _geometry.pushUv(glm::vec2(0, 1));
   _geometry.pushUv(glm::vec2(0, 0));
   _geometry.pushUv(glm::vec2(1, 0));
-  _geometry.pushUv(glm::vec2(1, 1));
-  _geometry.pushVertex(glm::vec3(pos.first, 1, pos.second));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 1, pos.second));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 0, pos.second));
-  _geometry.pushVertex(glm::vec3(pos.first, 0, pos.second));
-  _geometry.pushUv(glm::vec2(0, 0));
-  _geometry.pushUv(glm::vec2(1, 0));
+  _geometry.pushVertex(glm::vec3(posX, posZ + size, posY));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ + size, posY));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ, posY));
+  _geometry.pushVertex(glm::vec3(posX, posZ, posY));
   _geometry.pushUv(glm::vec2(1, 1));
   _geometry.pushUv(glm::vec2(0, 1));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 1, pos.second));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 1, pos.second + 1));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 0, pos.second + 1));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 0, pos.second));
   _geometry.pushUv(glm::vec2(0, 0));
   _geometry.pushUv(glm::vec2(1, 0));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ + size, posY));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ + size, posY + size));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ, posY + size));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ, posY));
   _geometry.pushUv(glm::vec2(1, 1));
   _geometry.pushUv(glm::vec2(0, 1));
-  _geometry.pushVertex(glm::vec3(pos.first, 1, pos.second + 1));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 1, pos.second + 1));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 0, pos.second + 1));
-  _geometry.pushVertex(glm::vec3(pos.first, 0, pos.second + 1));
   _geometry.pushUv(glm::vec2(0, 0));
   _geometry.pushUv(glm::vec2(1, 0));
+  _geometry.pushVertex(glm::vec3(posX, posZ + size, posY + size));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ + size, posY + size));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ, posY + size));
+  _geometry.pushVertex(glm::vec3(posX, posZ, posY + size));
   _geometry.pushUv(glm::vec2(1, 1));
   _geometry.pushUv(glm::vec2(0, 1));
-  _geometry.pushVertex(glm::vec3(pos.first, 1, pos.second));
-  _geometry.pushVertex(glm::vec3(pos.first, 1, pos.second + 1));
-  _geometry.pushVertex(glm::vec3(pos.first, 0, pos.second + 1));
-  _geometry.pushVertex(glm::vec3(pos.first, 0, pos.second));
   _geometry.pushUv(glm::vec2(0, 0));
   _geometry.pushUv(glm::vec2(1, 0));
+  _geometry.pushVertex(glm::vec3(posX, posZ + size, posY));
+  _geometry.pushVertex(glm::vec3(posX, posZ + size, posY + size));
+  _geometry.pushVertex(glm::vec3(posX, posZ, posY + size));
+  _geometry.pushVertex(glm::vec3(posX, posZ, posY));
   _geometry.pushUv(glm::vec2(1, 1));
   _geometry.pushUv(glm::vec2(0, 1));
-  _geometry.pushVertex(glm::vec3(pos.first, 1, pos.second));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 1, pos.second));
-  _geometry.pushVertex(glm::vec3(pos.first + 1, 1, pos.second + 1));
-  _geometry.pushVertex(glm::vec3(pos.first, 1, pos.second + 1));
   _geometry.pushUv(glm::vec2(0, 0));
   _geometry.pushUv(glm::vec2(1, 0));
+  _geometry.pushVertex(glm::vec3(posX, posZ + size, posY));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ + size, posY));
+  _geometry.pushVertex(glm::vec3(posX + size, posZ + size, posY + size));
+  _geometry.pushVertex(glm::vec3(posX, posZ + size, posY + size));
   _geometry.pushUv(glm::vec2(1, 1));
   _geometry.pushUv(glm::vec2(0, 1));
+  _geometry.pushUv(glm::vec2(0, 0));
+  _geometry.pushUv(glm::vec2(1, 0));
   if (_geometry.build() == false)
     return (false);
   return (true);

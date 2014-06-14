@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sat Jun 14 14:01:06 2014 aurelien prieur
+// Last update Sat Jun 14 15:16:39 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -246,10 +246,11 @@ void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
     {
       const std::pair<size_t, size_t> *player1Pos = _gameEntities.getPlayerPos(0);
       const std::pair<size_t, size_t> *player2Pos = _gameEntities.getPlayerPos(1);
-      this->_eventsHandler.cmdToString(string, _gameEntities.getPlayerId(0),
+      this->_eventsHandler.cmdToString(string,
+				       _gameEntities.getPlayerId(0),
 				       (player1Pos != NULL) ? *player1Pos : std::pair<size_t, size_t>(0, 0),
 				       _gameEntities.getPlayerId(1),
-				       (player2Pos != NULL) ? *player1Pos : std::pair<size_t, size_t>(0, 0));
+				       (player2Pos != NULL) ? *player2Pos : std::pair<size_t, size_t>(0, 0));
       std::cout << "Sending data: " << string << std::endl;
       _connexion.getMasterSocket()->write(string);
       _connexion.unwatchEventOnSocket(_connexion.getMasterSocket(), POLLOUT);

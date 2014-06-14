@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Sat Jun 14 14:14:37 2014 virol_g
+// Last update Sat Jun 14 15:43:05 2014 aurelien prieur
 //
 
 #include "MenuHandler.hpp"
@@ -105,8 +105,6 @@ t_game	*MenuHandler::launchMenus()
     return (NULL);
   while (menu->update())
     menu->draw();
-  //_sdlContext->stop();
-  //  delete _sdlContext;
   if ((choice = menu->getChoice()) != NULL)
     {
       if (choice->createMap == true)
@@ -114,7 +112,11 @@ t_game	*MenuHandler::launchMenus()
 	  MapMenu	*mapMenu = new MapMenu(*_sdlContext);
 
 	  if (!mapMenu->initialize() || !mapMenu->build())
-	    return (NULL);
+	    {
+	      _sdlContext->stop();
+	      delete _sdlContext;
+	      return (NULL);
+	    }
 	  while (mapMenu->update())
 	    mapMenu->draw();
 	  choice->heightMap = mapMenu->getInfo("Map height");
@@ -130,7 +132,12 @@ t_game	*MenuHandler::launchMenus()
       else if (mode == 1)
 	ret = joinGame(choice);
     }
+  _sdlContext->stop();
+  delete _sdlContext;
   if (!ret)
-    return (NULL);
+    {
+
+      return (NULL);
+    }
   return (choice);
 }
