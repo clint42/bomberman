@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Sat Jun 14 23:00:13 2014 aurelien prieur
+// Last update Sun Jun 15 00:52:13 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -68,6 +68,7 @@ int	main()
 
   ThreadUI	threadUI(eventsHandler, gameEntities, createInstructs);
   core.run();
+  std::cout << "After core.run()" << std::endl;
   threadUI.join();
   return (EXIT_SUCCESS);
 }
