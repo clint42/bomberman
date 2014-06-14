@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sat Jun 14 15:16:39 2014 aurelien prieur
+// Last update Sat Jun 14 17:13:39 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -179,7 +179,7 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
       if (_parser->getConfig().mapName != "" && _parser->getConfig().idPlayer1 != 0 &&
 	  (_parser->getConfig().idPlayer2 != 0 || !_configurator->getOptions()->isDouble))
 	{
-	  _map = new MapRender("./maps/" + _parser->getConfig().mapName);
+	  _map = new MapRender(_parser->getConfig().mapName);
 	  buildMapMd5(string, _parser->getConfig().idPlayer1);
 	  _configurator->pushCmd(string);
 	  if (_configurator->getOptions()->isDouble)
@@ -216,11 +216,7 @@ void	ClientCore::trampoline(void *param, Socket *socket, bool b[3])
 
 bool		ClientCore::run()
 {
-  std::cout << "[CLIENT]: RUN !!!" << std::endl;
   loadMap();
-  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(20, 20), BONUSSPEED));
-  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(15, 20), BONUSRANGE));
-  _createInstructs.push(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(20, 23), BONUSBOMB));
   while (_connexion.update(500) >= 0 && !_eventsHandler.isFinished())
     {
       _connexion.perform(&trampoline, this);

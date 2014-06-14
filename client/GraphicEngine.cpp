@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sat Jun 14 15:07:50 2014 aurelien prieur
+// Last update Sat Jun 14 17:11:43 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -13,6 +13,7 @@
 #include "GraphicEngine.hpp"
 #include "Block.hpp"
 #include "Bonus.hpp"
+#include "Fire.hpp"
 
 GraphicEngine::GraphicEngine(EventsHandler &eventsHandler,
 			     GameEntities &gameEntities,
@@ -71,6 +72,7 @@ bool	GraphicEngine::initialize()
     }
   shader.bind();
   shader.setUniform("color", glm::vec4(1, 1, 1, 1));
+  Fire::load();
   Block::loadTextures();
   Bonus::loadTextures();
   if (this->mkBackground() == false)
@@ -88,6 +90,7 @@ bool	GraphicEngine::initialize()
   //TODO: testing purpose only. Find a better solution to load Player model before game start
   Player * test = new Player(0);
   test->initialize();
+  //test2->initialize();
   if (SHOW_FPS)
     fps = new FpsDisplay;
   else
