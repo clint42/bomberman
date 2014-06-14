@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 30 17:36:18 2014 aurelien prieur
-// Last update Sun Jun  8 18:15:48 2014 aurelien prieur
+// Last update Sat Jun 14 17:26:38 2014 aurelien prieur
 //
 
 #ifndef FLOOR_HPP_
@@ -26,6 +26,7 @@ public:
   virtual bool	update(gdl::Clock const &clock, EventsHandler const &events);
   virtual void	draw(gdl::AShader &shader, gdl::Clock const &clock);
   virtual void	setSize(std::pair<size_t, size_t> const &size);
+  virtual std::pair<double, double> const	&getSize(void) const;
 };
 
 #endif // !FLOOR_HPP_

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu Jun  5 12:08:48 2014 aurelien prieur
-// Last update Wed Jun 11 13:53:59 2014 aurelien prieur
+// Last update Sat Jun 14 17:42:47 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -17,8 +17,10 @@ bool	Block::loadTextures(void)
 {
   textures[BLOCK] = new gdl::Texture;
   textures[BOX] = new gdl::Texture;
+  textures[FIRE] = new gdl::Texture;
   if (!(textures[BLOCK]->load("./client/assets/ublock.tga")) ||
-      !(textures[BOX]->load("./client/assets/box.tga")))
+      !(textures[BOX]->load("./client/assets/box.tga")) ||
+      !textures[FIRE]->load("./client/assets/fire.tga"))
     {
       std::cerr << "Failed to load block textures" << std::endl;
       return (false);

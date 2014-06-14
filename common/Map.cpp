@@ -9,8 +9,8 @@
 ** CONSTRUCTOR / DESTRUCTOR
 */
 
-Map::Map(std::string const &filename) {
-  std::ifstream	file(filename.c_str(), std::ios::in);
+Map::Map(std::string const &filename) : _width(0), _height(0) {
+  std::ifstream	file((std::string("./maps/") + filename).c_str(), std::ios::in);
   std::string	tmp;
 
   this->_filename = filename;
@@ -83,7 +83,7 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
 
 void
 Map::md5It() {
-  std::ifstream filemap(this->_filename.c_str(), std::ios::in);
+  std::ifstream filemap((std::string("./maps/") + this->_filename).c_str(), std::ios::in);
 
   if(filemap) {
     char key[MD5_DIGEST_LENGTH] = {0};

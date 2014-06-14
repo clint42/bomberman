@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:11:27 2014 aurelien prieur
-// Last update Sat Jun 14 12:35:26 2014 aurelien prieur
+// Last update Sat Jun 14 17:49:05 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -38,8 +38,10 @@ AObject::~AObject()
 AObject	*AObject::create(int objectType)
 {
 
-  if (objectType == BLOCK || objectType == BOX)
+  std::cout << "[CLIENT] Create entity: " << objectType << std::endl;
+  if (objectType == BLOCK || objectType == BOX || objectType == FIRE)
     {
+      std::cout << "[CLIENT]Create Full Bock. ID: " << objectType << std::endl;
       return (new Block(static_cast<ObjectType>(objectType)));
     }
   else if (objectType >= BONUSSPEED && objectType <= BONUSBOMB)
@@ -49,10 +51,6 @@ AObject	*AObject::create(int objectType)
   else if (objectType == BOMB)
     {
       return (new Bomb);
-    }
-  else if (objectType == FIRE)
-    {
-      return (new Fire);
     }
   else if (objectType > PLAYER)
     {

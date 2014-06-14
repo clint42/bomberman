@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sat Jun 14 11:25:04 2014 aurelien prieur
+// Last update Sat Jun 14 17:20:47 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -41,24 +41,33 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
   std::pair<std::map<std::pair<size_t, size_t>, AObject *>::iterator, bool>	ret;
 
   _locker.lock();
-  if ((entity = AObject::create(desc.second)) != NULL)
+  if (_entities.find(desc.first) == _entities.end())
     {
-      if (entity->initialize(desc.first) == false)
+      if ((entity = AObject::create(desc.second)) != NULL)
 	{
+	  if (entity->initialize(desc.first) == false)
+	    {
+	      _locker.unlock();
+	      return (false);
+	    }
+	  _entities.insert(std::pair<std::pair<size_t, size_t>, AObject *>(desc.first, entity));
+	  if (desc.second > PLAYER)
+	    std::cout << "[CLIENT]creation id: " << desc.second - PLAYER << std::endl;
+	  if (desc.second > PLAYER && desc.second - PLAYER == _playersId[0] && _player == NULL)
+	    _player = entity;
+	  if (desc.second > PLAYER && _isDouble && desc.second - PLAYER == _playersId[1] && _player2 == NULL)
+	    _player2 = entity;
+	}
+      else
+	{
+	  std::cout << "Couldn't create entity: Instanciation failed." << std::endl;
 	  _locker.unlock();
 	  return (false);
 	}
-      _entities.insert(std::pair<std::pair<size_t, size_t>, AObject *>(desc.first, entity));
-      if (desc.second > PLAYER && desc.second - PLAYER == _playersId[0])
-	_player = entity;
-      else if (desc.second > PLAYER && _isDouble && desc.second - PLAYER == _playersId[1])
-	_player2 = entity;
     }
   else
     {
-      std::cout << "[CLIENT][GAMEENTITIES->addEntity]: AObject::create return NULL" << std::endl;
-      _locker.unlock();
-      return (false);
+      std::cout << "Couldn't create entity: There is already something at these coords." << std::endl;
     }
   _locker.unlock();
   return (true);
@@ -70,7 +79,13 @@ bool		GameEntities::deleteEntity(std::pair<size_t, size_t> const &coord)
   if (_entities.find(coord) != _entities.end())
     {
       if (_entities[coord] != NULL)
-      	delete _entities[coord];
+      	{
+	  if (_entities[coord] == _player)
+	    _player = NULL;
+	  else if (_entities[coord] == _player2)
+	    _player2 = NULL;
+	  delete _entities[coord];
+	}
       _entities.erase(coord);
     }
   return (true);
@@ -98,7 +113,7 @@ bool				GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
   std::pair<size_t, size_t>	newCoord(coord);
   bool				ret;
 
-  //_locker.lock();
+  _locker.lock();
   ret = false;
   entity = getEntity(coord);
   if (entity != NULL)
@@ -116,7 +131,7 @@ bool				GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
       _entities.erase(coord);
       ret = true;
     }
-  //_locker.unlock();
+  _locker.unlock();
   return (ret);
 }
 
@@ -321,6 +336,7 @@ std::pair<size_t, size_t> const *GameEntities::getPlayerPos(int nPlayer)
 void	GameEntities::setPlayerId(int id, int nPlayer)
 {
   _locker.lock();
+  std::cout << "[CLIENT] setPlayerId: nPlayer: " << nPlayer << " | id: " << id << std::endl;
   _playersId[nPlayer] = id;
   _locker.unlock();
 }

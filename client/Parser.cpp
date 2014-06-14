@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sat Jun 14 11:03:47 2014 aurelien prieur
+// Last update Sat Jun 14 17:56:53 2014 aurelien prieur
 //
 
 #include "Parser.hpp"
@@ -94,6 +94,7 @@ void		Parser::parseCreate(const t_parser &_parser)
   size_t	posy;
   size_t	id;
 
+  std::cout << "[CLIENT]: Parser::parseCreate"  << std::endl;
   CVRT_STRING_TO_SIZET(_parser.params[1], id);
   CVRT_STRING_TO_SIZET(_parser.params[2], posx);
   CVRT_STRING_TO_SIZET(_parser.params[3], posy);

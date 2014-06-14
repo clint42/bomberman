@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sat Jun 14 15:07:50 2014 aurelien prieur
+// Last update Sat Jun 14 17:31:27 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -13,6 +13,7 @@
 #include "GraphicEngine.hpp"
 #include "Block.hpp"
 #include "Bonus.hpp"
+#include "Fire.hpp"
 
 GraphicEngine::GraphicEngine(EventsHandler &eventsHandler,
 			     GameEntities &gameEntities,
@@ -71,6 +72,7 @@ bool	GraphicEngine::initialize()
     }
   shader.bind();
   shader.setUniform("color", glm::vec4(1, 1, 1, 1));
+  Fire::load();
   Block::loadTextures();
   Bonus::loadTextures();
   if (this->mkBackground() == false)
@@ -88,6 +90,7 @@ bool	GraphicEngine::initialize()
   //TODO: testing purpose only. Find a better solution to load Player model before game start
   Player * test = new Player(0);
   test->initialize();
+  //test2->initialize();
   if (SHOW_FPS)
     fps = new FpsDisplay;
   else
@@ -142,10 +145,14 @@ void		GraphicEngine::drawPlayer(int nPlayer)
   this->shader.setUniform("projection", projection);
   AObject const *player = this->objects.getPlayer(true, nPlayer);
   if (player != NULL)
+    transformation = glm::lookAt(glm::vec3(0, 17, 8) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
+  else
     {
-      transformation = glm::lookAt(glm::vec3(0, 17, 8) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
-      this->shader.setUniform("view", transformation);
+      std::pair<double, double> const &sizeMap = floor.getSize();
+      transformation = glm::lookAt(glm::vec3(0, 17, 8) + glm::vec3(sizeMap.first / 2.f, 0, sizeMap.second / 2.f),
+				   glm::vec3(sizeMap.first / 2.f, 0, sizeMap.second / 2.f), glm::vec3(0, 1, 0));
     }
+  this->shader.setUniform("view", transformation);
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
        it != this->objects.getEntities().end(); ++it)
     it->second->draw(this->shader, this->clock);

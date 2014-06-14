@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 30 17:39:31 2014 aurelien prieur
-// Last update Wed Jun 11 14:55:43 2014 aurelien prieur
+// Last update Sat Jun 14 17:27:02 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -64,4 +64,9 @@ void	Floor::setSize(std::pair<size_t, size_t> const &size)
 {
   _size.first = static_cast<double>(size.first);
   _size.second = static_cast<double>(size.second);
+}
+
+std::pair<double, double> const	&Floor::getSize(void) const
+{
+  return (_size);
 }

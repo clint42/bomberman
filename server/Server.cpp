@@ -76,8 +76,6 @@ Server::Server::run() {
 
   while (_run && (ret = _co->update(timeLoop)) >= 0) {
     DEBUG("Server::server::run() => loop", 0);
-    std::cout << "---------------" << std::endl;
-    std::cout << "tour de boucle" << Time().now() << std::endl;
     if (_game)
       _game->updateTimeLeft();
 
@@ -115,7 +113,6 @@ Server::Server::run() {
       }
     }
     this->sendBroadcast();
-    std::cout << "fin boucle" << Time().now() << std::endl;
     DEBUG("Server::server::run() => ! loop\n", 0);
   } // ! while
   DEBUG("! Server::server::run()", -1);
