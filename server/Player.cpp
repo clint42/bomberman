@@ -17,7 +17,7 @@ Server::Player::updateDateNextCommand(Server::Player::Action a, Time const &date
   else if (a == ORIENT)  mult = DELAY_MULT_ORIENT;
   else			 mult = DELAY_MULT_BOMB;
 
-  _dateNextCommand = date - Time(0, 0, 0, (DELAY * mult / _commandTimeMultiplier));
+  _dateNextCommand = date - Time(0, 0, 0, 50/*(DELAY * mult / _commandTimeMultiplier)*/);
   std::cout << "Server::Player::updateDateNextCommand() => date is '" << _dateNextCommand << "'" << std::endl;
   DEBUG("! Server::Player::updateDateNextCommand()", -1);
 }
