@@ -67,7 +67,6 @@ namespace Server {
     inline void	  setTeam(Team *t) { this->_team = t; }
     inline void	  hasCertifiedMd5(bool b) { _certifiedMd5 = b; }
 
-    inline void	  poseBomb() { if (_bombsLimit > _bombsOnFloor) _bombsOnFloor += 1; }
     inline void   destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }
 
     inline Time const & getDateNextCommand() const { return _dateNextCommand; }
