@@ -5,12 +5,12 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Fri Jun 13 18:42:40 2014 lafitt_g
+## Last update Sat Jun 14 10:16:39 2014 buret_j
 ##
 
 CXX =	clang++
 
-CXXFLAGS += -I/home/$(USER)/LibBomberman_linux_x64/includes -Icommon -Iclient/menu -Werror -Wall -Wextra -ggdb
+CXXFLAGS += -I/home/$(USER)/LibBomberman_linux_x64/includes -Icommon -Iclient/menu -Werror -Wall -Wextra
 
 LXXFLAGS =  -L/home/$(USER)/LibBomberman_linux_x64/libs -lgdl_gl -lGL -lGLEW -ldl -lrt -lfbxsdk -lSDL2 -lpthread -lssl -lcrypto
 
@@ -56,11 +56,14 @@ SRC =   client/main.cpp \
 	client/ThreadUI.cpp \
 	client/UI.cpp \
 \
-	server/Server.cpp \
+	server/Server.cpp		\
 	server/Server_adminCommand.cpp	\
 	server/Server_filter.cpp	\
 	server/Server_peerConnexion.cpp \
-	server/Game.cpp \
+	server/Game.cpp			\
+	server/Game_bomb.cpp		\
+	server/Game_move.cpp		\
+	server/Game_orient.cpp		\
 	server/Player.cpp
 
 OBJ =	$(SRC:.cpp=.o)

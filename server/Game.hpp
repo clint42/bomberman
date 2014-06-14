@@ -57,6 +57,7 @@ namespace	Server {
     SafeQueue<t_cmd *>		_events;
     CondSafeQueue<t_cmd *>	_bombs;
 
+    Time	_timeLeft;
 
   public:
 
@@ -69,9 +70,9 @@ namespace	Server {
     inline std::string const &getMapName() const { return _map->getFilename(); }
     inline std::string const &getMapMd5() const { return _map->getKey(); }
 
-    Time		timeLeft() const;
-    // inline bool		hasSomethingToDo() const { return !(_events.empty() || _bombs.empty()); }
-    inline bool		hasSomethingToDo() const { return !_events.empty() || !_bombs.empty(); }
+    void updateTimeLeft() { _timeLeft = !_paused ? (_endAt - Time().now()) : (_endAt - _pausedAt); }
+    inline Time const &	timeLeft() const { return _timeLeft; }
+    inline bool		hasSomethingToDo() const { return !_events.empty(); } // || !_bombs.empty(); }
 
     void		start();
     inline bool		isStarted() const { return _started; }
@@ -116,7 +117,7 @@ namespace	Server {
     void		killPlayer(const std::pair<size_t, size_t>);
 
     static std::map<std::string, Game::Type>    _types;
-    static bool                         _isInit;
+    static bool					_isInit;
     static std::map<int, std::string>		_bonus;
 
   private:

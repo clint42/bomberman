@@ -41,6 +41,7 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
 
 Server::Game::~Game() {
   delete _map;
+  delete _bombThread;
 }
 
 void *
@@ -67,8 +68,13 @@ Server::Game::bombsProcessing() {
       }
       { // code
 	DEBUG("Server::Game:: TEST4", 0);
-	if (this->timeLeft() > c->date)
+	if (this->timeLeft() > c->date) {
+	  std::cout << "[SERVER] Server::Game::bombsProcessing() => time of usleep " << this->timeLeft().usec() - c->date.usec() << "." << std::endl;
 	  usleep(this->timeLeft().usec() - c->date.usec());
+	}
+	else {
+	  DEBUG("[SERVER] Server::Game::bombsProcessing() => en fait, elle explose directe", 0);
+	}
 	if (_paused) {
 	  _bombs.push_front(c);
 	} else {
@@ -91,6 +97,7 @@ Server::Game::start() {
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre", 0);
     _startedAt.now();
     _endAt = _startedAt + Time(0, GAME_TIME * _time);
+    this->updateTimeLeft();
 
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 1", 0);
     _bombThread = new Thread(&Server::Game::trampoline_bombsProcessing, this); // create bombs' thread
@@ -111,16 +118,6 @@ Server::Game::start() {
     _bombs.signal(); // unpause bomb thread (var cond)
   }
   DEBUG("! Server::Game::start()", -1);
-}
-
-Time
-Server::Game::timeLeft() const {
-  if (!_paused) {
-    Time tmp;
-    tmp.now();
-    return (_endAt - tmp);
-  }
-  return (_endAt - _pausedAt);
 }
 
 void
@@ -168,7 +165,6 @@ Server::Game::update() {
     }
     else {
       this->pickPlayers(_nbPlayers);
-      sleep(1);
       this->start();
     }
   }
@@ -288,122 +284,6 @@ Server::Game::earnBonus(Player *p, int bonus, const std::pair<size_t, size_t> po
   this->_messenger->broadcastMessage(convert.str());
 }
 
-bool
-Server::Game::moveUp(Player *p, t_cmd *c)
-{
-  (void)c;
-  if (p->getPosY())
-    {
-      std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() - 1);
-      std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
-      int			elem = this->_map->getElemAtPos(pos);
-
-      if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
-	this->earnBonus(p, elem, pos);
-      if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
-	{
-	  this->_players[pos] = this->_players[oldPos];
-	  this->_players.erase(oldPos);
-	  return (p->moveUp());
-	}
-    }
-  return false;
-}
-
-bool
-Server::Game::moveRight(Player *p, t_cmd *c)
-{
-  (void)c;
-  if (p->getPosX() != this->_map->getWidth() - 1)
-    {
-      std::pair<size_t, size_t> pos(p->getPosX() + 1, p->getPosY());
-      std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
-      int			elem = this->_map->getElemAtPos(pos);
-
-      if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
-	this->earnBonus(p, elem, pos);
-      if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
-	{
-	  this->_players[pos] = this->_players[oldPos];
-	  this->_players.erase(oldPos);
-	  return (p->moveRight());
-	}
-    }
-  return false;
-}
-
-bool
-Server::Game::moveDown(Player *p, t_cmd *c)
-{
-  (void)c;
-  if (p->getPosY() != this->_map->getHeight() - 1)
-    {
-      std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() + 1);
-      std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
-      int			elem = this->_map->getElemAtPos(pos);
-
-      if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
-	this->earnBonus(p, elem, pos);
-      if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
-	{
-	  this->_players[pos] = this->_players[oldPos];
-	  this->_players.erase(oldPos);
-	  return (p->moveDown());
-	}
-    }
-  return false;
-}
-
-bool
-Server::Game::moveLeft(Player *p, t_cmd *c)
-{
-  (void)c;
-  if (p->getPosX())
-    {
-      std::pair<size_t, size_t> pos(p->getPosX() - 1, p->getPosY());
-      std::pair<size_t, size_t> oldPos(p->getPosX(), p->getPosY());
-      int			elem = this->_map->getElemAtPos(pos);
-
-      if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
-	this->earnBonus(p, elem, pos);
-      if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
-	{
-	  this->_players[pos] = this->_players[oldPos];
-	  this->_players.erase(oldPos);
-	  return (p->moveLeft());
-	}
-    }
-  return false;
-}
-
-bool
-Server::Game::orientUp(Player *p, t_cmd *c)
-{
-  c->action = "ROTATE";
-  return(p->orient(Server::Player::UP));
-}
-
-bool
-Server::Game::orientRight(Player *p, t_cmd *c)
-{
-  c->action = "ROTATE";
-  return(p->orient(Server::Player::RIGHT));
-}
-
-bool
-Server::Game::orientDown(Player *p, t_cmd *c)
-{
-  c->action = "ROTATE";
-  return(p->orient(Server::Player::DOWN));
-}
-
-bool
-Server::Game::orientLeft(Player *p, t_cmd *c)
-{
-  c->action = "ROTATE";
-  return(p->orient(Server::Player::LEFT));
-}
-
 void
 Server::Game::bombSwitchQueue(t_cmd *c, const std::pair<size_t, size_t> pos)
 {
@@ -435,95 +315,6 @@ Server::Game::buildCmdCreateBomb(t_cmd *c, const std::pair<size_t, size_t> pos)
   std::cout << "[" <<c->params[3] << "]" << std::endl;
 }
 
-bool
-Server::Game::bombUp(Player *p, t_cmd *c)
-{
-  DEBUG("Server::Game::bombUp()", 1);
-  if (p->getPosY())
-    {
-      std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() - 1);
-      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
-	  p->getBombsLimit() > p->getBombsOnFloor())
-	{
-	  std::cout << "Avant bombSwitchQueue" << std::endl;
-	  this->bombSwitchQueue(c, pos);
-	  std::cout << "Avant buildCmdCreateBomb" << std::endl;
-	  this->buildCmdCreateBomb(c, pos);
-	  std::cout << "Avant setElemAtPos" << std::endl;
-	  this->_map->setElemAtPos(pos, Map::BOMB);
-  DEBUG("Server::Game::bombUp()", -1);
-	  return (p->dropBomb());
-	}
-    }
-  DEBUG("Server::Game::bombUp()", -1);
-  return false;
-}
-
-bool
-Server::Game::bombRight(Player *p, t_cmd *c)
-{
-  if (p->getPosX() != this->_map->getWidth() - 1)
-    {
-      std::pair<size_t, size_t> pos(p->getPosX() + 1, p->getPosY());
-      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
-	  p->getBombsLimit() > p->getBombsOnFloor())
-	{
-	  std::cout << "Avant bombSwitchQueue" << std::endl;
-	  this->bombSwitchQueue(c, pos);
-	  std::cout << "Avant buildCmdCreateBomb" << std::endl;
-	  this->buildCmdCreateBomb(c, pos);
-	  std::cout << "Avant setElemAtPos" << std::endl;
-	  this->_map->setElemAtPos(pos, Map::BOMB);
-  DEBUG("Server::Game::bombUp()", -1);
-	  return (p->dropBomb());
-	}
-    }
-  return false;
-}
-
-bool
-Server::Game::bombDown(Player *p, t_cmd *c)
-{
-  if (p->getPosY() != this->_map->getHeight() - 1)
-    {
-      std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() + 1);
-      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
-	  p->getBombsLimit() > p->getBombsOnFloor())
-	{
-	  std::cout << "Avant bombSwitchQueue" << std::endl;
-	  this->bombSwitchQueue(c, pos);
-	  std::cout << "Avant buildCmdCreateBomb" << std::endl;
-	  this->buildCmdCreateBomb(c, pos);
-	  std::cout << "Avant setElemAtPos" << std::endl;
-	  this->_map->setElemAtPos(pos, Map::BOMB);
-  DEBUG("Server::Game::bombUp()", -1);
-	  return (p->dropBomb());
-	}
-    }
-  return false;
-}
-
-bool
-Server::Game::bombLeft(Player *p, t_cmd *c)
-{
-  if (p->getPosX())
-    {
-      std::pair<size_t, size_t> pos(p->getPosX() - 1, p->getPosY());
-      if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
-	  p->getBombsLimit() > p->getBombsOnFloor())
-	{
-	  std::cout << "Avant bombSwitchQueue" << std::endl;
-	  this->bombSwitchQueue(c, pos);
-	  std::cout << "Avant buildCmdCreateBomb" << std::endl;
-	  this->buildCmdCreateBomb(c, pos);
-	  std::cout << "Avant setElemAtPos" << std::endl;
-	  this->_map->setElemAtPos(pos, Map::BOMB);
-  DEBUG("Server::Game::bombUp()", -1);
-	  return (p->dropBomb());
-	}
-    }
-  return false;
-}
 
 void
 Server::Game::createBonus(const std::pair<size_t, size_t> pos, t_cmd *c, int ret)
@@ -539,88 +330,6 @@ Server::Game::createBonus(const std::pair<size_t, size_t> pos, t_cmd *c, int ret
     }
   else
     this->_map->deleteElem(pos);
-}
-
-bool
-Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
-{
-  std::stringstream convert;
-  int		ret;
-  std::map<std::pair<size_t, size_t>, Player *>::iterator it;
-
-  if ((ret = this->_map->getElemAtPos(pos)))
-    {
-      if (ret == Map::DWALL || ret == Map::B_BOMB || ret == Map::B_RANGE || ret == Map::B_SPEED)
-	{
-	  convert << ";0 " << pos.first << " " << pos.second << " DESTROY";
-	  c->msg += convert.str();
-	  this->createBonus(pos, c, ret);
-	}
-      if (ret == Map::WALL || ret == Map::DWALL || ret == Map::BOMB || ret == Map::B_BOMB || ret == Map::B_RANGE || ret == Map::B_SPEED)
-	return (false);
-    }
-  else
-    {
-      if ((it = this->_players.find(pos)) != this->_players.end())
-	{
-	  convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
-	  this->killPlayer(pos);
-	}
-      convert << ";0 0 0 CREATE FIRE 0 " << pos.first << " " << pos.second;
-      c->msg += convert.str();
-    }
-  return (true);
-}
-
-void
-Server::Game::bombExplose(Player *p, t_cmd *c)
-{
-  int		val = 1;
-  std::stringstream convert;
-  std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY());
-
-  // this->_map->setElemAtPos(pos, Map::GROUND);
-  this->_map->deleteElem(pos);
-  convert << "0 " << pos.first << " " << pos.second << " DESTROY";
-  convert << ";0 0 0 CREATE FIRE 0 " << pos.first << " " << pos.second;
-  c->msg = convert.str();
-  // RIGHT
-  while (p->getPosX() + val < this->_map->getWidth() - 1 && (size_t)val <= p->getBombRange())
-    {
-      pos.first = p->getPosX() + val;
-      if (this->exploseCase(pos, c) == false)
-	break ;
-      ++val;
-    }
-  // LEFT
-  val = -1;
-  while (p->getPosX() + val > 0 && (size_t)(val * -1) <= p->getBombRange())
-    {
-      pos.first = p->getPosX() + val;
-      if (this->exploseCase(pos, c) == false)
-	break ;
-      --val;
-    }
-  // UP
-  val = -1;
-  while (p->getPosY() + val > 0 && (size_t)(val * -1) <= p->getBombRange())
-    {
-      pos.first = p->getPosX();
-      pos.first = p->getPosY() + val;
-      if (this->exploseCase(pos, c) == false)
-	break ;
-      --val;
-    }
-  // DOWN
-  val = 1;
-  while (p->getPosY() + val < this->_map->getWidth() - 1 && (size_t)val <= p->getBombRange())
-    {
-      pos.second = p->getPosY() + val;
-      if (this->exploseCase(pos, c) == false)
-	break ;
-      ++val;
-    }
-  c->msg += "\n";
 }
 
 bool Server::Game::_isGame = false;
@@ -663,14 +372,14 @@ Server::Game::process(t_cmd *c, Player *p)
     {
       std::cout << "PROCESS Players size = " << _players.size() << std::endl;
       p->getAction(&a, &d, c->params[0]);
-      DEBUG("!Server::Game::process() ==> verifier les actions de process", -1);
+      DEBUG("!Server::Game::process() ==> verifier les actions de process => if", -1);
       return ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c));
     }
   else if (c->action == "BOMB")
     {
       a = Server::Player::BOMB;
       d = p->getOrientation();
-      DEBUG("!Server::Game::process() ==> verifier les actions de process", -1);
+      DEBUG("!Server::Game::process() ==> verifier les actions de process => else if", -1);
       return ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c));
     }
   else if (c->action == "BOMB EXPLOSE")
@@ -680,13 +389,15 @@ Server::Game::process(t_cmd *c, Player *p)
       std::cout << "Return false mais c'est normal" << std::endl;
       // send directly to messenger
     }
-  DEBUG("!Server::Game::process()", -1);
+  DEBUG("! Server::Game::process()", -1);
   return (false);
 }
 
 void
 Server::Game::killPlayer(const std::pair<size_t, size_t> pos)
 {
+  if (_players[pos]->isBot())
+    delete _players[pos];
   this->_players.erase(pos);
 }
 
