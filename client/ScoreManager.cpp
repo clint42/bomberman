@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri Jun 13 14:32:18 2014 aurelien prieur
-// Last update Fri Jun 13 15:34:14 2014 aurelien prieur
+// Last update Sat Jun 14 17:50:47 2014 virol_g
 //
 
 #include <fstream>
@@ -65,7 +65,7 @@ void			ScoreManager::save(void) const
   file.open(_filename.c_str(), std::ios::out | std::ios::trunc);
   if (file.is_open())
     {
-      for (int i = 0; i < 10; ++i)
+      for (size_t i = 0; i < 10; ++i)
 	{
 	  if (i < _player1Score.size())
 	    file << "0 " << _player1Score[i] << std::endl;
