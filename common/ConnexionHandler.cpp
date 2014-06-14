@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Sat Jun 14 22:50:51 2014 buret_j
+// Last update Sun Jun 15 01:48:28 2014 buret_j
 */
 
 #include "ConnexionHandler.hpp"
@@ -127,20 +127,21 @@ ConnexionHandler::Serveur::perform(void (*fct)(void *, Socket *, bool b[3]),
 				   void *param, Poll *poll) {
   bool	event[3];
   // DEBUG("ConnexionHandler::Server::perform()", 1);
-  for (std::vector<Socket *>::iterator it = _sockets.begin();
-       it != _sockets.end(); ++it) {
-    if (*it) {
+  for (size_t it = 0; it != _sockets.capacity(); ++it) {
+    if (_sockets[it]) {
     // printf("=================\n");
     // printf("perform : %p \n", *it);
     //   std::cout << "CH::Serveur::perform : " << (*it)->getFd() << std::endl;
-      event[0] = poll->isEventOccurred((*it)->getFd(), POLLIN);
-      event[1] = poll->isEventOccurred((*it)->getFd(), POLLOUT);
-      event[2] = poll->isDisconnected((*it)->getFd());
+      event[0] = poll->isEventOccurred(_sockets[it]->getFd(), POLLIN);
+      event[1] = poll->isEventOccurred(_sockets[it]->getFd(), POLLOUT);
+      event[2] = poll->isDisconnected(_sockets[it]->getFd());
       if (event[0] || event[1] || event[2]) {
-	if (_masterSocket && *it == _masterSocket)
+	if (_masterSocket && _sockets[it] == _masterSocket) {
 	  this->acceptPeer(poll, reinterpret_cast<Server::Server *>(param));
+	  
+	}
 	else
-	  fct(param, *it, event);
+	  fct(param, _sockets[it], event);
       }
     }
   }
