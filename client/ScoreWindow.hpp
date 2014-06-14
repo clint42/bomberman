@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 17:41:08 2014 virol_g
-// Last update Sat Jun 14 18:56:23 2014 virol_g
+// Last update Sat Jun 14 23:24:04 2014 virol_g
 //
 
 #ifndef		SCOREWINDOW_HPP_
@@ -13,6 +13,7 @@
 
 # include	<vector>
 # include	<sstream>
+# include	"MenuBackground.hpp"
 # include	"menu/AMenu.hpp"
 # include	"menu/IMenuElem.hpp"
 # include	"MenuButton.hpp"
@@ -30,7 +31,7 @@ class		ScoreWindow: public AMenu
   std::string	toString(const std::string &, int);
 
 public:
-  ScoreWindow(gdl::SdlContext sdlContext, std::vector<int> ids,
+  ScoreWindow(gdl::SdlContext &sdlContext, std::vector<int> ids,
 	      std::vector<int> scores, int idWiner);
   ~ScoreWindow();
 
