@@ -11,7 +11,7 @@ static Server::Game::Play g_Plays[] = {
 Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type,
 		   std::list<Player *> const &peers, Messenger *mes)
   : _map(0), _params(g_Plays[type]), _time(static_cast<Time_t>(t)), _messenger(mes), _bombThread(0),
-    _started(false), _paused(false),
+    _started(false), _paused(false), _ended(false),
     _nbPlayers(p), _nbBots(b), _round(0),
     _peers(peers)
 {
@@ -65,13 +65,13 @@ Server::Game::bombsProcessing() {
       DEBUG("Server::Game:: TEST2", 0);
       if (!_bombs.empty()) {
 	DEBUG("Server::Game:: TEST3", 0);
-	_bombs.signal();
+	// _bombs.signal();
       }
       { // code
 	DEBUG("Server::Game:: TEST4", 0);
 	if (this->timeLeft() > c->date) {
-	  std::cout << "[SERVER] Server::Game::bombsProcessing() => time of usleep " << this->timeLeft().usec() - c->date.usec() << "." << std::endl;
-	  usleep(this->timeLeft().usec() - c->date.usec());
+	  std::cout << "[SERVER] Server::Game::bombsProcessing() => time of usleep " << this->timeLeft().inUsec() - c->date.inUsec() << "." << std::endl;
+	  usleep(this->timeLeft().inUsec() - c->date.inUsec());
 	}
 	else {
 	  DEBUG("[SERVER] Server::Game::bombsProcessing() => en fait, elle explose directe", 0);
