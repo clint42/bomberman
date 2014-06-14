@@ -5,12 +5,12 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Sat Jun 14 14:04:38 2014 aurelien prieur
+## Last update Sat Jun 14 15:01:24 2014 lafitt_g
 ##
 
 CXX =	clang++
 
-CXXFLAGS += -I/home/$(USER)/LibBomberman_linux_x64/includes -Icommon -Iclient/menu -Werror -Wall -Wextra
+CXXFLAGS += -I/home/$(USER)/LibBomberman_linux_x64/includes -Icommon -Iclient/menu -Werror -Wall -Wextra -ggdb
 
 LXXFLAGS =  -L/home/$(USER)/LibBomberman_linux_x64/libs -lgdl_gl -lGL -lGLEW -ldl -lrt -lfbxsdk -lSDL2 -lpthread -lssl -lcrypto
 
