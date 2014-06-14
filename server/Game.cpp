@@ -55,11 +55,12 @@ Server::Game::bombsProcessing() {
   t_cmd *	c;
 
   DEBUG("Server::Game::bombsProcessing", 1);
-  while (!this->isEnded()) {
+  while (!_ended) {
     DEBUG("Server::Game:: TEST0", 0);
     if (_paused || !_bombs.tryPop(&c)) {
       DEBUG("Server::Game:: TEST1", 0);
-      _bombs.wait();
+      // _bombs.wait();
+      usleep(75000);
     } else {
       DEBUG("Server::Game:: TEST2", 0);
       if (!_bombs.empty()) {
@@ -104,7 +105,7 @@ Server::Game::start() {
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 2", 0);
     _started = true;
     std::stringstream ss;
-    ss << "0 0 0 STARTGAME " << this->timeLeft().sec() << "\n";
+    ss << "0 0 0 STARTGAME " << this->timeLeft().inSec() << "\n";
     std::cout << "<< " << ss.str() << std::endl;
     _messenger->broadcastMessage(ss.str());
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 2", 0);
@@ -169,6 +170,7 @@ Server::Game::update() {
     }
   }
   else if (this->isEnded()) {
+    _ended = true;
   }
   else {
     t_cmd *c;
@@ -357,6 +359,8 @@ Server::Game::process(t_cmd *c, Player *p)
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::MOVE, Server::Player::LEFT)] = &Server::Game::moveLeft;
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::UP)] = &Server::Game::orientUp;
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::RIGHT)] = &Server::Game::orientRight;
+
+
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::DOWN)] = &Server::Game::orientDown;
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::ORIENT, Server::Player::LEFT)] = &Server::Game::orientLeft;
       func[std::pair<Server::Player::Action, Server::Player::Dir>(Server::Player::BOMB, Server::Player::UP)] = &Server::Game::bombUp;

@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Fri Jun 13 15:31:38 2014 virol_g
+// Last update Sat Jun 14 14:19:27 2014 virol_g
 //
 
 #include	<sstream>
@@ -13,7 +13,7 @@
 #include	"CreateMenu.hpp"
 #include	"ReadDir.hpp"
 
-CreateMenu::CreateMenu(gdl::SdlContext &sdlContext): AMenu(sdlContext)
+CreateMenu::CreateMenu(gdl::SdlContext &sdlContext): AMenu(sdlContext), _createMap(false)
 {
 }
 
@@ -37,54 +37,55 @@ bool	CreateMenu::build()
       std::cerr << "Unable to open maps list file" << std::endl;
       return (false);
     }
-  _titles.push_back(new GraphicalText("Select a map", std::pair<size_t, size_t>(400, 440),
+  _titles.push_back(new GraphicalText("Select a map", std::pair<size_t, size_t>(400, 410),
 				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
-  _selectMap = new MenuScroll(std::pair<size_t, size_t>(400, 460),
-  			      std::pair<size_t, size_t>(680, 460),
-  			      std::pair<size_t, size_t>(80, 60),
+  _selectMap = new MenuScroll(std::pair<size_t, size_t>(400, 430),
+  			      std::pair<size_t, size_t>(680, 430),
+  			      std::pair<size_t, size_t>(80, 50),
   			      glm::vec4(0.23, 0.18, 0.52, 1.f),
   			      glm::vec4(0.93, 0.9, 0.32, 1.f));
   while ((name = files.readFileName()) != "")
     if (name != "." && name != "..")
-      _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 460),
-					 std::pair<size_t, size_t>(210, 60), name,
+      _selectMap->addElem(new MenuButton(std::pair<size_t, size_t>(480, 430),
+					 std::pair<size_t, size_t>(210, 50), name,
 					 glm::vec4(0.23, 0.18, 0.52, 1.f),
 					 glm::vec4(0.93, 0.9, 0.32, 1.f)));
   _menuBackground = new MenuBackground("./client/menu/ressources/backgroundSubMenu.tga");
-  _titles.push_back(new GraphicalText("How many players ?", std::pair<size_t, size_t>(400, 120),
+  _titles.push_back(new GraphicalText("How many players ?", std::pair<size_t, size_t>(400, 110),
 				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
-  _inputs.push_back(new MenuInput(std::pair<size_t, size_t>(400, 140),
-				  std::pair<size_t, size_t>(250, 60),
+  _inputs.push_back(new MenuInput(std::pair<size_t, size_t>(400, 130),
+				  std::pair<size_t, size_t>(250, 50),
 				  glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f)));
-  _titles.push_back(new GraphicalText("How many bots ?", std::pair<size_t, size_t>(400, 240),
+  _titles.push_back(new GraphicalText("How many bots ?", std::pair<size_t, size_t>(400, 210),
 				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
-  _inputs.push_back(new MenuInput(std::pair<size_t, size_t>(400, 260),
-				  std::pair<size_t, size_t>(250, 60),
+  _inputs.push_back(new MenuInput(std::pair<size_t, size_t>(400, 230),
+				  std::pair<size_t, size_t>(250, 50),
 				  glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f)));
-
   _titles.push_back(new GraphicalText("Server port", std::pair<size_t, size_t>(400, 20),
 				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
-  _inputs.push_back(new MenuInput(std::pair<size_t, size_t>(400, 40), std::pair<size_t, size_t>(250, 60),
+  _inputs.push_back(new MenuInput(std::pair<size_t, size_t>(400, 40),
+				  std::pair<size_t, size_t>(250, 50),
 				  glm::vec4(0.23, 0.18, 0.52, 1.f), glm::vec4(0.51, 0.53, 0.85, 1.f), "4242"));
-
-  _titles.push_back(new GraphicalText("Game duration",
-				      std::pair<size_t, size_t>(400, 340),
-				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
-
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(600, 550),
 				      std::pair<size_t, size_t>(200, 60),
 				      "Finish", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
-
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 360),
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(480, 490),
+				      std::pair<size_t, size_t>(210, 50), "Gen. map",
+				      glm::vec4(0.23, 0.18, 0.52, 1.f),
+				      glm::vec4(0.51, 0.53, 0.85, 1.f)));
+  _titles.push_back(new GraphicalText("Game duration",
+				      std::pair<size_t, size_t>(400, 310),
+				      glm::vec4(0.23, 0.18, 0.52, 1.f), P_FONT_SIZE, "airstrike"));
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(400, 330),
 				      std::pair<size_t, size_t>(135, 50),
 				      "Short", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(535, 360),
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(535, 330),
 				      std::pair<size_t, size_t>(150, 50),
 				      "Medium", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike", true));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(685, 360),
+  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(685, 330),
 				      std::pair<size_t, size_t>(135, 50),
 				      "Long", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
@@ -130,6 +131,11 @@ bool	CreateMenu::update()
 		  i = _selected;
 		  if (this->canFinish() == true)
 		    return (false);
+		}
+	      if (_menuElems[i]->getString() == "Gen. map" && this->canFinish() == true)
+		{
+		  _createMap = true;
+		  return (false);
 		}
 	      _selected = i;
 	      _menuElems[i]->hover(true);
@@ -188,5 +194,7 @@ t_game		*CreateMenu::getChoice() const
   ss2 >> choice->nbBots;
   ss3 << _inputs[2]->getString();
   ss3 >> choice->serverPort;
+  std::cout << "GET CHOICE : " << std::boolalpha << _createMap << std::endl;
+  choice->createMap = _createMap;
   return (choice);
 }

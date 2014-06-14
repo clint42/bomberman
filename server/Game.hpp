@@ -45,6 +45,7 @@ namespace	Server {
     bool	_paused;
     Time	_pausedAt;
     Time	_endAt;
+    bool	_ended;
 
     size_t	_nbPlayers;
     size_t	_nbBots;
@@ -134,7 +135,9 @@ namespace	Server {
 
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
-      return (p->getDateNextCommand() < this->timeLeft()) ? true : false;
+      // return (p->getDateNextCommand() < this->timeLeft()) ? true : false;
+      (void)p;
+      return true;
     }
   };
 

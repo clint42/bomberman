@@ -76,6 +76,8 @@ Server::Server::run() {
 
   while (_run && (ret = _co->update(timeLoop)) >= 0) {
     DEBUG("Server::server::run() => loop", 0);
+    std::cout << "---------------" << std::endl;
+    std::cout << "tour de boucle" << Time().now() << std::endl;
     if (_game)
       _game->updateTimeLeft();
 
@@ -102,7 +104,7 @@ Server::Server::run() {
 	DEBUG("Server::server::run() => loop => faut que je demare le jeu un jour", 0);
 	_game->update();
       }
-      if (!_game || _game->isPaused() || !_game->hasSomethingToDo()) {
+      else if (!_game || _game->isPaused() || !_game->hasSomethingToDo()) {
 	timeLoop = _messenger.hasSomethingToSay() ? 0 : TIMELOOP;
 	DEBUG("Server::server::run() => loop => j'ai rien a faire en fait", 0);
       }
@@ -113,6 +115,7 @@ Server::Server::run() {
       }
     }
     this->sendBroadcast();
+    std::cout << "fin boucle" << Time().now() << std::endl;
     DEBUG("Server::server::run() => ! loop\n", 0);
   } // ! while
   DEBUG("! Server::server::run()", -1);

@@ -5,6 +5,7 @@ std::map<std::string, Server::Game::Type> Server::Game::_types;
 
 bool
 Server::Server::funcWelcome(const t_cmd *_cmd) {
+  DEBUG("Server::Server::funcConfig()", 1);
   if (Game::_isInit == false)
     {
       Game::_isInit = true;
@@ -14,7 +15,6 @@ Server::Server::funcWelcome(const t_cmd *_cmd) {
       Game::_types["TEAM_SURVIVOR"] = Game::TEAM_SURVIVOR;
     }
 
-  DEBUG("Server::Server::funcConfig()", 1);
 
   try
     {
@@ -94,13 +94,16 @@ Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd) {
 
 bool
 Server::Server::funcWithFriend(t_cmd const *cmd) {
+  DEBUG("Server::Server::funcWithFriend()", 1);
   Player *p = this->findPeerByID(cmd->id);
 
   if (p)
     {
       addPeer(p->getSocket());
+  DEBUG("!Server::Server::funcWithFriend()", -1);
       return (true);
     }
+  DEBUG("!Server::Server::funcWithFriend()", -1);
   return (false);
 }
 
@@ -109,6 +112,7 @@ std::map<std::string, bool (Server::Server::*)(const Server::t_cmd *)> Server::S
 
 bool
 Server::Server::manageAdminCommand() {
+  std::cout << "SIZE EXT = " << this->_ext.size() << std::endl;
   if (Server::_isInit == false)
     {
       Server::_isInit = true;
@@ -119,8 +123,7 @@ Server::Server::manageAdminCommand() {
 	Server::_func["WITHFRIEND"] = &Server::Server::funcWithFriend;
     }
   bool ret = false;
-
-  if (this->_ext.front()->id == 1)
+  if (this->_ext.front()->id == 1 || this->_ext.front()->action == "MD5" || this->_ext.front()->action == "WITHFRIEND")
     ret = (this->*_func[this->_ext.front()->action])(this->_ext.front());
   this->_ext.pop_front();
   return ret;
