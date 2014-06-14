@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Sat Jun 14 15:07:27 2014 lafitt_g
+## Last update Sat Jun 14 17:50:10 2014 virol_g
 ##
 
 CXX =	clang++
@@ -46,6 +46,8 @@ SRC =   client/main.cpp \
 	client/FpsDisplay.cpp \
 	client/GraphicalText.cpp \
 	client/GraphicalLetter.cpp \
+	client/ScoreManager.cpp \
+	client/ScoreWindow.cpp \
 \
 	common/Map.cpp \
 	common/Mutex.cpp \

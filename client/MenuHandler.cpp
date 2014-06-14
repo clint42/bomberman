@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Sat Jun 14 15:43:05 2014 aurelien prieur
+// Last update Sat Jun 14 18:08:19 2014 virol_g
 //
 
 #include "MenuHandler.hpp"
@@ -122,6 +122,7 @@ t_game	*MenuHandler::launchMenus()
 	  choice->heightMap = mapMenu->getInfo("Map height");
 	  choice->widthMap = mapMenu->getInfo("Map width");
 	  choice->playersMap = mapMenu->getInfo("Players on the map");
+	  choice->mapName = mapMenu->getInfo("Map name");
 	}
 
       choice->isDouble = mainChoice->isDouble;
