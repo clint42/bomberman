@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Fri Jun 13 15:16:04 2014 julie franel
+// Last update Sat Jun 14 22:50:51 2014 buret_j
 */
 
 #include "ConnexionHandler.hpp"
@@ -36,6 +36,8 @@ ConnexionHandler::reset() {
 void
 ConnexionHandler::rmSocket(Socket *s) {
   try {
+    if (s == this->getMasterSocket())
+      std::cout << "====== [SERVER] Poll::stopWatchingEvent() => fd is " << s->getFd() << std::endl;
     std::cout << "J'unwatch la socket" << std::endl; // debug
     _poll.disconnected(s->getFd());
   } catch (PollException) { }
@@ -85,12 +87,13 @@ ConnexionHandler::Serveur::initialise() {
       || listen(fd, 10) == -1)
     throw ConnexionException("Can't create socket properly");
 
-  if (_sockets.capacity() < (size_t)fd) {
+  if (_sockets.capacity() <= (size_t)fd) {
     std::vector<Socket *> tmp = _sockets;
     _sockets = std::vector<Socket *>(fd + 5);
     std::copy(tmp.begin(), tmp.end(), _sockets.begin());
   }
   _sockets[fd] = new Socket(fd);
+  std::cout << "======= [SERVER] CH::Server::initialise() => master fd is" << fd << std::endl;
   _masterSocket = _sockets[fd];
 }
 
@@ -108,12 +111,13 @@ ConnexionHandler::Serveur::acceptPeer(Poll *poll, Server::Server *srv) {
   int		fd;
 
   fd = accept4(_masterSocket->getFd(), (sockaddr *)&sin, &sin_len, SOCK_NONBLOCK); // have to throw except° & catch it
-  if (_sockets.capacity() < (size_t)fd + 1) {
+  if (_sockets.capacity() <= (size_t)fd) {
     std::vector<Socket *> tmp = _sockets;
     _sockets = std::vector<Socket *>(fd + 5);
     std::copy(tmp.begin(), tmp.end(), _sockets.begin());
   }
   _sockets[fd] = new Socket(fd);
+  std::cout << "[SERVER] CH:Serveur::acceptPeer() => fd is " << fd << std::endl;
   poll->watchEvent(fd, POLLIN);
   srv->addPeer(_sockets[fd]);
 }
