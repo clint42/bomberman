@@ -15,22 +15,25 @@ Time::operator=(Time const &t) {
 }
 Time &
 Time::operator-=(Time const &t) {
-  _t.tv_sec = (_t.tv_sec - t._t.tv_sec) > 0 ? (_t.tv_sec - t._t.tv_sec) : 0;
   _t.tv_usec = (_t.tv_usec - t._t.tv_usec) > 0 ? (_t.tv_usec - t._t.tv_usec) : 0;
+  _t.tv_sec = (_t.tv_sec - t._t.tv_sec) > 0 ? (_t.tv_sec - t._t.tv_sec) - !(_t.tv_usec) : 0;
   return *this;
 }
 Time &
 Time::operator+=(Time const &t) {
   _t.tv_sec += t._t.tv_sec;
-  _t.tv_usec += t._t.tv_usec;
+  if ((_t.tv_usec += t._t.tv_usec) >= 1000000) {
+    _t.tv_usec %= 1000000;
+    _t.tv_sec += 1;
+  };
   return *this;
 }
 
 Time
 Time::operator-(Time const &t) const {
   Time	ret;
-  ret._t.tv_sec = (_t.tv_sec - t._t.tv_sec) > 0 ? (_t.tv_sec - t._t.tv_sec) : 0;
   ret._t.tv_usec = (_t.tv_usec - t._t.tv_usec) > 0 ? (_t.tv_usec - t._t.tv_usec) : 0;
+  ret._t.tv_sec = (_t.tv_sec - t._t.tv_sec) > 0 ? (_t.tv_sec - t._t.tv_sec) - !(ret._t.tv_usec) : 0;
   return ret;
 }
 
@@ -38,24 +41,30 @@ Time
 Time::operator+(Time const &t) const {
   Time	ret;
   ret._t.tv_sec = _t.tv_sec + t._t.tv_sec;
-  ret._t.tv_usec = _t.tv_usec + t._t.tv_usec;
+  if ((ret._t.tv_usec = _t.tv_usec + t._t.tv_usec) > 1000000) {
+    ret._t.tv_sec += 1;
+    ret._t.tv_usec %= 1000000;
+  }
   return ret;
 }
 
 bool
 Time::operator>(Time const &t) const {
-  return this->usec() > t.usec();
-  }
+  return this->inUsec() > t.inUsec();
+}
 
 bool
 Time::operator<(Time const &t) const {
-  return this->usec() < t.usec();
+  return this->inUsec() < t.inUsec();
 }
 
-
-
-std::ostream &	operator<<(std::ostream &s, Time const &t) {
-  s << "Time(h: " << t.hour() << ", m: " << t.min() - (t.hour() * 60) << ", s: " << t.sec() - (t.min() * 60) << " , ms: " << t.msec() - (t.sec() * 1000) << " , us: " << t.usec() - (t.msec() * 1000) << ")";
-  (void)t;
+std::ostream &
+operator<<(std::ostream &s, Time const &t) {
+  s << "Time(h: " << t.hour() 
+    << ", m: " << t.min()
+    << ", s: " << t.sec()
+    << " , ms: " << t.msec()
+    << " , us: " << t.usec()
+    << ")";
   return s;
 }
