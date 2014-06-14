@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Sat Jun 14 17:50:10 2014 virol_g
+## Last update Sat Jun 14 23:46:27 2014 aurelien prieur
 ##
 
 CXX =	clang++
@@ -32,6 +32,7 @@ SRC =   client/main.cpp \
 	client/AObject.cpp \
 	client/GameEntities.cpp \
 	client/GraphicEngine.cpp \
+	client/LoadBar.cpp \
 	client/EventsHandler.cpp \
 	client/ClientCore.cpp \
 	client/Parser.cpp \
