@@ -474,7 +474,7 @@ Server::Game::bombRight(Player *p, t_cmd *c)
 	  this->buildCmdCreateBomb(c, pos);
 	  std::cout << "Avant setElemAtPos" << std::endl;
 	  this->_map->setElemAtPos(pos, Map::BOMB);
-  DEBUG("Server::Game::bombUp()", -1);
+  DEBUG("Server::Game::bombRight()", -1);
 	  return (p->dropBomb());
 	}
     }
@@ -496,7 +496,7 @@ Server::Game::bombDown(Player *p, t_cmd *c)
 	  this->buildCmdCreateBomb(c, pos);
 	  std::cout << "Avant setElemAtPos" << std::endl;
 	  this->_map->setElemAtPos(pos, Map::BOMB);
-  DEBUG("Server::Game::bombUp()", -1);
+  DEBUG("Server::Game::bombDown()", -1);
 	  return (p->dropBomb());
 	}
     }
@@ -518,7 +518,7 @@ Server::Game::bombLeft(Player *p, t_cmd *c)
 	  this->buildCmdCreateBomb(c, pos);
 	  std::cout << "Avant setElemAtPos" << std::endl;
 	  this->_map->setElemAtPos(pos, Map::BOMB);
-  DEBUG("Server::Game::bombUp()", -1);
+  DEBUG("Server::Game::bombLeft()", -1);
 	  return (p->dropBomb());
 	}
     }
