@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:30 2014 aurelien prieur
-// Last update Fri Jun 13 18:29:49 2014 aurelien prieur
+// Last update Sat Jun 14 11:29:44 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -57,17 +57,17 @@ void	Player::genColor(void)
 
 bool	Player::initialize(std::pair<size_t, size_t> const &pos)
 {
-  _speed = 10.0f;
+  _speed = 2.0f;
   if (_model.load("./client/assets/marvin.fbx") == false)
     {
       std::cerr << "Couldn't load model." << std::endl;
       return (false);
     }
-  if (_model.createSubAnim(0, "run", 25, 65) == false)
+  if (_model.createSubAnim(0, "run", 25, 70) == false)
     return (false);
   if (_model.createSubAnim(0, "start", 0, 25) == false)
     return (false);
-  if (_model.createSubAnim(0, "end", 70, 121) == false)
+  if (_model.createSubAnim(0, "end", 75, 121) == false)
     return (false);
   this->scale(glm::vec3(0.002, 0.002, 0.002));
   this->setPos(glm::vec3(pos.first + 0.5, 0, pos.second + 0.5));
@@ -80,16 +80,15 @@ void	Player::updateMovement(void)
 {
   if (equalVec3(_pos, _target))
     {
-      if (_moving)
-  	_moveEvents.pop_front();
       if (_moveEvents.size() > 0)
   	{
   	  _direction = _moveEvents.front();
-  	  _target = _pos + _moveVectors[_direction];
+	  _moveEvents.pop_front();
+	  _target = _pos + _moveVectors[_direction];
 	  if (!_moving)
 	    {
 	      _moving = true;
-	      _model.setCurrentSubAnim("start", false);
+	      _model.setCurrentSubAnim("start", true);
 	      _mainAnimStarted = false;
 	    }
   	}
@@ -101,6 +100,7 @@ void	Player::updateMovement(void)
     }
   else if (_moving && !_mainAnimStarted)
     {
+      std::cout << "[CLIENT] Main anim started" << std::endl;
       _model.setCurrentSubAnim("run", true);
       _mainAnimStarted = true;
     }

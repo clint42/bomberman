@@ -5,9 +5,10 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Wed Apr 23 19:35:42 2014 buret_j
-// Last update Sun Jun  8 16:49:05 2014 buret_j
+// Last update Fri Jun 13 21:45:50 2014 aurelien prieur
 //
 
+#include <iostream>
 #include "Mutex.hpp"
 
 Mutex::Mutex(void) {
