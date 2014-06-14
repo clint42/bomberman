@@ -1,4 +1,4 @@
-#include "Server.hpp"
+B1;2802;0c#include "Server.hpp"
 
 bool Server::Game::_isInit = false;
 std::map<std::string, Server::Game::Type> Server::Game::_types;
@@ -94,8 +94,14 @@ Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd) {
 
 bool
 Server::Server::funcWithFriend(t_cmd const *cmd) {
-  (void)cmd;
-  return (true);
+  Player *p = this->findPeerByID(cmd->id);
+
+  if (p)
+    {
+      addPeer(p->getSocket());
+      return (true);
+    }
+  return (false);
 }
 
 bool Server::Server::_isInit = false;
@@ -110,9 +116,10 @@ Server::Server::manageAdminCommand() {
 	Server::_func["PAUSE"] = &Server::Server::funcPause;
 	Server::_func["KILL"] = &Server::Server::funcKill;
 	Server::_func["MD5"] = &Server::Server::funcMd5;
+	Server::_func["WITHFRIEND"] = &Server::Server::funcWithFriend;
     }
   bool ret = false;
-  
+
   if (this->_ext.front()->id == 1)
     ret = (this->*_func[this->_ext.front()->action])(this->_ext.front());
   this->_ext.pop_front();
