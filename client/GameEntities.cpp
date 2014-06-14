@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sat Jun 14 15:48:50 2014 aurelien prieur
+// Last update Sat Jun 14 17:20:47 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -79,7 +79,13 @@ bool		GameEntities::deleteEntity(std::pair<size_t, size_t> const &coord)
   if (_entities.find(coord) != _entities.end())
     {
       if (_entities[coord] != NULL)
-      	delete _entities[coord];
+      	{
+	  if (_entities[coord] == _player)
+	    _player = NULL;
+	  else if (_entities[coord] == _player2)
+	    _player2 = NULL;
+	  delete _entities[coord];
+	}
       _entities.erase(coord);
     }
   return (true);

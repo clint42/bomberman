@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sat Jun 14 17:11:43 2014 aurelien prieur
+// Last update Sat Jun 14 17:31:27 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -145,10 +145,14 @@ void		GraphicEngine::drawPlayer(int nPlayer)
   this->shader.setUniform("projection", projection);
   AObject const *player = this->objects.getPlayer(true, nPlayer);
   if (player != NULL)
+    transformation = glm::lookAt(glm::vec3(0, 17, 8) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
+  else
     {
-      transformation = glm::lookAt(glm::vec3(0, 17, 8) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
-      this->shader.setUniform("view", transformation);
+      std::pair<double, double> const &sizeMap = floor.getSize();
+      transformation = glm::lookAt(glm::vec3(0, 17, 8) + glm::vec3(sizeMap.first / 2.f, 0, sizeMap.second / 2.f),
+				   glm::vec3(sizeMap.first / 2.f, 0, sizeMap.second / 2.f), glm::vec3(0, 1, 0));
     }
+  this->shader.setUniform("view", transformation);
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
        it != this->objects.getEntities().end(); ++it)
     it->second->draw(this->shader, this->clock);
