@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sat Jun 14 17:50:02 2014 aurelien prieur
+// Last update Sat Jun 14 19:14:06 2014 julie franel
 //
 
 #include <iostream>
@@ -89,6 +89,8 @@ bool			ClientCore::initialize(t_game *options)
   _socket = _connexion.getMasterSocket();
   _connexion.watchEventOnSocket(_socket, POLLIN);
   _configurator = new Configurator(options);
+  if (options->createMap)
+    Map::generateMap(options->widthMap, options->heightMap, options->playersMap, options->mapName);
   if (options->isDouble)
     _gameEntities.setDouble();
   try {
@@ -140,7 +142,7 @@ void			ClientCore::buildWithFriendCmd(std::string &string) const
 void			ClientCore::buildMapMd5(std::string &string, int idPlayer) const
 {
   std::ostringstream	oss;
-  
+
   oss << idPlayer << " 0 0 MD5 ";
   oss << _map->getMd5() << std::endl;
   string = oss.str();
@@ -151,7 +153,7 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
   //TODO: find a better solution to send config only once
   static bool	configSend = false;
   std::string	string;
-  
+
   if (b[2])
     {
       std::cerr << "Connexion reset by host during configuration process" << std::endl;
@@ -161,7 +163,7 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
     {
       std::cout << "[client] Before getline" << std::endl;
       _socket->read(string);
-      std::cout << "[CLIENT] received  [" << string << "]" << std::endl; 
+      std::cout << "[CLIENT] received  [" << string << "]" << std::endl;
       _parser->run(string);
       if (_parser->getConfig().welcomeReceived && !configSend)
 	{
@@ -227,7 +229,7 @@ bool		ClientCore::run()
 void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
 {
   std::string	string;
-   
+
   if (b[2])
     {
       _eventsHandler.finish();
@@ -258,7 +260,7 @@ bool		ClientCore::write(void)
   return (false);
 }
 
- ClientCore::Configurator::Configurator(t_game *options): _error(false), _options(options)
+ClientCore::Configurator::Configurator(t_game *options): _error(false), _options(options)
 {
 }
 
@@ -297,4 +299,3 @@ t_game const	*ClientCore::Configurator::getOptions(void) const
 {
   return (_options);
 }
-

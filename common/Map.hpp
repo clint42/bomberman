@@ -4,6 +4,7 @@
 # include <iostream>
 # include <string>
 # include <map>
+# include <vector>
 # include <utility>
 # include <cstdlib>
 # include "Exception.hpp"
@@ -53,8 +54,12 @@ public:
   void			deleteElem(const size_t posX, const size_t posY);
   void			deleteElem(const std::pair<size_t, size_t>);
 
-  static void		generateMap();
+  static void		generateMap(const size_t width, const size_t height, const size_t maxPlayers,
+				    const std::string &filename);
+  static eTypes		generateCase(const size_t x, const size_t y, const size_t width, const size_t height);
 
+  static std::vector<eTypes>	_mapTypes;
+  static bool			_isMapInit;
 };
 
 class           MapException: public ABombermanException
