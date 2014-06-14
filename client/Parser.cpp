@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sat Jun 14 18:15:26 2014 julie franel
+// Last update Sat Jun 14 18:38:39 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -118,8 +118,8 @@ bool		Parser::parseCreate(std::list<t_parser *> &_tabParser)
 	  size_t posx;
 	  size_t posy;
 
-	  CVRT_STRING_TO_SIZET((*it)->params[1], posx);
-	  CVRT_STRING_TO_SIZET((*it)->params[2], posy);
+	  CVRT_STRING_TO_SIZET((*it)->params[2], posx);
+	  CVRT_STRING_TO_SIZET((*it)->params[3], posy);
 	  _list.push_back(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(posx, posy),
 								    this->_types[(*it)->params[0]]));
 	  _tabParser.erase(it);
