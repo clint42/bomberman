@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sun Jun 15 01:01:39 2014 aurelien prieur
+// Last update Sun Jun 15 01:28:39 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -86,7 +86,8 @@ bool	GraphicEngine::initialize()
       std::cerr << "Error while loading models." << std::endl;
       return (false);
     }
-  if (!Block::loadTextures() || !Bonus::loadTextures())
+  if ((loadBar.update((25.f / 30.f) * 100) && !Block::loadTextures()) ||
+      (loadBar.update((30.f / 30.f) * 100) && !Bonus::loadTextures()))
     {
       std::cerr << "Error while loading textures." << std::endl;
       return (false);

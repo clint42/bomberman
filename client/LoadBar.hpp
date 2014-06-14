@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat Jun 14 20:03:51 2014 aurelien prieur
-// Last update Sat Jun 14 23:47:12 2014 aurelien prieur
+// Last update Sun Jun 15 01:24:25 2014 aurelien prieur
 //
 
 #ifndef LOADBAR_HPP_
@@ -30,7 +30,7 @@ class	LoadBar
   gdl::Geometry		_border;
   gdl::Geometry		_borderLeft;
   gdl::Geometry		_borderRight;
-  gdl::Geometry		_loaderGauge;
+  gdl::Geometry		*_loaderGauge;
   void	draw(void);
 
 public:
