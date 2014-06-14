@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Sat Jun 14 14:19:27 2014 virol_g
+// Last update Sat Jun 14 22:42:05 2014 virol_g
 //
 
 #include	<sstream>
@@ -184,9 +184,7 @@ t_game		*CreateMenu::getChoice() const
 
   if (_selected == -1)
     return (NULL);
-  std::cout << "Create menu getChoice !" << std::endl;
   choice->mapName = _selectMap->getString();
-  std::cout << "AFter select map getChoice." << std::endl;
   choice->timeGame = (_selected == -1) ? 2 : _selected;
   ss << _inputs[0]->getString();
   ss >> choice->nbPlayers;
@@ -194,7 +192,6 @@ t_game		*CreateMenu::getChoice() const
   ss2 >> choice->nbBots;
   ss3 << _inputs[2]->getString();
   ss3 >> choice->serverPort;
-  std::cout << "GET CHOICE : " << std::boolalpha << _createMap << std::endl;
   choice->createMap = _createMap;
   return (choice);
 }

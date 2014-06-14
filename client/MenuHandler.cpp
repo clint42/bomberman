@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Sat Jun 14 19:43:06 2014 virol_g
+// Last update Sat Jun 14 23:47:39 2014 virol_g
 //
 
 #include "ScoreWindow.hpp" // test
@@ -32,12 +32,6 @@ t_game		*MenuHandler::mainMenu()
   t_game	*options;
   int		retVal;
 
-  //  ScoreWindow	win(*_sdlContext, std::vector<int>(1, -1), std::vector<int>(100, -1), 1);
-
-  // if (!(win.initialize()) || !(win.build()))
-  //   return (NULL);
-  // while (win.update())
-  //   win.draw();
   if (!(menu.initialize()) || !(menu.build()))
     return (NULL);
   while (menu.update())
