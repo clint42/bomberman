@@ -119,7 +119,6 @@ namespace	Server {
     static std::map<std::string, Game::Type>    _types;
     static bool					_isInit;
     static std::map<int, std::string>		_bonus;
-    static Time					_timeLeft;
 
   private:
 

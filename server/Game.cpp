@@ -97,6 +97,7 @@ Server::Game::start() {
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre", 0);
     _startedAt.now();
     _endAt = _startedAt + Time(0, GAME_TIME * _time);
+    this->updateTimeLeft();
 
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 1", 0);
     _bombThread = new Thread(&Server::Game::trampoline_bombsProcessing, this); // create bombs' thread
