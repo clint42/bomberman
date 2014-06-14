@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sat Jun 14 18:50:53 2014 julie franel
+// Last update Sun Jun 15 01:10:34 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -16,10 +16,11 @@
 */
 
 Parser::Parser(GameEntities &gameEntities,
-	       SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs):
+	       SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs,
+	       EventsHandler &eventsHandler):
   _gameEntities(gameEntities),
-  _createInstructs(createInstructs)
-
+  _createInstructs(createInstructs),
+  _eventsHandler(eventsHandler)
 {
   this->_dir["UP"] = AObject::UP;
   this->_dir["RIGHT"] = AObject::RIGHT;
@@ -32,7 +33,7 @@ Parser::Parser(GameEntities &gameEntities,
   this->_types["PLAYER"] = PLAYER;
   this->_types["B_BOMB"] = BONUSBOMB;
   this->_types["B_SPEED"] = BONUSSPEED;
-  this->_types["B_FIRE"] = BONUSRANGE;
+  this->_types["B_RANGE"] = BONUSRANGE;
 
   this->_fct["MOVE"] = &Parser::parseMove;
   this->_fct["CREATE"] = &Parser::parseCreate;
@@ -41,6 +42,7 @@ Parser::Parser(GameEntities &gameEntities,
   this->_fct["CHRONO"] = &Parser::parseChrono;
   this->_fct["POINT"] = &Parser::parsePoint;
   this->_fct["STARTGAME"] = &Parser::parseStartGame;
+  this->_fct["ENDGAME"] = &Parser::parseEndGame;
 
   this->_fct["WELCOME"] = &Parser::parseWelcome;
   this->_fct["MAP"] = &Parser::parseMap;
@@ -190,6 +192,12 @@ void		Parser::parsePoint(const t_parser &_parser)
 
   CVRT_STRING_TO_SIZET(_parser.params.front(), points);
   this->_gameEntities.addPoints(points, _parser.id);
+}
+
+
+void		Parser::parseEndGame(__attribute__((unused))const t_parser &_parser)
+{
+  this->_eventsHandler.endGame();
 }
 
 

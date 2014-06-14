@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Sun Jun  8 15:49:48 2014 julie franel
-// Last update Thu Jun 12 15:48:00 2014 julie franel
+// Last update Sun Jun 15 01:11:53 2014 julie franel
 //
 
 #ifndef		PARSER_HPP_
@@ -40,6 +40,7 @@ class		Parser
 
   GameEntities							&_gameEntities;
   SafeQueue<std::pair<std::pair<size_t, size_t>, int> >		&_createInstructs;
+  EventsHandler							&_eventsHandler;
   t_config							_config;
 
   std::map<std::string, AObject::EventIn>			_dir;
@@ -52,6 +53,7 @@ class		Parser
   void                  parseWelcome(const t_parser &_parser);
   void                  parseMap(const t_parser &_parser);
   void                  parseStartGame(const t_parser &_parser);
+  void			parseEndGame(const t_parser &_parser);
 
   void                  parseMove(const t_parser &_parser);
   void                  parseRotate(const t_parser &_parser);
@@ -70,7 +72,9 @@ class		Parser
   void			runSplit(std::string string);
 
 public:
-  Parser(GameEntities &gameEntities, SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs);
+  Parser(GameEntities &gameEntities,
+	 SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs,
+	 EventsHandler &eventsHandler);
   ~Parser();
 
   void			run(std::string &string);
