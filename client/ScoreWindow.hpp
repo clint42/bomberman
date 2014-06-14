@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 17:41:08 2014 virol_g
-// Last update Sat Jun 14 17:46:22 2014 virol_g
+// Last update Sat Jun 14 18:56:23 2014 virol_g
 //
 
 #ifndef		SCOREWINDOW_HPP_
@@ -25,15 +25,20 @@ class		ScoreWindow: public AMenu
   std::vector<int>	_scores;
   int			_idWiner;
   size_t		_nbPlayers;
+  bool			_replay;
 
   std::string	toString(const std::string &, int);
 
 public:
-  ScoreWindow(std::vector<int> ids, std::vector<int> scores,
-	      gdl::SdlContext sdlContext, int idWiner);
+  ScoreWindow(gdl::SdlContext sdlContext, std::vector<int> ids,
+	      std::vector<int> scores, int idWiner);
   ~ScoreWindow();
 
-  bool		build();
+  virtual bool	build();
+  virtual bool	update();
+  virtual void	draw();
+  virtual t_game	*getChoice() const;
+  bool		replay() const;
 };
 
 #endif		// !SCOREWINDOW_HPP_

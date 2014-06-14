@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 20:23:41 2014 virol_g
-// Last update Sat Jun 14 17:55:44 2014 virol_g
+// Last update Sat Jun 14 19:21:33 2014 virol_g
 //
 
 #ifndef		MAPMENU_HPP_
@@ -31,6 +31,7 @@ public:
   virtual void	draw();
   t_game	*getChoice() const;
   int		getInfo(const std::string &) const;
+  std::string	getMapName() const;
 };
 
 #endif		// !MAPMENU_HPP_

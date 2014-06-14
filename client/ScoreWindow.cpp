@@ -5,15 +5,16 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 17:46:00 2014 virol_g
-// Last update Sat Jun 14 17:46:27 2014 virol_g
+// Last update Sat Jun 14 19:17:38 2014 virol_g
 //
 
 #include	"ScoreManager.hpp"
 #include	"ScoreWindow.hpp"
+#include	<iostream>
 
-ScoreWindow::ScoreWindow(std::vector<int> ids, std::vector<int> scores,
-	    gdl::SdlContext sdlContext, int idWiner):
-  AMenu(sdlContext), _ids(ids), _scores(scores), _idWiner(idWiner)
+ScoreWindow::ScoreWindow(gdl::SdlContext sdlContext, std::vector<int> ids,
+			 std::vector<int> scores, int idWiner):
+  AMenu(sdlContext), _ids(ids), _scores(scores), _idWiner(idWiner), _replay(false)
 {
   _nbPlayers = (_ids[1] == -1) ? 1 : 2;
 }
@@ -41,11 +42,10 @@ std::string	ScoreWindow::toString(const std::string &str, int nb)
 
 bool		ScoreWindow::build()
 {
+  try {
   ScoreManager	scoreManager(".bomberman.score");
-  std::vector<int>	bestScores(scoreManager.getPlayer1Score());
+  std::vector<int>	bestScores;
 
-  (void)_idWiner;
-  (void)scoreManager;
   _elems.push_back(new MenuButton(std::pair<size_t, size_t>(300, 540),
 				  std::pair<size_t, size_t>(100, 60),
 				  "Quit", glm::vec4(0.23, 0.18, 0.52, 1.f),
@@ -67,5 +67,61 @@ bool		ScoreWindow::build()
 					std::pair<size_t, size_t>(400 / _nbPlayers, 100 + (i * 20)),
 					glm::vec4(0.23, 0.18, 0.52, 1.f), 20));
     }
+  }
+  catch (ScoreManagerException e)
+    {
+      std::cerr << e.what() << std::endl;
+    }
   return (true);
+}
+
+bool		ScoreWindow::update()
+{
+  glm::ivec2	mouse;
+
+  this->_sdlContext.updateClock(this->_clock);
+  this->_sdlContext.updateInputs(this->_input);
+  if (this->_input.getKey(SDLK_ESCAPE) || this->_input.getInput(SDL_QUIT, false))
+    {
+      _replay = false;
+      return (false);
+    }
+  if (this->_input.getKey(SDL_BUTTON_LEFT))
+    {
+      mouse = this->_input.getMousePosition();
+      for (size_t i = 0; i < _menuElems.size(); ++i)
+	{
+	  if (static_cast<size_t>(mouse.x) > _menuElems[i]->getPos().first &&
+	      static_cast<size_t>(mouse.x) < _menuElems[i]->getPos().first + _menuElems[i]->getSize().first &&
+	      static_cast<size_t>(mouse.y) > _menuElems[i]->getPos().second &&
+	      static_cast<size_t>(mouse.y) < _menuElems[i]->getPos().second + _menuElems[i]->getSize().second)
+	    {
+	      if (_menuElems[i]->getString() == "Replay")
+		_replay = true;
+	      return (false);
+	    }
+	}
+    }
+  return (true);
+}
+
+void		ScoreWindow::draw()
+{
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  _shader.bind();
+  _menuBackground->draw(_shader, _clock);
+  for (size_t i = 0; i < _menuElems.size(); ++i)
+    _menuElems[i]->draw(_shader, _clock);
+  for (size_t i = 0; i < _text.size(); ++i)
+    _text[i]->draw(_shader);
+}
+
+bool		ScoreWindow::replay() const
+{
+  return (_replay);
+}
+
+t_game		*ScoreWindow::getChoice() const
+{
+  return (NULL);
 }

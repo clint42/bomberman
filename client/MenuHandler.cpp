@@ -5,9 +5,10 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Sat Jun 14 18:08:19 2014 virol_g
+// Last update Sat Jun 14 19:21:12 2014 virol_g
 //
 
+#include "ScoreWindow.hpp" // test
 #include "MenuHandler.hpp"
 
 MenuHandler::MenuHandler(Signal &signal): _signal(signal), _forked(false)
@@ -31,6 +32,12 @@ t_game		*MenuHandler::mainMenu()
   t_game	*options;
   int		retVal;
 
+  ScoreWindow	win(*_sdlContext, std::vector<int>(1, -1), std::vector<int>(100, -1), 1);
+
+  if (!(win.initialize()) || !(win.build()))
+    return (NULL);
+  while (win.update())
+    win.draw();
   if (!(menu.initialize()) || !(menu.build()))
     return (NULL);
   while (menu.update())
@@ -122,7 +129,7 @@ t_game	*MenuHandler::launchMenus()
 	  choice->heightMap = mapMenu->getInfo("Map height");
 	  choice->widthMap = mapMenu->getInfo("Map width");
 	  choice->playersMap = mapMenu->getInfo("Players on the map");
-	  choice->mapName = mapMenu->getInfo("Map name");
+	  choice->mapName = mapMenu->getMapName();
 	}
 
       choice->isDouble = mainChoice->isDouble;

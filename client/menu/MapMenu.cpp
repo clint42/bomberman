@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 20:24:40 2014 virol_g
-// Last update Sat Jun 14 18:08:38 2014 virol_g
+// Last update Sat Jun 14 19:21:58 2014 virol_g
 //
 
 #include	"MapMenu.hpp"
@@ -136,7 +136,7 @@ int		MapMenu::getInfo(const std::string &fieldName) const
   int		retVal;
 
   retVal = -1;
-  for (size_t i = 0; i < _menuElems.size(); ++i)
+  for (size_t i = 0; i < _titles.size(); ++i)
     {
       if (_titles[i]->getString() == fieldName)
 	{
@@ -147,4 +147,14 @@ int		MapMenu::getInfo(const std::string &fieldName) const
 	}
     }
   return (retVal);
+}
+
+std::string	MapMenu::getMapName() const
+{
+  for (size_t i = 0; i < _menuElems.size(); ++i)
+    {
+      if (_titles[i]->getString() == "Map name")
+	return _menuElems[i]->getString();
+    }
+  return ("");
 }
