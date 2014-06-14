@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sat Jun 14 22:41:20 2014 aurelien prieur
+// Last update Sat Jun 14 22:55:10 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -119,7 +119,7 @@ bool	GraphicEngine::update()
       return (false);
     }
   //EXEC CREATE INSTRUCT
-  if (createInstructs.size() > 0)
+  while (createInstructs.size() > 0)
     {
       createInstructs.tryPop(&instruct);
       objects.addEntity(instruct);
