@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 15:57:53 2014 aurelien prieur
-// Last update Sun Jun 15 01:06:37 2014 aurelien prieur
+// Last update Sun Jun 15 01:16:38 2014 aurelien prieur
 //
 
 #ifndef EVENTSHANDLER_HPP_
@@ -67,7 +67,7 @@ public:
 				     int idPlayer2 = -1,
 				     std::pair<size_t, size_t> const &coord2 = (std::pair<size_t, size_t>(0, 0)));
   void			endGame(void);
-  void			isEndGame(void) const;
+  bool			isEndGame(void) const;
 };
 
 #endif // !EVENTHANDLER_HPP_
