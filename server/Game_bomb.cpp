@@ -45,9 +45,9 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   convert << ";0 0 0 CREATE FIRE 0 " << pos.first << " " << pos.second;
   c->msg = convert.str();
   // RIGHT
-  while (pos.first + val < this->_map->getWidth() - 1 && (size_t)val <= p->getBombRange())
+  while (c->pos.first + val < this->_map->getWidth() - 1 && (size_t)val <= p->getBombRange())
     {
-      pos.first += val;
+      pos.first = c->pos.first + val;
       if (this->exploseCase(pos, c) == false)
 	break ;
       ++val;
@@ -55,18 +55,19 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   // LEFT
   val = -1;
   pos.first = c->pos.first;
-  while (pos.first + val > 0 && (size_t)(val * -1) <= p->getBombRange())
+  while (c->pos.first + val > 0 && (size_t)(val * -1) <= p->getBombRange())
     {
-      pos.first += val;
+      pos.first = c->pos.first + val;
       if (this->exploseCase(pos, c) == false)
 	break ;
       --val;
     }
   // UP
+  val = -1;
   pos.first = c->pos.first;
-  while (pos.second + val > 0 && (size_t)(val * -1) <= p->getBombRange())
+  while (c->pos.second + val > 0 && (size_t)(val * -1) <= p->getBombRange())
     {
-      pos.second += val;
+      pos.second = c->pos.second + val;
       if (this->exploseCase(pos, c) == false)
 	break ;
       --val;
@@ -74,9 +75,9 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   // DOWN
   val = 1;
   pos.second = c->pos.second;
-  while (pos.second + val < this->_map->getHeight() - 1 && (size_t)val <= p->getBombRange())
+  while (c->pos.second + val < this->_map->getHeight() - 1 && (size_t)val <= p->getBombRange())
     {
-      pos.second += val;
+      pos.second = c->pos.second + val;
       if (this->exploseCase(pos, c) == false)
 	break ;
       ++val;
