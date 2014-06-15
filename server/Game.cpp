@@ -17,6 +17,12 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
     _nbPlayers(p), _nbBots(b),
     _peers(peers)
 {
+
+  if (m.find(".save") != std::string::npos)
+    this->_toLoad = true;
+  else
+    this->_toLoad = false;
+
   if (!p || !t || (p + b < 2) || !mes)
     throw GameException("Invalid parameters");
 
@@ -147,6 +153,8 @@ Server::Game::update() {
     else {
       this->pickPlayers(_nbPlayers);
       this->createBots();
+      if (this->_toLoad == true)
+	this->loadGame(this->_map->getFilename());
       this->start();
     }
   }
@@ -155,7 +163,6 @@ Server::Game::update() {
     _messenger->broadcastMessage("0 0 0 ENDGAME");
   }
   else {
-    this->updateBots();
     t_cmd *c;
     if (!_events.tryPop(&c)) {
       return ;
@@ -341,7 +348,6 @@ Server::Game::pickPlayers(size_t nb) {
       msg.clear();
     }
   } // !for
-  DEBUG("! Server::Game::pickPlayers()", -1);
 }
 
 void

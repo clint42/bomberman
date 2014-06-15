@@ -58,6 +58,8 @@ namespace	Server {
     size_t	_nbPlayers;
     size_t	_nbBots;
 
+    bool	_toLoad;
+
     std::list<Player *> const &	_peers;
     std::map<std::pair<size_t, size_t>, Player *> _players;
 
