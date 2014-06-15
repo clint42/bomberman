@@ -85,7 +85,7 @@ namespace	Server {
       return _started && !_paused && (!this->timeLeft().inUsec()/* || _players.size() <= 1*/);
     }
 
-    inline void		addEvent(t_cmd *c) { _events.push(c); std::cout << "SIZE ========" <<  _events.size() << std::endl;}
+    inline void		addEvent(t_cmd *c) { _events.push(c); }
     inline void		addBomb(t_cmd *c) { _bombs.push(c); }
 
     static bool		_isGame;

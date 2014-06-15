@@ -12,8 +12,6 @@ Server::Game::moveUp(Player *p, t_cmd *c)
 
       if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
 	this->earnBonus(p, elem, pos);
-      else
-	std::cout << "NE PEUX PAS BOUGER ELEM " << elem << std::endl;
       if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
 	{
 	  this->_players[pos] = this->_players[oldPos];
@@ -39,8 +37,6 @@ Server::Game::moveRight(Player *p, t_cmd *c)
 
       if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
 	this->earnBonus(p, elem, pos);
-      else
-	std::cout << "NE PEUX PAS BOUGER ELEM " << elem << std::endl;
       if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
 	{
 	  this->_players[pos] = this->_players[oldPos];
@@ -64,8 +60,6 @@ Server::Game::moveDown(Player *p, t_cmd *c)
 
       if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
 	this->earnBonus(p, elem, pos);
-      else
-	std::cout << "NE PEUX PAS BOUGER ELEM " << elem << std::endl;
       if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
 	{
 	  this->_players[pos] = this->_players[oldPos];
@@ -89,8 +83,6 @@ Server::Game::moveLeft(Player *p, t_cmd *c)
 
       if (elem == Map::B_BOMB || elem == Map::B_RANGE || elem == Map::B_SPEED)
 	this->earnBonus(p, elem, pos);
-      else
-	std::cout << "NE PEUX PAS BOUGER ELEM " << elem << std::endl;
       if (elem == Map::GROUND && this->_players.find(pos) == this->_players.end())
 	{
 	  this->_players[pos] = this->_players[oldPos];
