@@ -74,6 +74,8 @@ namespace	Server {
     inline Play const &	getParams() const { return _params; }
     inline std::string const &getMapName() const { return _map->getFilename(); }
     inline std::string const &getMapMd5() const { return _map->getKey(); }
+    inline size_t  getNbrBots() const {return this->_bots.size();}
+    inline size_t getNbrPlayers() const {return this->_players.size() - this->_bots.size();}
 
     void updateTimeLeft() { _timeLeft = !_paused ? (_endAt - Time().now()) : (_endAt - _pausedAt); }
     inline Time const &	timeLeft() const { return _timeLeft; }
