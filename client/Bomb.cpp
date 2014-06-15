@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu Jun  5 14:24:09 2014 aurelien prieur
-// Last update Sat Jun 14 19:12:07 2014 aurelien prieur
+// Last update Sun Jun 15 06:56:58 2014 aurelien prieur
 //
 
 #include "Bomb.hpp"

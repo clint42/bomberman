@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sun Jun 15 04:10:57 2014 aurelien prieur
+// Last update Sun Jun 15 06:57:15 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -127,13 +127,16 @@ bool	GraphicEngine::update()
       eventsHandler.finish();
       return (false);
     }
-  //EXEC CREATE INSTRUCT
   while (createInstructs.size() > 0)
     {
       createInstructs.tryPop(&instruct);
       objects.addEntity(instruct);
     }
-  this->objects.lock();
+  if (!this->objects.lock())
+    {
+      std::cerr << "Unable to lock mutex" << std::endl;
+      return (false);
+    }
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
        it != this->objects.getEntities().end(); ++it) 
     {
@@ -150,33 +153,24 @@ bool	GraphicEngine::update()
     this->chrono.setTime(this->objects.getTimeLeft(true));
   if (this->objects.isStarted(true))
     this->chrono.update(this->clock, this->eventsHandler);
-  this->objects.unlock();
+  if (!this->objects.unlock())
+    {
+      std::cerr << "Unable to unlock mutex" << std::endl;
+    }
   return (true);
 }
 
-bool		GraphicEngine::isViewable(std::pair<size_t, size_t> const &entityPos,
-					  std::pair<size_t, size_t> const &playerPos) const
-{
-  size_t	minX;
-  size_t	minY;
-  size_t	maxX;
-  size_t	maxY;
-
-  minX = (playerPos.first  >= 12) ? playerPos.first - 12 : 0;
-  maxX = playerPos.first + 11;
-  minY = (playerPos.second  >= 10) ? playerPos.second - 10 : 0;
-  maxY = playerPos.second + 6;
-  if (entityPos.first >= minX && entityPos.first <= maxX &&
-      entityPos.second >= minY && entityPos.second <= maxY)
-    return (true);
-  return (false);
-}
 void		GraphicEngine::drawPlayer(int nPlayer)
 {
   glm::mat4	transformation;
   glm::mat4	projection;
   std::pair<size_t, size_t> const	*playerPos = this->objects.getPlayerPos(nPlayer, true);
+  std::pair<size_t, size_t>	pos;
+  size_t			pY;
+  size_t			pX;
 
+  pY = playerPos->second;
+  pX = playerPos->first;
   viewPortPlayer(nPlayer);
   getPlayerProjection(projection);
   this->shader.setUniform("projection", projection);
@@ -191,17 +185,18 @@ void		GraphicEngine::drawPlayer(int nPlayer)
     }
   this->shader.setUniform("view", transformation);
   this->floor.draw(this->shader, this->clock);
-  for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
-       it != this->objects.getEntities().end(); ++it)
+  pos.first = (pX >= 12) ? pX - 12 : 0;
+  std::map<std::pair<size_t, size_t>, AObject *> entities = this->objects.getEntities();
+  while (pos.first < pX + 11)
     {
-      if (isViewable(it->first,
-      		     (playerPos != NULL) ?
-      		     *playerPos :
-      		     std::pair<size_t, size_t>(objects.getMapSize(true).first / 2,
-      					       objects.getMapSize(true).second / 2)))
-      	{
-      	  it->second->draw(this->shader, this->clock);
-      	}
+      pos.second = (pY >= 10) ? pY - 10 : 0;
+      while (pos.second < pY + 6)
+	{
+	  if (entities.find(pos) != entities.end())
+	    entities[pos]->draw(shader, clock);
+	  ++pos.second;
+	}
+      ++pos.first;
     }
 }
 

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:11:27 2014 aurelien prieur
-// Last update Sat Jun 14 18:46:25 2014 aurelien prieur
+// Last update Sun Jun 15 04:28:45 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -16,7 +16,7 @@
 #include "Fire.hpp"
 #include "Bonus.hpp"
 
-AObject::AObject(): _id(0), _pos(0, 0, 0), _rotation(0, 0, 0), _scale(1, 1, 1), _target(0, 0, 0),
+AObject::AObject(): _id(0), _isModel(false), _pos(0, 0, 0), _rotation(0, 0, 0), _scale(1, 1, 1), _target(0, 0, 0),
 		    _direction(DOWN), _moving(false), _moveVectors(4)
 {
 }
@@ -155,4 +155,14 @@ glm::vec3 const	&AObject::getPos(void) const
 int	AObject::getId(void) const
 {
   return (_id);
+}
+
+void	AObject::itsModel(void)
+{
+  _isModel = true;
+}
+
+bool	AObject::isModel(void) const
+{
+  return (_isModel);
 }

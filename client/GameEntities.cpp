@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sun Jun 15 02:52:00 2014 aurelien prieur
+// Last update Sun Jun 15 06:55:24 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -51,6 +51,8 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
 	      return (false);
 	    }
 	  _entities.insert(std::pair<std::pair<size_t, size_t>, AObject *>(desc.first, entity));
+	  if (desc.second > PLAYER || desc.second == FIRE || desc.second == BOMB)
+	    entity->itsModel();
 	  if (desc.second > PLAYER && desc.second - PLAYER == _playersId[0] && _player == NULL)
 	    _player = entity;
 	  if (desc.second > PLAYER && _isDouble && desc.second - PLAYER == _playersId[1] && _player2 == NULL)
@@ -73,7 +75,11 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
 
 bool		GameEntities::deleteEntity(std::pair<size_t, size_t> const &coord)
 {
-  //TODO: Before erase elem from map, delete entity
+  if (!_locker.lock())
+    {
+      std::cerr << "Unable to lock mutex" << std::endl;
+      return (false);
+    }
   if (_entities.find(coord) != _entities.end())
     {
       if (_entities[coord] != NULL)
@@ -85,6 +91,11 @@ bool		GameEntities::deleteEntity(std::pair<size_t, size_t> const &coord)
 	  delete _entities[coord];
 	}
       _entities.erase(coord);
+    }
+  if (!_locker.unlock())
+    {
+      std::cerr << "Unable to lock mutex" << std::endl;
+      return (false);
     }
   return (true);
 }
@@ -111,7 +122,11 @@ bool				GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
   std::pair<size_t, size_t>	newCoord(coord);
   bool				ret;
 
-  _locker.lock();
+  if (!_locker.lock())
+    {
+      std::cerr << "Unable to lock mutex" << std::endl;
+      return (false);
+    }
   ret = false;
   entity = getEntity(coord);
   if (entity != NULL)
@@ -129,7 +144,11 @@ bool				GameEntities::moveEntity(std::pair<size_t, size_t> const &coord,
       _entities.erase(coord);
       ret = true;
     }
-  _locker.unlock();
+  if (!_locker.unlock())
+    {
+      std::cerr << "Unable to unlock mutex" << std::endl;
+      return (false);
+    }
   return (ret);
 }
 

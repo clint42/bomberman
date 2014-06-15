@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu Jun  5 14:21:16 2014 aurelien prieur
-// Last update Sat Jun 14 19:10:13 2014 aurelien prieur
+// Last update Sun Jun 15 06:56:49 2014 aurelien prieur
 //
 
 #ifndef BOMB_HPP_
@@ -17,6 +17,7 @@ class	Bomb: public AObject
 {
   static gdl::Model	_preloadedModel;
   gdl::Model	_model;
+
 public:
   Bomb();
   virtual ~Bomb();

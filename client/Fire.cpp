@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri Jun  6 18:25:18 2014 aurelien prieur
-// Last update Sat Jun 14 19:46:15 2014 aurelien prieur
+// Last update Sun Jun 15 06:56:23 2014 aurelien prieur
 //
 
 #include "Fire.hpp"
@@ -28,7 +28,7 @@ bool	Fire::load(void)
       return (false);
     }
   return (true);
-}
+} 
 
 bool	Fire::initialize(std::pair<size_t, size_t> const &pos)
 {
