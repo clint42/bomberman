@@ -186,7 +186,6 @@ Server::Game::update() {
   }
   else {
     this->updateBots();
-    // Creer fonction qui itere sur tous les bots / pour chacun des bots faire une action
     t_cmd *c;
     if (!_events.tryPop(&c)) {
       DEBUG("! Server::Game::update()", -1);
