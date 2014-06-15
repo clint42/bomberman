@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:54:40 2014 aurelien prieur
-// Last update Sat Jun 14 18:56:46 2014 aurelien prieur
+// Last update Sun Jun 15 02:51:33 2014 aurelien prieur
 //
 
 #ifndef GAMEENTITIES_HPP_
@@ -49,7 +49,7 @@ public:
 			     AObject::EventIn event);
   void		setPlayer(int id, int nPlayer = 0);
   AObject const	*getPlayer(bool withoutLock = false, int nPlayer = 0);
-  std::pair<size_t, size_t> const *getPlayerPos(int nPlayer = 0);
+  std::pair<size_t, size_t> const *getPlayerPos(int nPlayer = 0, bool withoutLock = false);
   int		getPlayerId(int nPlayer = 0);
   void		setPlayerId(int id, int nPlayer = 0);
   void		addPoints(int points, int playerId);
@@ -57,7 +57,7 @@ public:
   void		decreaseTimeLeft(float const &val);
   float		getTimeLeft(bool withoutLock = false);
   void		setTimeLeft(float const &timeLeft);
-  std::pair<size_t, size_t> const	&getMapSize(void);
+  std::pair<size_t, size_t> const	&getMapSize(bool withoutLock = false);
   void					setMapSize(std::pair<size_t, size_t> const &mapSize);
   bool					isDouble(bool withoutLock = false);
   void					setDouble(void);

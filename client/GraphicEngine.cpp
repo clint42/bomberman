@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sun Jun 15 01:28:39 2014 aurelien prieur
+// Last update Sun Jun 15 04:10:57 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -154,28 +154,55 @@ bool	GraphicEngine::update()
   return (true);
 }
 
+bool		GraphicEngine::isViewable(std::pair<size_t, size_t> const &entityPos,
+					  std::pair<size_t, size_t> const &playerPos) const
+{
+  size_t	minX;
+  size_t	minY;
+  size_t	maxX;
+  size_t	maxY;
+
+  minX = (playerPos.first  >= 12) ? playerPos.first - 12 : 0;
+  maxX = playerPos.first + 11;
+  minY = (playerPos.second  >= 10) ? playerPos.second - 10 : 0;
+  maxY = playerPos.second + 6;
+  if (entityPos.first >= minX && entityPos.first <= maxX &&
+      entityPos.second >= minY && entityPos.second <= maxY)
+    return (true);
+  return (false);
+}
 void		GraphicEngine::drawPlayer(int nPlayer)
 {
   glm::mat4	transformation;
   glm::mat4	projection;
+  std::pair<size_t, size_t> const	*playerPos = this->objects.getPlayerPos(nPlayer, true);
 
   viewPortPlayer(nPlayer);
   getPlayerProjection(projection);
   this->shader.setUniform("projection", projection);
   AObject const *player = this->objects.getPlayer(true, nPlayer);
   if (player != NULL)
-    transformation = glm::lookAt(glm::vec3(0, 17, 8) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
+    transformation = glm::lookAt(glm::vec3(0, 8, 4) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
   else
     {
       std::pair<double, double> const &sizeMap = floor.getSize();
-      transformation = glm::lookAt(glm::vec3(0, 17, 8) + glm::vec3(sizeMap.first / 2.f, 0, sizeMap.second / 2.f),
+      transformation = glm::lookAt(glm::vec3(0, 8, 4) + glm::vec3(sizeMap.first / 2.f, 0, sizeMap.second / 2.f),
 				   glm::vec3(sizeMap.first / 2.f, 0, sizeMap.second / 2.f), glm::vec3(0, 1, 0));
     }
   this->shader.setUniform("view", transformation);
+  this->floor.draw(this->shader, this->clock);
   for (std::map<std::pair<size_t, size_t>, AObject *>::iterator it = this->objects.getEntities().begin();
        it != this->objects.getEntities().end(); ++it)
-    it->second->draw(this->shader, this->clock);
-  this->floor.draw(this->shader, this->clock);
+    {
+      if (isViewable(it->first,
+      		     (playerPos != NULL) ?
+      		     *playerPos :
+      		     std::pair<size_t, size_t>(objects.getMapSize(true).first / 2,
+      					       objects.getMapSize(true).second / 2)))
+      	{
+      	  it->second->draw(this->shader, this->clock);
+      	}
+    }
 }
 
 void		GraphicEngine::drawScore(int nPlayer)
