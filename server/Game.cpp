@@ -290,6 +290,23 @@ void			Server::Game::saveGame() const
 }
 
 
+void		Server::Game::loadGame(const std::string &filename) const
+{
+  std::ifstream file(filename.c_str(), std::ios::in);
+  std::string   readed;
+
+  if (file.is_open())
+    {
+      while (std::getline(file, readed) && readed.compare("SETTINGS") != 0);
+      while (std::getline(file, readed))
+	{
+	  std::cout << readed << std::endl;
+	}
+      file.close();
+    }
+
+}
+
 
 /*
 ** PROCESS

@@ -124,6 +124,7 @@ namespace	Server {
     static std::map<int, std::string>		_bonus;
 
     void		saveGame() const;
+    void		loadGame(const std::string &filename) const;
 
   private:
 
