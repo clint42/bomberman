@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:52:00 2014 aurelien prieur
-// Last update Sun Jun 15 20:15:55 2014 aurelien prieur
+// Last update Sun Jun 15 23:02:21 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -27,13 +27,16 @@ UI::~UI()
 
 bool	UI::run()
 {
+  bool	ret;
+
   if (!_graphicEngine.initialize())
     return (false);
-  while (!_eventsHandler.isFinished() && _graphicEngine.update())
+  while (!_eventsHandler.isFinished() && !_eventsHandler.isEndGame() &&  _graphicEngine.update())
     {
       _graphicEngine.draw();
     }
   _graphicEngine.stop();
+  ret = false;
   if (_eventsHandler.isEndGame())
     {
       gdl::SdlContext *sdlContext = new gdl::SdlContext;
@@ -55,12 +58,11 @@ bool	UI::run()
       sdlContext->start(1920, 1080, "Scores", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
       ScoreWindow win(*sdlContext, ids, scores, 1);
       if (!(win.initialize()) || !(win.build()))
-      	return (false);
+	return (false);
       while (win.update())
-      	win.draw();
+	win.draw();
       sdlContext->stop();
       delete sdlContext;
-      return (win.replay());
     }
   return (false);
 }

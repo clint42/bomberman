@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 18:57:08 2014 julie franel
+// Last update Sun Jun 15 22:36:15 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -214,11 +214,13 @@ void	ClientCore::trampoline(void *param, Socket *socket, bool b[3])
 bool		ClientCore::run()
 {
   loadMap();
-  while (_connexion.update(500) >= 0 && !_eventsHandler.isFinished())
+  while (_connexion.update(500) >= 0 && !_eventsHandler.isFinished() && !_eventsHandler.isEndGame())
     {
       _connexion.perform(&trampoline, this);
     }
-  return (true);
+  if (_eventsHandler.isEndGame())
+    return (true);
+  return (false);
 }
 
 void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
