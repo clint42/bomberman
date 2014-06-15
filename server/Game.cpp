@@ -275,7 +275,7 @@ void			Server::Game::saveGame() const
 	  ++y;
 	}
       file << "SETTINGS" << std::endl;
-      file << this->timeLeft() << std::endl;
+      file << this->timeLeft().inSec() << std::endl;
       for (std::map<std::pair<size_t, size_t>, Player *>::const_iterator it = this->_players.begin();
 	   it != this->_players.end(); ++it)
 	{
