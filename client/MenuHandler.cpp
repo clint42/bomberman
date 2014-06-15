@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Sun Jun 15 01:52:39 2014 virol_g
+// Last update Sun Jun 15 03:01:20 2014 virol_g
 //
 
 #include "ScoreWindow.hpp" // test
@@ -32,20 +32,20 @@ t_game		*MenuHandler::mainMenu()
   t_game	*options;
   int		retVal;
 
-  // std::vector<int> ids;
-  // std::vector<int> scores;
-  // gdl::SdlContext *sdlContext = new gdl::SdlContext;
+  std::vector<int> ids;
+  std::vector<int> scores;
+  gdl::SdlContext *sdlContext = new gdl::SdlContext;
 
-  // ids.push_back(1);
-  // ids.push_back(-1);
-  // scores.push_back(100);
-  // scores.push_back(20);
-  // sdlContext->start(1920, 1080, "Scores", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
-  // ScoreWindow win(*sdlContext, ids, scores, 1);
-  // if (!(win.initialize()) || !(win.build()))
-  //   return (NULL);
-  // while (win.update())
-  //   win.draw();
+  ids.push_back(1);
+  ids.push_back(-1);
+  scores.push_back(100);
+  scores.push_back(20);
+  sdlContext->start(1920, 1080, "Scores", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
+  ScoreWindow win(*sdlContext, ids, scores, 1);
+  if (!(win.initialize()) || !(win.build()))
+    return (NULL);
+  while (win.update())
+    win.draw();
 
 
   if (!(menu.initialize()) || !(menu.build()))

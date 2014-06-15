@@ -5,10 +5,9 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 17:46:00 2014 virol_g
-// Last update Sun Jun 15 01:51:42 2014 virol_g
+// Last update Sun Jun 15 03:52:44 2014 virol_g
 //
 
-#include	"ScoreManager.hpp"
 #include	"ScoreWindow.hpp"
 #include	<iostream>
 
@@ -17,7 +16,6 @@ ScoreWindow::ScoreWindow(gdl::SdlContext &sdlContext, std::vector<int> ids,
   AMenu(sdlContext), _ids(ids), _scores(scores), _idWiner(idWiner), _replay(false)
 {
   _nbPlayers = (_ids[1] == -1) ? 1 : 2;
-  std::cout << "nb players : " << _nbPlayers << std::endl;
 }
 
 ScoreWindow::~ScoreWindow()
@@ -66,13 +64,8 @@ bool		ScoreWindow::build()
 {
   bool		failed = false;
 
-  try {
-    ScoreManager	scoreManager(".bomberman.score");}
+  _scoreManager = new ScoreManager(".bomberman.score");
 
-  catch (ScoreManagerException e)
-    {
-      failed = true;
-    }
   _menuBackground = new MenuBackground("client/assets/background.tga", 1920, 1080);
   _elems.push_back(new MenuButton(std::pair<size_t, size_t>(300, 340),
 				  std::pair<size_t, size_t>(140, 60),
@@ -90,8 +83,7 @@ bool		ScoreWindow::build()
 				    glm::vec4(0.23, 0.18, 0.52, 1.f), 30));
   if (failed == false)
     {
-      ScoreManager	scoreManager(".bomberman.score");
-      std::vector<int>	bestScores(scoreManager.getPlayer1Score());
+      std::vector<int>	bestScores(_scoreManager->getPlayer1Score());
 
       for (size_t i = 0; i < bestScores.size(); ++i)
 	{
@@ -100,6 +92,8 @@ bool		ScoreWindow::build()
 					    glm::vec4(0.23, 0.18, 0.52, 1.f), 20));
 	}
     }
+  _scoreManager->addPlayer1Score(_scores[0]);
+  _scoreManager->save();
   if (_nbPlayers == 2)
     {
       _text.push_back(new GraphicalText(((_ids[1] == _idWiner) ? "You won !" : "You lost..."),
@@ -110,8 +104,7 @@ bool		ScoreWindow::build()
 					glm::vec4(0.23, 0.18, 0.52, 1.f), 30));
       if (failed == false)
 	{
-	  ScoreManager	scoreManager(".bomberman.score");
-	  std::vector<int>	bestScores(scoreManager.getPlayer2Score());
+	  std::vector<int>	bestScores(_scoreManager->getPlayer2Score());
       
 	  for (size_t i = 0; i < bestScores.size(); ++i)
 	    {
@@ -120,6 +113,8 @@ bool		ScoreWindow::build()
 						glm::vec4(0.23, 0.18, 0.52, 1.f), 20));
 	    }
 	}
+      _scoreManager->addPlayer2Score(_scores[1]);
+      _scoreManager->save();
     }
   return (true);
 }

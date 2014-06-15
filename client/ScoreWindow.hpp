@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 17:41:08 2014 virol_g
-// Last update Sun Jun 15 01:34:35 2014 virol_g
+// Last update Sun Jun 15 02:53:00 2014 virol_g
 //
 
 #ifndef		SCOREWINDOW_HPP_
@@ -18,6 +18,7 @@
 # include	"menu/AMenu.hpp"
 # include	"menu/IMenuElem.hpp"
 # include	"MenuButton.hpp"
+# include	"ScoreManager.hpp"
 
 class		ScoreWindow: public AMenu
 {
@@ -25,6 +26,7 @@ class		ScoreWindow: public AMenu
   std::vector<GraphicalText *>	_text;
   std::vector<int>	_ids;
   std::vector<int>	_scores;
+  ScoreManager		*_scoreManager;
   int			_idWiner;
   size_t		_nbPlayers;
   bool			_replay;
