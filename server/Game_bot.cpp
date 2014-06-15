@@ -8,8 +8,6 @@ Server::Game::trampoline_botsProcessing(void *g) {
 
 void
 Server::Game::botsProcessing() {
-  t_cmd *	c;
-  (void)c;
   while (!_ended) {
     if (_started && !_paused) {
       for (std::list<Bot *>::iterator it = _bots.begin(); it != _bots.end(); ++it)
