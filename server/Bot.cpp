@@ -23,7 +23,7 @@ Server::Game::Bot::attack()
 }
 
 void
-Server::Game::Bot::actionBot(Time &date, SafeQueue<t_cmd *> &events)
+Server::Game::Bot::actionBot(const Time &date, SafeQueue<t_cmd *> &events)
 {
   int		warning;
 

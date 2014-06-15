@@ -185,6 +185,7 @@ Server::Game::update() {
     _messenger->broadcastMessage("0 0 0 ENDGAME");
   }
   else {
+    this->updateBots();
     // Creer fonction qui itere sur tous les bots / pour chacun des bots faire une action
     t_cmd *c;
     if (!_events.tryPop(&c)) {
@@ -224,6 +225,13 @@ Server::Game::update() {
     delete c;
     DEBUG("! Server::Game::update()", -1);
   }
+}
+
+void
+Server::Game::updateBots()
+{
+  for (std::list<Bot *>::iterator it = _bots.begin(); it != _bots.end(); ++it)
+    (*it)->actionBot(this->timeLeft(), _events);
 }
 
 void

@@ -131,6 +131,7 @@ namespace	Server {
   private:
 
     Player *		findPlayerByID(const size_t);
+    void		updateBots();
     void		filterCmd(t_cmd *) const;
     bool		process(t_cmd *, Player *);
     void		bombSwitchQueue(t_cmd *, const std::pair<size_t, size_t>);
@@ -145,9 +146,9 @@ namespace	Server {
 
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
-      std::cout << "Server::Game::hasDateNextCommandExpired()" << std::endl;
-      std::cout << "dateNextCommand is:" << p->getDateNextCommand() << std::endl;
-      std::cout << "timeLeft is:" << this->timeLeft() << std::endl;
+      // std::cout << "Server::Game::hasDateNextCommandExpired()" << std::endl;
+      // std::cout << "dateNextCommand is:" << p->getDateNextCommand() << std::endl;
+      // std::cout << "timeLeft is:" << this->timeLeft() << std::endl;
       return p->getDateNextCommand() > this->timeLeft();
     }
 
@@ -157,13 +158,13 @@ namespace	Server {
       std::map<std::pair<size_t, size_t>, Player *>	&_list;
 
       bool	danger();
+      void	attack();
     public:
       Bot(Player *p, Map *m, std::map<std::pair<size_t, size_t>, Player *>  &list);
       ~Bot();
 
       inline Player *	getPlayer() const { return _p; }
-      void	attack();
-      void	actionBot(Time &date, SafeQueue<t_cmd *> &events);
+      void	actionBot(const Time &date, SafeQueue<t_cmd *> &events);
     };
 
   };
