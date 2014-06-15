@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 13:07:30 2014 aurelien prieur
-// Last update Sun Jun 15 06:55:59 2014 aurelien prieur
+// Last update Sun Jun 15 09:45:13 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -66,7 +66,7 @@ void	Player::genColor(void)
 
 bool	Player::initialize(std::pair<size_t, size_t> const &pos)
 {
-  _speed = 3.0f;
+  _speed = 2.0f;
   if (_model.load("./client/assets/marvin.fbx") == false)
     {
       std::cerr << "Couldn't load model." << std::endl;
@@ -109,7 +109,6 @@ void	Player::updateMovement(void)
     }
   else if (_moving && !_mainAnimStarted)
     {
-      std::cout << "[CLIENT] Main anim started" << std::endl;
       _model.setCurrentSubAnim("run", true);
       _mainAnimStarted = true;
     }
@@ -133,6 +132,7 @@ bool	Player::update(gdl::Clock const &clock, EventsHandler const &events)
 
 void	Player::draw(gdl::AShader &shader, gdl::Clock const &clock)
 {
+  shader.bind();
   shader.setUniform("color", _color);
   _model.draw(shader, getTransformation(), clock.getElapsed());
   shader.setUniform("color", glm::vec4(1, 1, 1, 1));

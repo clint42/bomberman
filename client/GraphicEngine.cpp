@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sun Jun 15 06:57:15 2014 aurelien prieur
+// Last update Sun Jun 15 08:12:06 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -165,12 +165,16 @@ void		GraphicEngine::drawPlayer(int nPlayer)
   glm::mat4	transformation;
   glm::mat4	projection;
   std::pair<size_t, size_t> const	*playerPos = this->objects.getPlayerPos(nPlayer, true);
+  std::pair<double, double> const &sizeMap = floor.getSize();
   std::pair<size_t, size_t>	pos;
-  size_t			pY;
-  size_t			pX;
+  size_t			pY = sizeMap.second / 2.f;
+  size_t			pX = sizeMap.first / 2.f;
 
-  pY = playerPos->second;
-  pX = playerPos->first;
+  if (playerPos != NULL)
+    {
+      pY = playerPos->second;
+      pX = playerPos->first;
+    }
   viewPortPlayer(nPlayer);
   getPlayerProjection(projection);
   this->shader.setUniform("projection", projection);
@@ -179,23 +183,22 @@ void		GraphicEngine::drawPlayer(int nPlayer)
     transformation = glm::lookAt(glm::vec3(0, 8, 4) + player->getPos(), player->getPos(), glm::vec3(0, 1, 0));
   else
     {
-      std::pair<double, double> const &sizeMap = floor.getSize();
       transformation = glm::lookAt(glm::vec3(0, 8, 4) + glm::vec3(sizeMap.first / 2.f, 0, sizeMap.second / 2.f),
 				   glm::vec3(sizeMap.first / 2.f, 0, sizeMap.second / 2.f), glm::vec3(0, 1, 0));
     }
   this->shader.setUniform("view", transformation);
   this->floor.draw(this->shader, this->clock);
   pos.first = (pX >= 12) ? pX - 12 : 0;
-  std::map<std::pair<size_t, size_t>, AObject *> entities = this->objects.getEntities();
+  std::map<std::pair<size_t, size_t>, AObject *> entities = this->objects.getEntities(); 
   while (pos.first < pX + 11)
     {
       pos.second = (pY >= 10) ? pY - 10 : 0;
       while (pos.second < pY + 6)
-	{
-	  if (entities.find(pos) != entities.end())
-	    entities[pos]->draw(shader, clock);
-	  ++pos.second;
-	}
+  	{
+  	  if (entities.find(pos) != entities.end())
+  	    entities[pos]->draw(shader, clock);
+  	  ++pos.second;
+  	}
       ++pos.first;
     }
 }

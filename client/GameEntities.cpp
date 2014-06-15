@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sun Jun 15 06:55:24 2014 aurelien prieur
+// Last update Sun Jun 15 10:16:32 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -40,7 +40,11 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
   AObject	*entity;
   std::pair<std::map<std::pair<size_t, size_t>, AObject *>::iterator, bool>	ret;
 
-  _locker.lock();
+  if (!_locker.lock())
+    {
+      std::cerr << "Unable to lock mutex" << std::endl;
+      return (false);
+    }
   if (_entities.find(desc.first) == _entities.end())
     {
       if ((entity = AObject::create(desc.second)) != NULL)
@@ -69,7 +73,11 @@ bool		GameEntities::addEntity(std::pair<std::pair<size_t, size_t>, int> const &d
     {
       std::cout << "Couldn't create entity: There is already something at these coords." << std::endl; 
     }
-  _locker.unlock();
+  if (!_locker.unlock())
+    {
+      std::cerr << "Unable to unlock mutex" << std::endl;
+      return (false);
+    }
   return (true);
 }
 
@@ -88,7 +96,8 @@ bool		GameEntities::deleteEntity(std::pair<size_t, size_t> const &coord)
 	    _player = NULL;
 	  else if (_entities[coord] == _player2)
 	    _player2 = NULL;
-	  delete _entities[coord];
+	  //delete _entities[coord];
+	  //_entities[coord] = NULL;
 	}
       _entities.erase(coord);
     }
@@ -159,7 +168,11 @@ bool		GameEntities::rotateEntity(std::pair<size_t, size_t> const &coord,
   glm::vec3	rotVal;
   bool		ret;
 
-  _locker.lock();
+  if (!_locker.lock())
+    {
+      std::cerr << "Unable to lock mutex" << std::endl;
+      return (false);
+    }
   ret = false;
   entity = getEntity(coord);
   if (entity != NULL)
@@ -168,7 +181,11 @@ bool		GameEntities::rotateEntity(std::pair<size_t, size_t> const &coord,
       entity->setRotation(rotVal);
       ret = true;
     }
-  _locker.unlock();
+  if (!_locker.unlock())
+    {
+      std::cerr << "Unable to unlock" << std::endl;
+      return (false);
+    }
   return (ret);
 }
 
@@ -357,7 +374,6 @@ std::pair<size_t, size_t> const *GameEntities::getPlayerPos(int nPlayer, bool wi
 void	GameEntities::setPlayerId(int id, int nPlayer)
 {
   _locker.lock();
-  std::cout << "[CLIENT] setPlayerId: nPlayer: " << nPlayer << " | id: " << id << std::endl;
   _playersId[nPlayer] = id;
   _locker.unlock();
 }

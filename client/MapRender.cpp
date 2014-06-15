@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sun Jun  8 16:08:57 2014 aurelien prieur
-// Last update Thu Jun 12 22:21:29 2014 aurelien prieur
+// Last update Sun Jun 15 10:15:10 2014 aurelien prieur
 //
 
 #include "MapRender.hpp"
@@ -28,7 +28,6 @@ bool	MapRender::render(SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &in
 {
   std::map<std::pair<size_t, size_t>, int> const &map = _logicMap.getMap();
 
-  std::cout << "MAP RENDER" << std::endl;
   for (std::map<std::pair<size_t, size_t>, int>::const_iterator it = map.begin();
        it != map.end();
        ++it)
@@ -36,7 +35,6 @@ bool	MapRender::render(SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &in
       instructQueue.push(std::pair<std::pair<size_t, size_t>, int>(it->first,
 								   _graphEquivalent[static_cast<Map::eTypes>(it->second)]));
     }
-  std::cout << "MAP RENDER END" << std::endl;
   return (true);
 }
 
