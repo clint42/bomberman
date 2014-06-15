@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sun Jun 15 16:28:45 2014 aurelien prieur
+// Last update Sun Jun 15 17:13:12 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -322,7 +322,7 @@ void	GameEntities::setDouble(void)
 void	GameEntities::startGame(void)
 {
   _locker.lock();
-  _isStarted = true;
+  _isStarted = !_isStarted;
   _locker.unlock();
 }
 
