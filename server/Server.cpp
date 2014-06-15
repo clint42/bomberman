@@ -29,23 +29,19 @@ Server::Server::readMessage(Socket *s) {
 
 void
 Server::Server::sendMessage(Socket *s) {
-  DEBUG("Server::Server::sendMessage()", 1);
   if (_messenger.hasSomethingToSay(s)) {
     std::string m;
     _messenger.retrieveMessage(s, m);
     s->write(m);
   }
-  DEBUG("!Server::Server::sendMessage()", -1);
 }
 
 void
 Server::Server::sendBroadcast() {
-  DEBUG("Server::Server::sendBroadcast()", 1);
   for (std::list<Player *>::iterator it = _peers.begin();
        it != _peers.end(); ++it) {
     this->sendMessage((*it)->getSocket());
   }
-  DEBUG("! Server::Server::sendBroadcast()", -1);
 }
 
 /*
@@ -64,7 +60,7 @@ Server::Server::trampoline_performResult(void *p, Socket *s, bool b[3]) {
   }
 }
 
-#define TIMELOOP 500
+#define TIMELOOP 200
 
 void
 Server::Server::run() {
