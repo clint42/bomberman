@@ -42,7 +42,6 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   std::stringstream convert;
   std::pair<size_t, size_t> pos(c->pos.first, c->pos.second);
 
-  // this->_map->setElemAtPos(pos, Map::GROUND);
   p->destroyBomb();
   this->_map->deleteElem(pos);
   convert << "0 " << pos.first << " " << pos.second << " DESTROY";
@@ -96,24 +95,18 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
 bool
 Server::Game::bombUp(Player *p, t_cmd *c)
 {
-  DEBUG("Server::Game::bombUp()", 1);
   if (p->getPosY())
     {
       std::pair<size_t, size_t> pos(p->getPosX(), p->getPosY() - 1);
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
 	{
-	  std::cout << "Avant bombSwitchQueue" << std::endl;
 	  this->bombSwitchQueue(c, pos);
-	  std::cout << "Avant buildCmdCreateBomb" << std::endl;
 	  this->buildCmdCreateBomb(c, pos);
-	  std::cout << "Avant setElemAtPos" << std::endl;
 	  this->_map->setElemAtPos(pos, Map::BOMB);
-	  DEBUG("Server::Game::bombUp()", 0);
 	  return (p->dropBomb());
 	}
     }
-  DEBUG("Server::Game::bombUp()", -1);
   return false;
 }
 
@@ -126,13 +119,9 @@ Server::Game::bombRight(Player *p, t_cmd *c)
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
 	{
-	  std::cout << "Avant bombSwitchQueue" << std::endl;
 	  this->bombSwitchQueue(c, pos);
-	  std::cout << "Avant buildCmdCreateBomb" << std::endl;
 	  this->buildCmdCreateBomb(c, pos);
-	  std::cout << "Avant setElemAtPos" << std::endl;
 	  this->_map->setElemAtPos(pos, Map::BOMB);
-	  DEBUG("Server::Game::bombRight()", 0);
 	  return (p->dropBomb());
 	}
     }
@@ -148,13 +137,9 @@ Server::Game::bombDown(Player *p, t_cmd *c)
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
 	{
-	  std::cout << "Avant bombSwitchQueue" << std::endl;
 	  this->bombSwitchQueue(c, pos);
-	  std::cout << "Avant buildCmdCreateBomb" << std::endl;
 	  this->buildCmdCreateBomb(c, pos);
-	  std::cout << "Avant setElemAtPos" << std::endl;
 	  this->_map->setElemAtPos(pos, Map::BOMB);
-	  DEBUG("Server::Game::bombDown()", 0);
 	  return (p->dropBomb());
 	}
     }
@@ -170,13 +155,9 @@ Server::Game::bombLeft(Player *p, t_cmd *c)
       if (!this->_map->getElemAtPos(pos) && this->_players.find(pos) == this->_players.end() &&
 	  p->getBombsLimit() > p->getBombsOnFloor())
 	{
-	  std::cout << "Avant bombSwitchQueue" << std::endl;
 	  this->bombSwitchQueue(c, pos);
-	  std::cout << "Avant buildCmdCreateBomb" << std::endl;
 	  this->buildCmdCreateBomb(c, pos);
-	  std::cout << "Avant setElemAtPos" << std::endl;
 	  this->_map->setElemAtPos(pos, Map::BOMB);
-	  DEBUG("Server::Game::bombLeft()", 0);
 	  return (p->dropBomb());
 	}
     }

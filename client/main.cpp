@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Sun Jun 15 15:00:29 2014 julie franel
+// Last update Sun Jun 15 23:09:45 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -20,10 +20,6 @@
 #include "Signal.hpp"
 #include "MenuHandler.hpp"
 
-//TODO: testing purpose only. Remove it.
-extern int debug_align;
-int debug_align = 0;
-
 int	main()
 {
   srand(time(0));
@@ -32,33 +28,17 @@ int	main()
   Signal		signal(&connexionHandler);
   signal.catchSignal(SIGINT, false);
 
-  //TODO: Move to the right place. Testing purpose only.
   MenuHandler menuHandler(signal);
+  menuHandler.initialize();
   t_game	*options;
 
   if ((options = (menuHandler.launchMenus())) == NULL)
     return (EXIT_FAILURE);
-  std::cout << "=========================> " << std::endl;
-  std::cout << "MAPNAME= " << options->mapName << std::endl;
-  std::cout << "NBPLAYERS= " << options->nbPlayers << std::endl;
-  std::cout << "NBBOTS= " << options->nbBots << std::endl;
-  std::cout << "TIMEGAME= " << options->timeGame << std::endl;
-  std::cout << "IPADDR= " << options->ipAddr << std::endl;
-  std::cout << "SERVERPORT= " << options->serverPort << std::endl;
-  std::cout << "ISHOST= " << std::boolalpha << options->isHost << std::endl;
-  std::cout << "ISDOUBLE= " << std::boolalpha << options->isDouble << std::endl;
-  std::cout << "LOADMAP= " << std::boolalpha << options->loadMap << std::endl;
-  std::cout << "GENERATEMAP= " << std::boolalpha << options->createMap << std::endl;
-  std::cout << "WIDTHMAP= " << options->widthMap << std::endl;
-  std::cout << "HEIGHTMAP= " << options->heightMap << std::endl;
-  std::cout << "PLAYERSMAP= " << options->playersMap << std::endl;
-
 
   EventsHandler		eventsHandler(connexionHandler);
   GameEntities		gameEntities;
   SafeQueue<std::pair<std::pair<size_t, size_t>, int> >	createInstructs;
 
-  //3: LAUNCH CORE AND GRAPHICENGINE
   ClientCore	core(gameEntities, eventsHandler, createInstructs, connexionHandler);
 
   if (!core.initialize(options))

@@ -5,7 +5,6 @@ std::map<std::string, Server::Game::Type> Server::Game::_types;
 
 bool
 Server::Server::funcWelcome(const t_cmd *_cmd) {
-  DEBUG("Server::Server::funcConfig()", 1);
   if (Game::_isInit == false)
     {
       Game::_isInit = true;
@@ -35,7 +34,6 @@ Server::Server::funcWelcome(const t_cmd *_cmd) {
       _run = false;
       return (false);
     }
-  DEBUG("! Server::Server::funcConfig()", -1);
   return (true);
 }
 
@@ -66,26 +64,19 @@ Server::Server::findPeerByID(const size_t id)
 
 bool
 Server::Server::funcMd5(t_cmd const *cmd) {
-  DEBUG("Server::Server::funcMd5()", 1);
 
   Player *p;
   p = this->findPeerByID(cmd->id);
 
-  if (!_game || !p || p->hasCertified()) {
-    DEBUG("! Server::Server::funcMd5() => player not found", -1);
+  if (!_game || !p || p->hasCertified())
     return false;
-  }
-  if (_game->getMapMd5() == cmd->params[0]) {
-    DEBUG("Server::Server::funcMd5() => la key match", 0);
+  if (_game->getMapMd5() == cmd->params[0])
     p->hasCertifiedMd5(true);
-  }
   else {
-    DEBUG("Server::Server::funcMd5() => wrong key. On degage le peer", 0);
     _messenger.addMessage(p->getSocket(), "0 0 0 MAPCORRUPTED");
     this->sendMessage(p->getSocket());
     this->peerDisconnected(p->getSocket());
   }
-  DEBUG("! Server::Server::funcMd5()", -1);
   return (true);
 }
 
@@ -118,16 +109,13 @@ Server::Server::funcSave(__attribute__((unused))const t_cmd *_cmd) {
 
 bool
 Server::Server::funcWithFriend(t_cmd const *cmd) {
-  DEBUG("Server::Server::funcWithFriend()", 1);
   Player *p = this->findPeerByID(cmd->id);
 
   if (p && cmd->params[0] == "YES")
     {
       addPeer(p->getSocket());
-  DEBUG("!Server::Server::funcWithFriend()", -1);
       return (true);
     }
-  DEBUG("!Server::Server::funcWithFriend()", -1);
   return (false);
 }
 
@@ -136,7 +124,6 @@ std::map<std::string, bool (Server::Server::*)(const Server::t_cmd *)> Server::S
 
 bool
 Server::Server::manageAdminCommand() {
-  std::cout << "SIZE EXT = " << this->_ext.size() << std::endl;
   if (Server::_isInit == false)
     {
       Server::_isInit = true;

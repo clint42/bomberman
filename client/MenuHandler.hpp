@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:21:25 2014 aurelien prieur
-// Last update Sun Jun 15 21:39:26 2014 aurelien prieur
+// Last update Sun Jun 15 22:35:32 2014 aurelien prieur
 //
 
 #ifndef MENUHANDLER_HPP_
@@ -39,6 +39,7 @@ private:
 public:
   MenuHandler(Signal &signal);
   ~MenuHandler();
+  void initialize();
   t_game	*launchMenus();
 };
 

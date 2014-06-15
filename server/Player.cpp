@@ -11,18 +11,12 @@ Server::Player::~Player() {
 
 void
 Server::Player::updateDateNextCommand(Server::Player::Action a, Time const &date) {
-  DEBUG("Server::Player::updateDateNextCommand()", 1);
   double mult;
   if (a == MOVE)	 mult = DELAY_MULT_MOVE;
   else if (a == ORIENT)  mult = DELAY_MULT_ORIENT;
   else			 mult = DELAY_MULT_BOMB;
 
-  std::cout << "------- updateDateNextCommand()" << std::endl;
-  std::cout << "before: " << _dateNextCommand << std::endl;
   _dateNextCommand = date - Time(0, 0, 0, 50/*(DELAY * mult / _commandTimeMultiplier)*/);
-  std::cout << "  " << date << "\n- " << Time(0, 0, 0, 50) << "\n= " << _dateNextCommand << std::endl;
-  std::cout << "-------" << std::endl;
-  DEBUG("! Server::Player::updateDateNextCommand()", -1);
 }
 
 bool Server::Player::_isInit = false;

@@ -1,13 +1,3 @@
-//
-// Messenger.hpp for  in /home/buret_j/rendu/bomberman/server
-// 
-// Made by buret_j
-// Login   <buret_j@epitech.net>
-// 
-// Started on  Thu Jun  5 17:15:53 2014 buret_j
-// Last update Sun Jun 15 23:15:28 2014 buret_j
-//
-
 #ifndef MESSENGER_HPP_
 # define MESSENGER_HPP_
 
