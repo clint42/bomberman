@@ -158,6 +158,7 @@ namespace	Server {
       Bot(Player *p, Map *m, std::map<std::pair<size_t, size_t>, Player *>  &list);
       ~Bot();
 
+      inline Player *	getPlayer() const { return _p; }
       void	actionBot();
     };
 

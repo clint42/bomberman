@@ -3,9 +3,6 @@
 Server::Game::Bot::Bot(Server::Player *p, Map *m, std::map<std::pair<size_t, size_t>, Server::Player *> &list):
   _p(p), _map(m), _list(list)
 {
-  // (void)_p;
-  // (void)_map;
-  // (void)_list;
 }
 
 Server::Game::Bot::~Bot()
@@ -15,6 +12,9 @@ Server::Game::Bot::~Bot()
 void
 Server::Game::Bot::actionBot()
 {
+  int		warning;
+
+  warning = this->danger();
   (void)_list;
 }
 
