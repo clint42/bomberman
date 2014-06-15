@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon Jun  2 13:23:08 2014 buret_j
-// Last update Sun Jun 15 22:00:59 2014 julie franel
+// Last update Sun Jun 15 22:59:09 2014 buret_j
 */
 
 #ifndef MACROS_HPP_
@@ -17,15 +17,6 @@
   std::stringstream ss(strToFill);				\
   ss << sizetToAdd;						\
   strToFill += ss.str();					\
-  }
-
-extern int debug_align;
-# define DEBUG(str, n) {					\
-        std::cout << "[SERVER] ";				\
-    for (int i = n < 0; i < debug_align; ++i)			\
-      std::cout << " ";						\
-    std::cout << str << std::endl;				\
-        debug_align += n;					\
   }
 
 #endif /* !MACROS_HPP_ */

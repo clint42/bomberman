@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Sun Jun  8 16:38:49 2014 buret_j
-// Last update Sun Jun 15 12:50:28 2014 buret_j
+// Last update Sun Jun 15 22:57:35 2014 buret_j
 //
 
 #ifndef CONDSAFEQUEUE_HPP_
@@ -32,15 +32,10 @@ public:
   ~CondSafeQueue() { }
 
   void	push(T v) {
-    // std::cout << "CondSafeQueue::push() => avant lock" << std::endl;
     _mutexQueue.lock();
-    // std::cout << "CondSafeQueue::push() => c'est lock" << std::endl;
     _queue.push_back(v);
-    // std::cout << "CondSafeQueue::push() => avant delock" << std::endl;
     _mutexQueue.unlock();
-    // std::cout << "CondSafeQueue::push() => c'est delock" << std::endl;
     // this->signal();
-    // std::cout << "CondSafeQueue::push() => j'ai signal ma condvar" << std::endl;
   }
   void	push_front(T v) {
     _mutexQueue.lock();
