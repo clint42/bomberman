@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sun Jun 15 08:12:06 2014 aurelien prieur
+// Last update Sun Jun 15 17:17:28 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -149,6 +149,8 @@ bool	GraphicEngine::update()
   this->scores[0]->update(this->objects.getPlayerScore(true, 0));
   if (this->objects.isDouble(true))
     this->scores[1]->update(this->objects.getPlayerScore(true, 1));
+  std::cout << "[GRAPHICENGINE] chrono.getTime(): " << chrono.getTime() << std::endl;
+  std::cout << "[GRAPHICENGINE] objects.isStarted(): " << objects.isStarted(true) << std::endl;
   if (this->chrono.getTime() == -1.f)
     this->chrono.setTime(this->objects.getTimeLeft(true));
   if (this->objects.isStarted(true))
