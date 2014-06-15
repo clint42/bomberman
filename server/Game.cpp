@@ -51,8 +51,8 @@ Server::Game::~Game() {
   while (_events.tryPop(&c)) delete c;
   while (_bombs.tryPop(&c))  delete c;
   for (std::list<Bot *>::iterator it = _bots.begin(); it != _bots.end(); ++it) {
-    std::pair<size_t, size_t> pos((*it)->getPosX(), (*it)->getPosY());
-    this->killplayer(pos);
+    std::pair<size_t, size_t> pos((*it)->getPlayer()->getPosX(), (*it)->getPlayer()->getPosY());
+    this->killPlayer(pos);
   }
   if (_players.size()) {
     
