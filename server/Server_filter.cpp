@@ -57,7 +57,8 @@ Server::Server::putCmdInQueue(t_cmd *cmd) {
     this->_game->addEvent(cmd);
   }
   else if (((!cmd->action.compare("PAUSE") ||
-	     !cmd->action.compare("KILL")) && cmd->params.size() == 0) ||
+	     !cmd->action.compare("KILL") ||
+	     !cmd->action.compare("SAVE")) && cmd->params.size() == 0) ||
 	   (!cmd->action.compare("CONFIG") && cmd->params.size() == 5) ||
 	   (!cmd->action.compare("WITHFRIEND") && cmd->params.size() == 1) ||
 	   (!cmd->action.compare("MD5") && cmd->params.size() == 1)) {
