@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Sun Jun 15 22:09:45 2014 julie franel
+// Last update Sun Jun 15 23:03:26 2014 aurelien prieur
 // Last update Sun Jun 15 21:39:17 2014 aurelien prieur
 //
 
@@ -14,6 +14,10 @@
 MenuHandler::MenuHandler(Signal &signal): _signal(signal), _forked(false)
 {
   _sdlContext = new gdl::SdlContext;
+}
+
+void	MenuHandler::initialize()
+{
   _sdlContext->start(800, 600, "Menu", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
 }
 

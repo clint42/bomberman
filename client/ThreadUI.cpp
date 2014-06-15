@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:19:12 2014 aurelien prieur
-// Last update Sun Jun 15 10:14:03 2014 aurelien prieur
+// Last update Sun Jun 15 22:22:01 2014 aurelien prieur
 //
 
 #include "ThreadUI.hpp"
@@ -43,7 +43,7 @@ void		*ThreadUI::run()
       //RETURN ERROR
     }
   //RETURN SUCCESS
-  return (NULL);
+  pthread_exit(NULL);
 }
 
 GameEntities	&ThreadUI::getGameEntities()
