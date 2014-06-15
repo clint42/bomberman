@@ -5,13 +5,14 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 26 16:09:25 2014 aurelien prieur
-// Last update Thu Jun 12 13:46:43 2014 virol_g
+// Last update Sun Jun 15 01:50:56 2014 virol_g
 //
 
 #include <iostream>
 #include "MenuBackground.hpp"
 
-MenuBackground::MenuBackground(const std::string &textureName)
+MenuBackground::MenuBackground(const std::string &textureName, size_t width, size_t height):
+  _width(width), _height(height)
 {
   this->initialize(textureName);
 }
@@ -29,9 +30,9 @@ bool	MenuBackground::initialize(std::string const &textureName)
     }
   _geometry.setColor(glm::vec4(1, 1, 1, 1));
   _geometry.pushVertex(glm::vec3(0, 0, -1));
-  _geometry.pushVertex(glm::vec3(800, 0, -1));
-  _geometry.pushVertex(glm::vec3(800, 600, -1));
-  _geometry.pushVertex(glm::vec3(0, 600, -1));
+  _geometry.pushVertex(glm::vec3(_width, 0, -1));
+  _geometry.pushVertex(glm::vec3(_width, _height, -1));
+  _geometry.pushVertex(glm::vec3(0, _height, -1));
   _geometry.pushUv(glm::vec2(0, 1));
   _geometry.pushUv(glm::vec2(1, 1));
   _geometry.pushUv(glm::vec2(1, 0));

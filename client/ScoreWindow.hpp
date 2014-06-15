@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 17:41:08 2014 virol_g
-// Last update Sat Jun 14 23:24:04 2014 virol_g
+// Last update Sun Jun 15 01:34:35 2014 virol_g
 //
 
 #ifndef		SCOREWINDOW_HPP_
@@ -13,6 +13,7 @@
 
 # include	<vector>
 # include	<sstream>
+# include	<SdlContext.hh>
 # include	"MenuBackground.hpp"
 # include	"menu/AMenu.hpp"
 # include	"menu/IMenuElem.hpp"
@@ -35,6 +36,7 @@ public:
 	      std::vector<int> scores, int idWiner);
   ~ScoreWindow();
 
+  virtual bool	initialize();
   virtual bool	build();
   virtual bool	update();
   virtual void	draw();

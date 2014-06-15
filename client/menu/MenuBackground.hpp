@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 26 16:04:21 2014 aurelien prieur
-// Last update Thu Jun 12 13:46:15 2014 virol_g
+// Last update Sun Jun 15 01:49:32 2014 virol_g
 //
 
 #ifndef MENUBACKGROUND_HPP_
@@ -17,8 +17,10 @@ class	MenuBackground: public IMenuElem
 {
   gdl::Texture	_texture;
   gdl::Geometry	_geometry;
+  size_t	_width;
+  size_t	_height;
 public:
-  MenuBackground(const std::string &);
+  MenuBackground(const std::string &, size_t width = 800, size_t height = 600);
   virtual ~MenuBackground();
   virtual bool	initialize(std::string const &textureName);
   virtual bool	update(gdl::Clock const &clock, gdl::Input &input);

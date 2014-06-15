@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 17:46:00 2014 virol_g
-// Last update Sat Jun 14 23:46:29 2014 virol_g
+// Last update Sun Jun 15 01:51:42 2014 virol_g
 //
 
 #include	"ScoreManager.hpp"
@@ -17,7 +17,7 @@ ScoreWindow::ScoreWindow(gdl::SdlContext &sdlContext, std::vector<int> ids,
   AMenu(sdlContext), _ids(ids), _scores(scores), _idWiner(idWiner), _replay(false)
 {
   _nbPlayers = (_ids[1] == -1) ? 1 : 2;
-  std::cout << _nbPlayers << std::endl;
+  std::cout << "nb players : " << _nbPlayers << std::endl;
 }
 
 ScoreWindow::~ScoreWindow()
@@ -42,6 +42,26 @@ std::string	ScoreWindow::toString(const std::string &str, int nb)
   return (ret);
 }
 
+bool		ScoreWindow::initialize()
+{
+  glm::mat4     projection;
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  if (!_shader.load("./client/shaders/basic.fp", GL_FRAGMENT_SHADER)
+      || !_shader.load("./client/shaders/basic.vp", GL_VERTEX_SHADER)
+      || !_shader.build())
+    {
+      std::cerr << "Shader loading error" << std::endl;
+      return (false);
+    }
+  projection = glm::ortho(0.f, 1920.f, 1080.f, 0.f, -1.f, 1.f);
+  _shader.bind();
+  _shader.setUniform("projection", projection);
+  _shader.setUniform("view", glm::mat4(1));
+  return (true);
+}
+
 bool		ScoreWindow::build()
 {
   bool		failed = false;
@@ -53,7 +73,7 @@ bool		ScoreWindow::build()
     {
       failed = true;
     }
-  _menuBackground = new MenuBackground("client/assets/background.tga");
+  _menuBackground = new MenuBackground("client/assets/background.tga", 1920, 1080);
   _elems.push_back(new MenuButton(std::pair<size_t, size_t>(300, 340),
 				  std::pair<size_t, size_t>(140, 60),
 				  "Quit", glm::vec4(0.23, 0.18, 0.52, 1.f),
@@ -80,22 +100,25 @@ bool		ScoreWindow::build()
 					    glm::vec4(0.23, 0.18, 0.52, 1.f), 20));
 	}
     }
-  _text.push_back(new GraphicalText(((_ids[1] == _idWiner) ? "You won !" : "You lost..."),
-				    std::pair<size_t, size_t>(500, 50),
-				    glm::vec4(0.23, 0.18, 0.52, 1.f), 40));
-  _text.push_back(new GraphicalText(this->toString("Your score : ", _scores[1]),
-				    std::pair<size_t, size_t>(500, 80),
-				    glm::vec4(0.23, 0.18, 0.52, 1.f), 30));
-  if (failed == false)
+  if (_nbPlayers == 2)
     {
-      ScoreManager	scoreManager(".bomberman.score");
-      std::vector<int>	bestScores(scoreManager.getPlayer2Score());
-
-      for (size_t i = 0; i < bestScores.size(); ++i)
+      _text.push_back(new GraphicalText(((_ids[1] == _idWiner) ? "You won !" : "You lost..."),
+					std::pair<size_t, size_t>(500, 50),
+					glm::vec4(0.23, 0.18, 0.52, 1.f), 40));
+      _text.push_back(new GraphicalText(this->toString("Your score : ", _scores[1]),
+					std::pair<size_t, size_t>(500, 80),
+					glm::vec4(0.23, 0.18, 0.52, 1.f), 30));
+      if (failed == false)
 	{
-	  _text.push_back(new GraphicalText(this->toString("- ", bestScores[i]),
-					    std::pair<size_t, size_t>(500, 100 + (i * 20)),
-					    glm::vec4(0.23, 0.18, 0.52, 1.f), 20));
+	  ScoreManager	scoreManager(".bomberman.score");
+	  std::vector<int>	bestScores(scoreManager.getPlayer2Score());
+      
+	  for (size_t i = 0; i < bestScores.size(); ++i)
+	    {
+	      _text.push_back(new GraphicalText(this->toString("- ", bestScores[i]),
+						std::pair<size_t, size_t>(500, 100 + (i * 20)),
+						glm::vec4(0.23, 0.18, 0.52, 1.f), 20));
+	    }
 	}
     }
   return (true);
