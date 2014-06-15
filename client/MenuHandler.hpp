@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:21:25 2014 aurelien prieur
-// Last update Fri Jun 13 21:57:25 2014 virol_g
+// Last update Sun Jun 15 12:33:35 2014 virol_g
 //
 
 #ifndef MENUHANDLER_HPP_
@@ -18,6 +18,7 @@
 # include "MapMenu.hpp"
 # include "CreateMenu.hpp"
 # include "JoinMenu.hpp"
+# include "LoadMenu.hpp"
 # include "Signal.hpp"
 # include "ConnexionHandler.hpp"
 # include "../server/Server.hpp"
