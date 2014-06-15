@@ -5,11 +5,8 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-<<<<<<< HEAD
-// Last update Sun Jun 15 22:06:08 2014 julie franel
-=======
+// Last update Sun Jun 15 22:09:45 2014 julie franel
 // Last update Sun Jun 15 21:39:17 2014 aurelien prieur
->>>>>>> f237ac4588bcf9af8fb1d87c91e05dfc49968342
 //
 
 #include "MenuHandler.hpp"
