@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sat Jun 14 18:57:23 2014 aurelien prieur
+// Last update Sun Jun 15 02:52:00 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -247,11 +247,13 @@ float		GameEntities::getTimeLeft(bool withoutLock)
 }
 
 
-std::pair<size_t, size_t> const &GameEntities::getMapSize(void)
+std::pair<size_t, size_t> const &GameEntities::getMapSize(bool withoutLock)
 {
-  _locker.lock();
+  if (!withoutLock)
+    _locker.lock();
   std::pair<size_t, size_t> const &retVal = _mapSize;
-  _locker.unlock();
+  if (!withoutLock)
+    _locker.unlock();
   return (retVal);
 }
 
@@ -310,9 +312,10 @@ int	GameEntities::getPlayerId(int nPlayer)
   return (retVal);
 }
 
-std::pair<size_t, size_t> const *GameEntities::getPlayerPos(int nPlayer)
+std::pair<size_t, size_t> const *GameEntities::getPlayerPos(int nPlayer, bool withoutLock)
 {
-  _locker.lock();
+  if (!withoutLock)
+    _locker.lock();
   const AObject *player = getPlayer(true, nPlayer);
   if (player != NULL)
     {
@@ -327,7 +330,8 @@ std::pair<size_t, size_t> const *GameEntities::getPlayerPos(int nPlayer)
 	    }
 	}
     }
-  _locker.unlock();
+  if (!withoutLock)
+    _locker.unlock();
   return (NULL);
 }
 
