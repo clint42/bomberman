@@ -11,8 +11,8 @@
 */
 
 Map::Map(std::string const &filename) : _width(0), _height(0) {
-  std::string	name = "./maps/" + filename;
-  std::ifstream	file(name.c_str(), std::ios::in);
+  //std::string	name = "./maps/" + filename;
+  std::ifstream	file(filename.c_str(), std::ios::in);
   std::string	tmp;
 
   this->_filename = filename;
@@ -22,6 +22,7 @@ Map::Map(std::string const &filename) : _width(0), _height(0) {
   CVRT_STRING_TO_SIZET(tmp, _height);
   std::getline(file, tmp);
   CVRT_STRING_TO_SIZET(tmp, _nbPlayers);
+  std::cout << "============> " << _width << " " << _height << " " << filename << std::endl;
   if (_width < 4 || _height < 4)
     throw MapException("Map size be must equal to 4*4 or higher.");
 
@@ -57,8 +58,7 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
   size_t			_w = 0;
   size_t			_h = 0;
 
-  while (file.get(_c) // && _h < height
-	 )
+  while (file.get(_c) && _h < height)
     {
       std::cout << _c;
       _c -= '0';
@@ -87,7 +87,7 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
 
 void
 Map::md5It() {
-  std::ifstream filemap((std::string("./maps/") + this->_filename).c_str(), std::ios::in);
+  std::ifstream filemap(this->_filename.c_str(), std::ios::in);
 
   if(filemap) {
     char key[MD5_DIGEST_LENGTH + 1] = {0};
