@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Sun Jun 15 12:12:22 2014 virol_g
+// Last update Sun Jun 15 21:45:41 2014 virol_g
 //
 
 #include	<sstream>
@@ -193,5 +193,6 @@ t_game		*CreateMenu::getChoice() const
   ss3 << _inputs[2]->getString();
   ss3 >> choice->serverPort;
   choice->createMap = _createMap;
+  choice->loadMap = false;
   return (choice);
 }
