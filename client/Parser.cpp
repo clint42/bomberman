@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 10:14:51 2014 aurelien prieur
+// Last update Sun Jun 15 10:25:41 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -177,9 +177,9 @@ void		Parser::parseStartGame(const t_parser &_parser)
 {
   size_t        _chrono;
 
-  this->_gameEntities.startGame();
   CVRT_STRING_TO_SIZET(_parser.params[0], _chrono);
   this->_gameEntities.setTimeLeft(static_cast<float>(_chrono));
+  this->_gameEntities.startGame();
 }
 
 
