@@ -26,8 +26,8 @@ Map::Map(std::string const &filename) : _width(0), _height(0) {
     throw MapException("Map size be must equal to 4*4 or higher.");
 
   this->getMap(_width, _height, file);
-  // this->md5It();
-  _key = "key"; // THIS IS DEBUG
+  this->md5It();
+  // _key = "key"; // THIS IS DEBUG
   file.close();
 
   if (this->_nbPlayers > ((_width * _height) - (_map.size() - 1)))
@@ -71,7 +71,7 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
 	  _w = 0;
 	  _h += 1;
 	}
-      else if (_c == 1 || _c == 2)
+      else if (_c > 0)
 	{
 	  if (_w >= width || _h >= height)
 	    throw MapException("Map size wrong.");
@@ -90,14 +90,15 @@ Map::md5It() {
   std::ifstream filemap((std::string("./maps/") + this->_filename).c_str(), std::ios::in);
 
   if(filemap) {
-    char key[MD5_DIGEST_LENGTH] = {0};
+    char key[MD5_DIGEST_LENGTH + 1] = {0};
     std::string content, line;
 
     while (filemap >> line)
       content += line;
     filemap.close();
+
     MD5((unsigned char *)content.c_str(), content.size(), (unsigned char *)key);
-    _key = key;
+    _key = std::string(reinterpret_cast<char const *>(key));
   } else
     throw Md5Exception();
 }
