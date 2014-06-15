@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sun Jun 15 10:16:32 2014 aurelien prieur
+// Last update Sun Jun 15 16:28:45 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -232,9 +232,9 @@ void		GameEntities::addPoints(int points, int playerId)
 {
   _locker.lock();
   if (_playersId[0] == playerId)
-    _playerScore += points;
+    _playerScore = points;
   else if (_playersId[1] == playerId)
-    _player2Score += points;
+    _player2Score = points;
   _locker.unlock();
 }
 
