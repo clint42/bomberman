@@ -18,10 +18,10 @@ Server::Player::updateDateNextCommand(Server::Player::Action a, Time const &date
   else			 mult = DELAY_MULT_BOMB;
 
   std::cout << "------- updateDateNextCommand()" << std::endl;
-  std::cout << "date: " << date << std::endl;
+  std::cout << "before: " << _dateNextCommand << std::endl;
   _dateNextCommand = date - Time(0, 0, 0, 50/*(DELAY * mult / _commandTimeMultiplier)*/);
-  std::cout << "_dNC: " << _dateNextCommand << std::endl;
-  std::cout << "Server::Player::updateDateNextCommand() => date is '" << _dateNextCommand << "'" << std::endl;
+  std::cout << "  " << date << "\n- " << Time(0, 0, 0, 50) << "\n= " << _dateNextCommand << std::endl;
+  std::cout << "-------" << std::endl;
   DEBUG("! Server::Player::updateDateNextCommand()", -1);
 }
 
@@ -47,61 +47,52 @@ Server::Player::getAction(Server::Player::Action *a, Server::Player::Dir *dir, c
 }
 
 bool
-Server::Player::moveUp()
-{
+Server::Player::moveUp() {
   this->_posY -= 1;
   return (true);
 }
 
 bool
-Server::Player::moveRight()
-{
+Server::Player::moveRight() {
   this->_posX += 1;
   return (true);
 }
 
 bool
-Server::Player::moveDown()
-{
+Server::Player::moveDown() {
   this->_posY += 1;
   return (true);
 }
 
 bool
-Server::Player::moveLeft()
-{
+Server::Player::moveLeft() {
   this->_posX -= 1;
   return (true);
 }
 
 bool
-Server::Player::orient(Dir d)
-{
+Server::Player::orient(Dir d) {
   this->_orientation = d;
   return (true);
 }
 
 bool
-Server::Player::dropBomb()
-{
+Server::Player::dropBomb() {
   this->_bombsOnFloor += 1;
   return (true);
 }
 
 void
-Server::Player::earnBomb()
-{
+Server::Player::earnBomb() {
   this->_bombsLimit += 1;
 }
 
 void
-Server::Player::earnRange()
-{
+Server::Player::earnRange() {
   this->_bombRange += 1;
 }
 
 void
-Server::Player::earnSpeed()
-{
-  this->_commandTimeMultiplier = _commandTimeMultiplier > 0.2 ? _commandTimeMultiplier - 0.1 : _commandTimeMultiplier / 2;
+Server::Player::earnSpeed() {
+  this->_commandTimeMultiplier -= (_commandTimeMultiplier > 0.2) * 0.1;
 }

@@ -1,11 +1,11 @@
 //
 // LoadMenu.cpp for bomberman in /home/virol_g/tek2/cpp/bomberman/client/menu
-// 
+//
 // Made by virol_g
 // Login   <virol_g@epitech.net>
-// 
+//
 // Started on  Sun Jun 15 10:47:18 2014 virol_g
-// Last update Sun Jun 15 12:32:22 2014 virol_g
+// Last update Sun Jun 15 14:59:48 2014 julie franel
 //
 
 #include	"LoadMenu.hpp"
@@ -71,7 +71,7 @@ bool	LoadMenu::update()
 {
   glm::ivec2	mouse;
 
-  this->_sdlContext.updateClock(this->_clock); 
+  this->_sdlContext.updateClock(this->_clock);
   this->_sdlContext.updateInputs(this->_input);
   if (this->_input.getKey(SDLK_ESCAPE) || this->_input.getInput(SDL_QUIT, false))
     {
@@ -123,5 +123,7 @@ t_game	*LoadMenu::getChoice() const
   ss << _portInput->getString();
   ss >> choice->serverPort;
   choice->mapName = _files->getString();
+  choice->isHost = true;
+  choice->ipAddr = "127.0.0.1";
   return (choice);
 }

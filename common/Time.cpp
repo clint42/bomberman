@@ -15,36 +15,34 @@ Time::operator=(Time const &t) {
 }
 Time &
 Time::operator-=(Time const &t) {
-  _t.tv_usec = (_t.tv_usec - t._t.tv_usec) > 0 ? (_t.tv_usec - t._t.tv_usec) : 0;
-  _t.tv_sec = (_t.tv_sec - t._t.tv_sec) > 0 ? (_t.tv_sec - t._t.tv_sec) - !(_t.tv_usec) : 0;
+  unsigned long int r = this->inUsec() - t.inUsec();
+  _t.tv_sec = r / 1000000;
+  _t.tv_usec = r % 1000000;
   return *this;
 }
 Time &
 Time::operator+=(Time const &t) {
-  _t.tv_sec += t._t.tv_sec;
-  if ((_t.tv_usec += t._t.tv_usec) >= 1000000) {
-    _t.tv_usec %= 1000000;
-    _t.tv_sec += 1;
-  };
+  unsigned long int r = this->inUsec() + t.inUsec();
+  _t.tv_sec = r / 1000000;
+  _t.tv_usec = r % 1000000;
   return *this;
 }
 
 Time
 Time::operator-(Time const &t) const {
   Time	ret;
-  ret._t.tv_usec = (_t.tv_usec - t._t.tv_usec) > 0 ? (_t.tv_usec - t._t.tv_usec) : 0;
-  ret._t.tv_sec = (_t.tv_sec - t._t.tv_sec) > 0 ? (_t.tv_sec - t._t.tv_sec) - !(ret._t.tv_usec) : 0;
+  unsigned long int r = this->inUsec() - t.inUsec();
+  ret._t.tv_sec = r / 1000000;
+  ret._t.tv_usec = r % 1000000;
   return ret;
 }
 
 Time
 Time::operator+(Time const &t) const {
   Time	ret;
-  ret._t.tv_sec = _t.tv_sec + t._t.tv_sec;
-  if ((ret._t.tv_usec = _t.tv_usec + t._t.tv_usec) > 1000000) {
-    ret._t.tv_sec += 1;
-    ret._t.tv_usec %= 1000000;
-  }
+  unsigned long int r = this->inUsec() + t.inUsec();
+  ret._t.tv_sec = r / 1000000;
+  ret._t.tv_usec = r % 1000000;
   return ret;
 }
 

@@ -11,7 +11,8 @@
 */
 
 Map::Map(std::string const &filename) : _width(0), _height(0) {
-  std::ifstream	file((std::string("./maps/") + filename).c_str(), std::ios::in);
+  std::string	name = "./maps/" + filename;
+  std::ifstream	file(name.c_str(), std::ios::in);
   std::string	tmp;
 
   this->_filename = filename;
@@ -56,8 +57,10 @@ Map::getMap(size_t width, size_t height, std::ifstream &file) {
   size_t			_w = 0;
   size_t			_h = 0;
 
-  while (file.get(_c))
+  while (file.get(_c) // && _h < height
+	 )
     {
+      std::cout << _c;
       _c -= '0';
       if (!((_c >= 0 && _c <= 2) || _c == ('\n' - '0')))
 	throw MapException("Invalid block identifier");
