@@ -40,6 +40,7 @@ namespace Server {
 
     bool	funcWelcome(const t_cmd *);
     bool	funcPause(const t_cmd *);
+    bool	funcSave(const t_cmd *);
     bool	funcKill(const t_cmd *);
     bool	funcMd5(const t_cmd *);
     bool	funcWithFriend(const t_cmd *);

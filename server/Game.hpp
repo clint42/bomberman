@@ -121,7 +121,7 @@ namespace	Server {
     static bool					_isInit;
     static std::map<int, std::string>		_bonus;
 
-    void		saveMap() const;
+    void		saveGame() const;
 
   private:
 
