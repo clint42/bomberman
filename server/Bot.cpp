@@ -12,13 +12,11 @@ Server::Game::Bot::Bot(Server::Player *p, Map *m, std::map<std::pair<size_t, siz
   getDirection[3] = "LEFT";
 }
 
-Server::Game::Bot::~Bot()
-{
+Server::Game::Bot::~Bot() {
 }
 
 void
-Server::Game::Bot::attack()
-{
+Server::Game::Bot::attack() {
 
 }
 

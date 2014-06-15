@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Tue Jun 10 18:22:24 2014 aurelien prieur
-// Last update Wed Jun 11 13:55:16 2014 aurelien prieur
+// Last update Sun Jun 15 19:55:06 2014 aurelien prieur
 //
 
 #include "GraphicEngine.hpp"
@@ -67,9 +67,11 @@ void			Score::update(int score)
 {
   std::ostringstream	oss;
   int			i;
+  int			tmpScore;
 
   i = 1;
-  while ((score /= 10) > 0)
+  tmpScore = score;
+  while ((tmpScore /= 10) > 0)
     ++i;
   for (int j = 0; j < (6 - i); ++j)
     oss <<  "0";

@@ -12,6 +12,7 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
 		   std::list<Player *> const &peers, Messenger *mes, size_t &id)
   : _map(0), _params(g_Plays[type]), _time(static_cast<Time_t>(t)),
     _messenger(mes), _bombThread(0), _id(id),
+    _botsThread(0),
     _started(false), _paused(false), _ended(false),
     _nbPlayers(p), _nbBots(b),
     _peers(peers)
@@ -57,44 +58,23 @@ void
 Server::Game::bombsProcessing() {
   t_cmd *	c;
 
-  DEBUG("Server::Game::bombsProcessing", 1);
   while (!_ended) {
-    // std::cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << std::endl;
     if (_paused || !_bombs.tryPop(&c)) {
-      // std::cout << "$$$$ j'entame le wait()" << std::endl;
-      // _bombs.wait();
-      // std::cout << "$$$$ je sors du wait()" << std::endl;
       usleep(75000);
     }
     else {
-      // std::cout << "$$$$ j'ai reussi a pop un objet" << std::endl;
-      if (!_bombs.empty()) {
-	// _bombs.signal();
+      if (this->timeLeft() > c->date) {
+	usleep(this->timeLeft().inUsec() - c->date.inUsec());
       }
-      else {
-	// std::cout << "$$$$ j'unlock pour pas avoir de delock" << std::endl;
+      if (_paused) {
+	_bombs.push_front(c);
+      } else {
+	if (c->action == "BOMB")
+	  c->action += " EXPLOSE";
+	_events.push_front(c);
       }
-      // std::cout << "$$$$ je fais l'execution" << std::endl;
-      { // code
-	if (this->timeLeft() > c->date) {
-	  // std::cout << "[SERVER] Server::Game::bombsProcessing() => time of usleep " << this->timeLeft().inUsec() - c->date.inUsec() << "." << std::endl;
-	  usleep(this->timeLeft().inUsec() - c->date.inUsec());
-	}
-	else {
-	  // DEBUG("[SERVER] Server::Game::bombsProcessing() => en fait, elle explose directe", 0);
-	}
-	if (_paused) {
-	  _bombs.push_front(c);
-	} else {
-	  if (c->action == "BOMB")
-	    c->action += " EXPLOSE";
-	  _events.push_front(c);
-	}
-      } // !code
-      // delete c; // pas delete puisqu'on repush !! sigsegf autrement...
     }
   }
-  DEBUG("!Server::Game::bombsProcessing", -1);
 }
 
 void
@@ -110,6 +90,7 @@ Server::Game::start() {
       (it->second)->updateDateNextCommand(Server::Player::ORIENT, this->timeLeft() - Time(0, 0, COUNTDOWN + 1));
     }
     _bombThread = new Thread(&Server::Game::trampoline_bombsProcessing, this);
+    _botsThread = new Thread(&Server::Game::trampoline_botsProcessing, this);
     _started = true;
     std::stringstream ss;
     ss << "0 0 0 STARTGAME " << this->timeLeft().inSec() << "\n";
@@ -182,6 +163,13 @@ Server::Game::update() {
   }
   else if (this->isEnded()) {
     _ended = true;
+    std::cout << "=======================================================================" << std::endl;
+    std::cout << "=======================================================================" << std::endl;
+    std::cout << "=======================================================================" << std::endl;
+    std::cout << "=======================================================================" << std::endl;
+    std::cout << "=======================================================================" << std::endl;
+    std::cout << "=======================================================================" << std::endl;
+    std::cout << "=======================================================================" << std::endl;
     _messenger->broadcastMessage("0 0 0 ENDGAME");
   }
   else {
@@ -227,13 +215,6 @@ Server::Game::update() {
 }
 
 void
-Server::Game::updateBots()
-{
-  for (std::list<Bot *>::iterator it = _bots.begin(); it != _bots.end(); ++it)
-    (*it)->actionBot(this->timeLeft(), _events);
-}
-
-void
 Server::Game::filterCmd(t_cmd *cmd) const {
   std::stringstream convert;
 
@@ -262,8 +243,9 @@ void			Server::Game::saveGame() const
   size_t x = 0;
   size_t y = 0;
 
-  ss << "save/" << (t->tm_year + 1900) << "-" << (t->tm_mon + 1) << "-" << t->tm_mday
-     << "-" << t->tm_hour << "h" << t->tm_min << "m" << t->tm_sec << "s.save";
+  ss << "save/" << this->getNbrPlayers() << "-" << this->getNbrBots() << "-"
+     << (t->tm_year + 1900) << "-" << (t->tm_mon + 1) << "-" << t->tm_mday << "-"
+     << t->tm_hour << "h" << t->tm_min << "m" << t->tm_sec << "s.save";
   name = ss.str();
 
   file.open(name.c_str(), std::ios::out | std::ios::trunc);
@@ -289,29 +271,75 @@ void			Server::Game::saveGame() const
       for (std::map<std::pair<size_t, size_t>, Player *>::const_iterator it = this->_players.begin();
 	   it != this->_players.end(); ++it)
 	{
-	  file << it->second->getPosX() << " " << it->second->getPosY() << " " <<
-	    it->second->getScore() << std::endl;
+	  file << it->second->isBot() << " " << it->second->getPosX() << " " << it->second->getPosY()
+	       << " " << it->second->getScore() << std::endl;
 	}
       file.close();
     }
 }
 
 
-void		Server::Game::loadGame(const std::string &filename) const
+void		Server::Game::loadGame(const std::string &filename)
 {
   std::ifstream file(filename.c_str(), std::ios::in);
   std::string   readed;
+  std::vector<std::string>	_infos;
 
   if (file.is_open())
     {
       while (std::getline(file, readed) && readed.compare("SETTINGS") != 0);
       while (std::getline(file, readed))
-	{
-	  std::cout << readed << std::endl;
-	}
+	_infos.push_back(readed);
       file.close();
-    }
 
+      size_t	nbrBots = 0;
+      size_t	nbrPlayers = 0;
+      size_t	pos1 = filename.find("/");
+      size_t	pos2 = filename.find("-", pos1);
+      size_t	timeLeft;
+      size_t	count = 1;
+      size_t	posX = 0;
+      size_t	posY = 0;
+      bool	isBot = false;
+      size_t	score = 0;
+
+      CVRT_STRING_TO_SIZET(filename.substr(pos1 + 1, pos2 - pos1 - 1), nbrPlayers);
+
+      pos1 = filename.find("-", pos2);
+      CVRT_STRING_TO_SIZET(filename.substr(pos2 + 1, pos1 - pos2 - 1), nbrBots);
+
+      CVRT_STRING_TO_SIZET(_infos[0], timeLeft);
+      //      this->setTimeLeft(timeLeft); // DECOMMENTER
+
+      this->pickPlayers(nbrBots + nbrPlayers);
+      for (std::map<std::pair<size_t, size_t>, Player *>::iterator it = this->_players.begin();
+	   it != this->_players.end(); ++it)
+      	{
+	  if (count <= (nbrBots + nbrPlayers) && count <= _infos.size())
+	    {
+	      pos1 = 0;
+	      pos2 = 0;
+	      pos1 = _infos[count].find(" ");
+	      isBot = _infos[count].substr(0, pos1).compare("1") == 0 ? true : false;
+
+	      pos2 = _infos[count].find(" ", pos1 + 1);
+	      CVRT_STRING_TO_SIZET(_infos[count].substr(pos1 + 1, pos2 - pos1 - 1), posX);
+
+	      pos1 = _infos[count].find(" ", pos2 + 1);
+	      CVRT_STRING_TO_SIZET(_infos[count].substr(pos2 + 1, pos1 - pos2 - 1), posY);
+
+	      pos2 = _infos[count].find(" ", pos1 + 1);
+	      CVRT_STRING_TO_SIZET(_infos[count].substr(pos1 + 1, pos2 - pos1 - 1), score);
+
+	      // std::cout << std::boolalpha << isBot << " - POSX= " << posX
+	      // 		<< " POSY= " << posY << " - SCORE= " << score << std::endl;
+	      (*it).second->setPos(posX, posY);
+	      (*it).second->setBot(isBot);
+	      (*it).second->setScore(score);
+	      ++count;
+	    }
+      	}
+    }
 }
 
 

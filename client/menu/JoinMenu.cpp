@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Wed Jun 11 14:19:39 2014 virol_g
-// Last update Sun Jun 15 20:42:48 2014 virol_g
+// Last update Sun Jun 15 21:45:58 2014 virol_g
 //
 
 #include	<fstream>
@@ -112,5 +112,6 @@ t_game	*JoinMenu::getChoice() const
   ss << _readPort->getString();
   ss >> choice->serverPort;
   choice->createMap = false;
+  choice->loadMap = false;
   return (choice);
 }

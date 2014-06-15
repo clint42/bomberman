@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 18:00:17 2014 aurelien prieur
-// Last update Sun Jun 15 17:13:12 2014 aurelien prieur
+// Last update Sun Jun 15 19:20:42 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -232,9 +232,15 @@ void		GameEntities::addPoints(int points, int playerId)
 {
   _locker.lock();
   if (_playersId[0] == playerId)
-    _playerScore = points;
+    {
+      std::cout << "_playerScore: " << points << std::endl;
+      _playerScore = points;
+    }
   else if (_playersId[1] == playerId)
-    _player2Score = points;
+    {
+      std::cout << "_player2Score: " << points << std::endl;
+      _player2Score = points;
+    }
   _locker.unlock();
 }
 
@@ -255,8 +261,14 @@ int		GameEntities::getPlayerScore(bool withoutLock, int nPlayer)
 
 void		GameEntities::setTimeLeft(float const &timeLeft)
 {
-  _locker.lock();
+  if (!_locker.lock())
+    {
+      std::cerr << "Unable to lock mutex." << std::endl;
+      return ;
+    }
+  std::cout << "[GAMEENTITIES]setTimeLeft timeLeft: " << timeLeft << std::endl;
   _timeLeft = timeLeft;
+  std::cout << "[GAMEENTITIES]setTimeLeft _timeLeft: " << _timeLeft << std::endl;
   _locker.unlock();
 }
 
@@ -276,7 +288,9 @@ float		GameEntities::getTimeLeft(bool withoutLock)
 
   if (!withoutLock)
     _locker.lock();
+  std::cout << "[GAMEENTITIES]getTimeLeft _timeLeft: " << _timeLeft << std::endl;
   retVal = _timeLeft;
+  std::cout << "[GAMEENTITIES]getTimeLeft _timeLeft: " <<  retVal << std::endl;
   if (!withoutLock)
     _locker.unlock();
   return (retVal);

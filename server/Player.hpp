@@ -64,7 +64,8 @@ namespace Server {
     void	  getAction(Action &, std::string const &);
 
     inline void	  setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
-
+    inline void   setBot(bool bot) {this->_bot = bot;};
+    inline void   setScore(size_t score) {this->_score = score;};
     inline void	  cleanScore() { this->_score = 0; }
     inline void   incrScore() {this->_score += 10; }
     inline void	  hasCertifiedMd5(bool b) { _certifiedMd5 = b; }

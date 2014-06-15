@@ -1,11 +1,12 @@
 //
 // MenuHandler.cpp for bomberman in /home/prieur_b/tek2/cpp/bomberman/client
-// 
+//
 // Made by aurelien prieur
 // Login   <prieur_b@epitech.net>
-// 
+//
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Sun Jun 15 20:40:17 2014 virol_g
+// Last update Sun Jun 15 22:09:45 2014 julie franel
+// Last update Sun Jun 15 21:39:17 2014 aurelien prieur
 //
 
 #include "MenuHandler.hpp"
@@ -25,6 +26,25 @@ pid_t	MenuHandler::forker() const
   return (fork());
 }
 
+bool		MenuHandler::launchIntro()
+{
+  Intro		intro(_sdlContext);
+  bool		ret;
+
+  if (!intro.initialize())
+    {
+      std::cerr << "Unable to initialize intro" << std::endl;
+      return (false);
+    }
+  while (!intro.isFinished() && (ret = intro.update()))
+    {
+      intro.draw();
+    }
+  if (!ret)
+    return (false);
+  return (true);
+}
+
 t_game		*MenuHandler::mainMenu()
 {
   MainMenu	menu = MainMenu(*_sdlContext);
@@ -38,8 +58,6 @@ t_game		*MenuHandler::mainMenu()
   if ((options = menu.getChoice()) != NULL)
     {
       retVal = static_cast<int>(!options->isHost);
-      // delete options;
-      // return (std::pair<int, bool>(retVal, options->isDouble));
     }
   return (options);
 }
@@ -47,7 +65,7 @@ t_game		*MenuHandler::mainMenu()
 bool	MenuHandler::createGame(t_game *options)
 {
   pid_t	pid;
- 
+
   if (!_forked)
     {
       pid = forker();
@@ -59,7 +77,7 @@ bool	MenuHandler::createGame(t_game *options)
       if (pid == 0)
       	{
       	  ConnexionHandler	connexionHandler;
-	  
+
 	  try {
 	    Server::Server server(&connexionHandler, options->serverPort);
 	    server.run();
@@ -92,6 +110,8 @@ t_game	*MenuHandler::launchMenus()
   int		mode;
   bool		ret = true;
 
+  if (!launchIntro())
+    return (NULL);
   if ((mainChoice = mainMenu()) == NULL)
     return (NULL);
   mode = static_cast<int>(mainChoice->selected);
@@ -129,11 +149,12 @@ t_game	*MenuHandler::launchMenus()
 
       choice->isDouble = mainChoice->isDouble;
       delete mainChoice;
-      std::cout << "Choice received" << std::endl;
       if (mode == 0)
 	ret = createGame(choice);
       else if (mode == 1)
 	ret = joinGame(choice);
+      else if (mode == 2)
+	ret = createGame(choice);
     }
   _sdlContext->stop();
   delete _sdlContext;
