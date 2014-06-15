@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Sun Jun 15 12:41:53 2014 virol_g
+// Last update Sun Jun 15 12:53:53 2014 virol_g
 //
 
 #include <iostream>
@@ -25,6 +25,21 @@ MainMenu::~MainMenu()
   delete _menuBackground;
 }
 
+bool	MainMenu::canLoad() const
+{
+  ReadDir	file("./save");
+  std::string	name;
+
+  if (file.initialize() == false)
+    return (false);
+  while ((name = file.readFileName()) != "")
+    {
+      if (name != "." || name != "..")
+	return (true);
+    }
+  return (false);
+}
+
 bool	MainMenu::build()
 {
   _menuBackground = new MenuBackground("./client/menu/ressources/mainMenuBg.tga");
@@ -36,10 +51,11 @@ bool	MainMenu::build()
 				      std::pair<size_t, size_t>(270, 60),
 				      "Join game", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
-  _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(530, 305),
-				      std::pair<size_t, size_t>(270, 60),
-				      "Load game", glm::vec4(0.23, 0.18, 0.52, 1.f),
-				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
+  if (this->canLoad() == true)
+    _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(530, 305),
+					std::pair<size_t, size_t>(270, 60),
+					"Load game", glm::vec4(0.23, 0.18, 0.52, 1.f),
+					glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
   _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(60, 500), 
 				      std::pair<size_t, size_t>(100, 60),
 				      "No", glm::vec4(0.23, 0.18, 0.52, 1.f),
