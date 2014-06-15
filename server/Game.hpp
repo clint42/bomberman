@@ -169,9 +169,11 @@ namespace	Server {
       Player *	_p;
       Map *	_map;
       std::map<std::pair<size_t, size_t>, Player *>	&_list;
+      std::vector<bool> _way;
 
-      bool	danger();
+      void	danger();
       void	attack();
+      bool	isFull(bool);
     public:
       Bot(Player *p, Map *m, std::map<std::pair<size_t, size_t>, Player *>  &list);
       ~Bot();

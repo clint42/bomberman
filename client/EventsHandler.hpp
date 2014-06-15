@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 15:57:53 2014 aurelien prieur
-// Last update Sun Jun 15 01:16:38 2014 aurelien prieur
+// Last update Sun Jun 15 22:45:25 2014 buret_j
 //
 
 #ifndef EVENTSHANDLER_HPP_
@@ -52,6 +52,7 @@ private:
   Mutex				_mutex;
   bool				_finished;
   bool				_endGame;
+  size_t			_winner;
 
 public:
   EventsHandler(ConnexionHandler &connexionHandler);
@@ -68,6 +69,7 @@ public:
 				     std::pair<size_t, size_t> const &coord2 = (std::pair<size_t, size_t>(0, 0)));
   void			endGame(void);
   bool			isEndGame(void) const;
+  void			setWinner(size_t w) { _winner = w; }
 };
 
 #endif // !EVENTHANDLER_HPP_

@@ -5,7 +5,7 @@
 // Login   <franel_j@epitech.net>
 //
 // Started on  Sun Jun  8 15:49:48 2014 julie franel
-// Last update Sun Jun 15 01:11:53 2014 julie franel
+// Last update Sun Jun 15 22:46:21 2014 virol_g
 //
 
 #ifndef		PARSER_HPP_
@@ -54,6 +54,7 @@ class		Parser
   void                  parseMap(const t_parser &_parser);
   void                  parseStartGame(const t_parser &_parser);
   void			parseEndGame(const t_parser &_parser);
+  void			parseVictory(__attribute__((unused))const t_parser &_parser);
 
   void                  parseMove(const t_parser &_parser);
   void                  parseRotate(const t_parser &_parser);
