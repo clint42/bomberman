@@ -107,7 +107,7 @@ Server::Game::start() {
     this->updateTimeLeft();
     for (std::map<std::pair<size_t, size_t>, Player *>::iterator it = _players.begin();
 	 it != _players.end(); ++it) {
-      (it->second)->updateDateNextCommand(Server::Player::ORIENT, this->timeLeft() - Time(0, 0, COUNTDOWN));
+      (it->second)->updateDateNextCommand(Server::Player::ORIENT, this->timeLeft() - Time(0, 0, COUNTDOWN + 1));
     }
     _bombThread = new Thread(&Server::Game::trampoline_bombsProcessing, this);
     _started = true;
@@ -119,11 +119,11 @@ Server::Game::start() {
   }
   else if (_paused) {
     DEBUG("Server::Game::start() => on redemarre apres une pause", 0);
-    Time t;
-    t.now();
-    _endAt += t - _pausedAt;
+    std::stringstream ss;
+    _endAt += Time().now() - _pausedAt;
     _paused = false;
-    _bombs.signal(); // unpause bomb thread (var cond)
+    ss << "0 0 0 PAUSE " << this->timeLeft().inSec() << "\n";
+    _messenger->broadcastMessage(ss.str());
   }
   DEBUG("! Server::Game::start()", -1);
 }
@@ -131,8 +131,11 @@ Server::Game::start() {
 void
 Server::Game::pause() {
   if (_started && !_paused) {
+    std::stringstream ss;
+    ss << "0 0 0 PAUSE " << this->timeLeft().inSec() << "\n";
     _pausedAt.now();
     _paused = true;
+    _messenger->broadcastMessage(ss.str());
   }
 }
 
