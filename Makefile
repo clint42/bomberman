@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Sun Jun 15 12:17:48 2014 virol_g
+## Last update Sun Jun 15 16:49:37 2014 lafitt_g
 ##
 
 CXX =	clang++
@@ -70,7 +70,8 @@ SRC =   client/main.cpp \
 	server/Game_bomb.cpp		\
 	server/Game_move.cpp		\
 	server/Game_orient.cpp		\
-	server/Player.cpp
+	server/Player.cpp		\
+	server/Bot.cpp
 
 OBJ =	$(SRC:.cpp=.o)
 

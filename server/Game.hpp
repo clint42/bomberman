@@ -151,11 +151,11 @@ namespace	Server {
     class	Bot {
       Player *	_p;
       Map *	_map;
-      std::map<std::pair<size_t, size_t>, Player *>	_list;
+      std::map<std::pair<size_t, size_t>, Player *>	&_list;
 
       bool	danger();
     public:
-      Bot(Player *p, Map *m, const std::map<std::pair<size_t, size_t>, Player *> &list);
+      Bot(Player *p, Map *m, std::map<std::pair<size_t, size_t>, Player *>  &list);
       ~Bot();
 
       void	actionBot();

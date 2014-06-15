@@ -182,6 +182,7 @@ Server::Game::update() {
     _messenger->broadcastMessage("0 0 0 ENDGAME");
   }
   else {
+    // Creer fonction qui itere sur tous les bots / pour chacun des bots faire une action
     t_cmd *c;
     if (!_events.tryPop(&c)) {
       DEBUG("! Server::Game::update()", -1);
@@ -338,7 +339,7 @@ Server::Game::createBots() {
 
   for (size_t n = 0; n < _nbBots; ++n) {
     p = new Player(_id, 0, true);
-    _bots.push_back(new Bot(p, _map));
+    _bots.push_back(new Bot(p, _map, _players));
     pos = this->generatePos(-1, -1);
     p->setPos(pos.first, pos.second);
     this->_players[pos] = p;
