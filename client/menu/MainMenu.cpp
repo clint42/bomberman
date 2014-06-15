@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Sun Jun 15 12:53:53 2014 virol_g
+// Last update Sun Jun 15 17:16:04 2014 virol_g
 //
 
 #include <iostream>
@@ -51,7 +51,7 @@ bool	MainMenu::build()
 				      std::pair<size_t, size_t>(270, 60),
 				      "Join game", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
-  if (this->canLoad() == true)
+  if ((_displayLoad = this->canLoad()) == true)
     _menuElems.push_back(new MenuButton(std::pair<size_t, size_t>(530, 305),
 					std::pair<size_t, size_t>(270, 60),
 					"Load game", glm::vec4(0.23, 0.18, 0.52, 1.f),
@@ -96,13 +96,13 @@ bool	   MainMenu::update()
 	    {
 	      if (_menuElems[i]->getString() == "Next")
 		return (false);
-	      if (i != static_cast<size_t>(_selected) && i < 3)
+	      if (i != static_cast<size_t>(_selected) && i < (3 - !_displayLoad))
 		_menuElems[_selected]->hover(false);
-	      if (i != static_cast<size_t>(_nbPlayers) && i >= 3)
+	      if (i != static_cast<size_t>(_nbPlayers) && i >= (3 - !_displayLoad))
 		_menuElems[_nbPlayers]->hover(false);
-	      if (i < 3)
+	      if (i < (3 - !_displayLoad))
 		_selected = i;
-	      else if (i >= 3)
+	      else if (i >= (3 - !_displayLoad))
 		_nbPlayers = i;
 	      _menuElems[i]->hover(true);
 	    }

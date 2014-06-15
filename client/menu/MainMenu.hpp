@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:54:59 2014 aurelien prieur
-// Last update Sun Jun 15 12:54:10 2014 virol_g
+// Last update Sun Jun 15 17:13:51 2014 virol_g
 //
 
 #ifndef MAINMENU_HPP_
@@ -18,6 +18,7 @@
 class	MainMenu: public AMenu
 {
   int	   	_nbPlayers;
+  bool		_displayLoad;
   GraphicalText	*_title;
 
   bool	canLoad() const;
