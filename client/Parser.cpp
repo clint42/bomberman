@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 12:39:49 2014 julie franel
+// Last update Sun Jun 15 15:09:19 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -196,6 +196,7 @@ void		Parser::parsePoint(const t_parser &_parser)
 
 void		Parser::parseEndGame(__attribute__((unused))const t_parser &_parser)
 {
+  std::cout << "PARSER= ENDGAME" << std::endl;
   this->_eventsHandler.endGame();
 }
 
