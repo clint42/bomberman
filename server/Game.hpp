@@ -159,7 +159,8 @@ namespace	Server {
       ~Bot();
 
       inline Player *	getPlayer() const { return _p; }
-      void	actionBot();
+      void	attack();
+      void	actionBot(Time &date, SafeQueue<t_cmd *> &events);
     };
 
   };
