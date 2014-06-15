@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu May 29 15:57:53 2014 aurelien prieur
-// Last update Sun Jun 15 22:39:31 2014 buret_j
+// Last update Sun Jun 15 22:45:25 2014 buret_j
 //
 
 #ifndef EVENTSHANDLER_HPP_
@@ -35,7 +35,6 @@ private:
   class		PlayerEvent
   {
     int		_player;
-    size_t	_winner;
     std::string	_cmd;
     int		_ks;
   public:
@@ -53,6 +52,7 @@ private:
   Mutex				_mutex;
   bool				_finished;
   bool				_endGame;
+  size_t			_winner;
 
 public:
   EventsHandler(ConnexionHandler &connexionHandler);
