@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 17:46:00 2014 virol_g
-// Last update Sun Jun 15 03:52:44 2014 virol_g
+// Last update Sun Jun 15 09:35:09 2014 virol_g
 //
 
 #include	"ScoreWindow.hpp"
@@ -62,56 +62,54 @@ bool		ScoreWindow::initialize()
 
 bool		ScoreWindow::build()
 {
-  bool		failed = false;
-
   _scoreManager = new ScoreManager(".bomberman.score");
 
-  _menuBackground = new MenuBackground("client/assets/background.tga", 1920, 1080);
-  _elems.push_back(new MenuButton(std::pair<size_t, size_t>(300, 340),
+  _menuBackground = new MenuBackground("client/menu/ressources/whiteTex.tga", 1920, 1080);
+  _elems.push_back(new MenuButton(std::pair<size_t, size_t>(820, 980),
 				  std::pair<size_t, size_t>(140, 60),
 				  "Quit", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				  glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
-  _elems.push_back(new MenuButton(std::pair<size_t, size_t>(440, 340),
+  _elems.push_back(new MenuButton(std::pair<size_t, size_t>(960, 980),
 				  std::pair<size_t, size_t>(200, 60),
 				  "Replay", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				  glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
   _text.push_back(new GraphicalText(((_ids[0] == _idWiner) ? "You won !" : "You lost..."),
-				    std::pair<size_t, size_t>(400 / static_cast<size_t>(_nbPlayers), 50),
-				    glm::vec4(0.23, 0.18, 0.52, 1.f), 40));
+				    std::pair<size_t, size_t>(500 / static_cast<size_t>(_nbPlayers), 50),
+				    glm::vec4(0.23, 0.18, 0.52, 1.f), 60));
   _text.push_back(new GraphicalText(this->toString("Your score : ", _scores[0]),
-				    std::pair<size_t, size_t>(400 / _nbPlayers, 80),
-				    glm::vec4(0.23, 0.18, 0.52, 1.f), 30));
-  if (failed == false)
-    {
-      std::vector<int>	bestScores(_scoreManager->getPlayer1Score());
+				    std::pair<size_t, size_t>(500 / _nbPlayers, 150),
+				    glm::vec4(0.23, 0.18, 0.52, 1.f), 50));
+  std::vector<int>	bestScores(_scoreManager->getPlayer1Score());
 
-      for (size_t i = 0; i < bestScores.size(); ++i)
-	{
-	  _text.push_back(new GraphicalText(this->toString("- ", bestScores[i]),
-					    std::pair<size_t, size_t>(400 / _nbPlayers, 100 + (i * 20)),
-					    glm::vec4(0.23, 0.18, 0.52, 1.f), 20));
-	}
+  _text.push_back(new GraphicalText("Your best scores :",
+				    std::pair<size_t, size_t>(500 / _nbPlayers, 300),
+				    glm::vec4(0.23, 0.18, 0.52, 1.f), 40));
+  for (size_t i = 0; i < bestScores.size(); ++i)
+    {
+      _text.push_back(new GraphicalText(this->toString("- ", bestScores[i]),
+					std::pair<size_t, size_t>(500 / _nbPlayers, 400 + (i * 40)),
+					glm::vec4(0.23, 0.18, 0.52, 1.f), 40));
     }
   _scoreManager->addPlayer1Score(_scores[0]);
   _scoreManager->save();
   if (_nbPlayers == 2)
     {
       _text.push_back(new GraphicalText(((_ids[1] == _idWiner) ? "You won !" : "You lost..."),
-					std::pair<size_t, size_t>(500, 50),
-					glm::vec4(0.23, 0.18, 0.52, 1.f), 40));
+					std::pair<size_t, size_t>(1200, 50),
+					glm::vec4(0.23, 0.18, 0.52, 1.f), 60));
       _text.push_back(new GraphicalText(this->toString("Your score : ", _scores[1]),
-					std::pair<size_t, size_t>(500, 80),
-					glm::vec4(0.23, 0.18, 0.52, 1.f), 30));
-      if (failed == false)
-	{
-	  std::vector<int>	bestScores(_scoreManager->getPlayer2Score());
+					std::pair<size_t, size_t>(1200, 150),
+					glm::vec4(0.23, 0.18, 0.52, 1.f), 50));
+      std::vector<int>	bestScores(_scoreManager->getPlayer2Score());
       
-	  for (size_t i = 0; i < bestScores.size(); ++i)
-	    {
-	      _text.push_back(new GraphicalText(this->toString("- ", bestScores[i]),
-						std::pair<size_t, size_t>(500, 100 + (i * 20)),
-						glm::vec4(0.23, 0.18, 0.52, 1.f), 20));
-	    }
+      _text.push_back(new GraphicalText("Your best scores :",
+					std::pair<size_t, size_t>(1200, 300),
+					glm::vec4(0.23, 0.18, 0.52, 1.f), 40));
+      for (size_t i = 0; i < bestScores.size(); ++i)
+	{
+	  _text.push_back(new GraphicalText(this->toString("- ", bestScores[i]),
+					    std::pair<size_t, size_t>(1200, 400 + (i * 40)),
+					    glm::vec4(0.23, 0.18, 0.52, 1.f), 40));
 	}
       _scoreManager->addPlayer2Score(_scores[1]);
       _scoreManager->save();

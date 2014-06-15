@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri Jun 13 14:32:18 2014 aurelien prieur
-// Last update Sun Jun 15 04:07:47 2014 virol_g
+// Last update Sun Jun 15 05:56:40 2014 virol_g
 //
 
 #include <fstream>
@@ -22,8 +22,6 @@ ScoreManager::ScoreManager(std::string const &filename): _player1Score(0), _play
   int			score;
   size_t		cursor;
 
-  std::cout << "__player 1 size : " << _player1Score.size() << std::endl;
-  std::cout << "__1 filename : " << _filename << std::endl;
   file.open(_filename.c_str());
   if (file.is_open())
     {
@@ -52,9 +50,6 @@ ScoreManager::ScoreManager(std::string const &filename): _player1Score(0), _play
       std::reverse(_player2Score.begin(), _player2Score.end());
       file.close();
     }
-  // else
-  std::cout << "__2 filename : " << _filename << std::endl;
-  //   throw ScoreManagerException("Couldn't open score file");
 }
 
 ScoreManager::~ScoreManager()
@@ -65,7 +60,6 @@ void			ScoreManager::save(void) const
 {
   std::ofstream		file;
 
-  std::cout << _filename.c_str() << std::endl;
   file.open(_filename.c_str(), std::ios::out | std::ios::trunc);
   if (file.is_open())
     {
@@ -96,10 +90,8 @@ void			ScoreManager::addPlayerScore(int score, std::vector<int> &scoreTab)
 {
   bool			added = false;
 
-  std::cout << "file name : " << _filename << std::endl;
   if (scoreTab.size() > 0)
     {
-      std::cout << "size score tab : " << scoreTab.size() << std::endl;
       for (std::vector<int>::iterator it = scoreTab.begin(); it != scoreTab.end() && !added; ++it)
       	{
       	  if ((*it) < score)
@@ -117,7 +109,6 @@ void			ScoreManager::addPlayerScore(int score, std::vector<int> &scoreTab)
 
 void			ScoreManager::addPlayer1Score(int score)
 {
-  std::cout << "player 1 score size : " << _player1Score.size() << std::endl;
   addPlayerScore(score, _player1Score);
 }
 
