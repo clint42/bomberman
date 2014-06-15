@@ -39,8 +39,12 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
 }
 
 Server::Game::~Game() {
-  delete _map;
+  t_cmd *c;
+
   delete _bombThread;
+  delete _map;
+  while (_events.tryPop(&c)) delete c;
+  while (_bombs.tryPop(&c))  delete c;
 }
 
 void *
@@ -90,12 +94,9 @@ Server::Game::start() {
   if (!_started) {
     DEBUG("Server::Game::start() => le jeu n'etait pas demarre", 0);
     _startedAt.now();
-    _endAt = _startedAt + Time(0, GAME_TIME * _time);
+    _endAt = _startedAt + Time(0, GAME_TIME * _time, COUNTDOWN);
     this->updateTimeLeft();
-
-    DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 1", 0);
-    _bombThread = new Thread(&Server::Game::trampoline_bombsProcessing, this); // create bombs' thread
-    DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 2", 0);
+    _bombThread = new Thread(&Server::Game::trampoline_bombsProcessing, this);
     _started = true;
     std::stringstream ss;
     ss << "0 0 0 STARTGAME " << this->timeLeft().inSec() << "\n";
@@ -158,13 +159,14 @@ Server::Game::update() {
       return ;
     }
     else {
-      std::cout << "============>>>>>> " << this->countPeersThatCertified() << "," << _nbPlayers << std::endl;
       this->pickPlayers(_nbPlayers);
       this->start();
     }
   }
   else if (this->isEnded()) {
     _ended = true;
+    std::cout << "====================================================================================================================================" << std::endl;
+    _messenger->broadcastMessage("0 0 0 ENDGAME");
   }
   else {
     t_cmd *c;
@@ -255,9 +257,8 @@ Server::Game::pickPlayers(size_t nb) {
 
     if ((*it)->hasCertified()) {
       std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
-      std::cout << "NBR DE PLAYER A CREER = " << this->_peers.size() << std::endl;
       (*it)->setPos(pos.first, pos.second);
-      (*it)->updateDateNextCommand(Server::Player::ORIENT, this->timeLeft());
+      (*it)->updateDateNextCommand(Server::Player::ORIENT, this->timeLeft() + Time(0, 0, COUNTDOWN));
       this->_players[pos] = (*it);
       DEBUG("Server::Game::pickPlayers() => un peer est devenu un player", -1);
       msg << "0 0 0 CREATE PLAYER " << (*it)->getID() << " " << (*it)->getPosX() << " " << (*it)->getPosY() << "\n";

@@ -77,8 +77,15 @@ Server::Server::run() {
   while (_run && (ret = _co->update(timeLoop)) >= 0) {
     DEBUG("Server::server::run() => loop", 0);
     std::cout << "yo" << std::endl;
-    if (_game)
-      _game->updateTimeLeft();
+    if (_game) {
+      if (_game->isEnded()) {
+	delete _game;
+	_game = 0;
+      }
+      else
+	_game->updateTimeLeft();
+      
+    }
 
     if (ret) {
       DEBUG("Server::server::run() => loop => je dois lire qqc", 0);

@@ -1,8 +1,9 @@
 #ifndef SERVER__GAME_HPP_
 # define SERVER__GAME_HPP_
 
-# define GAME_TIME     5 // (in min)	total time of a map. Must be multiplied by e_time.
+# define GAME_TIME     1 // (in min)	total time of a map. Must be multiplied by e_time.
 # define BOMBTIME      2 // (in sec)
+# define COUNTDOWN     5 // (in sec)
 # define RESPAWN_DELAY 5 // (in sec)
 
 # include <sstream>
@@ -54,7 +55,6 @@ namespace	Server {
 
     std::list<Player *> const &	_peers;
     std::map<std::pair<size_t, size_t>, Player *> _players;
-    std::list<Team *>		_teams;
 
     SafeQueue<t_cmd *>		_events;
     CondSafeQueue<t_cmd *>	_bombs;
@@ -81,9 +81,8 @@ namespace	Server {
     void		pause();
     inline bool		isPaused() const { return _paused; }
     bool		isEnded() const {
-      Time t(0);
-      t.now();
-      return (_started && !_paused && t > _endAt) ? true : false;
+      return _ended
+	|| (_started && !_paused && (!this->timeLeft().inUsec() || _players.size() <= 1));
     }
 
     inline void		addEvent(t_cmd *c) { _events.push(c); std::cout << "SIZE ========" <<  _events.size() << std::endl;}
