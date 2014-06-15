@@ -21,13 +21,11 @@ Map::Map(std::string const &filename) : _width(0), _height(0) {
   CVRT_STRING_TO_SIZET(tmp, _height);
   std::getline(file, tmp);
   CVRT_STRING_TO_SIZET(tmp, _nbPlayers);
-  std::cout << "============> " << _width << " " << _height << " " << filename << std::endl;
   if (_width < 4 || _height < 4)
     throw MapException("Map size be must equal to 4*4 or higher.");
 
   this->getMap(_width, _height, file);
   this->md5It();
-  // _key = "key"; // THIS IS DEBUG
   file.close();
 
   if (this->_nbPlayers > ((_width * _height) - (_map.size() - 1)))

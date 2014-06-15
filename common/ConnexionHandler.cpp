@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 //
 // Started on  Mon May 26 15:06:00 2014 buret_j
-// Last update Sun Jun 15 01:48:28 2014 buret_j
+// Last update Sun Jun 15 22:58:36 2014 buret_j
 */
 
 #include "ConnexionHandler.hpp"
@@ -36,9 +36,6 @@ ConnexionHandler::reset() {
 void
 ConnexionHandler::rmSocket(Socket *s) {
   try {
-    if (s == this->getMasterSocket())
-      std::cout << "====== [SERVER] Poll::stopWatchingEvent() => fd is " << s->getFd() << std::endl;
-    std::cout << "J'unwatch la socket" << std::endl; // debug
     _poll.disconnected(s->getFd());
   } catch (PollException) { }
   if (_server)
@@ -93,7 +90,6 @@ ConnexionHandler::Serveur::initialise() {
     std::copy(tmp.begin(), tmp.end(), _sockets.begin());
   }
   _sockets[fd] = new Socket(fd);
-  std::cout << "======= [SERVER] CH::Server::initialise() => master fd is" << fd << std::endl;
   _masterSocket = _sockets[fd];
 }
 
@@ -117,7 +113,6 @@ ConnexionHandler::Serveur::acceptPeer(Poll *poll, Server::Server *srv) {
     std::copy(tmp.begin(), tmp.end(), _sockets.begin());
   }
   _sockets[fd] = new Socket(fd);
-  std::cout << "[SERVER] CH:Serveur::acceptPeer() => fd is " << fd << std::endl;
   poll->watchEvent(fd, POLLIN);
   srv->addPeer(_sockets[fd]);
 }
@@ -126,12 +121,8 @@ void
 ConnexionHandler::Serveur::perform(void (*fct)(void *, Socket *, bool b[3]),
 				   void *param, Poll *poll) {
   bool	event[3];
-  // DEBUG("ConnexionHandler::Server::perform()", 1);
   for (size_t it = 0; it != _sockets.capacity(); ++it) {
     if (_sockets[it]) {
-    // printf("=================\n");
-    // printf("perform : %p \n", *it);
-    //   std::cout << "CH::Serveur::perform : " << (*it)->getFd() << std::endl;
       event[0] = poll->isEventOccurred(_sockets[it]->getFd(), POLLIN);
       event[1] = poll->isEventOccurred(_sockets[it]->getFd(), POLLOUT);
       event[2] = poll->isDisconnected(_sockets[it]->getFd());
@@ -145,7 +136,6 @@ ConnexionHandler::Serveur::perform(void (*fct)(void *, Socket *, bool b[3]),
       }
     }
   }
-  // DEBUG("! ConnexionHandler::Server::perform()", -1);
 }
 
 void
