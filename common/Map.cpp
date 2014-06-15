@@ -1,4 +1,5 @@
 #include <openssl/md5.h>
+#include <ctime>
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -121,10 +122,6 @@ bool				Map::_isMapInit = false;
 void		Map::generateMap(const size_t width, const size_t height,
 				 const size_t maxPlayers, const std::string &filename)
 {
-  (void)width;
-  (void)height;
-  (void)maxPlayers;
-  (void)filename;
   size_t	x = 0;
   size_t	y = 0;
   std::ofstream	file;
@@ -161,6 +158,7 @@ void		Map::generateMap(const size_t width, const size_t height,
 }
 
 
+
 /*
 ** MODIFIERS
 */
@@ -173,17 +171,17 @@ Map::setElemAtPos(const std::pair<size_t, size_t> &pos, const int &val)
 }
 
 int
-Map::getElemAtPos(const size_t x, const size_t y) {
+Map::getElemAtPos(const size_t x, const size_t y) const {
   std::pair<size_t, size_t> p(x, y);
   if (this->_map.find(p) != this->_map.end())
-    return (this->_map[p]);
+    return (this->_map.find(p)->second);
   return (0);
 }
 
 int
-Map::getElemAtPos(const std::pair<size_t, size_t> &p) {
+Map::getElemAtPos(const std::pair<size_t, size_t> &p) const {
   if (this->_map.find(p) != this->_map.end())
-    return (this->_map[p]);
+    return (this->_map.find(p)->second);
   return (0);
 }
 

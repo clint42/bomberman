@@ -227,6 +227,51 @@ Server::Game::filterCmd(t_cmd *cmd) const {
   std::cout << "MSG = " << cmd->msg << std::endl;
 }
 
+
+void			Server::Game::saveMap() const
+{
+  time_t		seed = time(0);
+  struct tm		*t = localtime(&seed);
+  std::ofstream		file;
+  std::string		name;
+  std::stringstream	ss;
+  size_t x = 0;
+  size_t y = 0;
+
+  ss << "save/" << (t->tm_year + 1900) << "-" << (t->tm_mon + 1) << "-" << t->tm_mday
+     << "-" << t->tm_hour << "h" << t->tm_min << "m" << t->tm_sec << "s.save";
+  name = ss.str();
+
+  file.open(name.c_str(), std::ios::out | std::ios::trunc);
+  if (file.is_open())
+    {
+      file << this->getMap()->getWidth() << std::endl;
+      file << this->getMap()->getHeight() << std::endl;
+      file << this->getMap()->getNbrSlot() << std::endl;
+      while (y < this->getMap()->getHeight())
+	{
+	  x = 0;
+	  while (x < this->getMap()->getWidth())
+	    {
+	      std::pair<size_t, size_t> pos(x, y);
+	      file << this->getMap()->getElemAtPos(pos);
+	      ++x;
+	    }
+	  file << std::endl;
+	  ++y;
+	}
+      for (std::map<std::pair<size_t, size_t>, Player *>::const_iterator it = this->_players.begin();
+	   it != this->_players.end(); ++it)
+	{
+	  file << it->second->getPosX() << " " << it->second->getPosY() << " " <<
+	    it->second->getTeam()->getScore() << std::endl;
+	}
+      file.close();
+    }
+}
+
+
+
 /*
 ** PROCESS
 */

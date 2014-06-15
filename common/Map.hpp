@@ -48,8 +48,8 @@ public:
   inline std::string const &	getKey() const { return _key; }
   inline std::map<std::pair<size_t, size_t>, int> const &getMap() const { return _map; }
 
-  int			getElemAtPos(const size_t, const size_t);
-  int			getElemAtPos(const std::pair<size_t, size_t> &k);
+  int			getElemAtPos(const size_t, const size_t) const;
+  int			getElemAtPos(const std::pair<size_t, size_t> &k) const;
   void			setElemAtPos(const std::pair<size_t, size_t> &pos, const int &val);
   void			deleteElem(const size_t posX, const size_t posY);
   void			deleteElem(const std::pair<size_t, size_t>);
