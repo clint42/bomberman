@@ -5,7 +5,7 @@
 ## Login   <prieur_b@epitech.net>
 ## 
 ## Started on  Mon May 19 14:27:29 2014 aurelien prieur
-## Last update Sun Jun 15 21:36:39 2014 buret_j
+## Last update Sun Jun 15 21:57:34 2014 aurelien prieur
 ##
 
 CXX =	clang++
@@ -19,6 +19,7 @@ NAME =	bomberman
 SRC =   client/main.cpp \
 	client/MenuHandler.cpp \
 	client/menu/AMenu.cpp \
+	client/menu/Intro.cpp \
 	client/menu/MainMenu.cpp \
 	client/menu/CreateMenu.cpp \
 	client/menu/JoinMenu.cpp \
