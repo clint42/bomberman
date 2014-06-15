@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 17:46:00 2014 virol_g
-// Last update Sun Jun 15 09:35:09 2014 virol_g
+// Last update Sun Jun 15 22:57:50 2014 virol_g
 //
 
 #include	"ScoreWindow.hpp"
@@ -13,7 +13,7 @@
 
 ScoreWindow::ScoreWindow(gdl::SdlContext &sdlContext, std::vector<int> ids,
 			 std::vector<int> scores, int idWiner):
-  AMenu(sdlContext), _ids(ids), _scores(scores), _idWiner(idWiner), _replay(false)
+  AMenu(sdlContext), _ids(ids), _scores(scores), _idWiner(idWiner)
 {
   _nbPlayers = (_ids[1] == -1) ? 1 : 2;
 }
@@ -69,10 +69,6 @@ bool		ScoreWindow::build()
 				  std::pair<size_t, size_t>(140, 60),
 				  "Quit", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				  glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
-  _elems.push_back(new MenuButton(std::pair<size_t, size_t>(960, 980),
-				  std::pair<size_t, size_t>(200, 60),
-				  "Replay", glm::vec4(0.23, 0.18, 0.52, 1.f),
-				  glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
   _text.push_back(new GraphicalText(((_ids[0] == _idWiner) ? "You won !" : "You lost..."),
 				    std::pair<size_t, size_t>(500 / static_cast<size_t>(_nbPlayers), 50),
 				    glm::vec4(0.23, 0.18, 0.52, 1.f), 60));
@@ -124,10 +120,7 @@ bool		ScoreWindow::update()
   this->_sdlContext.updateClock(this->_clock);
   this->_sdlContext.updateInputs(this->_input);
   if (this->_input.getKey(SDLK_ESCAPE) || this->_input.getInput(SDL_QUIT, false))
-    {
-      _replay = false;
-      return (false);
-    }
+    return (false);
   if (this->_input.getKey(SDL_BUTTON_LEFT))
     {
       mouse = this->_input.getMousePosition();
@@ -138,8 +131,6 @@ bool		ScoreWindow::update()
 	      static_cast<size_t>(mouse.y) > _elems[i]->getPos().second &&
 	      static_cast<size_t>(mouse.y) < _elems[i]->getPos().second + _elems[i]->getSize().second)
 	    {
-	      if (_elems[i]->getString() == "Replay")
-		_replay = true;
 	      return (false);
 	    }
 	}
@@ -159,11 +150,6 @@ void		ScoreWindow::draw()
   for (size_t i = 0; i < _text.size(); ++i)
     _text[i]->draw(_shader);
   _sdlContext.flush();
-}
-
-bool		ScoreWindow::replay() const
-{
-  return (_replay);
 }
 
 t_game		*ScoreWindow::getChoice() const

@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Fri Jun 13 17:41:08 2014 virol_g
-// Last update Sun Jun 15 02:53:00 2014 virol_g
+// Last update Sun Jun 15 22:56:50 2014 virol_g
 //
 
 #ifndef		SCOREWINDOW_HPP_
@@ -29,7 +29,6 @@ class		ScoreWindow: public AMenu
   ScoreManager		*_scoreManager;
   int			_idWiner;
   size_t		_nbPlayers;
-  bool			_replay;
 
   std::string	toString(const std::string &, int);
 
@@ -43,7 +42,6 @@ public:
   virtual bool	update();
   virtual void	draw();
   virtual t_game	*getChoice() const;
-  bool		replay() const;
 };
 
 #endif		// !SCOREWINDOW_HPP_
