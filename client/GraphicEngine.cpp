@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 09:39:53 2014 aurelien prieur
-// Last update Sun Jun 15 17:37:43 2014 aurelien prieur
+// Last update Sun Jun 15 20:01:22 2014 aurelien prieur
 //
 
 #include <unistd.h>
@@ -79,6 +79,7 @@ bool	GraphicEngine::initialize()
   projection = glm::ortho(0.f, (float)(W_WIDTH), (float)(W_HEIGHT), 0.f, 1.f, -3.f);
   shader.setUniform("projection", projection);
   shader.setUniform("view", glm::mat4(1));
+  loadBar.update((1.f / 30.f) * 100);
   if ((loadBar.update((5.f / 30.f) * 100) && !Fire::load()) ||
       (loadBar.update((15.f / 30.f) * 100) && !Bomb::load()) ||
       (loadBar.update((20.f / 30.f) * 100) && !Player::load()))
@@ -149,7 +150,7 @@ bool	GraphicEngine::update()
   this->scores[0]->update(this->objects.getPlayerScore(true, 0));
   if (this->objects.isDouble(true))
     this->scores[1]->update(this->objects.getPlayerScore(true, 1));
-  if (this->chrono.getTime() == -1.f)
+  if (this->chrono.getTime() == -1.f && this->objects.getTimeLeft(true) > 0)
     this->chrono.setTime(this->objects.getTimeLeft(true));
   if (this->objects.isStarted(true))
     this->chrono.update(this->clock, this->eventsHandler);

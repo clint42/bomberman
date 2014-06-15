@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:33:28 2014 aurelien prieur
-// Last update Sun Jun 15 00:58:24 2014 aurelien prieur
+// Last update Sun Jun 15 20:06:34 2014 aurelien prieur
 //
 
 #ifndef UI_HPP
@@ -20,6 +20,7 @@ class	UI
 {
   GraphicEngine	_graphicEngine;
   EventsHandler	&_eventsHandler;
+  GameEntities	&_gameEntities;
 
 public:
   UI(EventsHandler &eventsHandler, GameEntities &gamEntities,

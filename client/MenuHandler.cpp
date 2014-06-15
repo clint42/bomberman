@@ -5,7 +5,11 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
+<<<<<<< HEAD
 // Last update Sun Jun 15 22:06:08 2014 julie franel
+=======
+// Last update Sun Jun 15 21:39:17 2014 aurelien prieur
+>>>>>>> f237ac4588bcf9af8fb1d87c91e05dfc49968342
 //
 
 #include "MenuHandler.hpp"
@@ -23,6 +27,25 @@ MenuHandler::~MenuHandler()
 pid_t	MenuHandler::forker() const
 {
   return (fork());
+}
+
+bool		MenuHandler::launchIntro()
+{
+  Intro		intro(_sdlContext);
+  bool		ret;
+
+  if (!intro.initialize())
+    {
+      std::cerr << "Unable to initialize intro" << std::endl;
+      return (false);
+    }
+  while (!intro.isFinished() && (ret = intro.update()))
+    {
+      intro.draw();
+    }
+  if (!ret)
+    return (false);
+  return (true);
 }
 
 t_game		*MenuHandler::mainMenu()
@@ -90,6 +113,8 @@ t_game	*MenuHandler::launchMenus()
   int		mode;
   bool		ret = true;
 
+  if (!launchIntro())
+    return (NULL);
   if ((mainChoice = mainMenu()) == NULL)
     return (NULL);
   mode = static_cast<int>(mainChoice->selected);
