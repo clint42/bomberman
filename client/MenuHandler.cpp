@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Sun Jun 15 12:39:52 2014 virol_g
+// Last update Sun Jun 15 20:51:09 2014 virol_g
 //
 
 #include "MenuHandler.hpp"
@@ -38,8 +38,6 @@ t_game		*MenuHandler::mainMenu()
   if ((options = menu.getChoice()) != NULL)
     {
       retVal = static_cast<int>(!options->isHost);
-      // delete options;
-      // return (std::pair<int, bool>(retVal, options->isDouble));
     }
   return (options);
 }
@@ -95,7 +93,6 @@ t_game	*MenuHandler::launchMenus()
   if ((mainChoice = mainMenu()) == NULL)
     return (NULL);
   mode = static_cast<int>(mainChoice->selected);
-  std::cout << "mode : " << mode << std::endl; 
   if (mode == 0)
     menu = new CreateMenu(*_sdlContext);
   else if (mode == 1)
@@ -130,7 +127,6 @@ t_game	*MenuHandler::launchMenus()
 
       choice->isDouble = mainChoice->isDouble;
       delete mainChoice;
-      std::cout << "Choice received" << std::endl;
       if (mode == 0)
 	ret = createGame(choice);
       else if (mode == 1)
