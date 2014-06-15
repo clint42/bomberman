@@ -85,7 +85,9 @@ namespace	Server {
     inline bool		isPaused() const { return _paused; }
     bool		ended() const { return _ended; }
     bool		isEnded() const {
-      return _started && !_paused && (!this->timeLeft().inUsec() || _players.size() <= 1);
+      return _started && !_paused && (!this->timeLeft().inUsec()
+				      || _players.size() <= 1
+				      || _players.size() == _bots.size());
     }
 
     inline void		addEvent(t_cmd *c) { _events.push(c); }
