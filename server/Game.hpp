@@ -80,9 +80,9 @@ namespace	Server {
     inline bool		isStarted() const { return _started; }
     void		pause();
     inline bool		isPaused() const { return _paused; }
+    bool		ended() const { return _ended; }
     bool		isEnded() const {
-      return _ended
-	|| (_started && !_paused && (!this->timeLeft().inUsec() || _players.size() <= 1));
+      return _started && !_paused && (!this->timeLeft().inUsec()/* || _players.size() <= 1*/);
     }
 
     inline void		addEvent(t_cmd *c) { _events.push(c); std::cout << "SIZE ========" <<  _events.size() << std::endl;}
