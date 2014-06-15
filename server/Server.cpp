@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server::Server(ConnexionHandler *c) : _run(true), _co(c) {
+Server::Server::Server(ConnexionHandler *c) : _run(true), _id(1), _co(c) {
   _game = NULL;
   _co->server(4242);
 }

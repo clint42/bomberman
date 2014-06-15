@@ -9,16 +9,16 @@ static Server::Game::Play g_Plays[] = {
 
 
 Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type,
-		   std::list<Player *> const &peers, Messenger *mes)
-  : _map(0), _params(g_Plays[type]), _time(static_cast<Time_t>(t)), _messenger(mes), _bombThread(0),
+		   std::list<Player *> const &peers, Messenger *mes, size_t &id)
+  : _map(0), _params(g_Plays[type]), _time(static_cast<Time_t>(t)),
+    _messenger(mes), _bombThread(0), _id(id),
     _started(false), _paused(false), _ended(false),
-    _nbPlayers(p), _nbBots(b), _round(0),
+    _nbPlayers(p), _nbBots(b),
     _peers(peers)
 {
-  (void)_round;
   DEBUG("Server::Game::Game()", 1);
 
-  if (!p || !t || !mes)
+  if (!p || !t || (p + b < 2) || !mes)
     throw GameException("Invalid parameters");
 
   try {
@@ -59,13 +59,24 @@ Server::Game::bombsProcessing() {
 
   DEBUG("Server::Game::bombsProcessing", 1);
   while (!_ended) {
+    std::cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << std::endl;
     if (_paused || !_bombs.tryPop(&c)) {
-      // _bombs.wait();
-      usleep(75000);
-    } else {
+      std::cout << "$$$$ j'entame le wait()" << std::endl;
+      _bombs.wait();
+      std::cout << "$$$$ je sors du wait()" << std::endl;
+      // usleep(75000);
+    }
+    else {
+      std::cout << "$$$$ j'ai reussi a pop un objet" << std::endl;
       if (!_bombs.empty()) {
-	// _bombs.signal();
+	_bombs.unlock();
+	_bombs.signal();
       }
+      else {
+	std::cout << "$$$$ j'unlock pour pas avoir de delock" << std::endl;
+	_bombs.unlock();
+      }
+      std::cout << "$$$$ je fais l'execution" << std::endl;
       { // code
 	if (this->timeLeft() > c->date) {
 	  std::cout << "[SERVER] Server::Game::bombsProcessing() => time of usleep " << this->timeLeft().inUsec() - c->date.inUsec() << "." << std::endl;
@@ -160,12 +171,12 @@ Server::Game::update() {
     }
     else {
       this->pickPlayers(_nbPlayers);
+      this->createBots();
       this->start();
     }
   }
   else if (this->isEnded()) {
     _ended = true;
-    std::cout << "====================================================================================================================================" << std::endl;
     _messenger->broadcastMessage("0 0 0 ENDGAME");
   }
   else {
@@ -264,7 +275,7 @@ void			Server::Game::saveGame() const
 	   it != this->_players.end(); ++it)
 	{
 	  file << it->second->getPosX() << " " << it->second->getPosY() << " " <<
-	    it->second->getTeam()->getScore() << std::endl;
+	    it->second->getScore() << std::endl;
 	}
       file.close();
     }
@@ -314,6 +325,28 @@ Server::Game::pickPlayers(size_t nb) {
     }
   } // !for
   DEBUG("! Server::Game::pickPlayers()", -1);
+}
+
+void
+Server::Game::createBots() {
+  Player *			p;
+  std::pair<size_t, size_t>     pos;
+  std::stringstream msg;
+
+  for (size_t n = 0; n < _nbBots; ++n) {
+    p = new Player(_id, 0, true);
+    _bots.push_back(new Bot(p, _map));
+    pos = this->generatePos(-1, -1);
+    p->setPos(pos.first, pos.second);
+    p->updateDateNextCommand(Server::Player::ORIENT, this->timeLeft()+Time(0, 0, COUNTDOWN));
+    this->_players[pos] = p;
+    msg << "0 0 0 CREATE PLAYER " << p->getID() << " "
+	<< p->getPosX() << " " << p->getPosY() << "\n";
+    _messenger->broadcastMessage(msg.str());
+    msg.str(std::string());
+    msg.clear();
+    ++_id;
+  }
 }
 
 void

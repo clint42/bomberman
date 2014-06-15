@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
-Server::Player::Player(size_t id, Socket *s)
-  : _id(id), _bot(false), _team(0), _posX(0), _posY(0), _orientation(DOWN),
+Server::Player::Player(size_t id, Socket *s, bool b)
+  : _id(id), _bot(b), _posX(0), _posY(0), _orientation(DOWN),
     _bombsLimit(1), _bombsOnFloor(0), _bombRange(2), _commandTimeMultiplier(1),  _certifiedMd5(false) {
   _socket = s;
 }

@@ -19,9 +19,11 @@
 # include "Messenger.hpp"
 
 namespace Server {
+
   class	Server {
 
     bool			_run;
+    size_t			_id;
 
     ConnexionHandler *		_co;
     Messenger			_messenger;
@@ -49,6 +51,7 @@ namespace Server {
     void	unwatchEvent(int e);
 
   public:
+
     Server(ConnexionHandler *);
     Server(ConnexionHandler *, int);
     ~Server();

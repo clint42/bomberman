@@ -2,17 +2,12 @@
 
 void
 Server::Server::addPeer(Socket *s) {
-  static size_t id = 1;
-  Player *p = new Player(id, s);
+  Player *p = new Player(_id, s, !s);
   std::string welcome;
   std::string s_id;
-
-  if (_game && _game->isStarted()) {
-    _co->rmSocket(s);
-    return ;
-  }
+  
   _peers.push_back(p);
-  CVRT_SIZET_TO_STRING(s_id, id);
+  CVRT_SIZET_TO_STRING(s_id, _id);
   welcome += s_id + " 0 0 WELCOME";
   if (_game) {
     welcome += "\n";
@@ -22,7 +17,7 @@ Server::Server::addPeer(Socket *s) {
   }
   _messenger.addMessage(s, welcome);
   this->sendMessage(s);
-  ++id;
+  ++_id;
 }
 
 void

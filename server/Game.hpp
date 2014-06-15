@@ -36,11 +36,15 @@ namespace	Server {
 
   private:
 
+    class Bot;
+
     Map *	_map;
     Play	_params;
     Time_t	_time;
     Messenger *	_messenger;
     Thread *	_bombThread;
+    size_t &	_id;
+    std::list<Bot *> _bots;
 
     bool	_started;
     Time	_startedAt;
@@ -51,7 +55,6 @@ namespace	Server {
 
     size_t	_nbPlayers;
     size_t	_nbBots;
-    size_t	_round;
 
     std::list<Player *> const &	_peers;
     std::map<std::pair<size_t, size_t>, Player *> _players;
@@ -64,7 +67,7 @@ namespace	Server {
   public:
 
     Game(std::string const &m, size_t p, size_t b, size_t t, Type type,
-	 std::list<Player *> const &, Messenger *);
+	 std::list<Player *> const &, Messenger *, size_t &);
     ~Game();
 
     inline Map const *	getMap() const { return _map; }
@@ -95,7 +98,6 @@ namespace	Server {
 
     std::pair<size_t, size_t>       generatePos(const size_t posx, const size_t posy);
     size_t		countPeersThatCertified() const;
-    void                pickPlayers(size_t);
 
     bool		moveUp(Player *, t_cmd *);
     bool		moveRight(Player *, t_cmd *);
@@ -130,6 +132,9 @@ namespace	Server {
     bool		process(t_cmd *, Player *);
     void		bombSwitchQueue(t_cmd *, const std::pair<size_t, size_t>);
 
+    void                pickPlayers(size_t);
+    void		createBots();
+
     void		bombExplose(Player *, t_cmd *);
     bool		exploseCase(const std::pair<size_t, size_t>, t_cmd *);
     void		createBonus(const std::pair<size_t, size_t>, t_cmd *, int);
@@ -137,10 +142,22 @@ namespace	Server {
 
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
-      // return (p->getDateNextCommand() < this->timeLeft()) ? true : false;
-      (void)p;
-      return true;
+      std::cout << "Server::Game::hasDateNextCommandExpired()" << std::endl;
+      std::cout << "dateNextCommand is:" << p->getDateNextCommand() << std::endl;
+      std::cout << "timeLeft is:" << this->timeLeft() << std::endl;
+      // return p->getDateNextCommand() > this->timeLeft();
+      return !!p;
     }
+
+    class	Bot {
+      Player *	_p;
+      Map *	_map;
+
+    public:
+      Bot(Player *p, Map *m) : _p(p), _map(m) { (void)_p; (void)_map; }
+      ~Bot() {}
+    };
+
   };
 
 }

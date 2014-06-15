@@ -7,7 +7,6 @@
 # include <map>
 
 # include "Time.hpp"
-# include "Team.hpp"
 # include "Socket.hpp"
 
 # define DELAY		   50 // (in msec) default time of all actions.
@@ -27,9 +26,7 @@ namespace Server {
   private:
 
     size_t	_id;
-    // std::string  _name;
     bool	_bot;
-    Team *	_team;
     size_t	_posX, _posY;
     Player::Dir	_orientation;
 
@@ -44,11 +41,10 @@ namespace Server {
     bool	_certifiedMd5;
 
   public:
-    Player(size_t, Socket *);
+    Player(size_t, Socket *, bool);
     ~Player();
 
     inline size_t getID() const { return this->_id; }
-    inline Team * getTeam() const { return this->_team; }
     inline bool   isBot() const { return this->_bot; }
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
@@ -64,7 +60,6 @@ namespace Server {
     void	  getAction(Action &, std::string const &);
 
     inline void	  setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
-    inline void	  setTeam(Team *t) { this->_team = t; }
     inline void	  hasCertifiedMd5(bool b) { _certifiedMd5 = b; }
 
     inline void   destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }

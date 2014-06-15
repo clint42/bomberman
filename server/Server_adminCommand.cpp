@@ -26,7 +26,7 @@ Server::Server::funcWelcome(const t_cmd *_cmd) {
       CVRT_STRING_TO_SIZET(_cmd->params[2], b);
       CVRT_STRING_TO_SIZET(_cmd->params[3], t);
       this->_game = new Game(_cmd->params[0], p, b, t, Game::_types[_cmd->params[4]],
-			     this->_peers, &this->_messenger);
+			     this->_peers, &this->_messenger, _id);
       this->sendBroadcast();
     }
   catch (GameException e)
