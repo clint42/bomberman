@@ -41,11 +41,14 @@ Server::Server::funcWelcome(const t_cmd *_cmd) {
 
 bool
 Server::Server::funcPause(__attribute__((unused))const t_cmd *_cmd) {
-  if (this->_game->isPaused() == true)
-    this->_game->start();
-  else
-    this->_game->pause();
-  return (true);
+  if (_game) {
+    if (_game->isPaused())
+      _game->start();
+    else
+      _game->pause();
+    return true;
+  }
+  return false;
 }
 
 Server::Player *
@@ -94,11 +97,12 @@ Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd) {
 
 bool
 Server::Server::funcSave(__attribute__((unused))const t_cmd *_cmd) {
-  if (this->_game->isPaused() == true)
-    {
-      this->_game->saveGame();
-      return (true);
-    }
+  if (_game) {
+    if (_game->isPaused() && _peers.size() <= 2
+	&& _peers.first()->getSocekt() == _peers.second()->getSocket())
+      _game->saveGame();
+    return true;
+  }
   return false;
 }
 
