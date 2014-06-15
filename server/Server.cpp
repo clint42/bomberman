@@ -23,7 +23,6 @@ Server::Server::readMessage(Socket *s) {
   s->getLine(v);
   for (std::vector<std::string *>::iterator it = v.begin(); it != v.end(); ++it) {
     _messages.push_back(*it);
-    std::cout << ">> " << **it << std::endl;
   }
 }
 

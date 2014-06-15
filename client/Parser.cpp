@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 22:40:05 2014 virol_g
+// Last update Sun Jun 15 23:25:39 2014 buret_j
 //
 
 #include "Parser.hpp"
@@ -216,11 +216,6 @@ void		Parser::parseVictory(__attribute__((unused))const t_parser &_parser)
 
 void		Parser::displayParserStruct(const t_parser &_parser)
 {
-  std::cout << "ID = [" << _parser.id << "]" << std::endl;
-  std::cout << "POSX = [" << _parser.pos.first << "]" << std::endl;
-  std::cout << "POSY = [" << _parser.pos.second << "]" << std::endl;
-  std::cout << "ACTION = [" << _parser.action << "]" << std::endl;
-  std::cout << "PARAMS = " << std::endl;
   for (std::vector<std::string>::const_iterator it = _parser.params.begin(); it != _parser.params.end(); ++it)
     {
       std::cout << "\t[" << *it << "]" << std::endl;

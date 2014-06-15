@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat Jun 14 22:19:54 2014 aurelien prieur
-// Last update Sun Jun 15 01:49:21 2014 aurelien prieur
+// Last update Sun Jun 15 23:26:12 2014 buret_j
 //
 
 #include <iostream>
@@ -97,7 +97,6 @@ bool	LoadBar::update(int valueLoaded)
 
 void	LoadBar::draw(void)
 {
-  std::cout << "Draw loader" << std::endl;
   _shader.bind();
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_BLEND);

@@ -159,9 +159,6 @@ namespace	Server {
 
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
-      // std::cout << "Server::Game::hasDateNextCommandExpired()" << std::endl;
-      // std::cout << "dateNextCommand is:" << p->getDateNextCommand() << std::endl;
-      // std::cout << "timeLeft is:" << this->timeLeft() << std::endl;
       return p->getDateNextCommand() > this->timeLeft();
     }
 
