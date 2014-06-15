@@ -55,9 +55,13 @@ Server::Game::~Game() {
     this->killPlayer(pos);
   }
   if (_players.size()) {
-    
-    _messenger->broadcastMessage("");
+    std::stringstream ss;
+    ss << _players.begin()->second->getID();
+    ss << " 0 0 VICTORY\n";
+    _messenger->broadcastMessage(ss.str());
   }
+  else
+    _messenger->broadcastMessage("0 0 0 VICTORY\n");
 }
 
 void *
