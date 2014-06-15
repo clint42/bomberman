@@ -241,7 +241,7 @@ Server::Game::filterCmd(t_cmd *cmd) const {
 }
 
 
-void			Server::Game::saveMap() const
+void			Server::Game::saveGame() const
 {
   time_t		seed = time(0);
   struct tm		*t = localtime(&seed);

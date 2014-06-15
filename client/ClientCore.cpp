@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 01:07:40 2014 aurelien prieur
+// Last update Sun Jun 15 10:17:40 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -161,9 +161,7 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
     }
   if (b[0])
     {
-      std::cout << "[client] Before getline" << std::endl;
       _socket->read(string);
-      std::cout << "[CLIENT] received  [" << string << "]" << std::endl;
       _parser->run(string);
       if (_parser->getConfig().welcomeReceived && !configSend)
 	{
@@ -186,7 +184,6 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
 	  _configurator->pushCmd(string);
 	  if (_configurator->getOptions()->isDouble)
 	    {
-	      std::cout << "IDPLAYER 2 while creating md5" <<_parser->getConfig().idPlayer2 <<  std::endl;
 	      buildMapMd5(string, _parser->getConfig().idPlayer2);
 	      _configurator->pushCmd(string);
 	    }
@@ -196,13 +193,9 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
   if (b[1])
     {
       _configurator->popCmd(string);
-      std::cout << "[CLIENT] send " << string << std::endl;
       _socket->write(string);
       if (_configurator->sizeCmd() == 0)
-	{
-	  std::cout << "UnwatchSocket" << std::endl;
-	  _connexion.unwatchEventOnSocket(_socket, POLLOUT);
-	}
+	_connexion.unwatchEventOnSocket(_socket, POLLOUT);
     }
 }
 
@@ -237,7 +230,6 @@ void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
   if (b[0])
     {
       this->_socket->read(string);
-      std::cout << "[CLIENT]receiving data: " << string << std::endl;
       this->_parser->run(string);
     }
   if (b[1])
@@ -249,7 +241,6 @@ void		ClientCore::io(__attribute__((unused))Socket *socket, bool b[3])
 				       (player1Pos != NULL) ? *player1Pos : std::pair<size_t, size_t>(0, 0),
 				       _gameEntities.getPlayerId(1),
 				       (player2Pos != NULL) ? *player2Pos : std::pair<size_t, size_t>(0, 0));
-      std::cout << "[CLIENT]Sending data: " << string << std::endl;
       _connexion.getMasterSocket()->write(string);
       _connexion.unwatchEventOnSocket(_connexion.getMasterSocket(), POLLOUT);
     }

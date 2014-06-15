@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri Jun  6 18:22:29 2014 aurelien prieur
-// Last update Sat Jun 14 18:55:06 2014 aurelien prieur
+// Last update Sun Jun 15 06:56:35 2014 aurelien prieur
 //
 
 #ifndef FIRE_HPP_

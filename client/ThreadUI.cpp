@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:19:12 2014 aurelien prieur
-// Last update Wed Jun  4 17:41:37 2014 aurelien prieur
+// Last update Sun Jun 15 10:14:03 2014 aurelien prieur
 //
 
 #include "ThreadUI.hpp"

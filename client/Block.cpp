@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu Jun  5 12:08:48 2014 aurelien prieur
-// Last update Sat Jun 14 17:42:47 2014 aurelien prieur
+// Last update Sun Jun 15 07:19:47 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -28,7 +28,7 @@ bool	Block::loadTextures(void)
   return (true);
 }
 
-Block::Block(ObjectType blockType): _blockType(blockType)
+Block::Block(ObjectType blockType): _timeElapsed(0.0), _blockType(blockType)
 {
 }
 
@@ -90,6 +90,17 @@ bool	Block::initialize(std::pair<size_t, size_t> const &pos)
   _geometry.pushUv(glm::vec2(0, 1));
   if (_geometry.build() == false)
     return (false);
+  return (true);
+}
+
+bool	Block::update(gdl::Clock const &clock, __attribute__((unused))EventsHandler const &events)
+{
+  if (_blockType == FIRE)
+    {
+      _timeElapsed += clock.getElapsed();
+      if (_timeElapsed > 1)
+	return (false);
+    }
   return (true);
 }
 

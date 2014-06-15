@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Thu Jun  5 14:24:09 2014 aurelien prieur
-// Last update Sat Jun 14 19:12:07 2014 aurelien prieur
+// Last update Sun Jun 15 09:39:32 2014 aurelien prieur
 //
 
 #include "Bomb.hpp"
@@ -41,5 +41,6 @@ bool	Bomb::initialize(std::pair<size_t, size_t> const &pos)
 
 void	Bomb::draw(gdl::AShader &shader, gdl::Clock const &clock)
 {
+  shader.bind();
   _model.draw(shader, getTransformation(), clock.getElapsed());
 }

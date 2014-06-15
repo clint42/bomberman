@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 01:10:34 2014 julie franel
+// Last update Sun Jun 15 10:25:41 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -82,7 +82,6 @@ void		Parser::parseMove(const t_parser &_parser)
 
   this->_gameEntities.moveEntity(_parser.pos, this->_dir[_parser.params.front()]);
   ++nbMove;
-  // std::cout << "[CLIENT]: NBMOVE: " << nbMove << std::endl;
 }
 
 void		Parser::parseChrono(const t_parser &_parser)
@@ -99,7 +98,6 @@ void		Parser::parseCreate(const t_parser &_parser)
   size_t	posy;
   size_t	id;
 
-  // std::cout << "[CLIENT]: Parser::parseCreate"  << std::endl;
   CVRT_STRING_TO_SIZET(_parser.params[1], id);
   CVRT_STRING_TO_SIZET(_parser.params[2], posx);
   CVRT_STRING_TO_SIZET(_parser.params[3], posy);
@@ -112,7 +110,6 @@ bool		Parser::parseCreate(std::list<t_parser *> &_tabParser)
   std::list<std::pair<std::pair<size_t, size_t>, int> >		_list;
   bool ret = false;
 
-  // std::cout << "[CLIENT]: Parser::parseCreate"  << std::endl;
   for (std::list<t_parser *>::iterator it = _tabParser.begin(); it != _tabParser.end(); ++it)
     {
       if ((*it)->action.compare("CREATE") == 0)
@@ -180,9 +177,9 @@ void		Parser::parseStartGame(const t_parser &_parser)
 {
   size_t        _chrono;
 
-  this->_gameEntities.startGame();
   CVRT_STRING_TO_SIZET(_parser.params[0], _chrono);
   this->_gameEntities.setTimeLeft(static_cast<float>(_chrono));
+  this->_gameEntities.startGame();
 }
 
 

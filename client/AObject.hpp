@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:05:44 2014 aurelien prieur
-// Last update Sat Jun 14 12:22:08 2014 aurelien prieur
+// Last update Sun Jun 15 04:27:11 2014 aurelien prieur
 //
 
 #ifndef AOBJECT_HPP_
@@ -51,6 +51,7 @@ public:
     };
 protected:
   int				_id;
+  bool				_isModel;
   glm::vec3			_pos;
   glm::vec3			_rotation;
   glm::vec3			_nextRotation;
@@ -82,6 +83,8 @@ public:
   glm::vec3	const	&getRotation() const;
   void			addMoveEvent(EventIn event);
   int			getId(void) const;
+  void			itsModel(void);
+  bool			isModel(void) const;
   static AObject	*create(int objectType);
 };
 

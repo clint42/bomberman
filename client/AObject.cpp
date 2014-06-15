@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Mon May 12 11:11:27 2014 aurelien prieur
-// Last update Sat Jun 14 18:46:25 2014 aurelien prieur
+// Last update Sun Jun 15 10:18:16 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -16,7 +16,7 @@
 #include "Fire.hpp"
 #include "Bonus.hpp"
 
-AObject::AObject(): _id(0), _pos(0, 0, 0), _rotation(0, 0, 0), _scale(1, 1, 1), _target(0, 0, 0),
+AObject::AObject(): _id(0), _isModel(false), _pos(0, 0, 0), _rotation(0, 0, 0), _scale(1, 1, 1), _target(0, 0, 0),
 		    _direction(DOWN), _moving(false), _moveVectors(4)
 {
 }
@@ -37,7 +37,7 @@ AObject::~AObject()
 
 AObject	*AObject::create(int objectType)
 {
-  if (objectType == BLOCK || objectType == BOX)
+  if (objectType == BLOCK || objectType == BOX || objectType == FIRE)
     {
       return (new Block(static_cast<ObjectType>(objectType)));
     }
@@ -49,10 +49,10 @@ AObject	*AObject::create(int objectType)
     {
       return (new Bomb);
     }
-  else if (objectType == FIRE)
-    {
-      return (new Fire);
-    }
+  // else if (objectType == FIRE)
+  //   {
+  //     return (new Fire);
+  //   }
   else if (objectType > PLAYER)
     {
       return (new Player(objectType - PLAYER));
@@ -84,7 +84,6 @@ void	AObject::rotate(glm::vec3 const &axis, float angle)
   _rotation.x = (_rotation.x >= 360) ? _rotation.x - 360 : _rotation.x;
   _rotation.y = (_rotation.y >= 360) ? _rotation.y - 360 : _rotation.y;
   _rotation.z = (_rotation.z >= 360) ? _rotation.z - 360 : _rotation.z;
-  std::cout << _rotation.x << ";" << _rotation.y << ";" << _rotation.z << std::endl;
 }
 
 void	AObject::setRotation(glm::vec3 const &rotation)
@@ -155,4 +154,14 @@ glm::vec3 const	&AObject::getPos(void) const
 int	AObject::getId(void) const
 {
   return (_id);
+}
+
+void	AObject::itsModel(void)
+{
+  _isModel = true;
+}
+
+bool	AObject::isModel(void) const
+{
+  return (_isModel);
 }

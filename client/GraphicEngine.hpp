@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 16:00:09 2014 aurelien prieur
-// Last update Sun Jun 15 02:53:00 2014 aurelien prieur
+// Last update Sun Jun 15 06:55:50 2014 aurelien prieur
 //
 
 #ifndef GRAPHICENGINE_HPP_
@@ -58,8 +58,7 @@ class			GraphicEngine: public gdl::Game
   bool			mkBackground(void);
   void			drawBackground(void);
   void			draw2D(void);
-  bool			isViewable(std::pair<size_t, size_t> const &entityPos,
-				   std::pair<size_t, size_t> const &playerPos) const;
+
 public:
   GraphicEngine(EventsHandler &eventsHandler, GameEntities &objects,
 		SafeQueue<std::pair<std::pair<size_t, size_t>, int> > &createInstructs);
