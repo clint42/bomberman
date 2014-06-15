@@ -1,11 +1,11 @@
 //
 // EventsHandler.cpp for bomberman in /home/prieur_b/tek2/cpp/bomberman/client
-// 
+//
 // Made by aurelien prieur
 // Login   <prieur_b@epitech.net>
-// 
+//
 // Started on  Thu May 29 16:01:34 2014 aurelien prieur
-// Last update Sun Jun 15 01:17:15 2014 aurelien prieur
+// Last update Sun Jun 15 13:41:11 2014 julie franel
 //
 
 #include <iostream>
@@ -49,6 +49,7 @@ EventsHandler::EventsHandler(ConnexionHandler &connexionHandler): _connexion(con
   _lastEvent.insert(std::pair<int, bool>(SDLK_z, false));
   _lastEvent.insert(std::pair<int, bool>(SDLK_s, false));
   _lastEvent.insert(std::pair<int, bool>(SDLK_p, false));
+  _lastEvent.insert(std::pair<int, bool>(SDLK_x, false));
   _curEvent = _lastEvent;
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_LEFT,
 						EventsHandler::PlayerEvent(1, "MOVE LEFT", DOWN | HOLD | UP)));
@@ -68,7 +69,8 @@ EventsHandler::EventsHandler(ConnexionHandler &connexionHandler): _connexion(con
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_s,
 						EventsHandler::PlayerEvent(0, "MOVE DOWN", DOWN | HOLD | UP)));
   _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_SPACE, EventsHandler::PlayerEvent(0, "BOMB", UP)));
-  _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_p, EventsHandler::PlayerEvent(-1, "PAUSE", DOWN)));
+  _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_p, EventsHandler::PlayerEvent(0, "PAUSE", DOWN)));
+  _syntaxTab.insert(std::pair<int, PlayerEvent>(SDLK_x, EventsHandler::PlayerEvent(0, "SAVE", DOWN)));
 }
 
 EventsHandler::~EventsHandler()
