@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 17:06:37 2014 aurelien prieur
+// Last update Sun Jun 15 18:34:18 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -43,6 +43,7 @@ Parser::Parser(GameEntities &gameEntities,
   this->_fct["SCORE"] = &Parser::parsePoint;
   this->_fct["STARTGAME"] = &Parser::parseStartGame;
   this->_fct["ENDGAME"] = &Parser::parseEndGame;
+  this->_fct["PAUSE"] = &Parser::parseStartGame; // StartGame is handling pause
 
   this->_fct["WELCOME"] = &Parser::parseWelcome;
   this->_fct["MAP"] = &Parser::parseMap;
@@ -180,7 +181,6 @@ void		Parser::parseStartGame(const t_parser &_parser)
   size_t        _chrono;
 
   CVRT_STRING_TO_SIZET(_parser.params[0], _chrono);
-  std::cout << "[CLIENT][PARSER] StartGame" << std::endl;
   this->_gameEntities.setTimeLeft(static_cast<float>(_chrono));
   this->_gameEntities.startGame();
 }
@@ -197,7 +197,6 @@ void		Parser::parsePoint(const t_parser &_parser)
 
 void		Parser::parseEndGame(__attribute__((unused))const t_parser &_parser)
 {
-  std::cout << "PARSER= ENDGAME" << std::endl;
   this->_eventsHandler.endGame();
 }
 
@@ -227,8 +226,6 @@ Parser::t_parser	*Parser::parser(std::string cmd)
   size_t	posy;
   t_parser	*_parser = new t_parser;
 
-  // std::cout << "======================================> " << std::endl;
-  // std::cout << "[" << cmd << "]" << std::endl;
   pos1 = cmd.find(" "); // recup id
   CVRT_STRING_TO_SIZET(cmd.substr(0, pos1), _parser->id);
   pos2 = cmd.find(" ", pos1 + 1); // recup posx
@@ -281,8 +278,6 @@ void		Parser::runSplit(std::string string)
   size_t	pos2 = -1;
   t_parser	*_parser;
 
-  // if (string.size() <= 3)
-  //   return ;
   if ((pos1 = string.find(";", pos2 + 1)) != std::string::npos)
     {
       std::list<t_parser *>	_tabParser;
@@ -312,7 +307,6 @@ void		Parser::run(std::string &string)
   size_t	pos1 = 0;
   size_t	pos2 = -1;
 
-  std::cout << "CLIENT RCV [" << string << "]" << std::endl;
   if (string.find("\n") != std::string::npos)
     {
       while ((pos1 = string.find("\n", pos2 + 1)) != std::string::npos)

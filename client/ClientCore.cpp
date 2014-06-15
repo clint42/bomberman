@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 10:17:40 2014 aurelien prieur
+// Last update Sun Jun 15 18:57:08 2014 julie franel
 //
 
 #include <iostream>
@@ -116,9 +116,11 @@ bool			ClientCore::initialize(t_game *options)
 void			ClientCore::buildConfigCmd(std::string &string) const
 {
   std::ostringstream	oss;
+  std::string		dir;
 
+  dir = _configurator->getOptions()->loadMap == true ? "save/" : "maps/";
   oss << _parser->getConfig().idPlayer1 << " 0 0 ";
-  oss << "CONFIG " << _configurator->getOptions()->mapName << " ";
+  oss << "CONFIG " << dir << _configurator->getOptions()->mapName << " ";
   oss << _configurator->getOptions()->nbPlayers << " ";
   oss << _configurator->getOptions()->nbBots << " ";
   oss << _configurator->getOptions()->timeGame << " ";
