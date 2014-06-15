@@ -1,7 +1,7 @@
 #ifndef SERVER__GAME_HPP_
 # define SERVER__GAME_HPP_
 
-# define GAME_TIME     1 // (in min)	total time of a map. Must be multiplied by e_time.
+# define GAME_TIME     5 // (in min)	total time of a map. Must be multiplied by e_time.
 # define BOMBTIME      2 // (in sec)
 # define COUNTDOWN     5 // (in sec)
 # define RESPAWN_DELAY 5 // (in sec)
@@ -85,10 +85,10 @@ namespace	Server {
     inline bool		isPaused() const { return _paused; }
     bool		ended() const { return _ended; }
     bool		isEnded() const {
-      return _started && !_paused && (!this->timeLeft().inUsec()/* || _players.size() <= 1*/);
+      return _started && !_paused && (!this->timeLeft().inUsec() || _players.size() <= 1);
     }
 
-    inline void		addEvent(t_cmd *c) { _events.push(c); std::cout << "SIZE ========" <<  _events.size() << std::endl;}
+    inline void		addEvent(t_cmd *c) { _events.push(c); }
     inline void		addBomb(t_cmd *c) { _bombs.push(c); }
 
     static bool		_isGame;
@@ -136,7 +136,7 @@ namespace	Server {
     void		createBots();
 
     void		bombExplose(Player *, t_cmd *);
-    bool		exploseCase(const std::pair<size_t, size_t>, t_cmd *);
+    bool		exploseCase(Player *, const std::pair<size_t, size_t>, t_cmd *);
     void		createBonus(const std::pair<size_t, size_t>, t_cmd *, int);
     void		earnBonus(Player *, int, const std::pair<size_t, size_t>);
 
@@ -145,8 +145,7 @@ namespace	Server {
       std::cout << "Server::Game::hasDateNextCommandExpired()" << std::endl;
       std::cout << "dateNextCommand is:" << p->getDateNextCommand() << std::endl;
       std::cout << "timeLeft is:" << this->timeLeft() << std::endl;
-      // return p->getDateNextCommand() > this->timeLeft();
-      return !!p;
+      return p->getDateNextCommand() > this->timeLeft();
     }
 
     class	Bot {

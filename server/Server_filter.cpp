@@ -21,6 +21,7 @@ Server::Server::filterMsg() {
   if (this->_messages.size() > 0)
     {
       std::string *msg = this->_messages.front();
+      std::cout << "Msg recu [" << *msg << "]" << std::endl;
       if (_game)
 	cmd->date = _game->timeLeft();
       cur_1 = msg->find(" ", cur_1);

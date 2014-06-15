@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 10:14:51 2014 aurelien prieur
+// Last update Sun Jun 15 12:02:14 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -116,11 +116,13 @@ bool		Parser::parseCreate(std::list<t_parser *> &_tabParser)
 	{
 	  size_t posx;
 	  size_t posy;
+	  size_t id;
 
+	  CVRT_STRING_TO_SIZET((*it)->params[1], id);
 	  CVRT_STRING_TO_SIZET((*it)->params[2], posx);
 	  CVRT_STRING_TO_SIZET((*it)->params[3], posy);
 	  _list.push_back(std::pair<std::pair<size_t, size_t>, int>(std::pair<size_t, size_t>(posx, posy),
-								    this->_types[(*it)->params[0]]));
+								    this->_types[(*it)->params[0]] + id));
 	  _tabParser.erase(it);
 	  it = _tabParser.begin();
 	  ret = true;
@@ -177,9 +179,9 @@ void		Parser::parseStartGame(const t_parser &_parser)
 {
   size_t        _chrono;
 
-  this->_gameEntities.startGame();
   CVRT_STRING_TO_SIZET(_parser.params[0], _chrono);
   this->_gameEntities.setTimeLeft(static_cast<float>(_chrono));
+  this->_gameEntities.startGame();
 }
 
 
@@ -262,13 +264,12 @@ void		Parser::handleActions(std::list<t_parser *> &_tabParser)
 
   for (itTab = _tabParser.begin(); itTab != _tabParser.end(); ++itTab)
     {
-      ret = (this->*_tabFct[(*itTab)->action])(_tabParser);
       if (ret == true)
 	{
 	  itTab = _tabParser.begin();
 	  ret = false;
 	}
-      // this->displayParserStruct((**itTab));
+      ret = (this->*_tabFct[(*itTab)->action])(_tabParser);
     }
 }
 
@@ -309,6 +310,7 @@ void		Parser::run(std::string &string)
   size_t	pos1 = 0;
   size_t	pos2 = -1;
 
+  std::cout << "CLIENT RCV [" << string << "]" << std::endl;
   if (string.find("\n") != std::string::npos)
     {
       while ((pos1 = string.find("\n", pos2 + 1)) != std::string::npos)

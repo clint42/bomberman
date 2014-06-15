@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Sun Jun  8 16:38:49 2014 buret_j
-// Last update Sat Jun 14 15:31:02 2014 buret_j
+// Last update Sun Jun 15 12:50:28 2014 buret_j
 //
 
 #ifndef CONDSAFEQUEUE_HPP_
@@ -32,20 +32,21 @@ public:
   ~CondSafeQueue() { }
 
   void	push(T v) {
-    std::cout << "CondSafeQueue::push() => avant lock" << std::endl;
+    // std::cout << "CondSafeQueue::push() => avant lock" << std::endl;
     _mutexQueue.lock();
-    std::cout << "CondSafeQueue::push() => c'est lock" << std::endl;
+    // std::cout << "CondSafeQueue::push() => c'est lock" << std::endl;
     _queue.push_back(v);
-    std::cout << "CondSafeQueue::push() => avant delock" << std::endl;
+    // std::cout << "CondSafeQueue::push() => avant delock" << std::endl;
     _mutexQueue.unlock();
-    std::cout << "CondSafeQueue::push() => c'est delock" << std::endl;
-    // _cond.signal();
-    std::cout << "CondSafeQueue::push() => j'ai signal ma condvar" << std::endl;
+    // std::cout << "CondSafeQueue::push() => c'est delock" << std::endl;
+    // this->signal();
+    // std::cout << "CondSafeQueue::push() => j'ai signal ma condvar" << std::endl;
   }
   void	push_front(T v) {
     _mutexQueue.lock();
     _queue.push_front(v);
     _mutexQueue.unlock();
+    // this->signal();
   }
 
   bool	tryPop(T *v) {
@@ -61,9 +62,20 @@ public:
     return (false);
   }
 
-  void	wait() { _cond.wait(); }
-  void  signal() { _cond.signal(); }
   bool	empty() const { return _queue.empty(); }
+
+  void	wait() {
+    _mutexThread.lock();
+    _cond.wait();
+    _mutexThread.unlock();
+  }
+  void  signal() {
+    _mutexThread.lock();
+    _cond.signal();
+    _mutexThread.unlock();
+  }
+  bool	lock() { return _mutexThread.lock(); }
+  bool	unlock() { return _mutexThread.unlock(); }
 
 };
 

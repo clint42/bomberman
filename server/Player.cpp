@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
-Server::Player::Player(size_t id, Socket *s, bool b)
-  : _id(id), _bot(b), _posX(0), _posY(0), _orientation(DOWN),
+    Server::Player::Player(size_t id, Socket *s, bool b)
+  : _id(id), _bot(b), _posX(0), _posY(0), _orientation(DOWN), _score(0),
     _bombsLimit(1), _bombsOnFloor(0), _bombRange(2), _commandTimeMultiplier(1),  _certifiedMd5(false) {
   _socket = s;
 }
@@ -17,7 +17,10 @@ Server::Player::updateDateNextCommand(Server::Player::Action a, Time const &date
   else if (a == ORIENT)  mult = DELAY_MULT_ORIENT;
   else			 mult = DELAY_MULT_BOMB;
 
+  std::cout << "------- updateDateNextCommand()" << std::endl;
+  std::cout << "date: " << date << std::endl;
   _dateNextCommand = date - Time(0, 0, 0, 50/*(DELAY * mult / _commandTimeMultiplier)*/);
+  std::cout << "_dNC: " << _dateNextCommand << std::endl;
   std::cout << "Server::Player::updateDateNextCommand() => date is '" << _dateNextCommand << "'" << std::endl;
   DEBUG("! Server::Player::updateDateNextCommand()", -1);
 }

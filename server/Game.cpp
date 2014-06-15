@@ -59,31 +59,29 @@ Server::Game::bombsProcessing() {
 
   DEBUG("Server::Game::bombsProcessing", 1);
   while (!_ended) {
-    std::cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << std::endl;
+    // std::cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << std::endl;
     if (_paused || !_bombs.tryPop(&c)) {
-      std::cout << "$$$$ j'entame le wait()" << std::endl;
-      _bombs.wait();
-      std::cout << "$$$$ je sors du wait()" << std::endl;
-      // usleep(75000);
+      // std::cout << "$$$$ j'entame le wait()" << std::endl;
+      // _bombs.wait();
+      // std::cout << "$$$$ je sors du wait()" << std::endl;
+      usleep(75000);
     }
     else {
-      std::cout << "$$$$ j'ai reussi a pop un objet" << std::endl;
+      // std::cout << "$$$$ j'ai reussi a pop un objet" << std::endl;
       if (!_bombs.empty()) {
-	_bombs.unlock();
-	_bombs.signal();
+	// _bombs.signal();
       }
       else {
-	std::cout << "$$$$ j'unlock pour pas avoir de delock" << std::endl;
-	_bombs.unlock();
+	// std::cout << "$$$$ j'unlock pour pas avoir de delock" << std::endl;
       }
-      std::cout << "$$$$ je fais l'execution" << std::endl;
+      // std::cout << "$$$$ je fais l'execution" << std::endl;
       { // code
 	if (this->timeLeft() > c->date) {
-	  std::cout << "[SERVER] Server::Game::bombsProcessing() => time of usleep " << this->timeLeft().inUsec() - c->date.inUsec() << "." << std::endl;
+	  // std::cout << "[SERVER] Server::Game::bombsProcessing() => time of usleep " << this->timeLeft().inUsec() - c->date.inUsec() << "." << std::endl;
 	  usleep(this->timeLeft().inUsec() - c->date.inUsec());
 	}
 	else {
-	  DEBUG("[SERVER] Server::Game::bombsProcessing() => en fait, elle explose directe", 0);
+	  // DEBUG("[SERVER] Server::Game::bombsProcessing() => en fait, elle explose directe", 0);
 	}
 	if (_paused) {
 	  _bombs.push_front(c);
@@ -107,6 +105,10 @@ Server::Game::start() {
     _startedAt.now();
     _endAt = _startedAt + Time(0, GAME_TIME * _time, COUNTDOWN);
     this->updateTimeLeft();
+    for (std::map<std::pair<size_t, size_t>, Player *>::iterator it = _players.begin();
+	 it != _players.end(); ++it) {
+      (it->second)->updateDateNextCommand(Server::Player::ORIENT, this->timeLeft() - Time(0, 0, COUNTDOWN));
+    }
     _bombThread = new Thread(&Server::Game::trampoline_bombsProcessing, this);
     _started = true;
     std::stringstream ss;
@@ -271,6 +273,7 @@ void			Server::Game::saveGame() const
 	  file << std::endl;
 	  ++y;
 	}
+      file << this->timeLeft() << std::endl;
       for (std::map<std::pair<size_t, size_t>, Player *>::const_iterator it = this->_players.begin();
 	   it != this->_players.end(); ++it)
 	{
@@ -314,7 +317,6 @@ Server::Game::pickPlayers(size_t nb) {
     if ((*it)->hasCertified()) {
       std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
       (*it)->setPos(pos.first, pos.second);
-      (*it)->updateDateNextCommand(Server::Player::ORIENT, this->timeLeft() + Time(0, 0, COUNTDOWN));
       this->_players[pos] = (*it);
       DEBUG("Server::Game::pickPlayers() => un peer est devenu un player", -1);
       msg << "0 0 0 CREATE PLAYER " << (*it)->getID() << " " << (*it)->getPosX() << " " << (*it)->getPosY() << "\n";
@@ -338,7 +340,6 @@ Server::Game::createBots() {
     _bots.push_back(new Bot(p, _map));
     pos = this->generatePos(-1, -1);
     p->setPos(pos.first, pos.second);
-    p->updateDateNextCommand(Server::Player::ORIENT, this->timeLeft()+Time(0, 0, COUNTDOWN));
     this->_players[pos] = p;
     msg << "0 0 0 CREATE PLAYER " << p->getID() << " "
 	<< p->getPosX() << " " << p->getPosY() << "\n";
@@ -360,7 +361,7 @@ Server::Game::earnBonus(Player *p, int bonus, const std::pair<size_t, size_t> po
   else
     p->earnSpeed();
   this->_map->deleteElem(pos);
-  convert << "0 " << pos.first << " " << pos.second << " DESTROY";
+  convert << "0 " << pos.first << " " << pos.second << " DESTROY\n";
   this->_messenger->broadcastMessage(convert.str());
 }
 
