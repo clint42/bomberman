@@ -44,7 +44,9 @@ namespace	Server {
     Messenger *	_messenger;
     Thread *	_bombThread;
     size_t &	_id;
-    std::list<Bot *> _bots;
+
+    std::list<Bot *>	_bots;
+    Thread *		_botsThread;
 
     bool	_started;
     Time	_startedAt;
@@ -75,6 +77,10 @@ namespace	Server {
     inline std::string const &getMapName() const { return _map->getFilename(); }
     inline std::string const &getMapMd5() const { return _map->getKey(); }
 
+    void setTimeLeft(size_t time) {
+      _startedAt = Time().now();
+      _endAt = _startedAt + Time(0, 0, time);
+    }
     void updateTimeLeft() { _timeLeft = !_paused ? (_endAt - Time().now()) : (_endAt - _pausedAt); }
     inline Time const &	timeLeft() const { return _timeLeft; }
     inline bool		hasSomethingToDo() const { return !_events.empty(); } // || !_bombs.empty(); }
@@ -97,6 +103,10 @@ namespace	Server {
     static std::map<std::pair<Player::Action, Player::Dir>,
 		    bool(Game::*)(Player *, t_cmd *)> func;
     static void *       trampoline_bombsProcessing(void *);
+    void		bombsProcessing();
+
+    static void *       trampoline_botsProcessing(void *);
+    void		botsProcessing();
 
     std::pair<size_t, size_t>       generatePos(const size_t posx, const size_t posy);
     size_t		countPeersThatCertified() const;
@@ -117,7 +127,6 @@ namespace	Server {
     bool		bombLeft(Player *, t_cmd *);
 
     void		update();
-    void		bombsProcessing();
     void		killPlayer(Player *);
     void		killPlayer(const std::pair<size_t, size_t>);
 
@@ -164,7 +173,7 @@ namespace	Server {
       ~Bot();
 
       inline Player *	getPlayer() const { return _p; }
-      void	actionBot(const Time &date, SafeQueue<t_cmd *> &events);
+      void		actionBot(const Time &date, SafeQueue<t_cmd *> &events);
     };
 
   };
