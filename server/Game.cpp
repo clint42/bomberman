@@ -19,6 +19,11 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
 {
   DEBUG("Server::Game::Game()", 1);
 
+  if (m.find(".save") != std::string::npos)
+    this->_toLoad = true;
+  else
+    this->_toLoad = false;
+
   if (!p || !t || (p + b < 2) || !mes)
     throw GameException("Invalid parameters");
 
@@ -158,6 +163,8 @@ Server::Game::update() {
     else {
       this->pickPlayers(_nbPlayers);
       this->createBots();
+      if (this->_toLoad == true)
+	this->loadGame(this->_map->getFilename());
       this->start();
     }
   }
@@ -182,7 +189,7 @@ Server::Game::update() {
       p = _players[c->pos];
     if ((!p || p->getID() != c->id) && c->action == "BOMB EXPLOSE")
       {
-      p = this->findPlayerByID(c->id);
+	p = this->findPlayerByID(c->id);
       	DEBUG("Server::Game::update() => Find player by ID", 0);
       }
     if (!p || p->getID() != c->id)
