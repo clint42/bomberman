@@ -299,25 +299,67 @@ void			Server::Game::saveGame() const
 }
 
 
-void		Server::Game::loadGame(const std::string &filename) const
+void		Server::Game::loadGame(const std::string &filename)
 {
   std::ifstream file(filename.c_str(), std::ios::in);
   std::string   readed;
+  std::vector<std::string>	_infos;
 
   if (file.is_open())
     {
       while (std::getline(file, readed) && readed.compare("SETTINGS") != 0);
       while (std::getline(file, readed))
-	{
-	  std::cout << readed << std::endl;
-	}
-      // size_t nbrBots = 0;
-      // size_t nbrPlayers = 0;
-      // size_t pos1 = filename.find("-");
-      // std::cout << filename.substr(0, pos1) << std::endl;
+	_infos.push_back(readed);
       file.close();
-    }
 
+      size_t	nbrBots = 0;
+      size_t	nbrPlayers = 0;
+      size_t	pos1 = filename.find("/");
+      size_t	pos2 = filename.find("-", pos1);
+      size_t	timeLeft;
+      size_t	count = 1;
+      size_t	posX = 0;
+      size_t	posY = 0;
+      bool	isBot = false;
+      size_t	score = 0;
+
+      CVRT_STRING_TO_SIZET(filename.substr(pos1 + 1, pos2 - pos1 - 1), nbrPlayers);
+
+      pos1 = filename.find("-", pos2);
+      CVRT_STRING_TO_SIZET(filename.substr(pos2 + 1, pos1 - pos2 - 1), nbrBots);
+
+      CVRT_STRING_TO_SIZET(_infos[0], timeLeft);
+      //      this->setTimeLeft(timeLeft); // DECOMMENTER
+
+      this->pickPlayers(nbrBots + nbrPlayers);
+      for (std::map<std::pair<size_t, size_t>, Player *>::iterator it = this->_players.begin();
+	   it != this->_players.end(); ++it)
+      	{
+	  if (count <= (nbrBots + nbrPlayers) && count <= _infos.size())
+	    {
+	      pos1 = 0;
+	      pos2 = 0;
+	      pos1 = _infos[count].find(" ");
+	      isBot = _infos[count].substr(0, pos1).compare("1") == 0 ? true : false;
+
+	      pos2 = _infos[count].find(" ", pos1 + 1);
+	      CVRT_STRING_TO_SIZET(_infos[count].substr(pos1 + 1, pos2 - pos1 - 1), posX);
+
+	      pos1 = _infos[count].find(" ", pos2 + 1);
+	      CVRT_STRING_TO_SIZET(_infos[count].substr(pos2 + 1, pos1 - pos2 - 1), posY);
+
+	      pos2 = _infos[count].find(" ", pos1 + 1);
+	      CVRT_STRING_TO_SIZET(_infos[count].substr(pos1 + 1, pos2 - pos1 - 1), score);
+
+	      // std::cout << std::boolalpha << isBot << " - POSX= " << posX
+	      // 		<< " POSY= " << posY << " - SCORE= " << score << std::endl;
+	      (*it).second->setPos(posX, posY);
+	      (*it).second->setBot(isBot);
+	      (*it).second->setScore(score);
+	      ++count;
+	    }
+      	}
+    }
 }
 
 

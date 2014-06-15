@@ -5,9 +5,10 @@
 // Login   <virol_g@epitech.net>
 //
 // Started on  Sun Jun 15 10:47:18 2014 virol_g
-// Last update Sun Jun 15 17:08:55 2014 virol_g
+// Last update Sun Jun 15 21:57:09 2014 julie franel
 //
 
+#include	"macros.hpp"
 #include	"LoadMenu.hpp"
 
 LoadMenu::LoadMenu(gdl::SdlContext &sdlContext) : AMenu(sdlContext)
@@ -126,5 +127,13 @@ t_game	*LoadMenu::getChoice() const
   choice->mapName = _files->getString();
   choice->isHost = true;
   choice->ipAddr = "127.0.0.1";
+  choice->timeGame = 1;
+  size_t pos1 = 0;
+  size_t pos2 = 0;
+  pos1 = choice->mapName.find("-");
+  CVRT_STRING_TO_SIZET(choice->mapName.substr(0, pos1), choice->nbPlayers);
+  pos2 = choice->mapName.find("-", pos1 + 1);
+  CVRT_STRING_TO_SIZET(choice->mapName.substr(pos1 + 1, pos2 - pos1 - 1), choice->nbBots);
+  std::cout << choice->nbPlayers << " | " << choice->nbBots << std::endl;
   return (choice);
 }

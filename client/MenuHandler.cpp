@@ -1,11 +1,11 @@
 //
 // MenuHandler.cpp for bomberman in /home/prieur_b/tek2/cpp/bomberman/client
-// 
+//
 // Made by aurelien prieur
 // Login   <prieur_b@epitech.net>
-// 
+//
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Sun Jun 15 20:51:09 2014 virol_g
+// Last update Sun Jun 15 22:06:08 2014 julie franel
 //
 
 #include "MenuHandler.hpp"
@@ -45,7 +45,7 @@ t_game		*MenuHandler::mainMenu()
 bool	MenuHandler::createGame(t_game *options)
 {
   pid_t	pid;
- 
+
   if (!_forked)
     {
       pid = forker();
@@ -57,7 +57,7 @@ bool	MenuHandler::createGame(t_game *options)
       if (pid == 0)
       	{
       	  ConnexionHandler	connexionHandler;
-	  
+
 	  try {
 	    Server::Server server(&connexionHandler, options->serverPort);
 	    server.run();
@@ -131,6 +131,8 @@ t_game	*MenuHandler::launchMenus()
 	ret = createGame(choice);
       else if (mode == 1)
 	ret = joinGame(choice);
+      else if (mode == 2)
+	ret = createGame(choice);
     }
   _sdlContext->stop();
   delete _sdlContext;
