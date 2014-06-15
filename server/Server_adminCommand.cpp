@@ -98,9 +98,19 @@ Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd) {
 bool
 Server::Server::funcSave(__attribute__((unused))const t_cmd *_cmd) {
   if (_game) {
-    if (_game->isPaused() && _peers.size() <= 2
-	&& _peers.first()->getSocekt() == _peers.second()->getSocket())
-      _game->saveGame();
+    if (_game->isPaused() && _peers.size() <= 2) {
+      if (_peers.size() == 2) {
+	std::list<Player *>::const_iterator it2 = _peers.begin();
+	std::list<Player *>::const_iterator it = it2;
+	++it2;
+	if ((*it)->getSocket() == (*it2)->getSocket())
+	  _game->saveGame();
+	else
+	  return false;
+      }
+      else
+	_game->saveGame();
+    }
     return true;
   }
   return false;
