@@ -17,7 +17,6 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
     _nbPlayers(p), _nbBots(b),
     _peers(peers)
 {
-  DEBUG("Server::Game::Game()", 1);
 
   if (m.find(".save") != std::string::npos)
     this->_toLoad = true;
@@ -41,7 +40,6 @@ Server::Game::Game(std::string const &m, size_t p, size_t b, size_t t, Type type
     _nbBots = _map->getNbrSlot() - _nbPlayers;
 
   _messenger->broadcastMessage(std::string("0 0 0 MAP ") + m);
-  DEBUG("! Server::Game::Game()", -1);
 }
 
 Server::Game::~Game() {
@@ -84,9 +82,7 @@ Server::Game::bombsProcessing() {
 
 void
 Server::Game::start() {
-  DEBUG("Server::Game::start()", 1);
   if (!_started) {
-    DEBUG("Server::Game::start() => le jeu n'etait pas demarre", 0);
     _startedAt.now();
     _endAt = _startedAt + Time(0, GAME_TIME * _time, COUNTDOWN);
     this->updateTimeLeft();
@@ -99,19 +95,15 @@ Server::Game::start() {
     _started = true;
     std::stringstream ss;
     ss << "0 0 0 STARTGAME " << this->timeLeft().inSec() << "\n";
-    std::cout << "<< " << ss.str() << std::endl;
     _messenger->broadcastMessage(ss.str());
-    DEBUG("Server::Game::start() => le jeu n'etait pas demarre => check point 2", 0);
   }
   else if (_paused) {
-    DEBUG("Server::Game::start() => on redemarre apres une pause", 0);
     std::stringstream ss;
     _endAt += Time().now() - _pausedAt;
     _paused = false;
     ss << "0 0 0 PAUSE " << this->timeLeft().inSec() << "\n";
     _messenger->broadcastMessage(ss.str());
   }
-  DEBUG("! Server::Game::start()", -1);
 }
 
 void
@@ -152,12 +144,10 @@ Server::Game::countPeersThatCertified() const {
 
 void
 Server::Game::update() {
-  DEBUG("Server::Game::update()", 1);
   Player *p = NULL;
 
   if (!_started) {
     if (this->countPeersThatCertified() < _nbPlayers) {
-      DEBUG("! Server::Game::update() => on a voulu lancer, mais pas assez de joueurs OK", -1);
       return ;
     }
     else {
@@ -175,7 +165,6 @@ Server::Game::update() {
   else {
     t_cmd *c;
     if (!_events.tryPop(&c)) {
-      DEBUG("! Server::Game::update()", -1);
       return ;
     }
     if (_players.find(c->pos) != _players.end())
@@ -183,33 +172,18 @@ Server::Game::update() {
     if ((!p || p->getID() != c->id) && c->action == "BOMB EXPLOSE")
       {
 	p = this->findPlayerByID(c->id);
-      	DEBUG("Server::Game::update() => Find player by ID", 0);
       }
     if (!p || p->getID() != c->id)
       {
-	DEBUG("Server::Game::update() => player not found", 0);
-	if (!p)
-	  {
-	    DEBUG("Server::Game::update() => P faux", 0);
-	  }
-        else if (p->getID() != c->id)
-	  {
-	    DEBUG("Server::Game::update() => ID incorrect", 0);
-	  }
 	delete c;
-	DEBUG("! Server::Game::update()", -1);
 	return ;
       }
 
     if (this->process(c, p)) {
-      DEBUG("Server::Game::update() => process returned true", 0);
       this->filterCmd(c);
       _messenger->broadcastMessage(c->msg);
     }
-    else
-      DEBUG("! Server::Game::update() => process return false", 0);
     delete c;
-    DEBUG("! Server::Game::update()", -1);
   }
 }
 
@@ -228,7 +202,6 @@ Server::Game::filterCmd(t_cmd *cmd) const {
     cmd->msg += convert.str();
   }
   cmd->msg += "\n";
-  std::cout << "MSG = " << cmd->msg << std::endl;
 }
 
 
@@ -308,7 +281,7 @@ void		Server::Game::loadGame(const std::string &filename)
       CVRT_STRING_TO_SIZET(filename.substr(pos2 + 1, pos1 - pos2 - 1), nbrBots);
 
       CVRT_STRING_TO_SIZET(_infos[0], timeLeft);
-      //      this->setTimeLeft(timeLeft); // DECOMMENTER
+      this->setTimeLeft(timeLeft);
 
       this->pickPlayers(nbrBots + nbrPlayers);
       for (std::map<std::pair<size_t, size_t>, Player *>::iterator it = this->_players.begin();
@@ -330,8 +303,6 @@ void		Server::Game::loadGame(const std::string &filename)
 	      pos2 = _infos[count].find(" ", pos1 + 1);
 	      CVRT_STRING_TO_SIZET(_infos[count].substr(pos1 + 1, pos2 - pos1 - 1), score);
 
-	      // std::cout << std::boolalpha << isBot << " - POSX= " << posX
-	      // 		<< " POSY= " << posY << " - SCORE= " << score << std::endl;
 	      (*it).second->setPos(posX, posY);
 	      (*it).second->setBot(isBot);
 	      (*it).second->setScore(score);
@@ -353,8 +324,6 @@ Server::Game::generatePos(const size_t posx, const size_t posy) {
 
   _posx = rand() % this->_map->getWidth();
   _posy = rand() % this->_map->getHeight();
-  std::cout << "X = " << _posx << " | Y = " << _posy << std::endl;
-  std::cout << "X = " << _map->getWidth() << " | Y = " << _map->getHeight() << std::endl;
   std::pair<size_t, size_t> pos(_posx, _posy);
   if ((_posx == posx && _posy == posy) ||
       (this->_map->getElemAtPos(_posx, _posy) != 0) ||
@@ -365,7 +334,6 @@ Server::Game::generatePos(const size_t posx, const size_t posy) {
 
 void
 Server::Game::pickPlayers(size_t nb) {
-  DEBUG("Server::Game::pickPlayers()", 1);
   std::stringstream msg;
   for (std::list<Player *>::const_iterator it = this->_peers.begin();
        it != this->_peers.end() && nb; ++it, --nb) {
@@ -374,15 +342,12 @@ Server::Game::pickPlayers(size_t nb) {
       std::pair<size_t, size_t>     pos = this->generatePos(-1, -1);
       (*it)->setPos(pos.first, pos.second);
       this->_players[pos] = (*it);
-      DEBUG("Server::Game::pickPlayers() => un peer est devenu un player", -1);
       msg << "0 0 0 CREATE PLAYER " << (*it)->getID() << " " << (*it)->getPosX() << " " << (*it)->getPosY() << "\n";
       _messenger->broadcastMessage(msg.str());
-      std::cout << "<< " << msg.str() << std::endl;
       msg.str(std::string());
       msg.clear();
     }
   } // !for
-  DEBUG("! Server::Game::pickPlayers()", -1);
 }
 
 void
@@ -404,23 +369,6 @@ Server::Game::createBots() {
     msg.clear();
     ++_id;
   }
-  // Player *			p;
-  // std::pair<size_t, size_t>     pos;
-  // std::stringstream msg;
-
-  // for (size_t n = 0; n < _nbBots; ++n) {
-  //   p = new Player(_id, 0, true);
-  //   _bots.push_back(new Bot(p, _map));
-  //   pos = this->generatePos(-1, -1);
-  //   p->setPos(pos.first, pos.second);
-  //   this->_players[pos] = p;
-  //   msg << "0 0 0 CREATE PLAYER " << p->getID() << " "
-  // 	<< p->getPosX() << " " << p->getPosY() << "\n";
-  //   _messenger->broadcastMessage(msg.str());
-  //   msg.str(std::string());
-  //   msg.clear();
-  //   ++_id;
-  // }
 }
 
 void
@@ -443,14 +391,10 @@ Server::Game::bombSwitchQueue(t_cmd *c, const std::pair<size_t, size_t> pos)
 {
   t_cmd * cmd = new t_cmd;
   cmd->id = c->id;
-  std::cout << "[SERVER] Server::Game::bomSwitchQueue() => before calcul" << c->date << std::endl;
   cmd->date = c->date - Time(0, 0, BOMBTIME);
-  std::cout << "[SERVER] Server::Game::bomSwitchQueue() => after calcul" << cmd->date << std::endl;
   cmd->pos = pos;
   cmd->action = c->action;
-  std::cout << "Avant push dans _bombs" << std::endl;
   this->_bombs.push(cmd);
-  std::cout << "Apres push dans _bombs" << std::endl;
 }
 
 void
@@ -466,8 +410,6 @@ Server::Game::buildCmdCreateBomb(t_cmd *c, const std::pair<size_t, size_t> pos)
   convert.clear();
   convert << pos.second;
   c->params.push_back(convert.str());
-  std::cout << "[" <<c->params[2] << "]" << std::endl;
-  std::cout << "[" <<c->params[3] << "]" << std::endl;
 }
 
 
@@ -495,10 +437,8 @@ std::map<int, std::string> Server::Game::_bonus;
 bool
 Server::Game::process(t_cmd *c, Player *p)
 {
-  DEBUG("Server::Game::process()", 1);
   if (!this->hasDateNextCommandExpired(p))
     {
-      DEBUG("!Server::Game::process() ==> pas le droit de faire une action", -1);
       return false;
     }
 
@@ -525,26 +465,20 @@ Server::Game::process(t_cmd *c, Player *p)
     }
   if (c->action == "MOVE")
     {
-      std::cout << "PROCESS Players size = " << _players.size() << std::endl;
       p->getAction(&a, &d, c->params[0]);
-      DEBUG("!Server::Game::process() ==> verifier les actions de process => if", -1);
       return ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c));
     }
   else if (c->action == "BOMB")
     {
       a = Server::Player::BOMB;
       d = p->getOrientation();
-      DEBUG("!Server::Game::process() ==> verifier les actions de process => else if", -1);
       return ((this->*func[std::pair<Server::Player::Action, Server::Player::Dir>(a, d)])(p, c));
     }
   else if (c->action == "BOMB EXPLOSE")
     {
       this->bombExplose(p, c);
       this->_messenger->broadcastMessage(c->msg);
-      std::cout << "Return false mais c'est normal" << std::endl;
-      // send directly to messenger
     }
-  DEBUG("! Server::Game::process()", -1);
   return (false);
 }
 
