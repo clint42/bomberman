@@ -12,12 +12,9 @@ Server::Game::botsProcessing() {
   (void)c;
   while (!_ended) {
     if (_started && !_paused) {
-      std::cout << "On update les bots. Ca va chier !" << std::endl;
       for (std::list<Bot *>::iterator it = _bots.begin(); it != _bots.end(); ++it)
 	(*it)->actionBot(this->timeLeft(), _events);
     }
-    else {
-      usleep(200000);
-    }
+    usleep(200000);
   }
 }
