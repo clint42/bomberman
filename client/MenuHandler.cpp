@@ -5,10 +5,9 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Wed Jun 11 08:32:50 2014 aurelien prieur
-// Last update Sun Jun 15 04:30:11 2014 virol_g
+// Last update Sun Jun 15 12:39:52 2014 virol_g
 //
 
-#include "ScoreWindow.hpp" // test
 #include "MenuHandler.hpp"
 
 MenuHandler::MenuHandler(Signal &signal): _signal(signal), _forked(false)
@@ -31,22 +30,6 @@ t_game		*MenuHandler::mainMenu()
   MainMenu	menu = MainMenu(*_sdlContext);
   t_game	*options;
   int		retVal;
-
-  // std::vector<int> ids;
-  // std::vector<int> scores;
-  // gdl::SdlContext *sdlContext = new gdl::SdlContext;
-
-  // ids.push_back(1);
-  // ids.push_back(-1);
-  // scores.push_back(100);
-  // scores.push_back(20);
-  // sdlContext->start(1920, 1080, "Scores", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
-  // ScoreWindow win(*sdlContext, ids, scores, 1);
-  // if (!(win.initialize()) || !(win.build()))
-  //   return (NULL);
-  // while (win.update())
-  //   win.draw();
-
 
   if (!(menu.initialize()) || !(menu.build()))
     return (NULL);
@@ -111,11 +94,14 @@ t_game	*MenuHandler::launchMenus()
 
   if ((mainChoice = mainMenu()) == NULL)
     return (NULL);
-  mode = static_cast<int>(!mainChoice->isHost);
+  mode = static_cast<int>(mainChoice->selected);
+  std::cout << "mode : " << mode << std::endl; 
   if (mode == 0)
     menu = new CreateMenu(*_sdlContext);
   else if (mode == 1)
     menu = new JoinMenu(*_sdlContext);
+  else if (mode == 2)
+    menu = new LoadMenu(*_sdlContext);
   else
     return (NULL);
   if (!menu->initialize() || !menu->build())

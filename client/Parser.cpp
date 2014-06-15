@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 12:02:14 2014 julie franel
+// Last update Sun Jun 15 12:39:49 2014 julie franel
 //
 
 #include "Parser.hpp"
@@ -40,7 +40,7 @@ Parser::Parser(GameEntities &gameEntities,
   this->_fct["ROTATE"] = &Parser::parseRotate;
   this->_fct["DESTROY"] = &Parser::parseDestroy;
   this->_fct["CHRONO"] = &Parser::parseChrono;
-  this->_fct["POINT"] = &Parser::parsePoint;
+  this->_fct["SCORE"] = &Parser::parsePoint;
   this->_fct["STARTGAME"] = &Parser::parseStartGame;
   this->_fct["ENDGAME"] = &Parser::parseEndGame;
 

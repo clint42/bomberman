@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Fri May 16 17:52:00 2014 aurelien prieur
-// Last update Sun Jun 15 01:10:32 2014 aurelien prieur
+// Last update Sun Jun 15 09:38:06 2014 virol_g
 //
 
 #include <unistd.h>
@@ -34,6 +34,18 @@ bool	UI::run()
   _graphicEngine.stop();
   if (_eventsHandler.isEndGame())
     {
+      //gdl::SdlContext *sdlContext = new gdl::SdlContext;
+      // ids.push_back(1);
+      // ids.push_back(-1);
+      // scores.push_back(100);
+      // scores.push_back(20);
+      // sdlContext->start(1920, 1080, "Scores", SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
+      // ScoreWindow win(*sdlContext, ids, scores, 1);
+      // if (!(win.initialize()) || !(win.build()))
+      // 	return (NULL);
+      // while (win.update())
+      // 	win.draw();
+      // delete sdlContext;
 
     }
   return (true);

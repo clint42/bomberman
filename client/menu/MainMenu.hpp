@@ -5,12 +5,13 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:54:59 2014 aurelien prieur
-// Last update Thu Jun 12 18:00:16 2014 virol_g
+// Last update Sun Jun 15 12:54:10 2014 virol_g
 //
 
 #ifndef MAINMENU_HPP_
 # define MAINMENU_HPP_
 
+# include	"ReadDir.hpp"
 # include	"../GraphicalText.hpp"
 # include	"AMenu.hpp"
 
@@ -19,6 +20,7 @@ class	MainMenu: public AMenu
   int	   	_nbPlayers;
   GraphicalText	*_title;
 
+  bool	canLoad() const;
 public:
   MainMenu(gdl::SdlContext &sdlContext);
   ~MainMenu();

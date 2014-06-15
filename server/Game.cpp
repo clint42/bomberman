@@ -273,6 +273,7 @@ void			Server::Game::saveGame() const
 	  file << std::endl;
 	  ++y;
 	}
+      file << "SETTINGS" << std::endl;
       file << this->timeLeft() << std::endl;
       for (std::map<std::pair<size_t, size_t>, Player *>::const_iterator it = this->_players.begin();
 	   it != this->_players.end(); ++it)
