@@ -21,7 +21,6 @@ Server::Server::filterMsg() {
   if (this->_messages.size() > 0)
     {
       std::string *msg = this->_messages.front();
-      std::cout << "Msg recu [" << *msg << "]" << std::endl;
       if (_game)
 	cmd->date = _game->timeLeft();
       cur_1 = msg->find(" ", cur_1);
@@ -46,7 +45,6 @@ Server::Server::filterMsg() {
 
 void
 Server::Server::putCmdInQueue(t_cmd *cmd) {
-  DEBUG("Server::Server::putCmdInQueue()", 1);
   if (this->_game && _game->isStarted() && !_game->isPaused() && !_game->ended()
       && ((cmd->params.size() == 0 && cmd->action == "BOMB") ||
 	  (cmd->params.size() == 1 && (cmd->action == "MOVE" &&
@@ -54,7 +52,6 @@ Server::Server::putCmdInQueue(t_cmd *cmd) {
 					cmd->params[0] == "DOWN" ||
 					cmd->params[0] == "LEFT" ||
 					cmd->params[0] == "RIGHT"))))) {
-    DEBUG("Server::Server::putCmdInQueue() => c'est une commande de deplacement", 0);
     this->_game->addEvent(cmd);
   }
   else if (((!cmd->action.compare("PAUSE") ||
@@ -64,11 +61,7 @@ Server::Server::putCmdInQueue(t_cmd *cmd) {
 	   (!cmd->action.compare("WITHFRIEND") && cmd->params.size() == 1) ||
 	   (!cmd->action.compare("MD5") && cmd->params.size() == 1)) {
     this->_ext.push_back(cmd);
-    DEBUG("Server::Server::putCmdInQueue() => la commande est bonne", 0);
   }
-  else {
-    DEBUG("Server::Server::putCmdInQueue() => la commande pue ou soit on a pas le faire", 0);
+  else
     delete cmd;
-  }
-  DEBUG("! Server::Server::putCmdInQueue()", -1);
 }

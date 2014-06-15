@@ -19,8 +19,6 @@ Server::Game::moveUp(Player *p, t_cmd *c)
 	  p->updateDateNextCommand(Server::Player::MOVE, c->date);
 	  return (p->moveUp());
 	}
-      else
-	std::cout << "Potentiellement un player en face" << std::endl;
     }
   return false;
 }
