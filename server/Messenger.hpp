@@ -5,7 +5,7 @@
 // Login   <buret_j@epitech.net>
 // 
 // Started on  Thu Jun  5 17:15:53 2014 buret_j
-// Last update Sun Jun 15 21:04:03 2014 buret_j
+// Last update Sun Jun 15 23:15:28 2014 buret_j
 //
 
 #ifndef MESSENGER_HPP_
@@ -57,8 +57,6 @@ namespace Server {
 	delete *it;
     }
     void	broadcastMessage(std::string const &toAdd) {
-      if (toAdd == "0 0 0 ENDGAME")
-	std::cout << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << std::endl;
       for (std::vector<std::string *>::iterator it = _queues.begin(); it != _queues.end(); ++it) {
 	if (*it)
 	  **it += toAdd;
