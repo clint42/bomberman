@@ -255,8 +255,9 @@ void			Server::Game::saveGame() const
   size_t x = 0;
   size_t y = 0;
 
-  ss << "save/" << (t->tm_year + 1900) << "-" << (t->tm_mon + 1) << "-" << t->tm_mday
-     << "-" << t->tm_hour << "h" << t->tm_min << "m" << t->tm_sec << "s.save";
+  ss << "save/" << this->getNbrPlayers() << "-" << this->getNbrBots() << "-"
+     << (t->tm_year + 1900) << "-" << (t->tm_mon + 1) << "-" << t->tm_mday << "-"
+     << t->tm_hour << "h" << t->tm_min << "m" << t->tm_sec << "s.save";
   name = ss.str();
 
   file.open(name.c_str(), std::ios::out | std::ios::trunc);
@@ -282,8 +283,8 @@ void			Server::Game::saveGame() const
       for (std::map<std::pair<size_t, size_t>, Player *>::const_iterator it = this->_players.begin();
 	   it != this->_players.end(); ++it)
 	{
-	  file << it->second->getPosX() << " " << it->second->getPosY() << " " <<
-	    it->second->getScore() << std::endl;
+	  file << it->second->isBot() << " " << it->second->getPosX() << " " << it->second->getPosY()
+	       << " " << it->second->getScore() << std::endl;
 	}
       file.close();
     }
@@ -302,6 +303,10 @@ void		Server::Game::loadGame(const std::string &filename) const
 	{
 	  std::cout << readed << std::endl;
 	}
+      // size_t nbrBots = 0;
+      // size_t nbrPlayers = 0;
+      // size_t pos1 = filename.find("-");
+      // std::cout << filename.substr(0, pos1) << std::endl;
       file.close();
     }
 
