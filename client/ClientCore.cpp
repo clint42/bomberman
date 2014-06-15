@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 22:36:15 2014 aurelien prieur
+// Last update Sun Jun 15 23:09:24 2014 aurelien prieur
 //
 
 #include <iostream>
@@ -152,7 +152,6 @@ void			ClientCore::buildMapMd5(std::string &string, int idPlayer) const
 
 void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
 {
-  //TODO: find a better solution to send config only once
   static bool	configSend = false;
   std::string	string;
 
@@ -167,7 +166,6 @@ void		ClientCore::config(__attribute__((unused))Socket *socket, bool b[3])
       _parser->run(string);
       if (_parser->getConfig().welcomeReceived && !configSend)
 	{
-	  std::cout << "CONFIG push in cmds" << std::endl;
 	  buildWithFriendCmd(string);
 	  _configurator->pushCmd(string);
 	  if (_configurator->getOptions()->isHost == true)

@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Fri May 16 15:53:47 2014 aurelien prieur
-// Last update Sun Jun 15 22:59:16 2014 aurelien prieur
+// Last update Sun Jun 15 23:09:45 2014 aurelien prieur
 //
 
 #include <cstdlib>
@@ -19,10 +19,6 @@
 #include "AObject.hpp"
 #include "Signal.hpp"
 #include "MenuHandler.hpp"
-
-//TODO: testing purpose only. Remove it.
-extern int debug_align;
-int debug_align = 0;
 
 int	main()
 {
