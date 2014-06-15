@@ -1,7 +1,7 @@
 #ifndef SERVER__GAME_HPP_
 # define SERVER__GAME_HPP_
 
-# define GAME_TIME     1 // (in min)	total time of a map. Must be multiplied by e_time.
+# define GAME_TIME     5 // (in min)	total time of a map. Must be multiplied by e_time.
 # define BOMBTIME      2 // (in sec)
 # define COUNTDOWN     5 // (in sec)
 # define RESPAWN_DELAY 5 // (in sec)
@@ -131,13 +131,13 @@ namespace	Server {
     void		bombSwitchQueue(t_cmd *, const std::pair<size_t, size_t>);
 
     void		bombExplose(Player *, t_cmd *);
-    bool		exploseCase(const std::pair<size_t, size_t>, t_cmd *);
+    bool		exploseCase(Player *, const std::pair<size_t, size_t>, t_cmd *);
     void		createBonus(const std::pair<size_t, size_t>, t_cmd *, int);
     void		earnBonus(Player *, int, const std::pair<size_t, size_t>);
 
     void		buildCmdCreateBomb(t_cmd *, const std::pair<size_t, size_t>);
     inline bool		hasDateNextCommandExpired(Player *p) const {
-      // return (p->getDateNextCommand() < this->timeLeft()) ? true : false;
+      // return (p->getDateNextCommand() > this->timeLeft()) ? true : false;
       (void)p;
       return true;
     }

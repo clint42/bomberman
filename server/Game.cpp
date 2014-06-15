@@ -175,7 +175,20 @@ Server::Game::update() {
       return ;
     }
     if (_players.find(c->pos) != _players.end())
+      {
       p = _players[c->pos];
+	std::cout << "Quand ca match" << std::endl;
+	std::cout << "Player pos dans map a X = " << _players.begin()->first.first << " | Y = " << _players.begin()->first.second << std::endl;
+	std::cout << "Player pos dans player a X = " << _players.begin()->second->getPosX() << " | Y = " << _players.begin()->second->getPosY() << std::endl;
+	std::cout << "Pos dans cmd a X = " << c->pos.first << " | Y = " << c->pos.second << std::endl;
+      }
+    else
+      {
+	std::cout << "Quand ca match pas" << std::endl;
+	std::cout << "Player pos dans map a X = " << _players.begin()->first.first << " | Y = " << _players.begin()->first.second << std::endl;
+	std::cout << "Player pos dans player a X = " << _players.begin()->second->getPosX() << " | Y = " << _players.begin()->second->getPosY() << std::endl;
+	std::cout << "Pos dans cmd a X = " << c->pos.first << " | Y = " << c->pos.second << std::endl;
+      }
     if ((!p || p->getID() != c->id) && c->action == "BOMB EXPLOSE")
       {
       p = this->findPlayerByID(c->id);
@@ -264,7 +277,7 @@ void			Server::Game::saveMap() const
 	   it != this->_players.end(); ++it)
 	{
 	  file << it->second->getPosX() << " " << it->second->getPosY() << " " <<
-	    it->second->getTeam()->getScore() << std::endl;
+	    it->second->getScore() << std::endl;
 	}
       file.close();
     }
@@ -327,7 +340,7 @@ Server::Game::earnBonus(Player *p, int bonus, const std::pair<size_t, size_t> po
   else
     p->earnSpeed();
   this->_map->deleteElem(pos);
-  convert << "0 " << pos.first << " " << pos.second << " DESTROY";
+  convert << "0 " << pos.first << " " << pos.second << " DESTROY\n";
   this->_messenger->broadcastMessage(convert.str());
 }
 

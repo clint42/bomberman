@@ -1,7 +1,7 @@
 #include "Game.hpp"
 
 bool
-Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
+Server::Game::exploseCase(Player *p, const std::pair<size_t, size_t> pos, t_cmd *c)
 {
   std::stringstream convert;
   int		ret;
@@ -24,6 +24,7 @@ Server::Game::exploseCase(const std::pair<size_t, size_t> pos, t_cmd *c)
 	{
 	  convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
 	  this->killPlayer(pos);
+	  p->incrScore();
 	}
       convert << ";0 0 0 CREATE FIRE 0 " << pos.first << " " << pos.second;
       c->msg += convert.str();
@@ -48,7 +49,7 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   while (c->pos.first + val < this->_map->getWidth() - 1 && (size_t)val <= p->getBombRange())
     {
       pos.first = c->pos.first + val;
-      if (this->exploseCase(pos, c) == false)
+      if (this->exploseCase(p, pos, c) == false)
 	break ;
       ++val;
     }
@@ -58,7 +59,7 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   while (c->pos.first + val > 0 && (size_t)(val * -1) <= p->getBombRange())
     {
       pos.first = c->pos.first + val;
-      if (this->exploseCase(pos, c) == false)
+      if (this->exploseCase(p, pos, c) == false)
 	break ;
       --val;
     }
@@ -68,7 +69,7 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   while (c->pos.second + val > 0 && (size_t)(val * -1) <= p->getBombRange())
     {
       pos.second = c->pos.second + val;
-      if (this->exploseCase(pos, c) == false)
+      if (this->exploseCase(p, pos, c) == false)
 	break ;
       --val;
     }
@@ -78,7 +79,7 @@ Server::Game::bombExplose(Player *p, t_cmd *c)
   while (c->pos.second + val < this->_map->getHeight() - 1 && (size_t)val <= p->getBombRange())
     {
       pos.second = c->pos.second + val;
-      if (this->exploseCase(pos, c) == false)
+      if (this->exploseCase(p, pos, c) == false)
 	break ;
       ++val;
     }

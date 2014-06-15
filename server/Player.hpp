@@ -29,10 +29,10 @@ namespace Server {
     size_t	_id;
     // std::string  _name;
     bool	_bot;
-    Team *	_team;
     size_t	_posX, _posY;
     Player::Dir	_orientation;
 
+    size_t	_score;
     size_t	_bombsLimit;
     size_t	_bombsOnFloor;
     size_t	_bombRange;
@@ -48,7 +48,8 @@ namespace Server {
     ~Player();
 
     inline size_t getID() const { return this->_id; }
-    inline Team * getTeam() const { return this->_team; }
+    // inline Team * getTeam() const { return this->_team; }
+    inline size_t getScore() const { return this->_score; }
     inline bool   isBot() const { return this->_bot; }
     inline size_t getPosX() const { return this->_posX; }
     inline size_t getPosY() const { return this->_posY; }
@@ -64,7 +65,9 @@ namespace Server {
     void	  getAction(Action &, std::string const &);
 
     inline void	  setPos(size_t posX, size_t posY) { this->_posX = posX; this->_posY = posY; }
-    inline void	  setTeam(Team *t) { this->_team = t; }
+    // inline void	  setTeam(Team *t) { this->_team = t; }
+    inline void	  cleanScore() { this->_score = 0; }
+    inline void   incrScore() {this->_score += 10; }
     inline void	  hasCertifiedMd5(bool b) { _certifiedMd5 = b; }
 
     inline void   destroyBomb() { if (_bombsOnFloor > 0) _bombsOnFloor -= 1; }
