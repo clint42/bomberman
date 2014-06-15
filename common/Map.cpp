@@ -11,7 +11,6 @@
 */
 
 Map::Map(std::string const &filename) : _width(0), _height(0) {
-  //std::string	name = "./maps/" + filename;
   std::ifstream	file(filename.c_str(), std::ios::in);
   std::string	tmp;
 

@@ -33,7 +33,6 @@ Server::Server::sendMessage(Socket *s) {
   if (_messenger.hasSomethingToSay(s)) {
     std::string m;
     _messenger.retrieveMessage(s, m);
-    std::cout << "Server send : [" << m << "]" << std::endl;
     s->write(m);
   }
   DEBUG("!Server::Server::sendMessage()", -1);

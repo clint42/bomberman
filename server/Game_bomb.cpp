@@ -26,7 +26,7 @@ Server::Game::exploseCase(Player *p, const std::pair<size_t, size_t> pos, t_cmd 
 	  p->incrScore();
 	  this->killPlayer(pos);
 	  std::stringstream score;
-	  score << "0 0 0 SCORE " << p->getScore() << "\n";
+	  score << p->getID() << " 0 0 SCORE " << p->getScore() << "\n";
 	  _messenger->addMessage(p->getSocket(), score.str());
 	}
       convert << ";0 0 0 CREATE FIRE 0 " << pos.first << " " << pos.second;
