@@ -23,11 +23,11 @@ Server::Game::exploseCase(Player *p, const std::pair<size_t, size_t> pos, t_cmd 
       if ((it = this->_players.find(pos)) != this->_players.end())
 	{
 	  convert << ";" << (*it).second->getID() << " " << pos.first << " " << pos.second << " DESTROY";
-	  this->killPlayer(pos);
 	  p->incrScore();
-	  std::string msg_score(";0 0 0 SCORE ");
-	  CVRT_SIZET_TO_STRING(msg_score, p->getScore());
-	  _messenger->addMessage(p->getSocket(), msg_score);
+	  this->killPlayer(pos);
+	  std::stringstream score;
+	  score << "0 0 0 SCORE " << p->getScore() << "\n";
+	  _messenger->addMessage(p->getSocket(), score.str());
 	}
       convert << ";0 0 0 CREATE FIRE 0 " << pos.first << " " << pos.second;
       c->msg += convert.str();

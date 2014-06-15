@@ -15,6 +15,12 @@ Server::Game::Bot::actionBot()
   int		warning;
 
   warning = this->danger();
+  // if (warning == 0)
+  //   this->attack();
+  // else
+  //   {
+
+  //   }
   (void)_list;
 }
 

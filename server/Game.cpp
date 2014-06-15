@@ -501,8 +501,11 @@ Server::Game::killPlayer(const std::pair<size_t, size_t> pos)
     {
       for (std::list<Bot *>::iterator it = _bots.begin(); it != _bots.end(); ++it)
 	{
-	  if ((*it)->getPlayer()->getPosX() == pos.first && (*it)->getPlayer()->getPosY() == pos.second)
-	    this->_bots.erase(it);
+	  if (*it && ((*it)->getPlayer()->getPosX() == pos.first && (*it)->getPlayer()->getPosY() == pos.second))
+	    {
+	      this->_bots.erase(it);
+	      break;
+	    }
 	}
       delete _players[pos];
     }
