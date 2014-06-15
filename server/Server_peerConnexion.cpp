@@ -7,6 +7,10 @@ Server::Server::addPeer(Socket *s) {
   std::string welcome;
   std::string s_id;
 
+  if (_game && _game->isStarted()) {
+    _co->rmSocket(s);
+    return ;
+  }
   _peers.push_back(p);
   CVRT_SIZET_TO_STRING(s_id, id);
   welcome += s_id + " 0 0 WELCOME";
