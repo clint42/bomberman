@@ -332,23 +332,23 @@ Server::Game::pickPlayers(size_t nb) {
 
 void
 Server::Game::createBots() {
-  Player *			p;
-  std::pair<size_t, size_t>     pos;
-  std::stringstream msg;
+  // Player *			p;
+  // std::pair<size_t, size_t>     pos;
+  // std::stringstream msg;
 
-  for (size_t n = 0; n < _nbBots; ++n) {
-    p = new Player(_id, 0, true);
-    _bots.push_back(new Bot(p, _map));
-    pos = this->generatePos(-1, -1);
-    p->setPos(pos.first, pos.second);
-    this->_players[pos] = p;
-    msg << "0 0 0 CREATE PLAYER " << p->getID() << " "
-	<< p->getPosX() << " " << p->getPosY() << "\n";
-    _messenger->broadcastMessage(msg.str());
-    msg.str(std::string());
-    msg.clear();
-    ++_id;
-  }
+  // for (size_t n = 0; n < _nbBots; ++n) {
+  //   p = new Player(_id, 0, true);
+  //   _bots.push_back(new Bot(p, _map));
+  //   pos = this->generatePos(-1, -1);
+  //   p->setPos(pos.first, pos.second);
+  //   this->_players[pos] = p;
+  //   msg << "0 0 0 CREATE PLAYER " << p->getID() << " "
+  // 	<< p->getPosX() << " " << p->getPosY() << "\n";
+  //   _messenger->broadcastMessage(msg.str());
+  //   msg.str(std::string());
+  //   msg.clear();
+  //   ++_id;
+  // }
 }
 
 void
