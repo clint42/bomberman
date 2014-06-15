@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 //
 // Started on  Sun Jun 15 10:47:18 2014 virol_g
-// Last update Sun Jun 15 14:59:48 2014 julie franel
+// Last update Sun Jun 15 17:08:55 2014 virol_g
 //
 
 #include	"LoadMenu.hpp"
@@ -107,6 +107,7 @@ void	LoadMenu::draw()
   _menuBackground->draw(_shader, _clock);
   _portInput->draw(_shader, _clock);
   _menuElems[0]->draw(_shader, _clock);
+  _files->draw(_shader, _clock);
   for (size_t i = 0; i < _titles.size(); ++i)
     _titles[i]->draw(_shader);
   _sdlContext.flush();
