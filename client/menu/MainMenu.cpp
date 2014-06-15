@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 // 
 // Started on  Sat May 24 14:57:38 2014 aurelien prieur
-// Last update Sun Jun 15 17:16:04 2014 virol_g
+// Last update Sun Jun 15 17:27:09 2014 virol_g
 //
 
 #include <iostream>
@@ -70,6 +70,7 @@ bool	MainMenu::build()
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
   _title = new GraphicalText("Multiplayer ?", std::pair<size_t, size_t>(50, 470),
 			     glm::vec4(0.51, 0.53, 0.85, 1.f), 20, "airstrike");
+  _nbPlayers = (3 - !_displayLoad);
   return (true);
 }
 
@@ -134,7 +135,7 @@ t_game		*MainMenu::getChoice() const
     return (NULL);
   options = new t_game;
   options->isHost = (_selected == 0);
-  options->isDouble = (_nbPlayers == 2) ? false : true;
+  options->isDouble = (_nbPlayers == (3 - !_displayLoad)) ? false : true;
   options->selected = _selected;
   return (options);
 }
