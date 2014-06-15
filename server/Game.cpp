@@ -173,6 +173,7 @@ Server::Game::update() {
     _messenger->broadcastMessage("0 0 0 ENDGAME");
   }
   else {
+    this->updateBots();
     t_cmd *c;
     if (!_events.tryPop(&c)) {
       DEBUG("! Server::Game::update()", -1);

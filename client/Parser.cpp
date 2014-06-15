@@ -5,7 +5,7 @@
 // Login   <prieur_b@epitech.net>
 //
 // Started on  Thu May 29 15:44:40 2014 aurelien prieur
-// Last update Sun Jun 15 18:34:18 2014 julie franel
+// Last update Sun Jun 15 22:40:05 2014 virol_g
 //
 
 #include "Parser.hpp"
@@ -44,6 +44,7 @@ Parser::Parser(GameEntities &gameEntities,
   this->_fct["STARTGAME"] = &Parser::parseStartGame;
   this->_fct["ENDGAME"] = &Parser::parseEndGame;
   this->_fct["PAUSE"] = &Parser::parseStartGame; // StartGame is handling pause
+  this->_fct["VICTORY"] = &Parser::parseVictory;
 
   this->_fct["WELCOME"] = &Parser::parseWelcome;
   this->_fct["MAP"] = &Parser::parseMap;
@@ -198,6 +199,14 @@ void		Parser::parsePoint(const t_parser &_parser)
 void		Parser::parseEndGame(__attribute__((unused))const t_parser &_parser)
 {
   this->_eventsHandler.endGame();
+}
+
+void		Parser::parseVictory(__attribute__((unused))const t_parser &_parser)
+{
+  size_t	idWinner;
+
+  CVRT_STRING_TO_SIZET(_parser.params.front(), idWinner);
+  this->_eventsHandler.setWinner(idWinner);
 }
 
 

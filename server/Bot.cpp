@@ -4,7 +4,7 @@
 std::map<int, std::string> getDirection;
 
 Server::Game::Bot::Bot(Server::Player *p, Map *m, std::map<std::pair<size_t, size_t>, Server::Player *> &list):
-  _p(p), _map(m), _list(list)
+  _p(p), _map(m), _list(list), _way(4)
 {
   getDirection[0] = "UP";
   getDirection[1] = "RIGHT";
@@ -20,92 +20,94 @@ Server::Game::Bot::attack() {
 
 }
 
+bool
+Server::Game::Bot::isFull(bool b)
+{
+  for (size_t i = 0; i < 4; ++i)
+    if (_way[i] != b)
+      return (false);
+  return (true);
+}
+
 void
 Server::Game::Bot::actionBot(const Time &date, SafeQueue<t_cmd *> &events)
 {
-  int		warning;
+  int		r;
 
-  warning = this->danger();
-  if (warning == 0)
+  for (size_t i = 0; i < 4; ++i)
+    _way[i] = true;
+  this->danger();
+  if (this->isFull(true) || this->isFull(false))
     this->attack();
   else
-    {
-      int	i = 0;
-
-      while (warning > 0)
-	{
-	  if (warning % 10 == 1)
-	    {
-	      Server::t_cmd	*cmd = new t_cmd;
-	      cmd->id = this->_p->getID();
-	      cmd->date = date;
-	      cmd->pos = std::pair<size_t, size_t>(this->_p->getPosX(), this->_p->getPosY());
-	      cmd->action = "MOVE";
-	      cmd->params.push_back(getDirection[i]);
-	      events.push(cmd);
-	      return ;
-	    }
-	  warning /= 10;
-	  ++i;
-	}
-    }
+    while (1)
+      {
+	r = rand() % 4;
+	if (_way[r] == true)
+	  {
+	    Server::t_cmd	*cmd = new t_cmd;
+	    cmd->id = this->_p->getID();
+	    cmd->date = date;
+	    cmd->pos = std::pair<size_t, size_t>(this->_p->getPosX(), this->_p->getPosY());
+	    cmd->action = "MOVE";
+	    cmd->params.push_back(getDirection[r]);
+	    events.push(cmd);
+	    return ;
+	  }
+      }
   (void)_list;
 }
 
-bool
+void
 Server::Game::Bot::danger()
 {
-  int	ret = 0;
   int	val = -1;
   std::pair<size_t, size_t>	pos(this->_p->getPosX(), this->_p->getPosY());
 
-  while (this->_p->getPosY() + val > 0 && (size_t)(val * -1) < 3)
+  while ((size_t)(val * -1) < 3)
     {
       pos.second = this->_p->getPosY() + val;
-      if (this->_map->getElemAtPos(pos) == Map::BOMB || (val == -1 && (this->_map->getElemAtPos(pos) == Map::WALL ||
-								       this->_map->getElemAtPos(pos) == Map::DWALL ||
-								       this->_list.find(pos) != this->_list.end())))
+      if (this->_map->getElemAtPos(pos) == Map::BOMB || (val == -1 && (this->_map->getElemAtPos(pos) == Map::WALL || this->_map->getElemAtPos(pos) == Map::DWALL || this->_list.find(pos) != this->_list.end())))
 	{
-	  ret = 1;
+	  _way[0] = false;
 	  break;
 	}
       --val;
     }
   val = 1;
   pos.second = this->_p->getPosY();
-  while (this->_p->getPosX() + val < this->_map->getWidth() - 1 && (size_t)val < 3)
+  while ((size_t)val < 3)
     {
       pos.first = this->_p->getPosX() + val;
       if (this->_map->getElemAtPos(pos) == Map::BOMB || (val == 1 && (this->_map->getElemAtPos(pos) == Map::WALL || this->_map->getElemAtPos(pos) == Map::DWALL || this->_list.find(pos) != this->_list.end())))
 	{
-	  ret += 10;
+	  _way[1] = false;
 	  break;
 	}
       ++val;
     }
   val = 1;
   pos.first = this->_p->getPosX();
-  while (this->_p->getPosY() + val < this->_map->getHeight() && (size_t)val < 3)
+  while ((size_t)val < 3)
     {
       pos.second = this->_p->getPosY() + val;
       if (this->_map->getElemAtPos(pos) == Map::BOMB || (val == 1 && (this->_map->getElemAtPos(pos) == Map::WALL || this->_map->getElemAtPos(pos) == Map::DWALL || this->_list.find(pos) != this->_list.end())))
 	{
-	  ret += 100;
+	  _way[2] = false;
 	  break;
 	}
       ++val;
     }
   val = -1;
   pos.second = this->_p->getPosY();
-  while (this->_p->getPosX() + val > 0 && (size_t)(val * -1) < 3)
+  while ((size_t)(val * -1) < 3)
     {
       pos.first = this->_p->getPosX() + val;
       if (this->_map->getElemAtPos(pos) == Map::BOMB || (val == -1 && (this->_map->getElemAtPos(pos) == Map::WALL || this->_map->getElemAtPos(pos) == Map::DWALL || this->_list.find(pos) != this->_list.end())))
 	{
-	  ret += 1000;
+	  _way[3] = false;
 	  break;
 	}
       --val;
     }
-  return (ret);
 }
