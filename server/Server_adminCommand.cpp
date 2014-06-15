@@ -93,6 +93,16 @@ Server::Server::funcKill(__attribute__((unused))const t_cmd *_cmd) {
 }
 
 bool
+Server::Server::funcSave(__attribute__((unused))const t_cmd *_cmd) {
+  if (this->_game->isPaused() == true)
+    {
+      this->_game->saveGame();
+      return (true);
+    }
+  return false;
+}
+
+bool
 Server::Server::funcWithFriend(t_cmd const *cmd) {
   DEBUG("Server::Server::funcWithFriend()", 1);
   Player *p = this->findPeerByID(cmd->id);
@@ -117,10 +127,11 @@ Server::Server::manageAdminCommand() {
     {
       Server::_isInit = true;
       Server::_func["CONFIG"] = &Server::Server::funcWelcome;
-	Server::_func["PAUSE"] = &Server::Server::funcPause;
-	Server::_func["KILL"] = &Server::Server::funcKill;
-	Server::_func["MD5"] = &Server::Server::funcMd5;
-	Server::_func["WITHFRIEND"] = &Server::Server::funcWithFriend;
+      Server::_func["PAUSE"] = &Server::Server::funcPause;
+      Server::_func["SAVE"] = &Server::Server::funcSave;
+      Server::_func["KILL"] = &Server::Server::funcKill;
+      Server::_func["MD5"] = &Server::Server::funcMd5;
+      Server::_func["WITHFRIEND"] = &Server::Server::funcWithFriend;
     }
   bool ret = false;
   if (this->_ext.front()->id == 1 || this->_ext.front()->action == "MD5" || this->_ext.front()->action == "WITHFRIEND")

@@ -5,7 +5,7 @@
 // Login   <virol_g@epitech.net>
 // 
 // Started on  Tue Jun 10 15:52:26 2014 virol_g
-// Last update Sat Jun 14 22:42:05 2014 virol_g
+// Last update Sun Jun 15 02:02:35 2014 virol_g
 //
 
 #include	<sstream>
@@ -89,7 +89,7 @@ bool	CreateMenu::build()
 				      std::pair<size_t, size_t>(135, 50),
 				      "Long", glm::vec4(0.23, 0.18, 0.52, 1.f),
 				      glm::vec4(0.51, 0.53, 0.85, 1.f), "airstrike"));
-  _selected = 2;
+  _selected = 3;
   return (true);
 }
 
@@ -185,7 +185,7 @@ t_game		*CreateMenu::getChoice() const
   if (_selected == -1)
     return (NULL);
   choice->mapName = _selectMap->getString();
-  choice->timeGame = (_selected == -1) ? 2 : _selected;
+  choice->timeGame = _selected - 1;
   ss << _inputs[0]->getString();
   ss >> choice->nbPlayers;
   ss2 << _inputs[1]->getString();
