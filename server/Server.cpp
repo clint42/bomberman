@@ -59,9 +59,8 @@ Server::Server::trampoline_performResult(void *p, Socket *s, bool b[3]) {
   }
   else {
     if (b[0]) {
-      reinterpret_cast<Server::Server *>(p)->readMessage(s); // on est censé ajouter ce msg
+      reinterpret_cast<Server::Server *>(p)->readMessage(s);
     }
-    // reinterpret_cast<Server::Server *>(p)->sendMessage(s);
   }
 }
 
@@ -69,12 +68,10 @@ Server::Server::trampoline_performResult(void *p, Socket *s, bool b[3]) {
 
 void
 Server::Server::run() {
-  DEBUG("Server::server::run()", 1);
   int	timeLoop = 0;
   int   ret;
 
   while (_run && (ret = _co->update(timeLoop)) >= 0) {
-    DEBUG("Server::server::run() => loop", 0);
     if (_game) {
       if (_game->ended()) {
 	delete _game;
@@ -83,18 +80,15 @@ Server::Server::run() {
       }
       else
 	_game->updateTimeLeft();
-      
     }
 
     if (ret) {
-      DEBUG("Server::server::run() => loop => je dois lire qqc", 0);
       _co->perform(&trampoline_performResult, this);
       while (!_messages.empty()) {
 	this->filterMsg();
 	ret = 0;
       }
       if (!_ext.empty()) {
-	DEBUG("Server::server::run() => loop => j'ai une commande admin a regarder", 0);
 	ret = 0;
 	while (!_ext.empty())
 	  ret += (int)this->manageAdminCommand();
@@ -106,26 +100,19 @@ Server::Server::run() {
       timeLoop = TIMELOOP;
     }
     if (!ret) {
-      DEBUG("Server::server::run() => loop => je regarde si j'update le game", 0);
-
       if (_game && !_game->isStarted()) {
-	DEBUG("Server::server::run() => loop => faut que je demare le jeu un jour", 0);
 	_game->update();
       }
       else if (!_game || _game->isPaused() || !_game->hasSomethingToDo()) {
 	timeLoop = _messenger.hasSomethingToSay() ? 0 : TIMELOOP;
-	DEBUG("Server::server::run() => loop => j'ai rien a faire en fait", 0);
       }
       else {
-	DEBUG("Server::server::run() => loop => j'update le game", 0);
 	_game->update();
 	timeLoop = 0;
       }
     }
     this->sendBroadcast();
-    DEBUG("Server::server::run() => ! loop\n", 0);
   } // ! while
-  DEBUG("! Server::server::run()", -1);
 }
 
 
