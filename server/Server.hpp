@@ -13,7 +13,6 @@
 # include "Team.hpp"
 # include "Types.hpp"
 # include "SafeQueue.hpp"
-# include "Filter.hpp"
 # include "Exception.hpp"
 # include "ConnexionHandler.hpp"
 # include "Messenger.hpp"
